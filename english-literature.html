@@ -577,7 +577,7 @@ function zcheck(gaveUp){const q=zcur,want=toks(q.q),got=gaveUp?[]:toks($("zin").
   if(!gaveUp&&!got.length){$("zfb").innerHTML='<div class="fb no">Type the quote first, or tap Show me.</div>';return}
   const ops=align(want,got),c=k=>ops.filter(o=>o.k===k).length,ok=c("ok"),sp=c("sp"),miss=c("miss"),x=c("x");
   const perfect=!gaveUp&&ok===want.length&&!x;
-  const r=zs[qkey(q)]||{n:0,p:0};r.n++;if(perfect)r.p++;r.last=perfect;zs[qkey(q)]=r;zsave();
+  const r=zs[qkey(q)]||{n:0,p:0};r.n++;if(perfect)r.p++;r.last=perfect;zs[qkey(q)]=r;zsave();if(!gaveUp&&window.GCSEasy)GCSEasy.addXP(perfect?2:(!miss&&!x?1:0),"quotes",60);
   const html=ops.map(o=>o.k==="ok"?`<span class="z-ok">${esc(o.w)}</span>`:o.k==="sp"?`<span class="z-sp" title="You wrote ${esc(o.g)}"><s>${esc(o.g)}</s> ${esc(o.w)}</span>`:o.k==="miss"?`<span class="z-miss" title="Missing word">${esc(o.w)}</span>`:`<span class="z-x" title="Not in the quote">${esc(o.g)}</span>`).join(" ");
   const pct=Math.round(ok/want.length*100);
   const res=gaveUp?"Here it is. Read it, then try it again.":perfect?"Perfect, word for word.":!miss&&!x?`Nearly: ${sp} spelling slip${sp>1?"s":""}. The words are all right.`:pct>=75?`Close: ${ok} of ${want.length} words exact.`:`${ok} of ${want.length} words exact. Keep going.`;

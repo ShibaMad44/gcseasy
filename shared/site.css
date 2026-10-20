@@ -97,3 +97,9 @@
 }
 .sitefoot{border-top:0}
 .sitefoot .in{padding-block:18px 28px}
+
+/* XP pop-up */
+.xptoast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);z-index:95;background:var(--hl);color:var(--hl-ink);font:700 1rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;padding:8px 16px;border-radius:999px;box-shadow:0 6px 20px rgba(0,0,0,.18);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s}
+.xptoast.show{opacity:1;transform:translate(-50%,0)}
+@media (max-width:640px){.xptoast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
+@media (prefers-reduced-motion:reduce){.xptoast{transition:none}}

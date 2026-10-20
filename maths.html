@@ -554,7 +554,7 @@ function drawQ(){const q=cur,box=$("pbox");
 }
 const showAns=(a,q)=>a.map(v=>q.frac&&Math.abs(v-Math.round(v))>1e-9?toFrac(v):(+v.toFixed(4))).join(", ");
 function toFrac(x){for(let d=1;d<=400;d++){const n=Math.round(x*d);if(Math.abs(n/d-x)<1e-9){return `${n}/${d}`.replace("-","−")}}return String(+x.toFixed(4))}
-function done(ok,ans){st.tally.t++;if(ok)st.tally.r++;save();if(mini&&ok)mini.r++;$("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
+function done(ok,ans){st.tally.t++;if(ok){st.tally.r++;if(window.GCSEasy)GCSEasy.addXP(1,"maths",80)}save();if(mini&&ok)mini.r++;$("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
   const q=cur;$("pfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"+(ans?`. Answer: ${showAns(ans,q)}${q.unit?" "+q.unit:""}`:"")}</div><div class="panel ms"><div class="t">Working</div>${q.w}</div><div class="row"><button class="btn p" id="pnext">${mini&&mini.i>=9?"See score":"Next question"}</button>${q.t.clips.map(c=>`<a class="mw big" href="${mwUrl(c)}" target="_blank" rel="noopener">Stuck? Watch clip ${c}</a>`).join("")}</div>`;
   $("pnext").onclick=()=>{if(mini)mini.i++;nextQ()};$("pnext").focus()}
 function endMini(){const box=$("pbox");box.innerHTML=`<div class="meta"><span>Mini mock</span><span>${mini.r} / 10</span></div><p class="dq">${mini.r*10}% ${mini.r>=8?"– excellent.":mini.r>=6?"– good. Practise the topics you dropped.":"– keep going: pick the topics you got wrong in One topic mode."}</p><div class="row"><button class="btn p" id="again">Another mini mock</button></div>`;$("again").onclick=startP}

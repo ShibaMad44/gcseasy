@@ -66,7 +66,7 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
       <p class="qzmeta">Question ${QZ.i+1} of ${QZ.items.length} · ${q.t}</p><p class="qzq">${q.q}</p><div class="opts">${q.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div><div id="qzfb"></div></div>`;
     $("qzx").onclick=close;
     sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;QZ.ans[QZ.i]=j;sheet.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});
-      const ok=j===q.a,last=QZ.i>=QZ.items.length-1;$("qzfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${q.ex?`<div class="panel ms">${q.ex}</div>`:""}<button type="button" class="btn p qzgo" id="qznext">${last?"See my score":"Next"}</button>`;
+      const ok=j===q.a,last=QZ.i>=QZ.items.length-1;if(ok&&window.GCSEasy)GCSEasy.addXP(1,"quiz",60);$("qzfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${q.ex?`<div class="panel ms">${q.ex}</div>`:""}<button type="button" class="btn p qzgo" id="qznext">${last?"See my score":"Next"}</button>`;
       $("qznext").onclick=()=>{if(last)end();else{QZ.i++;step()}};$("qznext").focus({preventScroll:true})});
     sheet.scrollTop=0}
   function end(){const it=QZ.items,got=it.filter((q,k)=>QZ.ans[k]===q.a).length,per={};it.forEach((q,k)=>{per[q.t]=per[q.t]||{g:0,n:0};per[q.t].n++;if(QZ.ans[k]===q.a)per[q.t].g++});
@@ -109,7 +109,7 @@ function setupCards(){
     card.className="card"+(flipped?" flipped":"");
     card.innerHTML=flipped?`<div class="lab">Answer</div><div class="a">${c[2]}</div>`:`<div class="lab">Question · tap to flip</div><div class="q">${c[1]}</div>`};
   const mark=ok=>{if(!deck.length)return;const c=deck[idx],k=ckey(c),r=state.srs[k]||{b:0,due:0};
-    if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;deck.splice(idx,1)}else{r.b=0;r.due=now();deck.push(deck.splice(idx,1)[0])}
+    const wasDue=r.due<=now();if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;deck.splice(idx,1);if(wasDue&&window.GCSEasy)GCSEasy.addXP(1,"cards",150)}else{r.b=0;r.due=now();deck.push(deck.splice(idx,1)[0])}
     state.srs[k]=r;save();if(idx>=deck.length)idx=0;flipped=false;render()};
   card.onclick=()=>{if(!deck.length)return;flipped=!flipped;render()};
   $("fcgot").onclick=()=>mark(true);$("fcagain").onclick=()=>mark(false);
@@ -155,7 +155,7 @@ function markButtons(p,host){
   for(let m=0;m<=p.mk;m++){const b=document.createElement("button");b.className="mk"+(state.m[p.id]===m?" on":"");b.textContent=m;b.setAttribute("aria-label",m+" marks");
     b.onclick=()=>{setMark(p.id,m);mr.querySelectorAll(".mk").forEach(x=>x.classList.toggle("on",x===b))};mr.appendChild(b)}
   host.appendChild(mr)}
-function setMark(id,m){state.m[id]=m;save();updScore()}
+function setMark(id,m){state.m[id]=m;save();updScore();if(m>0&&window.GCSEasy&&GCSEasy.addXP)GCSEasy.addXP(m,"exam",/^AI/.test(id)?120:0,/^AI/.test(id)?null:"q:"+C.id+":"+id)}
 function tagPills(p){return (p.tag||[]).map(t=>`<span class="pill ${t==="Triple"?"t":t==="HT"?"h":"u"}">${t}</span>`).join("")}
 
 function renderPart(p){
@@ -365,7 +365,7 @@ function renderDrill(host){
   function draw(){const q=dCur,box=$("drillbox");
     box.innerHTML=`<div class="meta"><span>${q.t} · ${q.name}</span><span>${state.dr.r} / ${state.dr.t} right</span></div><p class="dq">${q.q}</p><div class="num"><input id="drin" inputmode="decimal" placeholder="Your answer" aria-label="Answer">${q.unit?`<span class="u">${q.unit}</span>`:""}<button class="btn sm p" id="drchk">Check</button></div><div id="drfb"></div>`;
     const inp=$("drin"),go=()=>{const v=parseFloat(inp.value.replace(/[^0-9.\-]/g,""));if(isNaN(v)){$("drfb").innerHTML='<div class="fb no">Type a number first.</div>';return}
-      const ok=Math.abs(v-q.ans)<=Math.max(Math.abs(q.ans)*0.02,q.tol||0)+1e-9;state.dr.t++;if(ok)state.dr.r++;save();
+      const ok=Math.abs(v-q.ans)<=Math.max(Math.abs(q.ans)*0.02,q.tol||0)+1e-9;state.dr.t++;if(ok){state.dr.r++;if(window.GCSEasy)GCSEasy.addXP(1,"drill",60)}save();
       $("drchk").disabled=true;inp.disabled=true;
       $("drfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite. Answer: "+q.ans+(q.unit?" "+q.unit:"")}</div><div class="panel ms"><div class="t">Working</div>${q.work}</div><div class="row"><button class="btn p" id="drnext">Next question</button></div>`;
       box.querySelector(".meta span:last-child").textContent=`${state.dr.r} / ${state.dr.t} right`;

@@ -97,7 +97,7 @@ function setupTimer(){const nav=document.querySelector(".sitenav");if(!nav||docu
     let ms=elapsed(r);const cap=4*3600e3;let note="";if(ms>cap){ms=cap;note=" (capped at 4 hours: did you forget to stop it?)"}
     if(ms<60000)toast("Under a minute, so it wasn't saved.");
     else{const l=getLog();l.push({s:Date.now()-ms,e:Date.now(),d:ms,subj:r.subj});setLog(l);
-      const g=getGoal(),t=Math.round(todayMs()/60000);toast(`Saved <b>${Math.round(ms/60000)} min</b> of ${nameOf(r.subj)}${note}. ${t>=g?"Daily goal hit!":`${g-t} min to go today.`} <a href="tools.html#tracker">Tracker</a>`)}
+      addXP(Math.floor(ms/300000),"timer",96);const g=getGoal(),t=Math.round(todayMs()/60000);toast(`Saved <b>${Math.round(ms/60000)} min</b> of ${nameOf(r.subj)}${note}. ${t>=g?"Daily goal hit!":`${g-t} min to go today.`} <a href="tools.html#tracker">Tracker</a>`)}
     sync()}
   function open(){panel();pop.hidden=false;b.setAttribute("aria-expanded","true");const f=pop.querySelector("button,select");if(f)f.focus()}
   function close(){pop.hidden=true;b.setAttribute("aria-expanded","false")}
@@ -147,6 +147,23 @@ function aiClient(){if(_ai)return _ai;
       return {kind:"server",json:async p=>parseJSON(await call(p,true)),text:p=>call(p,false)}}
     return null})();
   return _ai}
+/* ---- XP: points for real revision. Exam marks pay once per question; repeatable activities have daily caps. ---- */
+const XPK="gcseasy-xp";
+const dkeyL=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function xpLedger(){let x=null;try{x=JSON.parse(localStorage.getItem(XPK)||"null")}catch(e){}x=x||{};x.total=x.total||0;x.days=x.days||{};x.aw=x.aw||{};return x}
+function xpToast(n){try{let t=document.getElementById("xptoast");if(!t){t=document.createElement("div");t.id="xptoast";t.className="xptoast";t.setAttribute("aria-live","polite");document.body.appendChild(t)}
+  t.textContent="+"+n+" XP";t.classList.remove("show");void t.offsetWidth;t.classList.add("show");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("show"),1600)}catch(e){}}
+/* add XP. cat + cap limit a category per day; key makes it once-only (stores the most paid for that key) */
+function addXP(n,cat,cap,key){n=Math.max(0,Math.round(n||0));if(!n)return 0;const x=xpLedger(),td=dkeyL();const d=x.days[td]=x.days[td]||{pts:0,cat:{}};
+  if(key){const prev=x.aw[key]||0;if(n<=prev)return 0;const add=n-prev;x.aw[key]=n;n=add}
+  if(cap){const used=d.cat[cat]||0;n=Math.min(n,Math.max(0,cap-used))}if(!n){try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}return 0}
+  d.pts+=n;d.cat[cat]=(d.cat[cat]||0)+n;x.total+=n;
+  const keep=Object.keys(x.days).sort().slice(-60);x.days=Object.fromEntries(keep.map(k=>[k,x.days[k]]));
+  try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}xpToast(n);clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),4000);return n}
+function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td=dkeyL();
+  for(let i=0;i<7;i++){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");week+=(x.days[k]||{}).pts||0}
+  today=(x.days[td]||{}).pts||0;const level=Math.floor(Math.sqrt(x.total/40))+1,lo=40*(level-1)**2,hi=40*level**2;
+  return {total:x.total,week,today,level,into:x.total-lo,need:hi-lo}}
 /* ---- class leaderboards (server only) ---- */
 const LBK="gcseasy-me";
 function me(){let m=null;try{m=JSON.parse(localStorage.getItem(LBK)||"null")}catch(e){}if(!m||!m.id){m={id:(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()),name:"",groups:[]};try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}return m}
@@ -158,7 +175,7 @@ function myStats(){const L=getLog(),t=dayStart();const days=new Set(L.map(x=>{co
   let streak=0,d=t;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
   const mins=Math.round(L.filter(x=>x.s>=t-6*864e5).reduce((a,x)=>a+(x.d!=null?x.d:x.e-x.s),0)/60000);
   const td=new Date().toISOString().slice(0,10);const today=dc.done&&dc.done[td];
-  return {streak,mins,daily:today?{date:td,score:today.score,of:today.of}:null,cards:Object.values(progress()).reduce((a,p)=>a+(p.answered||0),0)}}
+  const xs=xpStats();return {streak,mins:xs.week,daily:today?{date:td,score:today.score,of:today.of}:null,cards:xs.total}}
 async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)return;const st=myStats();const sig=JSON.stringify([m.name,m.groups,st]);
   let last={};try{last=JSON.parse(localStorage.getItem("gcseasy-lbsent")||"{}")}catch(e){}
   if(!force&&last.sig===sig&&Date.now()-(last.t||0)<6*3600e3)return;
@@ -166,5 +183,5 @@ async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)ret
   try{localStorage.setItem("gcseasy-lbsent",JSON.stringify({sig,t:Date.now()}))}catch(e){}}
 function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500)}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,me,saveMe,lbCall,lbSync,myStats};
+window.GCSEasy={SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();

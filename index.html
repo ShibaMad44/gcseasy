@@ -85,6 +85,9 @@ body{font-size:16.5px}
 .fact{display:grid;gap:3px;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink);border-left:4px solid var(--c)}
 .fact .fs{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .fact b{font-family:var(--display)}.fact span:last-child{color:var(--muted);font-size:.94rem}
+.xphow{margin-top:12px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:0 16px}
+.xphow summary{cursor:pointer;padding:14px 0;font:700 .95rem var(--display);color:var(--accent)}
+.xphow ul{margin:0 0 14px;padding-left:18px;font-size:.93rem;color:var(--muted)}.xphow b{color:var(--ink)}
 /* sections */
 .sec h2{font-size:1.5rem;letter-spacing:-.015em}
 .sec .sdesc{color:var(--muted);margin:6px 0 18px;max-width:60ch;font-size:.98rem}
@@ -150,8 +153,16 @@ body{font-size:16.5px}
 
 <section class="sec" id="groups">
   <h2>Class leaderboard</h2>
-  <p class="sdesc">Start a group, share the code with friends, and compare streaks, daily challenge scores and revision time. No sign-up.</p>
+  <p class="sdesc">Start a group, share the code with friends, and compare XP, streaks and daily challenge scores. No sign-up.</p>
   <div class="gbody"></div>
+  <details class="xphow"><summary>How XP works</summary><ul>
+    <li><b>Exam questions:</b> 1 XP per mark you get, once per question.</li>
+    <li><b>Daily challenge:</b> 2 XP per correct answer, +5 for finishing, +5 more for 5/5.</li>
+    <li><b>Flashcards:</b> 1 XP for each card you get right when it's due (up to 150 a day).</li>
+    <li><b>Quizzes, Maths practice, vocab and quote tests, calc drills:</b> 1 XP per right answer (up to 60–80 a day each).</li>
+    <li><b>Revision timer:</b> 1 XP for every 5 minutes.</li>
+    <li><b>Level up</b> as your total grows. The leaderboard ranks by XP earned in the last 7 days.</li>
+  </ul></details>
 </section>
 
 <section class="sec" id="subjects">
@@ -214,15 +225,16 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
   const ents=Object.entries(prog).filter(([,v])=>v&&v.at).sort((a,b)=>b[1].at-a[1].at);
   let ex=[];try{ex=JSON.parse(localStorage.getItem("gcseasy-exams")||"[]")||[]}catch(e){}
   const next=ex.map(x=>({n:x.name,d:Math.round((new Date(x.date+"T00:00:00").getTime()-today)/864e5)})).filter(x=>x.d>=0).sort((a,b)=>a.d-b.d)[0];
-  if(!L.length&&!ents.length&&!next)return;
+  if(!L.length&&!ents.length&&!next&&!GCSEasy.xpStats().total)return;
   const mins=f=>Math.round(L.filter(f).reduce((a,x)=>a+(x.e-x.s),0)/60000);
-  const days=new Set(L.map(x=>day(x.s)));let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
+  const days=new Set(L.map(x=>day(x.s)));try{Object.keys((JSON.parse(localStorage.getItem("gcseasy-daily")||"{}").done)||{}).forEach(k=>days.add(day(new Date(k+"T00:00:00"))))}catch(e){}let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
   const lastL=L.length?L[L.length-1]:null;
   const lastId=(lastL&&(!ents.length||lastL.e>ents[0][1].at))?lastL.subj:(ents[0]&&ents[0][0]);
   const last=SUBJECTS.find(x=>x.id===lastId);
   const el=$("mine");el.hidden=false;
   const g=GCSEasy.getGoal(),tm=mins(x=>day(x.s)===today);
-  el.innerHTML=`<h2>Your revision</h2><div><b>${tm} min</b><span>today · goal ${g} min${tm>=g?" ✓":""}</span></div><div><b>${mins(x=>x.s>=today-6*864e5)} min</b><span>last 7 days</span></div><div><b>${streak} day${streak===1?"":"s"}</b><span>streak</span></div>${next?`<div><b>${next.d===0?"Today":next.d===1?"Tomorrow":next.d+" days"}</b><span>until ${String(next.n).replace(/[<>&"]/g,"")}</span></div>`:""}${last&&last.href?`<a class="go" href="${last.href}">Carry on: ${last.name} →</a>`:""}<a href="tools.html#tracker" style="font-size:.88rem;color:var(--muted)">Full tracker</a>`})();
+  const xs=GCSEasy.xpStats();
+  el.innerHTML=`<h2>Your revision</h2><div><b>Level ${xs.level}</b><span>${xs.total} XP · ${xs.need-xs.into} to level ${xs.level+1}</span></div><div><b>${xs.week} XP</b><span>this week</span></div><div><b>${tm} min</b><span>today · goal ${g} min${tm>=g?" ✓":""}</span></div><div><b>${mins(x=>x.s>=today-6*864e5)} min</b><span>last 7 days</span></div><div><b>${streak} day${streak===1?"":"s"}</b><span>streak</span></div>${next?`<div><b>${next.d===0?"Today":next.d===1?"Tomorrow":next.d+" days"}</b><span>until ${String(next.n).replace(/[<>&"]/g,"")}</span></div>`:""}${last&&last.href?`<a class="go" href="${last.href}">Carry on: ${last.name} →</a>`:""}<a href="tools.html#tracker" style="font-size:.88rem;color:var(--muted)">Full tracker</a>`})();
 
 /* ---- daily challenge: the same 5 questions for everyone each day ---- */
 (function(){const box=$("tryq");const BANK=(window.GCSE_BANK||[]).filter(q=>!q.tri),CARDS=window.GCSE_CARDS||[];if(!BANK.length&&!CARDS.length){box.hidden=true;return}
@@ -254,7 +266,7 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
     box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;cur.ans[cur.i]=k;box.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(j===q.a)x.classList.add("right");else if(j===k)x.classList.add("wrong")});
       const ok=k===q.a;const last=cur.i>=Q.length-1;$("dfb").innerHTML=`<div class="fb" style="color:var(${ok?"--good":"--bad"})">${ok?"Correct":"Not quite"}</div>${q.ex?`<div class="why">${esc(q.ex)}</div>`:""}<div class="next"><button class="dbtn" id="dnext" type="button">${last?"See my score":"Next question"}</button></div>`;
       st.cur=cur;save();
-      $("dnext").onclick=()=>{if(last){const score=cur.ans.filter((a,j)=>a===Q[j].a).length;st.done[TODAY]={score,of:5,ans:cur.ans};delete st.cur;save();if(GCSEasy.lbSync)GCSEasy.lbSync(true).then(()=>window.drawGroups&&drawGroups())}else{cur.i++;st.cur=cur;save()}draw()}})}
+      $("dnext").onclick=()=>{if(last){const score=cur.ans.filter((a,j)=>a===Q[j].a).length;st.done[TODAY]={score,of:5,ans:cur.ans};delete st.cur;save();GCSEasy.addXP(score*2+5+(score===5?5:0),"daily",0,"daily:"+TODAY);if(GCSEasy.lbSync)GCSEasy.lbSync(true).then(()=>window.drawGroups&&drawGroups())}else{cur.i++;st.cur=cur;save()}draw()}})}
   draw()})();
 
 /* ---- class leaderboards ---- */
@@ -277,7 +289,7 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
     body.innerHTML=parts.map(g=>{if(g.err)return `<div class="gcard"><p>Group ${esc(g.code)} couldn't be loaded.</p></div>`;
       const you=m.id.slice(0,8);
       return `<div class="gcard"><div class="ghead"><div><b>${esc(g.name)}</b><span>${g.members.length} member${g.members.length===1?"":"s"}</span></div><button class="gcode" data-code="${g.code}" type="button" title="Copy the join code">Code ${g.code}</button></div>
-      <div class="gtbl"><table><tr><th>#</th><th>Name</th><th class="rn">Streak</th><th class="rn">Today</th><th class="rn">Mins (7d)</th></tr>${g.members.map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}</td><td class="rn">${x.streak}</td><td class="rn">${x.daily?x.daily.score+"/"+x.daily.of:"–"}</td><td class="rn">${x.mins}</td></tr>`).join("")}</table></div>
+      <div class="gtbl"><table><tr><th>#</th><th>Name</th><th class="rn">XP (7d)</th><th class="rn">Streak</th><th class="rn">Today</th></tr>${g.members.slice().sort((a,b)=>b.mins-a.mins||b.streak-a.streak).map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}</td><td class="rn"><b>${x.mins}</b></td><td class="rn">${x.streak}</td><td class="rn">${x.daily?x.daily.score+"/"+x.daily.of:"–"}</td></tr>`).join("")}</table></div>
       <div class="gfoot"><button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button></div></div>`}).join("")+
       `<div class="gfoot"><button class="dbtn alt" id="gadd" type="button">Join or create another group</button></div>`;
     body.querySelectorAll(".gcode").forEach(b=>b.onclick=async()=>{const t=`Join my GCSEasy revision group: code ${b.dataset.code}`;try{await navigator.clipboard.writeText(t);b.textContent="Copied"}catch(e){b.textContent=b.dataset.code}setTimeout(()=>b.textContent="Code "+b.dataset.code,2000)});
