@@ -1,0 +1,566 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Free Edexcel GCSE Maths Higher revision: every topic with MathsWatch clips, endless practice questions and the formulas you must learn.">
+<link rel="canonical" href="https://gcseasy.pages.dev/maths.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free Edexcel GCSE Maths Higher revision: every topic with MathsWatch clips, endless practice questions and the formulas you must learn.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/maths.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GCSE Maths Higher Revision (Edexcel) · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>
+/* Maths accent: graph-paper teal */
+:root{--accent:#0F7A7A;--accent-soft:#DFF1F1}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--accent:#5CC9C9;--accent-soft:#163233}}
+:root[data-theme="dark"]{--accent:#5CC9C9;--accent-soft:#163233}
+.msum{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px;margin-bottom:14px}
+.msum div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:4px;position:relative;overflow:hidden}
+.msum b{font:700 1.3rem var(--display);font-variant-numeric:tabular-nums}
+.msum span{font-size:.84rem;color:var(--muted)}
+.msum i{position:absolute;left:0;bottom:0;height:4px;background:var(--accent)}
+.key{display:grid;gap:6px;font-size:.88rem;color:var(--muted);margin-bottom:12px;align-items:center}
+.strand h3{margin:18px 0 8px}
+.trows{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.trows li{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:0}
+.trows li.g{border-style:dashed}
+.trows li.rag-g{background:var(--good-soft);border-color:var(--good)}
+.trows li.rag-o{background:var(--warn-soft);border-color:var(--warn)}
+.trows li.rag-r{background:var(--bad-soft);border-color:var(--bad)}
+.rag{display:inline-flex;gap:4px;flex:none}
+.rag button{width:22px;height:22px;border-radius:50%;border:2px solid;background:transparent;cursor:pointer;padding:0}
+.rag button.r{border-color:var(--bad)} .rag button.o{border-color:var(--warn)} .rag button.g{border-color:var(--good)}
+.rag button.r.on{background:var(--bad)} .rag button.o.on{background:var(--warn)} .rag button.g.on{background:var(--good)}
+.ragsum{grid-column:1/-1}
+.msum .ragbar{display:flex;height:10px;border-radius:5px;overflow:hidden;background:var(--line);border:0;padding:0;gap:0}
+.ragbar i{position:static;height:100%} .ragbar .g{background:var(--good)} .ragbar .o{background:var(--warn)} .ragbar .r{background:var(--bad)}
+.ragsum p{margin:4px 0 0;display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;font-size:.9rem;color:var(--muted)}
+.ragsum b{font:700 1rem var(--display);color:var(--ink)}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dot.g{background:var(--good)} .dot.o{background:var(--warn)} .dot.r{background:var(--bad)} .dot.u{background:var(--line)}
+.tk{display:flex;gap:10px;align-items:center;flex:1 1 200px;min-width:0}
+.tk input{width:20px;height:20px;accent-color:var(--good);flex:none}
+.tn{font-weight:700}
+.badges{display:flex;gap:5px}
+.b{font:700 .68rem var(--mono);padding:2px 6px;border-radius:4px;white-space:nowrap}
+.b.nc{background:var(--warn-soft);color:var(--warn)}
+.b.gc{background:var(--line);color:var(--ink)}
+.acts{display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.mw{font:700 .74rem var(--mono);color:var(--accent);background:var(--accent-soft);padding:5px 8px;border-radius:6px;text-decoration:none;white-space:nowrap}
+.mw.big{font-size:.84rem;padding:10px 12px;align-self:center}
+.pbar{display:grid;gap:10px;margin-bottom:14px}
+.pbar .chips{margin:0}
+.pbar select{font:500 1rem var(--body);padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);max-width:100%}
+.pinfo{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font:500 .84rem var(--mono);color:var(--muted)}
+#pbox{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+#pbox .dq{font:700 1.15rem/1.45 var(--display);margin:6px 0 14px}
+.pins{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pins label{display:flex;gap:6px;align-items:center;flex:1 1 140px;min-width:0}
+.pins label span{font:700 .9rem var(--mono);white-space:nowrap}
+.pins input{flex:1;min-width:0;font:500 1.05rem var(--mono);padding:10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.pins .u{font:500 .9rem var(--mono);color:var(--muted)}
+.ftbl{overflow-x:auto;margin:8px 0}
+.ftbl table td:first-child{font-weight:700;width:34%}
+.ftbl table.center td,.ftbl table.center th{text-align:center}
+.ftbl table.center td:first-child{width:auto}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap">
+<p class="crumbs"><a href="index.html#subjects">Subjects</a> / Maths</p>
+<header class="top">
+  <div class="tile"><small>M</small>Ma</div>
+  <div><h1>Maths</h1><p class="sub">Edexcel · 1MA1 · Higher tier · every topic</p></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-tp" aria-selected="true" data-p="tp">Topics</button>
+  <button role="tab" id="tab-pr" aria-selected="false" data-p="pr">Practice</button>
+  <button role="tab" id="tab-fm" aria-selected="false" data-p="fm">Formulas</button>
+  <button role="tab" id="tab-fc" aria-selected="false" data-p="fc">Cards</button>
+  <button role="tab" id="tab-tt" aria-selected="false" data-p="tt">Tips</button>
+</nav>
+<div id="p-tp">
+<p style="margin-bottom:10px">Every topic on the Higher GCSE. Rate each one <b>red</b> (don't get it), <b>orange</b> (getting there) or <b>green</b> (confident). Tap a <b>MW</b> clip to watch that MathsWatch video (you'll need your school login), or <b>Practise</b> for questions that change every time.</p>
+<div class="key"><span><span class="b nc">✱ Non-calc</span> likely on the non-calculator paper</span><span><span class="b gc">GCSE only</span> may not be in your school mock, but can be in the real exam</span></div>
+<div class="msum" id="msum"></div>
+<div class="chips" id="mfilt"></div>
+<div id="mlist"></div>
+</div>
+<div id="p-pr" hidden>
+<div class="pbar"><div class="chips" id="pmode"></div><select id="ptopic" aria-label="Choose a topic" hidden></select><div class="pinfo"><span id="pnote"></span><span id="ptally"></span></div></div>
+<div id="pbox"></div>
+<p style="font-size:.88rem;color:var(--muted);margin-top:10px">Practice covers about 100 of the topics. Graph and diagram topics (e.g. cumulative frequency, constructions, vectors) are best practised on MathsWatch.</p>
+</div>
+<div id="p-fm" hidden>
+<div class="warn"><b>For 2026 and 2027 exams</b> you're given a formulae sheet. Everything below in <b>Learn these</b> is <b>not</b> on it, so you have to memorise it. Check the exact sheet with your teacher.</div>
+
+<h3>Learn these: number and algebra</h3>
+<div class="ftbl"><table>
+<tr><th>What</th><th>Formula / fact</th></tr>
+<tr><td>Index laws</td><td>a<sup>m</sup> × a<sup>n</sup> = a<sup>m+n</sup> · a<sup>m</sup> ÷ a<sup>n</sup> = a<sup>m−n</sup> · (a<sup>m</sup>)<sup>n</sup> = a<sup>mn</sup> · a<sup>0</sup> = 1</td></tr>
+<tr><td>Negative and fractional indices</td><td>a<sup>−n</sup> = 1/a<sup>n</sup> · a<sup>1/n</sup> = ⁿ√a · a<sup>m/n</sup> = (ⁿ√a)<sup>m</sup></td></tr>
+<tr><td>Surds</td><td>√a × √b = √(ab) · √a ÷ √b = √(a/b) · rationalise: multiply top and bottom by the surd</td></tr>
+<tr><td>Percentage change</td><td>(change ÷ original) × 100</td></tr>
+<tr><td>Reverse percentage</td><td>original = new amount ÷ multiplier (e.g. ÷ 1.2 after a 20% rise)</td></tr>
+<tr><td>Simple interest</td><td>interest = principal × rate × years</td></tr>
+<tr><td>Depreciation</td><td>value = original × (1 − r/100)<sup>n</sup></td></tr>
+<tr><td>Straight line</td><td>y = mx + c · gradient m = (y₂ − y₁) ÷ (x₂ − x₁)</td></tr>
+<tr><td>Perpendicular gradient</td><td>m₁ × m₂ = −1 (flip and change sign)</td></tr>
+<tr><td>Circle centre origin <span class="b gc">GCSE only</span></td><td>x² + y² = r² · a tangent is perpendicular to the radius</td></tr>
+<tr><td>Linear sequence nth term</td><td>dn + (first term − d)</td></tr>
+<tr><td>Quadratic sequence</td><td>a = second difference ÷ 2, then find the linear part</td></tr>
+<tr><td>Difference of two squares</td><td>a² − b² = (a + b)(a − b)</td></tr>
+<tr><td>Completing the square <span class="b gc">GCSE only</span></td><td>x² + bx + c = (x + b/2)² − (b/2)² + c; the turning point is (−b/2, c − (b/2)²)</td></tr>
+<tr><td>Bounds</td><td>Max of a ÷ b = max a ÷ min b · max of a − b = max a − min b</td></tr>
+</table></div>
+
+<h3>Learn these: ratio, proportion and rates</h3>
+<div class="ftbl"><table>
+<tr><td>Speed</td><td>speed = distance ÷ time</td></tr>
+<tr><td>Density</td><td>density = mass ÷ volume</td></tr>
+<tr><td>Pressure</td><td>pressure = force ÷ area</td></tr>
+<tr><td>Direct proportion</td><td>y = kx (or y = kx², y = k√x…)</td></tr>
+<tr><td>Inverse proportion</td><td>y = k/x (or y = k/x²…)</td></tr>
+<tr><td>Gradient of a graph <span class="b gc">GCSE only</span></td><td>gradient of a distance–time graph = speed; velocity–time = acceleration</td></tr>
+<tr><td>Area under a graph <span class="b gc">GCSE only</span></td><td>area under a velocity–time graph = distance travelled</td></tr>
+</table></div>
+
+<h3>Learn these: geometry</h3>
+<div class="ftbl"><table>
+<tr><td>Rectangle · triangle · parallelogram</td><td>l × w · ½ × b × h · b × h</td></tr>
+<tr><td>Cuboid volume</td><td>l × w × h</td></tr>
+<tr><td>Cylinder</td><td>V = πr²h · surface area = 2πrh + 2πr²</td></tr>
+<tr><td>Pyramid</td><td>V = ⅓ × base area × h (learn it to be safe)</td></tr>
+<tr><td>Sector <span class="b nc">✱ often</span></td><td>area = θ/360 × πr² · arc length = θ/360 × 2πr</td></tr>
+<tr><td>Angles</td><td>on a straight line 180° · around a point 360° · in a triangle 180° · in a quadrilateral 360°</td></tr>
+<tr><td>Parallel lines</td><td>alternate and corresponding angles are equal; co-interior angles add to 180°</td></tr>
+<tr><td>Polygons</td><td>interior sum = (n − 2) × 180° · regular exterior angle = 360° ÷ n · interior + exterior = 180°</td></tr>
+<tr><td>Bearings</td><td>measured clockwise from north, 3 figures; back bearing = ± 180°</td></tr>
+<tr><td>Similar shapes <span class="b gc">GCSE only</span></td><td>length × k · area × k² · volume × k³</td></tr>
+<tr><td>Congruence <span class="b gc">GCSE only</span></td><td>SSS, SAS, ASA, RHS</td></tr>
+</table></div>
+<h3>Exact trig values <span class="b nc">✱ non-calc</span></h3>
+<div class="ftbl"><table class="center">
+<tr><th></th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th></tr>
+<tr><td>sin</td><td>0</td><td>1/2</td><td>√2/2</td><td>√3/2</td><td>1</td></tr>
+<tr><td>cos</td><td>1</td><td>√3/2</td><td>√2/2</td><td>1/2</td><td>0</td></tr>
+<tr><td>tan</td><td>0</td><td>√3/3</td><td>1</td><td>√3</td><td>–</td></tr>
+</table></div>
+<h3>Circle theorems <span class="b gc">GCSE only</span></h3>
+<ul>
+<li>Angle at the centre is twice the angle at the circumference.</li>
+<li>Angle in a semicircle is 90°.</li>
+<li>Angles in the same segment are equal.</li>
+<li>Opposite angles of a cyclic quadrilateral add to 180°.</li>
+<li>Tangent and radius meet at 90°; two tangents from a point are equal.</li>
+<li>Alternate segment theorem: the angle between a tangent and a chord equals the angle in the alternate segment.</li>
+<li>The perpendicular from the centre to a chord bisects the chord.</li>
+</ul>
+
+<h3>Learn these: statistics and probability</h3>
+<div class="ftbl"><table>
+<tr><td>Mean from a table</td><td>Σfx ÷ Σf (use midpoints for grouped data: an estimate)</td></tr>
+<tr><td>Range · IQR</td><td>largest − smallest · upper quartile − lower quartile</td></tr>
+<tr><td>Frequency density</td><td>frequency ÷ class width</td></tr>
+<tr><td>Probability</td><td>P = favourable outcomes ÷ total · P(not A) = 1 − P(A) · all outcomes add to 1</td></tr>
+<tr><td>AND / OR</td><td>independent: P(A and B) = P(A) × P(B) · mutually exclusive: P(A or B) = P(A) + P(B)</td></tr>
+<tr><td>Relative frequency</td><td>frequency ÷ total trials · expected = probability × trials</td></tr>
+<tr><td>Pie chart angle</td><td>frequency ÷ total × 360°</td></tr>
+<tr><td>Stratified sample</td><td>group size ÷ population × sample size</td></tr>
+</table></div>
+
+<h3>On the formulae sheet (2026/2027)</h3>
+<p>Quadratic formula · circumference and area of a circle · area of a trapezium · Pythagoras · sin, cos, tan ratios · sine rule · cosine rule · area of a triangle (½ab sin C) · volume of a prism · volume and curved surface area of a cone · volume and surface area of a sphere · compound interest. You still need to know <b>when</b> to use each one.</p>
+
+</div>
+<!-- CARDS -->
+<div id="p-fc" hidden>
+<div class="chips" id="fcf"></div>
+<div class="meta"><span id="fcpos"></span><span id="fcleft"></span></div>
+<button class="card" id="card" aria-live="polite"></button>
+<div class="row"><button class="btn b" id="fcagain">Again</button><button class="btn g" id="fcgot">Got it</button></div>
+<div class="row"><button class="btn" id="fcshuf">Shuffle &amp; restart</button></div>
+</div>
+
+
+<div id="p-tt" hidden>
+<details class="rc" open><summary>Edexcel Higher: the papers</summary><div class="in">
+<div class="tbl"><table><tr><th>Paper</th><th>Calculator?</th><th>Time</th><th class="num">Marks</th></tr>
+<tr><td>Paper 1</td><td><b>No</b></td><td>1 h 30</td><td class="num">80</td></tr>
+<tr><td>Paper 2</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr>
+<tr><td>Paper 3</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr></table></div>
+<p>About <b>1 minute per mark</b>, with 10 minutes spare to check. Topics marked ✱ are likely to come up on the non-calculator paper: practise them by hand.</p></div></details>
+<details class="rc"><summary>Get the method marks</summary><div class="in"><ol class="steps">
+<li><b>Show every step.</b> A wrong answer with the right method can still score most of the marks.</li>
+<li>Write the formula first, then substitute, then calculate.</li>
+<li>Don't round until the end. Keep full numbers in your calculator.</li>
+<li>Give units and round as the question says (e.g. "to 1 decimal place").</li>
+<li>"Show that" questions: write every line, and finish with the exact value given.</li>
+</ol></div></details>
+<details class="rc"><summary>Non-calculator tricks</summary><div class="in"><ul>
+<li>Percentages: find 10%, 5% and 1%, then build up.</li>
+<li>Fractions: ÷ means flip the second fraction and multiply.</li>
+<li>Estimating: round each number to 1 significant figure first.</li>
+<li>Long multiplication: use the grid or column method and check with an estimate.</li>
+<li>Know your squares to 15², cubes to 5³, and the exact trig values.</li>
+</ul></div></details>
+<details class="rc"><summary>Common mistakes</summary><div class="in"><ul>
+<li>−3² = −9 but (−3)² = 9.</li>
+<li>Bearings are measured clockwise from north.</li>
+<li>Area scale factor is k², volume is k³.</li>
+<li>In compound interest, use the multiplier to the power of the years: 1.05<sup>3</sup>, not 1.15.</li>
+<li>Reverse percentages: divide by the multiplier; don't take the percentage off the new amount.</li>
+<li>Frequency density = frequency ÷ class width, not the other way round.</li>
+</ul></div></details>
+<details class="rc"><summary>MathsWatch and other practice</summary><div class="in">
+<p>Each topic shows its <b>MathsWatch clip number</b>. Tap it to go straight to that clip (sign in with your school login if asked). Watch the video, then do the questions.</p>
+<p>For more exam questions, try <a href="https://corbettmaths.com/contents/" target="_blank" rel="noopener">Corbettmaths</a> (videos, worksheets and 5-a-day) and <a href="https://www.physicsandmathstutor.com/" target="_blank" rel="noopener">Physics &amp; Maths Tutor</a> (past papers by topic).</p></div></details>
+</div>
+</div>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script src="shared/study.js"></script>
+<script>
+/* ---- Maths practice generators. Each returns {q, a, w, unit?, tol?, labels?, frac?} or {q, opts, c, w} ---- */
+const ri=(a,b)=>Math.floor(a+Math.random()*(b-a+1));
+const pk=a=>a[Math.floor(Math.random()*a.length)];
+const nz=(a,b)=>{let v=0;while(!v)v=ri(a,b);return v};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a||1};
+const lcm=(a,b)=>a/gcd(a,b)*b;
+const fr=(n,d)=>{if(d<0){n=-n;d=-d}const g=gcd(n,d);n/=g;d/=g;return d===1?String(n):`${n}/${d}`};
+const r2=(x,d=2)=>+x.toFixed(d);
+const sgn=(n,first)=>n<0?(first?"−":" − ")+Math.abs(n):(first?"":" + ")+n;
+const term=(c,v,first)=>{if(c===0)return "";const a=Math.abs(c),s=c<0?(first?"−":" − "):(first?"":" + ");return s+(a===1&&v?"":a)+v};
+const poly=(arr)=>{let s="",f=true;arr.forEach(([c,v])=>{const t=term(c,v,f);if(t){s+=t;f=false}});return s||"0"};
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const mc=(q,right,wrongs,w)=>{const opts=shuf([right,...[...new Set(wrongs)].filter(x=>x!==right).slice(0,3)]);return {q,opts,c:opts.indexOf(right),w}};
+const D=Math.PI/180;
+const G={
+/* NUMBER */
+mulDec(){const a=ri(11,99)/10,b=ri(2,9)/10*(Math.random()<.5?10:1);const ans=r2(a*b,3);return {q:`Work out ${a} × ${b}`,a:ans,w:`${Math.round(a*10)} × ${Math.round(b*10)} = ${Math.round(a*10)*Math.round(b*10)}, then put the decimal point back: ${ans}`}},
+counting(){const a=ri(3,8),b=ri(2,6),c=ri(2,5);return {q:`A café offers ${a} starters, ${b} mains and ${c} desserts. How many different three-course meals are possible?`,a:a*b*c,w:`Product rule: ${a} × ${b} × ${c} = ${a*b*c}`}},
+estimate(){const A=pk([2,3,4,5,6,8]),B=pk([20,30,40,50,60]),C=pk([2,4,5,10]);const a=r2(A+ri(-40,40)/100,2),b=r2(B+ri(-4,4)+ri(0,9)/10,1),c=r2(C+ri(-20,20)/100,2);return {q:`Estimate the value of (${a} × ${b}) ÷ ${c} by rounding each number to 1 significant figure.`,a:A*B/C,w:`≈ (${A} × ${B}) ÷ ${C} = ${A*B} ÷ ${C} = ${A*B/C}`}},
+indices(){const b=pk([2,3,5,7,"x","a"]),m=ri(2,9),n=ri(2,8),k=pk(["mul","div","pow"]);const pw=k==="mul"?m+n:k==="div"?m+n-n:m*n;const M=k==="div"?m+n:m;return {q:k==="mul"?`Simplify ${b}<sup>${m}</sup> × ${b}<sup>${n}</sup>. Give the power.`:k==="div"?`Simplify ${b}<sup>${M}</sup> ÷ ${b}<sup>${n}</sup>. Give the power.`:`Simplify (${b}<sup>${m}</sup>)<sup>${n}</sup>. Give the power.`,a:pw,w:k==="mul"?`Multiply → add the powers: ${m} + ${n} = ${pw}`:k==="div"?`Divide → subtract: ${M} − ${n} = ${pw}`:`Power of a power → multiply: ${m} × ${n} = ${pw}`}},
+fracInd(){const c=pk([[8,1,3],[27,1,3],[16,1,2],[25,1,2],[64,2,3],[8,2,3],[27,2,3],[16,3,4],[81,3,4],[32,2,5],[4,3,2],[9,3,2],[125,2,3]]);const neg=Math.random()<.4;const [b,p,q]=c;const root=Math.round(Math.pow(b,1/q)),val=Math.pow(root,p);return {q:`Work out ${b}<sup>${neg?"−":""}${p}/${q}</sup>.${neg?" Give your answer as a fraction.":""}`,a:neg?1/val:val,frac:neg,w:`The denominator ${q} means the ${q===2?"square":q===3?"cube":q+"th"} root: ${b} → ${root}. Then to the power ${p}: ${val}.${neg?` The negative power means 1 over it: 1/${val}.`:""}`}},
+negInd(){const b=pk([2,3,4,5,10]),n=ri(1,3);const v=Math.pow(b,n);return {q:`Work out ${b}<sup>−${n}</sup>. Give your answer as a fraction.`,a:1/v,frac:true,w:`${b}<sup>−${n}</sup> = 1/${b}<sup>${n}</sup> = 1/${v}`}},
+hcf(){const g=pk([2,3,4,5,6,7,8,9,12]),a=g*ri(2,9),b=g*ri(2,9);const h=gcd(a,b);return {q:`Find the highest common factor (HCF) of ${a} and ${b}.`,a:h,w:`Factors in common; the biggest is ${h}. (Or use prime factor trees and multiply the shared primes.)`}},
+lcmQ(){const a=ri(4,15),b=ri(4,15);const l=lcm(a,b);return {q:`Find the lowest common multiple (LCM) of ${a} and ${b}.`,a:l,w:`List multiples, or use prime factors: LCM = ${l}`}},
+primes(){const ps=[2,2,2,3,3,5,7,11];const f=shuf([...ps]).slice(0,ri(3,4)).sort((a,b)=>a-b);const n=f.reduce((a,b)=>a*b,1);const show=arr=>{const c={};arr.forEach(x=>c[x]=(c[x]||0)+1);return Object.entries(c).map(([p,k])=>k>1?`${p}<sup>${k}</sup>`:p).join(" × ")};const wrong1=[...f];wrong1[0]=f[0]===2?3:2;const wrong2=[...f,2];const wrong3=f.slice(1);return mc(`Write ${n} as a product of its prime factors.`,show(f),[show(wrong1.sort((a,b)=>a-b)),show(wrong2.sort((a,b)=>a-b)),show(wrong3)],`Divide by primes repeatedly: ${n} = ${f.join(" × ")} = ${show(f)}`)},
+sfConv(){const m=ri(11,99)/10,e=pk([-6,-5,-4,-3,4,5,6,7]);const n=e>0?(m*Math.pow(10,e)).toLocaleString("en-GB",{useGrouping:false,maximumFractionDigits:0}):(m*Math.pow(10,e)).toFixed(-e+1);const right=`${m} × 10<sup>${e}</sup>`;return mc(`Write ${n} in standard form.`,right,[`${m} × 10<sup>${e+1}</sup>`,`${m} × 10<sup>${e-1}</sup>`,`${r2(m*10,1)} × 10<sup>${e}</sup>`],`Move the decimal point so the number is between 1 and 10: ${right}`)},
+sfCalc(){const a=ri(2,9),b=ri(2,9),x=ri(2,6),y=ri(2,6);let p=a*b,e=x+y;let m=p;if(p>=10){m=p/10;e+=1}const right=`${m} × 10<sup>${e}</sup>`;return mc(`Work out (${a} × 10<sup>${x}</sup>) × (${b} × 10<sup>${y}</sup>). Give your answer in standard form.`,right,[`${p} × 10<sup>${x+y}</sup>`,`${m} × 10<sup>${e-1}</sup>`,`${m} × 10<sup>${x*y}</sup>`],`${a} × ${b} = ${p}; 10<sup>${x}</sup> × 10<sup>${y}</sup> = 10<sup>${x+y}</sup>${p>=10?`; ${p} = ${m} × 10, so ${right}`:""}`)},
+surds(){const s=pk([2,3,5,6,7]),k=ri(2,6),n=k*k*s;return mc(`Simplify √${n}.`,`${k}√${s}`,[`${s}√${k}`,`${k*k}√${s}`,`${k}√${s*2}`],`√${n} = √(${k*k} × ${s}) = ${k}√${s}`)},
+ratSurd(){const a=ri(2,12),s=pk([2,3,5,7]);const g=gcd(a,s);const right=a%s===0?`${a/s}√${s}`:`${a}√${s}/${s}`;return mc(`Rationalise the denominator: ${a}/√${s}`,right,[`${a}/${s}`,`${a}√${s}`,`√${s}/${a}`],`Multiply top and bottom by √${s}: ${a}√${s}/${s}${a%s===0?` = ${right}`:""}`)},
+fracCalc(){const op=pk(["+","−","×","÷"]);const a=ri(1,7),b=ri(a+1,9),c=ri(1,7),d=ri(c+1,9);let n,dd;if(op==="+"){n=a*d+c*b;dd=b*d}else if(op==="−"){n=a*d-c*b;dd=b*d}else if(op==="×"){n=a*c;dd=b*d}else{n=a*d;dd=b*c}return {q:`Work out ${a}/${b} ${op} ${c}/${d}. Give your answer as a fraction in its simplest form.`,a:n/dd,frac:true,w:op==="+"||op==="−"?`Common denominator ${b*d}: ${a*d}/${b*d} ${op} ${c*b}/${b*d} = ${fr(n,dd)}`:op==="×"?`Multiply tops and bottoms: ${a*c}/${b*d} = ${fr(n,dd)}`:`Flip the second and multiply: ${a}/${b} × ${d}/${c} = ${fr(n,dd)}`}},
+recur(){const c=pk([[1,3,"0.333…","0.3̇"],[2,3,"0.666…","0.6̇"],[1,9,"0.111…","0.1̇"],[4,9,"0.444…","0.4̇"],[1,11,"0.0909…","0.0̇9̇"],[3,11,"0.2727…","0.2̇7̇"],[5,11,"0.4545…","0.4̇5̇"],[7,9,"0.777…","0.7̇"],[1,6,"0.1666…","0.16̇"],[5,6,"0.8333…","0.83̇"]]);return mc(`Write ${c[3]} (${c[2]}) as a fraction.`,`${c[0]}/${c[1]}`,[`${c[0]}/${c[1]+1}`,`${c[0]+1}/${c[1]}`,`${c[0]}/${c[1]*10}`],`Let x = ${c[2]}; multiply by 10 (or 100 for 2 repeating digits), subtract to remove the repeating part, then solve: ${c[0]}/${c[1]}`)},
+pct(){const p=pk([5,10,12.5,15,17.5,20,25,30,35,40,45,60,75]),n=pk([40,60,80,120,160,240,320,360,480,640]);return {q:`Work out ${p}% of £${n}.`,a:r2(p*n/100),unit:"£",w:`${p}% = ${p/100}; ${p/100} × ${n} = ${r2(p*n/100)}. Non-calc: 10% = ${n/10}, 5% = ${n/20}, then build up.`}},
+revPct(){const p=pk([10,15,20,25,30,40]),orig=ri(4,30)*10,up=Math.random()<.5;const now=up?orig*(1+p/100):orig*(1-p/100);return {q:`After a ${p}% ${up?"increase":"decrease"}, a price is £${r2(now)}. What was the original price?`,a:orig,unit:"£",w:`£${r2(now)} = ${up?100+p:100-p}% of the original. ÷ ${up?(100+p)/100:(100-p)/100} = £${orig}`}},
+errInt(){const k=pk(["dp","nearest"]);if(k==="dp"){const x=ri(10,99)/10;return {q:`x = ${x} rounded to 1 decimal place. Write the error interval for x.`,a:[r2(x-.05),r2(x+.05)],labels:["Lower ≤ x","x < Upper"],w:`Half of 0.1 is 0.05: ${r2(x-.05)} ≤ x < ${r2(x+.05)}`}}const u=pk([10,100,5]),x=ri(3,40)*u;return {q:`A length is ${x} cm, rounded to the nearest ${u} cm. Write the error interval.`,a:[x-u/2,x+u/2],labels:["Lower ≤ L","L < Upper"],w:`Half of ${u} is ${u/2}: ${x-u/2} ≤ L < ${x+u/2}`}},
+bounds(){const a=ri(20,90),b=ri(3,9);return {q:`a = ${a} to the nearest whole number and b = ${b} to the nearest whole number. Work out the upper bound of a ÷ b. Give your answer to 2 decimal places.`,a:r2((a+.5)/(b-.5)),tol:.01,w:`Upper bound of a ÷ b = biggest a ÷ smallest b = ${a+.5} ÷ ${b-.5} = ${r2((a+.5)/(b-.5))}`}},
+/* ALGEBRA */
+collect(){const a=nz(-6,9),b=nz(-6,9),c=nz(-6,9),d=nz(-6,9);const right=poly([[a+c,"x"],[b+d,"y"]]);return mc(`Simplify ${poly([[a,"x"],[b,"y"],[c,"x"],[d,"y"]])}`,right,[poly([[a+c,"x"],[b-d,"y"]]),poly([[a-c,"x"],[b+d,"y"]]),poly([[a+b+c+d,"xy"]])],`x terms: ${a} + ${c} = ${a+c}; y terms: ${b} + ${d} = ${b+d}`)},
+subst(){const a=nz(-5,6),b=nz(-5,6),p=ri(2,5),q=nz(-6,6);const v=p*a*a+q*b;return {q:`Work out ${p}a² ${q<0?"−":"+"} ${Math.abs(q)}b when a = ${a} and b = ${b}.`,a:v,w:`${p} × (${a})² ${q<0?"−":"+"} ${Math.abs(q)} × (${b}) = ${p*a*a} ${q*b<0?"−":"+"} ${Math.abs(q*b)} = ${v}`}},
+expand1(){const k=nz(-6,7),a=ri(2,6),b=nz(-9,9);return mc(`Expand ${k}(${a}x ${b<0?"−":"+"} ${Math.abs(b)})`,poly([[k*a,"x"],[k*b,""]]),[poly([[k*a,"x"],[b,""]]),poly([[k+a,"x"],[k*b,""]]),poly([[k*a,"x"],[-k*b,""]])],`Multiply everything inside by ${k}: ${k} × ${a}x = ${k*a}x and ${k} × ${b} = ${k*b}`)},
+expand2(){const a=nz(-9,9),b=nz(-9,9);return mc(`Expand and simplify (x ${sgn(a).trim()})(x ${sgn(b).trim()})`.replace("( x","(x"),poly([[1,"x²"],[a+b,"x"],[a*b,""]]),[poly([[1,"x²"],[a*b,"x"],[a+b,""]]),poly([[1,"x²"],[a+b,""]]),poly([[1,"x²"],[a-b,"x"],[-a*b,""]])],`FOIL: x² ${sgn(b)}x ${sgn(a)}x ${sgn(a*b)} = ${poly([[1,"x²"],[a+b,"x"],[a*b,""]])}`)},
+expand3(){const a=nz(-4,4),b=nz(-4,4),c=nz(-4,4);const s2=a*b+a*c+b*c,s1=a+b+c,s0=a*b*c;return mc(`Expand (x ${sgn(a).trim()})(x ${sgn(b).trim()})(x ${sgn(c).trim()})`,poly([[1,"x³"],[s1,"x²"],[s2,"x"],[s0,""]]),[poly([[1,"x³"],[s2,"x²"],[s1,"x"],[s0,""]]),poly([[1,"x³"],[s1,"x²"],[s2,"x"],[-s0,""]]),poly([[1,"x³"],[s1,"x"],[s0,""]])],`Expand two brackets first: (x² ${sgn(a+b)}x ${sgn(a*b)}), then multiply by (x ${sgn(c)}).`)},
+factor1(){const g=ri(2,8),a=nz(1,7),b=nz(-9,9);const x=pk(["x","y","a"]);if(gcd(a,b)!==1)return G.factor1();return mc(`Factorise fully ${poly([[g*a,x],[g*b,""]])}`,`${g}(${poly([[a,x],[b,""]])})`,[`${g*a}(${poly([[1,x],[b,""]])})`,`${g}(${poly([[a,x],[-b,""]])})`,`${g}${x}(${a} ${sgn(b)})`],`The highest common factor is ${g}.`)},
+factorQ(){const p=nz(-9,9),q=nz(-9,9);const b=p+q,c=p*q;if(b===0)return G.factorQ();return mc(`Factorise ${poly([[1,"x²"],[b,"x"],[c,""]])}`,`(x ${sgn(p).trim()})(x ${sgn(q).trim()})`,[`(x ${sgn(-p).trim()})(x ${sgn(-q).trim()})`,`(x ${sgn(c).trim()})(x ${sgn(1).trim()})`,`(x ${sgn(p).trim()})(x ${sgn(-q).trim()})`],`Find two numbers that multiply to ${c} and add to ${b}: ${p} and ${q}.`)},
+solveQ(){const p=nz(-9,9),q=nz(-9,9);if(p===q)return G.solveQ();const b=-(p+q),c=p*q;return {q:`Solve ${poly([[1,"x²"],[b,"x"],[c,""]])} = 0. Enter the smaller solution first.`,a:[Math.min(p,q),Math.max(p,q)],labels:["x =","x ="],w:`(x ${sgn(-p).trim()})(x ${sgn(-q).trim()}) = 0, so x = ${p} or x = ${q}`}},
+qFormula(){let a,b,c,disc;do{a=ri(1,4);b=nz(-9,9);c=nz(-9,9);disc=b*b-4*a*c}while(disc<=0||Number.isInteger(Math.sqrt(disc)));const x1=(-b-Math.sqrt(disc))/(2*a),x2=(-b+Math.sqrt(disc))/(2*a);return {q:`Solve ${poly([[a,"x²"],[b,"x"],[c,""]])} = 0. Give your answers to 2 decimal places, smaller first.`,a:[r2(x1),r2(x2)],tol:.011,labels:["x =","x ="],w:`x = (−b ± √(b² − 4ac)) ÷ 2a = (${-b} ± √${disc}) ÷ ${2*a}, so x = ${r2(x1)} or ${r2(x2)}`}},
+rearrange(){const c=pk([["v = u + at","t","t = (v − u)/a",["t = v − u − a","t = (v + u)/a","t = a(v − u)"]],["y = mx + c","x","x = (y − c)/m",["x = y − c − m","x = (y + c)/m","x = m(y − c)"]],["A = πr²","r","r = √(A/π)",["r = A/π","r = √A − π","r = (A/π)²"]],["P = 2(l + w)","w","w = P/2 − l",["w = P − 2l","w = 2P − l","w = (P − l)/2"]],["s = d/t","t","t = d/s",["t = ds","t = s/d","t = d − s"]],["y = 3x − 5","x","x = (y + 5)/3",["x = (y − 5)/3","x = 3y + 5","x = y/3 + 5"]]]);return mc(`Make ${c[1]} the subject of ${c[0]}`,c[2],c[3],`Do the inverse operations in reverse order to get ${c[1]} on its own: ${c[2]}`)},
+solve(){const x=nz(-8,10),a=ri(2,9),b=nz(-12,12),c=nz(1,5);const k=pk([1,2]);if(k===1){return {q:`Solve ${a}x ${sgn(b).trim()} = ${a*x+b}`,a:x,w:`Subtract ${b}: ${a}x = ${a*x}; divide by ${a}: x = ${x}`}}const d=a+c;return {q:`Solve ${d}x ${sgn(b).trim()} = ${c}x ${sgn(b+a*x).trim()}`.replace("+ -","− "),a:x,w:`Subtract ${c}x from both sides: ${a}x ${sgn(b)} = ${b+a*x}; so ${a}x = ${a*x}; x = ${x}`}},
+linSeq(){const d=nz(-6,8),a=nz(-5,12);const s=[0,1,2,3,4].map(i=>a+i*d);return {q:`Find the nth term of ${s.join(", ")}, … Write it as an + b.`,a:[d,a-d],labels:["a =","b ="],w:`Common difference ${d}, so ${d}n. ${d} × 1 = ${d}; to get ${a} add ${a-d}: nth term = ${d}n ${sgn(a-d)}`}},
+quadSeq(){const A=pk([1,2,3]),B=nz(-5,5),C=nz(-6,6);const s=[1,2,3,4,5].map(n=>A*n*n+B*n+C);const right=poly([[A,"n²"],[B,"n"],[C,""]]);return mc(`Find the nth term of ${s.join(", ")}, …`,right,[poly([[A*2,"n²"],[B,"n"],[C,""]]),poly([[A,"n²"],[B+1,"n"],[C-1,""]]),poly([[A,"n²"],[-B,"n"],[C,""]])],`Second difference ${2*A}, so ${A}n². Subtract ${A}n² from each term to get a linear sequence: ${B}n ${sgn(C)}.`)},
+geoSeq(){const a=ri(1,6),r=pk([2,3,-2,4,0.5]);const s=[0,1,2,3].map(i=>r2(a*Math.pow(r,i),3));return {q:`Find the next term of the geometric sequence ${s.join(", ")}, …`,a:r2(a*Math.pow(r,4),3),w:`Each term is multiplied by ${r}: ${s[3]} × ${r} = ${r2(a*Math.pow(r,4),3)}`}},
+linGraph(){const x1=ri(-4,2),y1=ri(-5,5),m=nz(-4,5),dx=ri(1,4),x2=x1+dx,y2=y1+m*dx;const c=y1-m*x1;return {q:`A straight line passes through (${x1}, ${y1}) and (${x2}, ${y2}). Find the gradient and the y-intercept.`,a:[m,c],labels:["m =","c ="],w:`m = (${y2} − ${y1}) ÷ (${x2} − ${x1}) = ${m}. Then ${y1} = ${m} × ${x1} + c, so c = ${c}.`}},
+perp(){const m=pk([[2,1],[3,1],[-2,1],[-3,1],[4,1],[1,2],[-1,4],[3,2],[-2,3]]);const show=(p,q)=>q===1?String(p):`${p<0?"−":""}${Math.abs(p)}/${q}`;const P=-m[1],Q=m[0];const pp=Q<0?-P:P,qq=Math.abs(Q);return {q:`A line has gradient ${show(m[0],m[1])}. What is the gradient of a line perpendicular to it? (Fractions allowed.)`,a:pp/qq,frac:true,w:`Perpendicular gradient = −1 ÷ m: flip the fraction and change the sign → ${show(pp,qq)}`}},
+formSolve(){const x=ri(3,15),a=ri(2,5),b=ri(1,9);const per=2*(x+a*x+b);return {q:`A rectangle has width x cm and length (${a}x + ${b}) cm. Its perimeter is ${per} cm. Find x.`,a:x,unit:"cm",w:`2(x + ${a}x + ${b}) = ${per} → ${2*(a+1)}x + ${2*b} = ${per} → x = ${x}`}},
+ineq(){const a=ri(2,7),b=nz(-9,9),x=nz(-6,9);const op=pk(["<",">","≤","≥"]);return {q:`Solve ${a}x ${sgn(b).trim()} ${op} ${a*x+b}. Enter the boundary value of x (the answer is x ${op} ?).`,a:x,w:`Subtract ${b} and divide by ${a}: x ${op} ${x}`}},
+gIneq(){return mc(`Which region is described by y > 2x + 1?`,"Above the line y = 2x + 1 (dashed line)",["Below the line y = 2x + 1","Above the line, drawn solid","Left of the line x = 2"],`> means above, and strict inequalities use a dashed line.`)},
+simEq(){const x=nz(-5,7),y=nz(-5,7),a=ri(1,5),b=nz(-4,5),c=ri(1,5),d=nz(-4,5);if(a*d-b*c===0)return G.simEq();return {q:`Solve the simultaneous equations:<br>${poly([[a,"x"],[b,"y"]])} = ${a*x+b*y}<br>${poly([[c,"x"],[d,"y"]])} = ${c*x+d*y}`,a:[x,y],labels:["x =","y ="],w:`Make the coefficients of one letter match, then add or subtract to eliminate it. x = ${x}, y = ${y}. Check by substituting into both equations.`}},
+complete(){const p=nz(-6,6),q=nz(-9,9);const b=2*p,c=p*p+q;return mc(`Write ${poly([[1,"x²"],[b,"x"],[c,""]])} in the form (x + a)² + b.`,`(x ${sgn(p).trim()})² ${sgn(q).trim()}`,[`(x ${sgn(b).trim()})² ${sgn(q).trim()}`,`(x ${sgn(p).trim()})² ${sgn(c).trim()}`,`(x ${sgn(-p).trim()})² ${sgn(q).trim()}`],`Halve the x coefficient: a = ${p}. Then subtract a² = ${p*p}: ${c} − ${p*p} = ${q}.`)},
+quadIneq(){const p=ri(1,6),n=-ri(1,6);return mc(`Solve ${poly([[1,"x²"],[-(p+n),"x"],[p*n,""]])} < 0`,`${n} < x < ${p}`,[`x < ${n} or x > ${p}`,`x < ${p}`,`${-p} < x < ${-n}`],`Roots are x = ${n} and x = ${p}. The graph is a U shape, so it's below 0 between the roots.`)},
+iter(){const x0=ri(1,3);const f=x=>Math.cbrt(2*x+5);let x=x0;for(let i=0;i<3;i++)x=f(x);return {q:`Using x<sub>n+1</sub> = ∛(2x<sub>n</sub> + 5) with x<sub>0</sub> = ${x0}, find x<sub>3</sub> to 3 decimal places.`,a:r2(x,3),tol:.0011,w:`x₁ = ${r2(f(x0),4)}, x₂ = ${r2(f(f(x0)),4)}, x₃ = ${r2(x,4)} → ${r2(x,3)}`}},
+func(){const a=ri(2,6),b=nz(-9,9),x=nz(-5,8);return {q:`f(x) = ${a}x ${sgn(b).trim()}. Work out f(${x}).`,a:a*x+b,w:`${a} × ${x} ${sgn(b)} = ${a*x+b}`}},
+compInv(){const a=ri(2,5),b=nz(-9,9),c=ri(2,4),x=nz(-4,5);const k=pk(["fg","inv"]);if(k==="fg"){const g=x*x;return {q:`f(x) = ${a}x ${sgn(b).trim()} and g(x) = x². Work out fg(${x}).`,a:a*g+b,w:`g(${x}) = ${g} first, then f(${g}) = ${a*g+b}`}}const y=a*x+b;return {q:`f(x) = ${a}x ${sgn(b).trim()}. Work out f<sup>−1</sup>(${y}).`,a:x,w:`f<sup>−1</sup>(x) = (x ${sgn(-b)}) ÷ ${a}, so (${y} ${sgn(-b)}) ÷ ${a} = ${x}`}},
+algFrac(){const p=nz(-6,6),q=nz(-6,6);if(p===q)return G.algFrac();return mc(`Simplify (${poly([[1,"x²"],[p+q,"x"],[p*q,""]])}) ÷ (x ${sgn(p).trim()})`,`x ${sgn(q).trim()}`,[`x ${sgn(p).trim()}`,`x ${sgn(-q).trim()}`,`x² ${sgn(q).trim()}`],`Factorise the top: (x ${sgn(p).trim()})(x ${sgn(q).trim()}), then cancel (x ${sgn(p).trim()}).`)},
+transf(){const k=pk([["y = f(x) + 3","Translation 3 units up"],["y = f(x + 3)","Translation 3 units left"],["y = f(x − 3)","Translation 3 units right"],["y = −f(x)","Reflection in the x-axis"],["y = f(−x)","Reflection in the y-axis"]]);return mc(`Describe the transformation from y = f(x) to ${k[0]}.`,k[1],["Translation 3 units up","Translation 3 units left","Translation 3 units right","Reflection in the x-axis","Reflection in the y-axis"].filter(x=>x!==k[1]),`Changes outside the bracket move y (as you'd expect); inside the bracket move x the opposite way.`)},
+circleEq(){const r=ri(2,12);return {q:`A circle has equation x² + y² = ${r*r}. What is its radius?`,a:r,w:`x² + y² = r², so r = √${r*r} = ${r}`}},
+/* GEOMETRY & TRIG */
+pyth(){const t=pk([[3,4,5],[5,12,13],[8,15,17],[7,24,25],[6,8,10],[9,12,15]]),k=Math.random()<.5;const s=pk([1,1,2]);const [a,b,c]=t.map(x=>x*s);if(k)return {q:`A right-angled triangle has shorter sides ${a} cm and ${b} cm. Find the hypotenuse.`,a:c,unit:"cm",w:`c² = ${a}² + ${b}² = ${a*a+b*b}; c = √${a*a+b*b} = ${c}`};return {q:`A right-angled triangle has hypotenuse ${c} cm and one side ${a} cm. Find the other side.`,a:b,unit:"cm",w:`b² = ${c}² − ${a}² = ${c*c-a*a}; b = ${b}`}},
+pyth3(){const a=ri(3,9),b=ri(3,9),c=ri(3,9);const d=Math.sqrt(a*a+b*b+c*c);return {q:`A cuboid is ${a} cm × ${b} cm × ${c} cm. Find the length of the space diagonal to 1 decimal place.`,a:r2(d,1),tol:.051,unit:"cm",w:`d = √(${a}² + ${b}² + ${c}²) = √${a*a+b*b+c*c} = ${r2(d,2)}`}},
+sohSide(){const ang=ri(20,70),h=ri(5,20),k=pk(["opp","adj"]);const v=k==="opp"?h*Math.sin(ang*D):h*Math.cos(ang*D);return {q:`A right-angled triangle has hypotenuse ${h} cm and an angle of ${ang}°. Find the side ${k==="opp"?"opposite":"adjacent to"} the angle, to 1 decimal place.`,a:r2(v,1),tol:.051,unit:"cm",w:`${k==="opp"?"SOH: opp = hyp × sin":"CAH: adj = hyp × cos"} ${ang}° = ${h} × ${r2(k==="opp"?Math.sin(ang*D):Math.cos(ang*D),4)} = ${r2(v,2)}`}},
+sohAng(){const o=ri(3,12),a=ri(3,12);const ang=Math.atan(o/a)/D;return {q:`A right-angled triangle has opposite side ${o} cm and adjacent side ${a} cm. Find the angle to 1 decimal place.`,a:r2(ang,1),tol:.051,unit:"°",w:`TOA: tan θ = ${o}/${a}; θ = tan⁻¹(${r2(o/a,4)}) = ${r2(ang,2)}°`}},
+sineRule(){const A=ri(30,80),B=ri(30,80),a=ri(6,15);const b=a*Math.sin(B*D)/Math.sin(A*D);return {q:`In triangle ABC, angle A = ${A}°, angle B = ${B}° and side a = ${a} cm. Find side b to 1 decimal place.`,a:r2(b,1),tol:.051,unit:"cm",w:`b/sin B = a/sin A → b = ${a} × sin ${B}° ÷ sin ${A}° = ${r2(b,2)}`}},
+cosRule(){const b=ri(4,12),c=ri(4,12),A=ri(35,120);const a=Math.sqrt(b*b+c*c-2*b*c*Math.cos(A*D));return {q:`In triangle ABC, b = ${b} cm, c = ${c} cm and angle A = ${A}°. Find side a to 1 decimal place.`,a:r2(a,1),tol:.051,unit:"cm",w:`a² = b² + c² − 2bc cos A = ${b*b} + ${c*c} − ${2*b*c} × cos ${A}° = ${r2(a*a,2)}; a = ${r2(a,2)}`}},
+triArea(){const a=ri(4,12),b=ri(4,12),C=ri(25,140);const A=.5*a*b*Math.sin(C*D);return {q:`Two sides of a triangle are ${a} cm and ${b} cm and the angle between them is ${C}°. Find the area to 1 decimal place.`,a:r2(A,1),tol:.051,unit:"cm²",w:`Area = ½ab sin C = ½ × ${a} × ${b} × sin ${C}° = ${r2(A,2)}`}},
+exactTrig(){const c=pk([["sin 30°","1/2"],["cos 60°","1/2"],["tan 45°","1"],["sin 90°","1"],["cos 0°","1"],["tan 30°","1/√3"],["sin 60°","√3/2"],["cos 30°","√3/2"],["tan 60°","√3"],["sin 45°","1/√2"],["cos 90°","0"],["sin 0°","0"]]);return mc(`What is the exact value of ${c[0]}?`,c[1],["1/2","√3/2","1/√2","1","0","√3","1/√3"].filter(x=>x!==c[1]).sort(()=>Math.random()-.5),`Learn the table for 0°, 30°, 45°, 60°, 90°: ${c[0]} = ${c[1]}`)},
+trigGraph(){const c=pk([["y = sin x","starts at 0, peaks at 90°, back to 0 at 180°"],["y = cos x","starts at 1, crosses 0 at 90°, −1 at 180°"],["y = tan x","has asymptotes at 90° and 270°"]]);return mc(`Which describes the graph of ${c[0]} for 0° ≤ x ≤ 360°?`,c[1],["starts at 0, peaks at 90°, back to 0 at 180°","starts at 1, crosses 0 at 90°, −1 at 180°","has asymptotes at 90° and 270°","is a straight line through the origin"].filter(x=>x!==c[1]),`Sketch all three and remember the key points.`)},
+area2d(){const k=pk(["trap","tri","par"]);const a=ri(3,12),b=ri(3,12),h=ri(2,10);if(k==="trap")return {q:`A trapezium has parallel sides ${a} cm and ${b} cm and height ${h} cm. Find its area.`,a:(a+b)*h/2,unit:"cm²",w:`½(a + b)h = ½ × ${a+b} × ${h} = ${(a+b)*h/2}`};if(k==="tri")return {q:`A triangle has base ${a} cm and perpendicular height ${h} cm. Find its area.`,a:a*h/2,unit:"cm²",w:`½ × ${a} × ${h} = ${a*h/2}`};return {q:`A parallelogram has base ${a} cm and perpendicular height ${h} cm. Find its area.`,a:a*h,unit:"cm²",w:`base × height = ${a*h}`}},
+triQuad(){const k=pk(["iso","quad","ext"]);if(k==="iso"){const t=ri(20,140);return {q:`An isosceles triangle has a top angle of ${t}°. Find each of the two equal base angles.`,a:(180-t)/2,unit:"°",w:`(180 − ${t}) ÷ 2 = ${(180-t)/2}`}}if(k==="quad"){const a=ri(60,120),b=ri(60,120),c=ri(50,110);return {q:`Three angles of a quadrilateral are ${a}°, ${b}° and ${c}°. Find the fourth angle.`,a:360-a-b-c,unit:"°",w:`Angles in a quadrilateral add to 360°: 360 − ${a+b+c} = ${360-a-b-c}`}}const a=ri(30,80),b=ri(30,80);return {q:`Two interior angles of a triangle are ${a}° and ${b}°. Find the exterior angle at the third vertex.`,a:a+b,unit:"°",w:`Exterior angle = sum of the two opposite interior angles = ${a+b}`}},
+parallel(){const a=ri(35,145),k=pk([["alternate",a],["corresponding",a],["co-interior",180-a],["vertically opposite",a]]);return {q:`Two parallel lines are crossed by a transversal. One angle is ${a}°. What is the ${k[0]} angle?`,a:k[1],unit:"°",w:k[0]==="co-interior"?`Co-interior angles add to 180°: ${180-a}`:`${k[0][0].toUpperCase()+k[0].slice(1)} angles are equal: ${a}°`}},
+polygon(){const n=pk([5,6,8,9,10,12,15,18,20]),k=pk(["int","ext","sum"]);const nm={5:"pentagon",6:"hexagon",8:"octagon",9:"nonagon",10:"decagon"}[n]||`${n}-sided polygon`;if(k==="sum")return {q:`Find the sum of the interior angles of a ${nm}.`,a:(n-2)*180,unit:"°",w:`(n − 2) × 180 = ${n-2} × 180 = ${(n-2)*180}`};if(k==="ext")return {q:`Find the exterior angle of a regular ${nm}.`,a:r2(360/n,1),unit:"°",w:`360 ÷ ${n} = ${r2(360/n,2)}`};return {q:`Find each interior angle of a regular ${nm}.`,a:r2(180-360/n,1),unit:"°",w:`Exterior = 360 ÷ ${n} = ${r2(360/n,2)}; interior = 180 − that = ${r2(180-360/n,2)}`}},
+circle(){const r=ri(2,15),k=pk(["area","circ"]),d=Math.random()<.5;const v=k==="area"?Math.PI*r*r:2*Math.PI*r;return {q:`A circle has ${d?"diameter":"radius"} ${d?2*r:r} cm. Find its ${k==="area"?"area":"circumference"} to 1 decimal place.`,a:r2(v,1),tol:.051,unit:k==="area"?"cm²":"cm",w:`${d?`Radius = ${r}. `:""}${k==="area"?`πr² = π × ${r}²`:`2πr = 2 × π × ${r}`} = ${r2(v,2)}`}},
+sector(){const r=ri(3,15),t=pk([30,40,45,60,72,90,120,135,150,210,240]),k=pk(["area","arc"]);const v=k==="area"?t/360*Math.PI*r*r:t/360*2*Math.PI*r;return {q:`A sector has radius ${r} cm and angle ${t}°. Find its ${k==="area"?"area":"arc length"} to 1 decimal place.`,a:r2(v,1),tol:.051,unit:k==="area"?"cm²":"cm",w:`${t}/360 × ${k==="area"?`π × ${r}²`:`2 × π × ${r}`} = ${r2(v,2)}`}},
+surface(){const k=pk(["cuboid","cyl"]);if(k==="cuboid"){const a=ri(2,10),b=ri(2,10),c=ri(2,10);return {q:`Find the surface area of a ${a} cm × ${b} cm × ${c} cm cuboid.`,a:2*(a*b+a*c+b*c),unit:"cm²",w:`2(${a*b} + ${a*c} + ${b*c}) = ${2*(a*b+a*c+b*c)}`}}const r=ri(2,8),h=ri(3,15);const v=2*Math.PI*r*h+2*Math.PI*r*r;return {q:`Find the total surface area of a cylinder with radius ${r} cm and height ${h} cm, to 1 decimal place.`,a:r2(v,1),tol:.051,unit:"cm²",w:`2πrh + 2πr² = ${r2(2*Math.PI*r*h,2)} + ${r2(2*Math.PI*r*r,2)} = ${r2(v,2)}`}},
+volume(){const k=pk(["prism","cyl","cuboid"]);if(k==="cuboid"){const a=ri(2,12),b=ri(2,12),c=ri(2,12);return {q:`Find the volume of a ${a} cm × ${b} cm × ${c} cm cuboid.`,a:a*b*c,unit:"cm³",w:`${a} × ${b} × ${c} = ${a*b*c}`}}if(k==="prism"){const A=ri(6,40),l=ri(3,15);return {q:`A prism has cross-sectional area ${A} cm² and length ${l} cm. Find its volume.`,a:A*l,unit:"cm³",w:`Area × length = ${A*l}`}}const r=ri(2,9),h=ri(3,15);const v=Math.PI*r*r*h;return {q:`Find the volume of a cylinder with radius ${r} cm and height ${h} cm, to 1 decimal place.`,a:r2(v,1),tol:.051,unit:"cm³",w:`πr²h = π × ${r*r} × ${h} = ${r2(v,2)}`}},
+coneSphere(){const k=pk(["cone","sphere","hemi"]);const r=ri(2,9),h=ri(4,15);const v=k==="cone"?Math.PI*r*r*h/3:k==="sphere"?4/3*Math.PI*r**3:2/3*Math.PI*r**3;return {q:`Find the volume of a ${k==="cone"?`cone with radius ${r} cm and height ${h} cm`:k==="sphere"?`sphere with radius ${r} cm`:`hemisphere with radius ${r} cm`}, to 1 decimal place. (The formula is on your sheet.)`,a:r2(v,1),tol:.051,unit:"cm³",w:k==="cone"?`⅓πr²h = ⅓ × π × ${r*r} × ${h} = ${r2(v,2)}`:k==="sphere"?`⁴⁄₃πr³ = ${r2(v,2)}`:`Half of ⁴⁄₃πr³ = ${r2(v,2)}`}},
+bearing(){const b=ri(10,350);const back=b>=180?b-180:b+180;return {q:`The bearing of B from A is ${String(b).padStart(3,"0")}°. What is the bearing of A from B?`,a:back,unit:"°",w:`Add or subtract 180°: ${String(back).padStart(3,"0")}°`}},
+transform(){const c=pk([["Translation by vector (3, −2)","moves every point 3 right and 2 down"],["Reflection in the line y = x","swaps the x and y coordinates"],["Rotation 90° clockwise about the origin","(x, y) → (y, −x)"],["Enlargement scale factor 2, centre the origin","doubles every coordinate"]]);return mc(`Which transformation ${c[1]}?`,c[0],["Translation by vector (3, −2)","Reflection in the line y = x","Rotation 90° clockwise about the origin","Enlargement scale factor 2, centre the origin"].filter(x=>x!==c[0]),`To describe fully: translation needs a vector; reflection a mirror line; rotation an angle, direction and centre; enlargement a scale factor and centre.`)},
+similar(){const k=ri(2,4),a=ri(3,9),b=ri(3,9);const t=pk(["len","area"]);if(t==="len")return {q:`Two triangles are similar. A side of ${a} cm on the small one matches ${a*k} cm on the large one. Another side on the small one is ${b} cm. Find the matching side on the large one.`,a:b*k,unit:"cm",w:`Scale factor ${a*k} ÷ ${a} = ${k}; ${b} × ${k} = ${b*k}`};const A=ri(4,20);return {q:`Two shapes are similar with length scale factor ${k}. The small one has area ${A} cm². Find the area of the large one.`,a:A*k*k,unit:"cm²",w:`Area scale factor = ${k}² = ${k*k}; ${A} × ${k*k} = ${A*k*k}`}},
+/* RATIO */
+share(){const a=ri(1,7),b=ri(1,7),u=ri(3,25);const t=(a+b)*u;return {q:`Share £${t} in the ratio ${a} : ${b}. How much is the larger share?`,a:Math.max(a,b)*u,unit:"£",w:`${a+b} parts; one part = ${t} ÷ ${a+b} = ${u}; larger = ${Math.max(a,b)} × ${u} = ${Math.max(a,b)*u}`}},
+share3(){const a=ri(1,6),b=ri(1,6),c=ri(1,6),u=ri(2,15);const t=(a+b+c)*u;return {q:`£${t} is shared in the ratio ${a} : ${b} : ${c}. How much is the middle share (the ${b} part)?`,a:b*u,unit:"£",w:`${a+b+c} parts; one part = ${u}; ${b} × ${u} = ${b*u}`}},
+ratioFrac(){const a=ri(1,8),b=ri(1,8);return {q:`Boys and girls are in the ratio ${a} : ${b}. What fraction of the group are girls?`,a:b/(a+b),frac:true,w:`${b} out of ${a+b} parts: ${fr(b,a+b)}`}},
+recipe(){const p=pk([2,4,5,6]),q=pk([3,8,10,12,15]),g=ri(4,30)*10;return {q:`A recipe for ${p} people uses ${g} g of flour. How much flour is needed for ${q} people?`,a:r2(g/p*q,1),unit:"g",w:`${g} ÷ ${p} = ${r2(g/p,2)} g per person; × ${q} = ${r2(g/p*q,2)}`}},
+exchange(){const r=pk([1.15,1.17,1.2,1.25,1.3]),x=ri(4,40)*10;const to=Math.random()<.5;return to?{q:`£1 = €${r}. Change £${x} into euros.`,a:r2(x*r),unit:"€",w:`${x} × ${r} = ${r2(x*r)}`}:{q:`£1 = €${r}. Change €${r2(x*r)} into pounds.`,a:x,unit:"£",w:`${r2(x*r)} ÷ ${r} = ${x}`}},
+bestValue(){const a=pk([250,400,500]),b=pk([600,750,1000]);const pa=r2(a/100*ri(80,140)/100,2),pb=r2(b/100*ri(80,140)/100,2);const ua=pa/a,ub=pb/b;if(Math.abs(ua-ub)<1e-4)return G.bestValue();const best=ua<ub?`${a} g for £${pa.toFixed(2)}`:`${b} g for £${pb.toFixed(2)}`;return mc(`Which is better value: ${a} g for £${pa.toFixed(2)} or ${b} g for £${pb.toFixed(2)}?`,best,[ua<ub?`${b} g for £${pb.toFixed(2)}`:`${a} g for £${pa.toFixed(2)}`,"They are the same value"],`Price per 100 g: £${r2(ua*100,3)} vs £${r2(ub*100,3)}. Lower is better value.`)},
+compound(){const P=ri(5,50)*100,r=pk([2,3,4,5,6]),n=ri(2,6);const v=P*Math.pow(1+r/100,n);return {q:`£${P} is invested at ${r}% compound interest per year. How much is it worth after ${n} years? (To the nearest penny.)`,a:r2(v),tol:.011,unit:"£",w:`${P} × ${1+r/100}<sup>${n}</sup> = ${r2(v)}`}},
+deprec(){const P=ri(5,40)*1000,r=pk([5,10,12,15,20,25]),n=ri(2,5);const v=P*Math.pow(1-r/100,n);return {q:`A car worth £${P} depreciates by ${r}% per year. What is it worth after ${n} years? (To the nearest pound.)`,a:Math.round(v),tol:1,unit:"£",w:`${P} × ${r2(1-r/100,2)}<sup>${n}</sup> = ${r2(v)}`}},
+direct(){const k=ri(2,9),x1=ri(2,6),x2=ri(7,15);const sq=Math.random()<.4;const f=x=>sq?k*x*x:k*x;return {q:`y is directly proportional to ${sq?"x²":"x"}. When x = ${x1}, y = ${f(x1)}. Find y when x = ${x2}.`,a:f(x2),w:`y = k${sq?"x²":"x"}: k = ${f(x1)} ÷ ${sq?x1*x1:x1} = ${k}; y = ${k} × ${sq?x2+"²":x2} = ${f(x2)}`}},
+inverse(){const k=pk([24,36,48,60,72,120,144]),x1=pk([2,3,4,6]),x2=pk([8,12,2,3]);return {q:`y is inversely proportional to x. When x = ${x1}, y = ${k/x1}. Find y when x = ${x2}.`,a:r2(k/x2,3),w:`y = k/x: k = ${x1} × ${k/x1} = ${k}; y = ${k} ÷ ${x2} = ${r2(k/x2,3)}`}},
+sdt(){const s=ri(4,18)*5,t=pk([0.5,1.5,2,2.5,3,4]),k=pk(["d","s","t"]);const d=s*t;if(k==="d")return {q:`A car travels at ${s} km/h for ${t} hours. How far does it go?`,a:d,unit:"km",w:`d = s × t = ${d}`};if(k==="s")return {q:`A train travels ${d} km in ${t} hours. Find its average speed.`,a:s,unit:"km/h",w:`s = d ÷ t = ${s}`};return {q:`How long does it take to travel ${d} km at ${s} km/h?`,a:t,unit:"hours",w:`t = d ÷ s = ${t}`}},
+density(){const dn=pk([2.5,7.8,8.9,0.8,1.2,11.3]),v=ri(5,60);const m=r2(dn*v,1);const k=Math.random()<.5;return k?{q:`An object has mass ${m} g and volume ${v} cm³. Find its density.`,a:dn,unit:"g/cm³",w:`density = mass ÷ volume = ${dn}`}:{q:`A metal has density ${dn} g/cm³. Find the mass of ${v} cm³.`,a:m,unit:"g",w:`mass = density × volume = ${m}`}},
+pressure(){const A=pk([0.5,2,4,5,8,10]),F=ri(2,40)*10;return {q:`A force of ${F} N acts on an area of ${A} m². Find the pressure.`,a:r2(F/A,2),unit:"N/m²",w:`P = F ÷ A = ${r2(F/A,2)}`}},
+eqRatio(){const a=ri(1,5),b=ri(2,6),b2=ri(2,6),c=ri(1,7);const L=lcm(b,b2);let A=a*L/b,B=L,C=c*L/b2;const g=gcd(gcd(A,B),C);A/=g;B/=g;C/=g;return {q:`a : b = ${a} : ${b} and b : c = ${b2} : ${c}. Write a : b : c in its simplest form.`,a:[A,B,C],labels:["a","b","c"],w:`Make b the same in both: LCM of ${b} and ${b2} is ${L}. a : b = ${a*L/b} : ${L}, b : c = ${L} : ${c*L/b2}, so a : b : c = ${A} : ${B} : ${C}`}},
+/* STATS */
+averages(){const v=Array.from({length:ri(5,9)},()=>ri(1,20)),k=pk(["mean","median","range"]);const s=[...v].sort((a,b)=>a-b);const med=s.length%2?s[(s.length-1)/2]:(s[s.length/2-1]+s[s.length/2])/2;const ans=k==="mean"?r2(v.reduce((a,b)=>a+b,0)/v.length,2):k==="median"?med:s[s.length-1]-s[0];return {q:`Find the ${k} of: ${v.join(", ")}${k==="mean"?" (to 2 dp)":""}`,a:ans,tol:k==="mean"?.006:0,w:k==="mean"?`Total ${v.reduce((a,b)=>a+b,0)} ÷ ${v.length} = ${ans}`:k==="median"?`In order: ${s.join(", ")}; middle = ${med}`:`${s[s.length-1]} − ${s[0]} = ${ans}`}},
+revMean(){const n=ri(4,8),m=ri(10,40),M2=m+ri(1,6);const extra=(n+1)*M2-n*m;return {q:`The mean of ${n} numbers is ${m}. Another number is added and the mean becomes ${M2}. What number was added?`,a:extra,w:`Old total = ${n} × ${m} = ${n*m}. New total = ${n+1} × ${M2} = ${(n+1)*M2}. Added number = ${extra}`}},
+tableMean(){const xs=[0,1,2,3,4],fs=xs.map(()=>ri(1,12));const tot=fs.reduce((a,b)=>a+b,0),sfx=xs.reduce((a,x,i)=>a+x*fs[i],0);return {q:`Number of pets (x) with frequency f:<br>${xs.map((x,i)=>`x = ${x}: f = ${fs[i]}`).join("; ")}.<br>Find the mean to 2 decimal places.`,a:r2(sfx/tot,2),tol:.006,w:`Σfx = ${sfx}, Σf = ${tot}; mean = ${sfx} ÷ ${tot} = ${r2(sfx/tot,3)}`}},
+groupedMean(){const bands=[[0,10],[10,20],[20,30],[30,40]],fs=bands.map(()=>ri(2,15));const tot=fs.reduce((a,b)=>a+b,0),s=bands.reduce((a,[l,u],i)=>a+(l+u)/2*fs[i],0);return {q:`Estimate the mean:<br>${bands.map(([l,u],i)=>`${l} < x ≤ ${u}: ${fs[i]}`).join("; ")}.<br>Give your answer to 1 decimal place.`,a:r2(s/tot,1),tol:.051,w:`Use midpoints 5, 15, 25, 35. Σfx = ${s}; Σf = ${tot}; ${s} ÷ ${tot} = ${r2(s/tot,2)}`}},
+iqr(){const v=Array.from({length:11},()=>ri(10,80)).sort((a,b)=>a-b);return {q:`Find the interquartile range of these 11 values: ${v.join(", ")}`,a:v[8]-v[2],w:`LQ = 3rd value = ${v[2]}; UQ = 9th value = ${v[8]}; IQR = ${v[8]-v[2]}`}},
+boxplot(){const lo=ri(5,15),lq=lo+ri(3,10),md=lq+ri(2,10),uq=md+ri(2,10),hi=uq+ri(3,12);const k=pk([["median",md],["interquartile range",uq-lq],["range",hi-lo]]);return {q:`A box plot shows: min ${lo}, LQ ${lq}, median ${md}, UQ ${uq}, max ${hi}. Find the ${k[0]}.`,a:k[1],w:k[0]==="median"?`The line in the box: ${md}`:k[0]==="range"?`${hi} − ${lo} = ${hi-lo}`:`${uq} − ${lq} = ${uq-lq}`}},
+histogram(){const w=pk([5,10,20,25]),f=ri(4,40);return {q:`A class interval has width ${w} and frequency ${f}. Find the frequency density.`,a:r2(f/w,2),w:`Frequency density = frequency ÷ class width = ${f} ÷ ${w} = ${r2(f/w,2)}`}},
+pie(){const tot=pk([36,60,90,120,180]),p=ri(2,tot/3);return {q:`In a survey of ${tot} people, ${p} chose blue. What angle should blue have on a pie chart?`,a:r2(p/tot*360,1),unit:"°",w:`${p}/${tot} × 360 = ${r2(p/tot*360,2)}`}},
+sampling(){const tot=pk([500,800,1000,1200]),grp=ri(50,tot/2),n=pk([50,80,100]);return {q:`A school has ${tot} students; ${grp} are in Year 11. A stratified sample of ${n} is taken. How many Year 11 students should be in the sample?`,a:Math.round(grp/tot*n),tol:.5,w:`${grp}/${tot} × ${n} = ${r2(grp/tot*n,2)} → ${Math.round(grp/tot*n)}`}},
+stemLeaf(){const v=Array.from({length:9},()=>ri(10,59)).sort((a,b)=>a-b);const rows={};v.forEach(x=>{(rows[Math.floor(x/10)]=rows[Math.floor(x/10)]||[]).push(x%10)});return {q:`Find the median from this stem and leaf diagram (key: 2 | 3 = 23):<br>${Object.entries(rows).map(([s,l])=>`${s} | ${l.join(" ")}`).join("<br>")}`,a:v[4],w:`9 values, so the median is the 5th: ${v[4]}`}},
+scatter(){const c=pk([["As temperature rises, ice cream sales rise","Positive correlation"],["As a car gets older, its value falls","Negative correlation"],["Shoe size and test score","No correlation"]]);return mc(`What type of correlation would you expect? ${c[0]}`,c[1],["Positive correlation","Negative correlation","No correlation"].filter(x=>x!==c[1]),`Correlation doesn't prove causation. Use a line of best fit to estimate, but only within the data range (interpolation).`)},
+/* PROBABILITY */
+probTable(){const a=ri(1,10),b=ri(1,10),c=ri(1,10),d=ri(1,10);const t=a+b+c+d;return {q:`A bag has ${a} red, ${b} blue, ${c} green and ${d} yellow counters. Find P(blue or green) as a fraction.`,a:(b+c)/t,frac:true,w:`${b+c} out of ${t}: ${fr(b+c,t)}`}},
+relFreq(){const n=pk([50,80,100,200,250]),k=ri(5,n/2);return {q:`A spinner lands on 4 a total of ${k} times in ${n} spins. Estimate how many times it would land on 4 in ${n*4} spins.`,a:k*4,w:`Relative frequency = ${k}/${n}; × ${n*4} = ${k*4}`}},
+venn(){const A=ri(5,20),B=ri(5,20),both=ri(1,5),none=ri(1,10);const tot=A+B+both+none;return {q:`In a Venn diagram, ${A} are in A only, ${B} in B only, ${both} in both and ${none} in neither. Find P(A) as a fraction.`,a:(A+both)/tot,frac:true,w:`A includes A only and the overlap: ${A+both} out of ${tot} = ${fr(A+both,tot)}`}},
+setThe(){const c=pk([["A ∩ B","in both A and B"],["A ∪ B","in A or B (or both)"],["A′","not in A"],["ξ","the universal set (everything)"]]);return mc(`What does ${c[0]} mean?`,c[1],["in both A and B","in A or B (or both)","not in A","the universal set (everything)"].filter(x=>x!==c[1]),`∩ = intersection (AND), ∪ = union (OR), ′ = complement (NOT).`)},
+freqTree(){const tot=ri(8,20)*10,m=ri(2,tot/10-1)*10,mg=ri(1,m/2);return {q:`${tot} people go to a cinema. ${m} are men; ${mg} of the men buy popcorn. How many men don't buy popcorn?`,a:m-mg,w:`${m} − ${mg} = ${m-mg}. Fill in a frequency tree: total → men/women → popcorn/no popcorn.`}},
+twoWay(){const a=ri(5,20),b=ri(5,20),c=ri(5,20),d=ri(5,20);return {q:`Of ${a+b} boys, ${a} like football. Of ${c+d} girls, ${c} like football. Find P(a randomly chosen student likes football) as a fraction.`,a:(a+c)/(a+b+c+d),frac:true,w:`${a+c} like football out of ${a+b+c+d}: ${fr(a+c,a+b+c+d)}`}},
+treeInd(){const n=ri(2,7),d=ri(n+1,10);return {q:`P(rain) = ${n}/${d} each day, independently. Find P(rain on both of two days) as a fraction.`,a:n*n/(d*d),frac:true,w:`Multiply along the branches: ${n}/${d} × ${n}/${d} = ${fr(n*n,d*d)}`}},
+treeDep(){const r=ri(3,8),b=ri(2,7),t=r+b;return {q:`A bag has ${r} red and ${b} blue sweets. Two are taken without replacement. Find P(both red) as a fraction.`,a:r*(r-1)/(t*(t-1)),frac:true,w:`${r}/${t} × ${r-1}/${t-1} = ${fr(r*(r-1),t*(t-1))}`}},
+probEq(){const k=ri(1,4),m=ri(2,5),c=r2(ri(1,4)/10,1);const x=r2((1-c)/(k+m+1),4);if(x<=0)return G.probEq();return {q:`P(A) = x, P(B) = ${k}x, P(C) = ${m}x and P(D) = ${c}. These are the only outcomes. Find x as a decimal (to 3 dp).`,a:r2(x,3),tol:.0006,w:`x + ${k}x + ${m}x + ${c} = 1 → ${k+m+1}x = ${r2(1-c,2)} → x = ${r2(x,4)}`}}
+};
+
+const TOPICS={N:"Number",A:"Algebra",G:"Geometry",S:"Stats & prob"};
+const CARDS=[
+["N","a^m × a^n =","a^(m+n)"],["N","a^m ÷ a^n =","a^(m−n)"],["N","(a^m)^n =","a^(mn)"],["N","a^0 =","1"],["N","a^(−n) =","1/a^n"],["N","a^(1/n) =","the nth root of a"],["N","a^(m/n) =","(nth root of a)^m"],
+["N","√a × √b =","√(ab)"],["N","How to rationalise a/√b","Multiply top and bottom by √b → a√b/b"],["N","Percentage change","(change ÷ original) × 100"],["N","Reverse percentage","new amount ÷ multiplier"],["N","Compound interest / depreciation","original × multiplier^years"],
+["N","Upper bound of a ÷ b","upper a ÷ lower b"],["N","Error interval of 4.3 to 1 dp","4.25 ≤ x < 4.35"],["N","Product rule for counting","multiply the number of choices for each part"],
+["A","Equation of a straight line","y = mx + c"],["A","Gradient between two points","(y₂ − y₁) ÷ (x₂ − x₁)"],["A","Perpendicular gradients","multiply to −1 (flip and change the sign)"],["A","Linear sequence nth term","dn + (first term − d)"],["A","Quadratic sequence: coefficient of n²","second difference ÷ 2"],
+["A","Difference of two squares","a² − b² = (a + b)(a − b)"],["A","Quadratic formula (on the sheet)","x = (−b ± √(b² − 4ac)) ÷ 2a"],["A","Circle centre (0,0), radius r","x² + y² = r²"],["A","Completing the square: x² + bx","(x + b/2)² − (b/2)²"],["A","Direct proportion","y = kx"],["A","Inverse proportion","y = k/x"],
+["G","Speed / density / pressure","s = d/t · ρ = m/V · P = F/A"],["G","Area of a triangle","½ × base × height (or ½ab sin C)"],["G","Area of a trapezium (on the sheet)","½(a + b)h"],["G","Volume of a cylinder","πr²h"],["G","Surface area of a cylinder","2πrh + 2πr²"],["G","Sector area","θ/360 × πr²"],["G","Arc length","θ/360 × 2πr"],
+["G","Interior angle sum of an n-gon","(n − 2) × 180°"],["G","Exterior angle of a regular n-gon","360° ÷ n"],["G","Co-interior angles","add to 180°"],["G","Alternate angles","are equal (Z shape)"],["G","sin 30°, cos 60°","1/2"],["G","sin 60°, cos 30°","√3/2"],["G","tan 45°","1"],["G","tan 60°","√3"],["G","sin 45°, cos 45°","√2/2"],["G","Similar shapes: area and volume factors","k² and k³"],["G","SOHCAHTOA","sin = O/H · cos = A/H · tan = O/A"],
+["S","Mean from a frequency table","Σfx ÷ Σf"],["S","Frequency density","frequency ÷ class width"],["S","IQR","upper quartile − lower quartile"],["S","P(not A)","1 − P(A)"],["S","Independent events: P(A and B)","P(A) × P(B)"],["S","Expected frequency","probability × number of trials"],["S","Pie chart angle","frequency ÷ total × 360°"],["S","Stratified sample","group ÷ population × sample size"]
+];
+Study.init({id:"maths",key:"maths-cards-v1",topics:TOPICS,cards:CARDS,figs:{},sets:[]});
+/* Checklist: [strand, topic, flags (n = likely non-calc ✱, g = GCSE only, not in mock), MathsWatch clips, generators] */
+const T=[
+["Number","Multiply Decimals","n",["66a"],["mulDec"]],
+["Number","Product Rule for Counting","",["58"],["counting"]],
+["Number","Estimations","",["91"],["estimate"]],
+["Number","Laws of Indices","n",["131"],["indices"]],
+["Number","Negative and Fractional Indices","",["154","188"],["negInd","fracInd"]],
+["Number","Highest Common Factor","n",["79"],["hcf"]],
+["Number","Lowest Common Multiple","n",["80"],["lcmQ"]],
+["Number","Product of Prime Factors","n",["78"],["primes"]],
+["Number","Standard Form Conversions","",["83"],["sfConv"]],
+["Number","Standard Form Calculations","",["83"],["sfCalc"]],
+["Number","Surds Calculations","n",["207a","207b"],["surds"]],
+["Number","Rationalising Fractional Surds","n",["207c"],["ratSurd"]],
+["Number","Fraction Calculations","n",["N36","73","74"],["fracCalc"]],
+["Number","Recurring Decimals","n",["177"],["recur"]],
+["Number","Percentages of an Amount","n",["86","87"],["pct"]],
+["Number","Reverse Percentages","",["109"],["revPct"]],
+["Number","Error Intervals","",["155a"],["errInt"]],
+["Number","Calculating with Bounds","",["206"],["bounds"]],
+["Algebra","Collecting Like Terms","",["33"],["collect"]],
+["Algebra","Substitution","n",["95"],["subst"]],
+["Algebra","Laws of Indices (algebra)","n",["131"],["indices"]],
+["Algebra","Expanding and Simplifying","",["134a"],["expand1"]],
+["Algebra","Factorising Expressions","",["94"],["factor1"]],
+["Algebra","Expanding Double Brackets","",["134b"],["expand2"]],
+["Algebra","Factorising Quadratics","n",["157a"],["factorQ"]],
+["Algebra","Expanding Triple Brackets","",["178"],["expand3"]],
+["Algebra","Rearranging Formulae","",["190"],["rearrange"]],
+["Algebra","Solving Equations","",["135a"],["solve"]],
+["Algebra","Linear Sequences","",["103"],["linSeq"]],
+["Algebra","Quadratic Sequences","",["213"],["quadSeq"]],
+["Algebra","Geometric Sequences","",["163"],["geoSeq"]],
+["Algebra","Linear Graphs","",["159a"],["linGraph"]],
+["Algebra","Quadratic Graphs","",["133a"],[]],
+["Algebra","Cubic Graphs","g",["161a"],[]],
+["Algebra","Reciprocal / Exponential Graphs","g",["161a"],[]],
+["Algebra","Perpendicular Lines","",["208"],["perp"]],
+["Algebra","Equations & Tangents of Circles","g",["197"],["circleEq"]],
+["Algebra","Forming and Solving Equations","",["137"],["formSolve"]],
+["Algebra","Solving Quadratic Equations","",["157a"],["solveQ"]],
+["Algebra","The Quadratic Formula","",["191a"],["qFormula"]],
+["Algebra","Completing the Square","g",["209a"],["complete"]],
+["Algebra","Solving Linear Inequalities","n",["139"],["ineq"]],
+["Algebra","Graphical Inequalities","",["181a"],["gIneq"]],
+["Algebra","Solving Quadratic Inequalities","g",["212"],["quadIneq"]],
+["Algebra","Linear Simultaneous Equations","n",["162"],["simEq"]],
+["Algebra","Quadratic Simultaneous Equations","g",["211a"],[]],
+["Algebra","Iterations","g",["180"],["iter"]],
+["Algebra","Function Calculations","g",["36"],["func"]],
+["Algebra","Inverse / Composite Functions","g",["214a","215"],["compInv"]],
+["Algebra","Simplifying Algebraic Fractions","g",["210a"],["algFrac"]],
+["Algebra","Algebraic Fraction Calculations","g",["210b"],[]],
+["Algebra","Graph Transformations","g",["196a"],["transf"]],
+["Algebra","Algebraic Proof","g",["193"],[]],
+["Trigonometry","Pythagoras Theorem","",["150b"],["pyth"]],
+["Trigonometry","3D Pythagoras","g",["217"],["pyth3"]],
+["Trigonometry","SOHCAHTOA Side Lengths","",["168"],["sohSide"]],
+["Trigonometry","SOHCAHTOA Angles","",["168"],["sohAng"]],
+["Trigonometry","Sine Rule","",["202a"],["sineRule"]],
+["Trigonometry","Cosine Rule","",["202b"],["cosRule"]],
+["Trigonometry","3D Trigonometry","g",["218"],[]],
+["Trigonometry","Area of a Triangle","",["203"],["triArea"]],
+["Trigonometry","Exact Trigonometry","n",["173"],["exactTrig"]],
+["Trigonometry","Trigonometric Graphs","",["195a","195b"],["trigGraph"]],
+["Statistics","Averages","n",["62"],["averages"]],
+["Statistics","Reverse Mean","",["62"],["revMean"]],
+["Statistics","Averages from a Table","",["130a"],["tableMean"]],
+["Statistics","Grouped Frequency Tables","",["130b"],["groupedMean"]],
+["Statistics","Scatter Graphs","n",["129"],["scatter"]],
+["Statistics","Frequency Polygons","",["65b"],[]],
+["Statistics","Sampling and Bias","",["176a"],["sampling"]],
+["Statistics","Pie Charts","",["128a"],["pie"]],
+["Statistics","Interquartile Range","",["152a"],["iqr"]],
+["Statistics","Box Plots","n",["187b"],["boxplot"]],
+["Statistics","Averages from a Stem and Leaf","",["128b"],["stemLeaf"]],
+["Statistics","Cumulative Frequency Graphs","n",["187a"],[]],
+["Statistics","Histograms","",["205"],["histogram"]],
+["Ratio & Proportion","Sharing in a Ratio","n",["106a"],["share"]],
+["Ratio & Proportion","Three Part Ratios","",["165b"],["share3"]],
+["Ratio & Proportion","Writing Ratios as Fractions","n",["165c"],["ratioFrac"]],
+["Ratio & Proportion","Recipes","",["39"],["recipe"]],
+["Ratio & Proportion","Exchange Rates","",["105"],["exchange"]],
+["Ratio & Proportion","Best Value Purchases","n",["41"],["bestValue"]],
+["Ratio & Proportion","Conversion Graphs","n",["106b"],[]],
+["Ratio & Proportion","Compound Interest","",["164"],["compound"]],
+["Ratio & Proportion","Depreciation","",["164"],["deprec"]],
+["Ratio & Proportion","Direct Proportion","",["199"],["direct"]],
+["Ratio & Proportion","Inverse Proportion","",["199"],["inverse"]],
+["Ratio & Proportion","Speed, Distance & Time","",["142a"],["sdt"]],
+["Ratio & Proportion","Mass, Density & Volume","",["142b"],["density"]],
+["Ratio & Proportion","Pressure, Force & Area","",["142c"],["pressure"]],
+["Ratio & Proportion","Velocity-Time Graphs","g",["216a"],[]],
+["Ratio & Proportion","Area under a Graph","g",["216a"],[]],
+["Ratio & Proportion","Gradient of a Graph","g",["216b","97b"],[]],
+["Ratio & Proportion","Equating Ratios","",["200b"],["eqRatio"]],
+["Geometry","Triangles & Quadrilaterals","n",["121b","112"],["triQuad"]],
+["Geometry","Area of 2D Shapes","n",["G24"],["area2d"]],
+["Geometry","Angles in Parallel Lines","n",["120"],["parallel"]],
+["Geometry","Angles in Polygons","",["123"],["polygon"]],
+["Geometry","Plans & Elevations","n",["51"],[]],
+["Geometry","Constructions","",["145a","145b","145c"],[]],
+["Geometry","Loci","g",["146"],[]],
+["Geometry","Area & Circumference of Circles","n",["117","118"],["circle"]],
+["Geometry","Circle Sectors","",["167"],["sector"]],
+["Geometry","Surface Area of 3D Shapes","",["114b"],["surface"]],
+["Geometry","Volume of 3D Shapes","",["119"],["volume"]],
+["Geometry","Cylinders, Cones & Spheres","",["172","169"],["coneSphere"]],
+["Geometry","Transformations","",["184"],["transform"]],
+["Geometry","Bearings","",["124"],["bearing"]],
+["Geometry","Similar Shapes","g",["201"],["similar"]],
+["Geometry","Congruent Triangles","g",["166"],[]],
+["Geometry","Circle Theorems","g",["185a"],[]],
+["Geometry","Vectors","g",["219"],[]],
+["Geometry","Geometric Proof","g",["185b"],[]],
+["Probability","Probability from a Table","",["59"],["probTable"]],
+["Probability","Relative Frequency","",["125"],["relFreq"]],
+["Probability","Venn Diagrams","n",["186"],["venn"]],
+["Probability","Set Theory","n",["127b"],["setThe"]],
+["Probability","Frequency Trees","n",["57"],["freqTree"]],
+["Probability","Two Way Tables","",["61"],["twoWay"]],
+["Probability","Probability Trees (Independent)","",["151"],["treeInd"]],
+["Probability","Probability Trees (Dependent)","",["175"],["treeDep"]],
+["Probability","Probability Equations","",["60"],["probEq"]]
+];
+const MW="https://vle.mathswatch.co.uk/vle/";
+const MWID={"33":188,"36":191,"39":194,"41":196,"51":207,"57":213,"59":215,"61":217,"62":218,"73":231,"74":232,"78":236,"79":237,"80":238,"83":241,"86":244,"87":245,"91":249,"94":252,"95":253,"103":261,"105":263,"109":268,"117":276,"118":277,"119":278,"120":279,"123":282,"124":283,"125":284,"129":289,"131":292,"137":300,"139":302,"143":306,"146":332,"151":317,"154":320,"162":329,"163":330,"164":331,"166":333,"167":334,"168":335,"169":336,"172":339,"173":340,"175":342,"177":344,"178":345,"180":347,"184":350,"186":353,"188":356,"190":358,"193":361,"197":367,"199":369,"201":370,"203":373,"205":375,"206":376,"208":380,"212":387,"213":388,"215":391,"217":393,"218":394,"219":395,"66a":222,"207a":377,"207b":378,"207c":379,"N36":761,"155a":321,"134a":295,"134b":296,"157a":323,"135a":297,"159a":325,"133a":256,"161a":328,"191a":359,"209a":381,"181a":3028,"211a":386,"214a":389,"210a":384,"210b":385,"196a":365,"150b":315,"202a":371,"202b":372,"195a":363,"195b":364,"130a":290,"130b":291,"65b":1205,"176a":318,"128a":288,"152a":3024,"187b":355,"128b":1210,"187a":354,"106a":264,"165b":1689,"165c":1690,"106b":265,"142a":305,"142b":1694,"142c":1695,"G24":785,"145a":309,"145b":310,"145c":308,"114b":273,"185a":351,"185b":352,"127b":287,"58":3016,"216a":392,"216b":1683,"97b":3036,"200b":1692,"121b":281,"112":3022,"60":216};
+const mwUrl=c=>MWID[c]?MW+"browse/"+MWID[c]+"/":MW;
+(function(){
+const $=id=>document.getElementById(id);
+const KEY="maths-v1";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
+st.rag=st.rag||{};if(st.ok){Object.keys(st.ok).forEach(k=>{if(st.ok[k]&&!st.rag[k])st.rag[k]="g"});delete st.ok}st.tally=st.tally||{r:0,t:0};const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+const TOP=T.map(([s,n,f,c,g],i)=>({i,s,n,nc:f.includes("n"),gcse:f.includes("g"),clips:c,gens:g}));
+const strands=[...new Set(TOP.map(t=>t.s))];
+let filt="all";
+function chip(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
+function summary(){const c=k=>TOP.filter(t=>(st.rag[t.i]||"")===k).length,N=TOP.length,g=c("g"),o=c("o"),r=c("r"),u=c("");
+  $("msum").innerHTML=`<div class="ragsum"><div class="ragbar"><i class="g" style="width:${g/N*100}%"></i><i class="o" style="width:${o/N*100}%"></i><i class="r" style="width:${r/N*100}%"></i></div>
+  <p><span class="dot g"></span><b>${g}</b> green <span class="dot o"></span><b>${o}</b> orange <span class="dot r"></span><b>${r}</b> red <span class="dot u"></span><b>${u}</b> not rated</p></div>`}
+function drawTopics(){
+  chip($("mfilt"),[["all","All topics"],["mock","Core topics"],["nc","✱ Likely non-calc"],["gcse","GCSE only"],["r","Red"],["o","Orange"],["u","Not rated"]],filt,k=>{filt=k;drawTopics()});
+  summary();
+  const show=t=>filt==="all"||(filt==="mock"&&!t.gcse)||(filt==="nc"&&t.nc)||(filt==="gcse"&&t.gcse)||(filt==="r"&&st.rag[t.i]==="r")||(filt==="o"&&st.rag[t.i]==="o")||(filt==="u"&&!st.rag[t.i]);
+  $("mlist").innerHTML=strands.map(s=>{const ts=TOP.filter(t=>t.s===s&&show(t));if(!ts.length)return "";
+    return `<section class="strand"><h3>${s}</h3><ul class="trows">${ts.map(t=>`<li class="${t.gcse?"g":""}${st.rag[t.i]?" rag-"+st.rag[t.i]:""}">
+      <span class="tk"><span class="rag" role="group" aria-label="How confident are you with ${t.n}?">${[["r","Red: don't get it"],["o","Orange: getting there"],["g","Green: confident"]].map(([k,l])=>`<button type="button" class="${k}${st.rag[t.i]===k?" on":""}" data-i="${t.i}" data-k="${k}" aria-pressed="${st.rag[t.i]===k}" title="${l}" aria-label="${l}"></button>`).join("")}</span><span class="tn">${t.n}</span></span>
+      <span class="badges">${t.nc?`<span class="b nc" title="Likely on the non-calculator paper">✱ Non-calc</span>`:""}${t.gcse?`<span class="b gc" title="May not be in your school mock, but can come up in the real GCSE">GCSE only</span>`:""}</span>
+      <span class="acts">${t.clips.map(c=>`<a class="mw" href="${mwUrl(c)}" target="_blank" rel="noopener" title="Watch MathsWatch clip ${c}">MW ${c}</a>`).join("")}${t.gens.length?`<button class="btn sm p" data-pr="${t.i}">Practise</button>`:""}</span></li>`).join("")}</ul></section>`}).join("")||`<p class="noresult">Nothing here. Nice work.</p>`;
+  $("mlist").querySelectorAll(".rag button").forEach(b=>b.onclick=()=>{const i=b.dataset.i,k=b.dataset.k;if(st.rag[i]===k)delete st.rag[i];else st.rag[i]=k;save();
+    const li=b.closest("li");li.classList.remove("rag-r","rag-o","rag-g");if(st.rag[i])li.classList.add("rag-"+st.rag[i]);
+    li.querySelectorAll(".rag button").forEach(x=>{const on=st.rag[i]===x.dataset.k;x.classList.toggle("on",on);x.setAttribute("aria-pressed",on)});summary()});
+  $("mlist").querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{pmode="topic";ptopic=+b.dataset.pr;document.getElementById("tab-pr").click();startP()});
+}
+/* practice */
+let pmode=st.pmode||"mock",ptopic=st.ptopic??0,cur=null,mini=null;
+const withGen=TOP.filter(t=>t.gens.length);
+function pool(){if(pmode==="topic")return [TOP[ptopic]];if(pmode==="nc")return withGen.filter(t=>t.nc&&!t.gcse);if(pmode==="gcse")return withGen.filter(t=>t.gcse);return withGen.filter(t=>!t.gcse)}
+function drawPSetup(){
+  chip($("pmode"),[["mock","Mixed: core topics"],["nc","✱ Non-calc mix"],["topic","One topic"],["gcse","GCSE-only topics"],["mini","Mini mock (10 Qs)"]],pmode,k=>{pmode=k;st.pmode=k;save();mini=null;drawPSetup();startP()});
+  const sel=$("ptopic");sel.hidden=pmode!=="topic";
+  if(!sel.options.length){strands.forEach(s=>{const og=document.createElement("optgroup");og.label=s;withGen.filter(t=>t.s===s).forEach(t=>{const o=document.createElement("option");o.value=t.i;o.textContent=t.n+(t.gcse?" (GCSE only)":"")+(t.nc?" ✱":"");og.appendChild(o)});sel.appendChild(og)});sel.onchange=()=>{ptopic=+sel.value;st.ptopic=ptopic;save();startP()}}
+  if(!TOP[ptopic]||!TOP[ptopic].gens.length)ptopic=withGen[0].i;sel.value=ptopic;
+  $("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
+  $("pnote").innerHTML=pmode==="nc"||(mini&&mini.nc)?`<b>No calculator.</b> Work these out on paper.`:"";
+}
+function startP(){drawPSetup();if(pmode==="mini"){mini={i:0,r:0,qs:Array.from({length:10},()=>{const p=withGen.filter(t=>!t.gcse);return p[Math.floor(Math.random()*p.length)]})}}else mini=null;nextQ()}
+function nextQ(){let t;if(mini){if(mini.i>=10)return endMini();t=mini.qs[mini.i]}else{const p=pool();t=p[Math.floor(Math.random()*p.length)]}
+  const g=t.gens[Math.floor(Math.random()*t.gens.length)];cur=Object.assign({t},G[g]());drawQ()}
+function parse(s){s=String(s).trim().replace(/[£€$°%,]|cm³|cm²|cm|km\/h|km|mm|m\b|g\b/gi,"").replace(/−/g,"-").trim();if(!s)return NaN;
+  let m=s.match(/^(-?\d+)\s+(\d+)\/(\d+)$/);if(m){const w=+m[1];return w+(w<0?-1:1)*(+m[2]/+m[3])}
+  m=s.match(/^(-?\d*\.?\d+)\s*\/\s*(-?\d*\.?\d+)$/);if(m)return +m[1]/+m[2];return parseFloat(s)}
+function drawQ(){const q=cur,box=$("pbox");
+  const head=`<div class="meta"><span>${q.t.s} · ${q.t.n}${q.t.nc?" · ✱":""}</span><span>${mini?`Question ${mini.i+1} of 10`:""}</span></div>`;
+  if(q.opts){box.innerHTML=head+`<p class="dq">${q.q}</p><div class="opts">${q.opts.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div><div id="pfb"></div>`;
+    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;box.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q.c)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===q.c)})}
+  else{const ans=Array.isArray(q.a)?q.a:[q.a],labels=q.labels||ans.map(()=>"");
+    box.innerHTML=head+`<p class="dq">${q.q}</p><div class="pins">${ans.map((_,k)=>`<label>${labels[k]?`<span>${labels[k]}</span>`:""}<input id="pin${k}" inputmode="text" autocomplete="off" placeholder="${q.frac?"e.g. 3/4":"Answer"}" aria-label="${labels[k]||"Answer"}"></label>`).join("")}${q.unit?`<span class="u">${q.unit}</span>`:""}<button class="btn sm p" id="pchk">Check</button></div><div id="pfb"></div>`;
+    const go=()=>{const vals=ans.map((_,k)=>parse($("pin"+k).value));if(vals.some(isNaN)){$("pfb").innerHTML='<div class="fb no">Fill in every box with a number (fractions like 3/4 are fine).</div>';return}
+      const tol=q.tol!=null?q.tol:q.frac?.0015:Math.max(1e-6,Math.abs(ans[0])*1e-6);const ok=vals.every((v,k)=>Math.abs(v-ans[k])<=tol+1e-9);
+      box.querySelectorAll(".pins input").forEach(i=>i.disabled=true);$("pchk").disabled=true;done(ok,ans)};
+    $("pchk").onclick=go;box.querySelectorAll(".pins input").forEach(i=>i.onkeydown=e=>{if(e.key==="Enter")go()});$("pin0").focus()}
+}
+const showAns=(a,q)=>a.map(v=>q.frac&&Math.abs(v-Math.round(v))>1e-9?toFrac(v):(+v.toFixed(4))).join(", ");
+function toFrac(x){for(let d=1;d<=400;d++){const n=Math.round(x*d);if(Math.abs(n/d-x)<1e-9){return `${n}/${d}`.replace("-","−")}}return String(+x.toFixed(4))}
+function done(ok,ans){st.tally.t++;if(ok)st.tally.r++;save();if(mini&&ok)mini.r++;$("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
+  const q=cur;$("pfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"+(ans?`. Answer: ${showAns(ans,q)}${q.unit?" "+q.unit:""}`:"")}</div><div class="panel ms"><div class="t">Working</div>${q.w}</div><div class="row"><button class="btn p" id="pnext">${mini&&mini.i>=9?"See score":"Next question"}</button>${q.t.clips.map(c=>`<a class="mw big" href="${mwUrl(c)}" target="_blank" rel="noopener">Stuck? Watch clip ${c}</a>`).join("")}</div>`;
+  $("pnext").onclick=()=>{if(mini)mini.i++;nextQ()};$("pnext").focus()}
+function endMini(){const box=$("pbox");box.innerHTML=`<div class="meta"><span>Mini mock</span><span>${mini.r} / 10</span></div><p class="dq">${mini.r*10}% ${mini.r>=8?"– excellent.":mini.r>=6?"– good. Practise the topics you dropped.":"– keep going: pick the topics you got wrong in One topic mode."}</p><div class="row"><button class="btn p" id="again">Another mini mock</button></div>`;$("again").onclick=startP}
+drawTopics();drawPSetup();startP();
+})();
+
+</script>
+</body>
+</html>

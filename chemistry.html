@@ -1,0 +1,961 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Free AQA GCSE Chemistry Paper 1 revision (C1–C5): bonding, moles, energy changes, flashcards and exam questions with mark schemes.">
+<link rel="canonical" href="https://gcseasy.pages.dev/chemistry.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free AQA GCSE Chemistry Paper 1 revision (C1–C5): bonding, moles, energy changes, flashcards and exam questions with mark schemes.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/chemistry.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GCSE Chemistry Revision (AQA) · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>
+/* Chemistry keeps the default blue accent. Diagram styles for the bonding deep dive. */
+.ph{display:flex;height:22px;border-radius:5px;overflow:hidden;margin:8px 0 2px}
+.ph span{flex:1}
+.phl{display:flex;justify-content:space-between;font:500 .75rem var(--mono);color:var(--muted)}
+details.deep{margin-top:18px}
+details.deep .in{padding-top:6px}
+/* figures */
+.fig .pos{fill:var(--accent-soft);stroke:var(--accent);stroke-width:1.5}
+.fig .neg{fill:var(--warn-soft);stroke:var(--warn);stroke-width:1.5}
+.fig .atom{fill:var(--surface);stroke:var(--ink);stroke-width:1.5}
+.fig .big{fill:var(--bad-soft);stroke:var(--bad);stroke-width:1.5}
+.fig .ln{stroke:var(--ink);stroke-width:2;fill:none}
+.fig .dash{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:3 4;fill:none}
+.fig .shell{fill:none;stroke:var(--ink);stroke-width:1.3}
+.fig .lb{fill:var(--ink);font-family:var(--mono);font-size:10px;font-weight:500}
+.fig .cap{fill:var(--muted);font-family:var(--body);font-size:11px}
+.fig .el{fill:var(--ink);font-family:var(--display);font-size:16px;font-weight:700}
+.fig .ed{fill:var(--ink)} .fig .ex{fill:var(--accent);font-family:var(--mono);font-size:12px;font-weight:700}
+.fig .ee{fill:var(--accent);font-family:var(--mono);font-size:9px}
+/* C2 boost */
+.step{margin-bottom:30px}
+.stephead{display:flex;gap:10px;align-items:center;margin-bottom:8px}
+.stepn{flex:none;width:30px;height:30px;border-radius:4px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:700 .9rem var(--mono)}
+.five{counter-reset:f;list-style:none;padding:0;display:grid;gap:8px}
+.five li{counter-increment:f;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px 10px 44px;position:relative;margin:0}
+.five li::before{content:counter(f);position:absolute;left:12px;top:10px;font:700 1.1rem var(--display);color:var(--accent)}
+.five li small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px}
+.tree{display:grid;gap:8px}
+.br{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1.3fr);gap:8px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.br .ar{font-family:var(--mono);color:var(--accent);font-weight:700}
+.br b{font-family:var(--display)}
+.struct{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.struct h3{margin-top:0}
+.struct dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:8px 0 0;font-size:.94rem}
+.struct dt{font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding-top:3px}
+.struct dd{margin:0}
+.drill{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px}
+.drill .dq{font:700 1.1rem var(--display);margin:4px 0 12px;text-wrap:balance}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap">
+<p class="crumbs"><a href="index.html#subjects">Subjects</a> / Sciences</p>
+<header class="top">
+  <div class="tile"><small>C</small>Ch</div>
+  <div><h1>Chemistry</h1><p class="sub">AQA · Paper 1 · Topics C1–C5</p></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-rev" aria-selected="true" data-p="rev">Revise</button>
+  <button role="tab" id="tab-fc" aria-selected="false" data-p="fc">Cards</button>
+  <button role="tab" id="tab-rp" aria-selected="false" data-p="rp">Practicals</button>
+  <button role="tab" id="tab-rc" aria-selected="false" data-p="rc">Technique</button>
+  <button role="tab" id="tab-ex" aria-selected="false" data-p="ex">Exam Qs</button>
+</nav>
+
+<!-- REVISE -->
+<div id="p-rev">
+<div class="chips" id="jump"></div>
+<p style="font-size:.92rem;color:var(--muted);margin-bottom:16px"><span class="pill t">Triple</span> = separate chemistry only. <span class="pill h">HT</span> = higher tier only. If you're on combined science, skip anything marked Triple.</p>
+
+<section class="topic" id="C1">
+<div class="th"><div class="tile"><small>C1</small>At</div><h2>Atomic structure &amp; the periodic table</h2></div>
+<div class="tbl"><table>
+<tr><th>Particle</th><th>Relative mass</th><th>Relative charge</th><th>Where</th></tr>
+<tr><td>Proton</td><td>1</td><td>+1</td><td>Nucleus</td></tr>
+<tr><td>Neutron</td><td>1</td><td>0</td><td>Nucleus</td></tr>
+<tr><td>Electron</td><td>Very small</td><td>−1</td><td>Shells</td></tr>
+</table></div>
+<ul>
+<li><b>Atomic number</b> (bottom) = protons. In a neutral atom, protons = electrons.</li>
+<li><b>Mass number</b> (top) = protons + neutrons. So neutrons = mass − atomic. <span class="f">²³₁₁Na</span> → 11 p, 11 e, 12 n.</li>
+<li><b>Isotopes</b>: same protons, different neutrons.</li>
+<li><b>Ions</b>: same protons, different electrons. Lose e⁻ → positive; gain e⁻ → negative. <span class="f">Mg²⁺</span> has 10 electrons.</li>
+<li>Atoms have no overall charge because protons = electrons.</li>
+</ul>
+<h3>Relative atomic mass (Ar)</h3>
+<div class="formula">Ar = Σ(abundance × mass number) ÷ total abundance</div>
+<p>Chlorine: 75% ³⁵Cl and 25% ³⁷Cl → (75×35 + 25×37) ÷ 100 = <b>35.5</b></p>
+<h3>History of the atom</h3>
+<ul>
+<li><b>Dalton</b>: atoms are tiny solid spheres that can't be divided.</li>
+<li><b>Thomson</b> discovered the <b>electron</b> → plum pudding model (ball of positive charge with electrons embedded).</li>
+<li><b>Rutherford</b>, alpha scattering: most alpha particles went straight through → mostly empty space. A few deflected → positive charge concentrated in a tiny <b>nucleus</b>. Nuclear model replaced plum pudding.</li>
+<li><b>Bohr</b>: electrons orbit the nucleus at fixed distances (shells).</li>
+<li>Protons found in the nucleus; <b>Chadwick</b> proved neutrons exist.</li>
+</ul>
+<p>Discovery order: <b>electron → proton → neutron</b>.</p>
+<h3>Groups</h3>
+<ul>
+<li><b>Group 1</b> alkali metals: 1 outer electron. React with water → metal hydroxide + hydrogen. <b>More reactive going down</b>: outer electron further from nucleus, weaker attraction, lost more easily.</li>
+<li><b>Group 7</b> halogens: 7 outer electrons, exist as pairs (Cl₂). <b>Less reactive going down</b>: harder to gain an electron. A more reactive halogen <b>displaces</b> a less reactive one: chlorine + potassium bromide → potassium chloride + bromine.</li>
+<li><b>Group 0</b> noble gases: full outer shell, so unreactive. Boiling points increase going down.</li>
+</ul>
+<div class="warn"><b>Watch out:</b> some books call it "Group 8". Write <b>Group 0</b> in the exam.</div>
+<h3>Separating mixtures</h3>
+<div class="tbl"><table>
+<tr><th>Method</th><th>Use it to…</th><th>Key details</th></tr>
+<tr><td>Filtration</td><td>Remove an insoluble solid from a liquid</td><td>Filtrate passes through; residue stays on the paper</td></tr>
+<tr><td>Evaporation</td><td>Get a soluble solid from a solution</td><td>Quick, but some solids may decompose</td></tr>
+<tr><td>Crystallisation</td><td>Get pure crystals of a soluble salt</td><td>Heat gently until crystals start to form, cool, filter, dry</td></tr>
+<tr><td>Simple distillation</td><td>Get the solvent from a solution</td><td>Solvent boils, vapour cools in condenser, liquid collected</td></tr>
+<tr><td>Fractional distillation</td><td>Separate liquids with different boiling points</td><td>Fractionating column; lowest boiling point collected first</td></tr>
+<tr><td>Chromatography</td><td>Separate/identify dyes</td><td>Pencil baseline above solvent; Rf = spot ÷ solvent distance</td></tr>
+</table></div>
+<p><b>Solute</b> dissolves in <b>solvent</b> to make a <b>solution</b>.</p>
+</section>
+
+<section class="topic" id="C2">
+<div class="th"><div class="tile"><small>C2</small>Bd</div><h2>Bonding &amp; structure</h2></div>
+<div class="warn"><b>Finding bonding hard?</b> Open the <b>Bonding deep dive</b> at the end of this section. It teaches C2 step by step with diagrams.</div>
+<div class="tbl"><table>
+<tr><th>Bond</th><th>Between</th><th>What happens</th></tr>
+<tr><td>Ionic</td><td>Metal + non-metal</td><td>Electrons <b>transferred</b> → oppositely charged ions attract</td></tr>
+<tr><td>Covalent</td><td>Non-metal + non-metal</td><td>Pairs of electrons <b>shared</b></td></tr>
+<tr><td>Metallic</td><td>Metal atoms</td><td>Positive ions in a sea of <b>delocalised electrons</b>; strong attraction between them</td></tr>
+</table></div>
+<p>Making NaCl: sodium <b>loses</b> 1 electron → Na⁺; chlorine <b>gains</b> 1 electron → Cl⁻. Both now have a full outer shell. The ions are held together by strong <b>electrostatic attraction</b>.</p>
+<h3>Giant ionic lattice (e.g. NaCl)</h3>
+<ul>
+<li>Strong electrostatic forces between oppositely charged ions, in all directions.</li>
+<li>High melting/boiling points: lots of energy needed to overcome them.</li>
+<li>Conduct only when <b>molten or dissolved</b>: ions are free to move and carry charge.</li>
+</ul>
+<h3>Simple molecular (H₂O, CO₂, CH₄, O₂)</h3>
+<ul>
+<li>Low melting/boiling points: only <b>weak intermolecular forces</b> are overcome, <b>not</b> the covalent bonds.</li>
+<li>Don't conduct: no free electrons or ions, no overall charge.</li>
+</ul>
+<h3>Giant covalent (diamond, graphite, silicon dioxide)</h3>
+<ul>
+<li>Very high melting points: many strong covalent bonds must break.</li>
+<li><b>Diamond</b>: each C has 4 covalent bonds → very hard, doesn't conduct.</li>
+<li><b>Graphite</b>: each C has 3 bonds, in layers. Weak forces between layers → slide, soft. One delocalised electron per C → conducts.</li>
+</ul>
+<h3>Polymers</h3>
+<p>Many small <b>monomers</b> join into long-chain <b>polymers</b>.</p>
+<h3>Metals &amp; alloys</h3>
+<ul>
+<li>High melting points, good conductors (delocalised electrons).</li>
+<li>Malleable: layers of atoms slide over each other.</li>
+<li><b>Alloys</b> are harder: different-sized atoms distort the layers, so they can't slide as easily.</li>
+</ul>
+<details class="rc deep" id="deep"><summary>Bonding deep dive: step by step</summary><div class="in">
+<div class="step">
+<div class="stephead"><span class="stepn">1</span><h2>The 5 sentences that score most C2 marks</h2></div>
+<p>Learn these word for word. Almost every C2 "explain" question is one of these.</p>
+<ol class="five">
+<li><b>Giant ionic</b>: strong electrostatic forces between oppositely charged ions need a lot of energy to overcome.<small>→ high melting point</small></li>
+<li><b>Simple molecular</b>: weak intermolecular forces between molecules need little energy to overcome.<small>→ low melting/boiling point. The covalent bonds do NOT break.</small></li>
+<li><b>Giant covalent</b>: many strong covalent bonds need a lot of energy to break.<small>→ very high melting point (diamond, graphite, silicon dioxide)</small></li>
+<li><b>Conducting</b>: the ions / delocalised electrons are free to move and carry charge.<small>→ ions for ionic compounds, electrons for metals and graphite</small></li>
+<li><b>Alloys</b>: different-sized atoms distort the layers, so they can't slide over each other.<small>→ alloys are harder than pure metals</small></li>
+</ol>
+</div>
+
+<div class="step">
+<div class="stephead"><span class="stepn">2</span><h2>Which bonding? Ask what it's made of</h2></div>
+<div class="tree">
+<div class="br"><span>Metal + non-metal<br><small style="color:var(--muted)">NaCl, MgO, CaCl₂</small></span><span class="ar">→</span><span><b>Ionic</b><br>giant ionic lattice</span></div>
+<div class="br"><span>Non-metals only<br><small style="color:var(--muted)">H₂O, CO₂, CH₄, Cl₂</small></span><span class="ar">→</span><span><b>Covalent</b><br>usually simple molecules</span></div>
+<div class="br"><span>The 4 exceptions<br><small style="color:var(--muted)">diamond, graphite, graphene, silicon dioxide</small></span><span class="ar">→</span><span><b>Covalent</b><br>giant covalent</span></div>
+<div class="br"><span>Metal only, or alloy<br><small style="color:var(--muted)">Cu, Fe, steel</small></span><span class="ar">→</span><span><b>Metallic</b><br>ions in a sea of electrons</span></div>
+</div>
+<div class="warn"><b>Shortcut:</b> if it's covalent and not on the list of 4 giant ones, assume it's a simple molecule.</div>
+</div>
+
+<div class="step">
+<div class="stephead"><span class="stepn">3</span><h2>How the bonds form: dot-and-cross</h2></div>
+<h3>Ionic: electrons are transferred</h3>
+<div class="fig" data-fig="nacl"></div>
+<ul>
+<li>Sodium (2,8,1) <b>loses</b> its 1 outer electron → <b>Na⁺</b> (2,8).</li>
+<li>Chlorine (2,8,7) <b>gains</b> 1 electron → <b>Cl⁻</b> (2,8,8). The cross is the electron from sodium.</li>
+<li>Both now have a <b>full outer shell</b>. Draw ions in <b>square brackets</b> with the charge outside.</li>
+<li>Magnesium oxide: Mg (2,8,2) loses <b>2</b> electrons → Mg²⁺; O (2,6) gains 2 → O²⁻.</li>
+</ul>
+<p><b>Working out formulas:</b> make the charges cancel. Mg²⁺ and Cl⁻ need two Cl⁻ → <b>MgCl₂</b>. Al³⁺ and O²⁻: 2 × 3+ = 6+ and 3 × 2− = 6− → <b>Al₂O₃</b>.</p>
+<h3>Covalent: electrons are shared</h3>
+<div class="fig" data-fig="water"></div>
+<ul>
+<li>Each <b>covalent bond = one shared pair</b> of electrons, drawn where the circles overlap.</li>
+<li>Water: O shares one pair with each H → 2 bonds. Methane CH₄ → 4 bonds. Cl₂ → 1 bond.</li>
+<li>Only draw the <b>outer shells</b>.</li>
+</ul>
+<p><b>Limits of these diagrams</b> (a common 1-mark question): dot-and-cross diagrams don't show the 3D arrangement or the relative sizes of atoms.</p>
+</div>
+
+<div class="step">
+<div class="stephead"><span class="stepn">4</span><h2>The four structures</h2></div>
+
+<div class="struct">
+<h3>Giant ionic lattice</h3>
+<div class="fig" data-fig="lattice"></div>
+<dl>
+<dt>Picture</dt><dd>Huge 3D grid of + and − ions, alternating.</dd>
+<dt>Melting</dt><dd>High. Strong electrostatic forces between oppositely charged ions, in all directions.</dd>
+<dt>Conducts</dt><dd>Only molten or dissolved, when the ions are free to move. Never as a solid.</dd>
+<dt>e.g.</dt><dd>Sodium chloride, magnesium oxide</dd>
+</dl>
+</div>
+
+<div class="struct">
+<h3>Simple molecules</h3>
+<div class="fig" data-fig="molecules"></div>
+<dl>
+<dt>Picture</dt><dd>Separate small molecules. Strong bonds <b>inside</b>, weak forces <b>between</b>.</dd>
+<dt>Melting</dt><dd>Low. Only the weak intermolecular forces are overcome.</dd>
+<dt>Conducts</dt><dd>Never. No overall charge, no free electrons or ions.</dd>
+<dt>e.g.</dt><dd>Water, CO₂, methane, oxygen, chlorine</dd>
+</dl>
+<div class="warn"><b>Biggest C2 mark-loser:</b> "the covalent bonds break when it boils". They don't. Only the forces between molecules are overcome. Bigger molecules have stronger intermolecular forces, so higher boiling points.</div>
+</div>
+
+<div class="struct">
+<h3>Giant covalent: diamond vs graphite</h3>
+<div class="fig" data-fig="carbon"></div>
+<dl>
+<dt>Both</dt><dd>Very high melting point: many strong covalent bonds to break.</dd>
+<dt>Diamond</dt><dd>Each C has 4 bonds → rigid, very hard, doesn't conduct (no free electrons). Used in cutting tools.</dd>
+<dt>Graphite</dt><dd>Each C has 3 bonds, in hexagon layers. Weak forces between layers → slide → soft, slippery. 1 delocalised electron per C → conducts.</dd>
+<dt>Graphene</dt><dd>A single layer of graphite. Strong, conducts.</dd>
+<dt>Fullerenes</dt><dd>Hollow carbon molecules (C₆₀ ball, nanotubes). Nanotubes are strong for their size; used in electronics.</dd>
+</dl>
+</div>
+
+<div class="struct">
+<h3>Metallic</h3>
+<div class="fig" data-fig="metal"></div>
+<dl>
+<dt>Picture</dt><dd>Layers of positive metal ions in a sea of delocalised electrons.</dd>
+<dt>Melting</dt><dd>High. Strong attraction between positive ions and delocalised electrons.</dd>
+<dt>Conducts</dt><dd>Yes, solid and liquid. Delocalised electrons move and carry charge (and heat).</dd>
+<dt>Shape</dt><dd>Malleable: layers slide. Alloys are harder:</dd>
+</dl>
+<div class="fig" data-fig="alloy"></div>
+</div>
+</div>
+
+<div class="step">
+<div class="stephead"><span class="stepn">5</span><h2>Master table: screenshot this</h2></div>
+<div class="tbl"><table>
+<tr><th>Structure</th><th>Melting point</th><th>Conducts solid?</th><th>Conducts molten / dissolved?</th></tr>
+<tr><td>Giant ionic</td><td>High</td><td>No</td><td>Yes (ions move)</td></tr>
+<tr><td>Simple molecular</td><td>Low</td><td>No</td><td>No</td></tr>
+<tr><td>Giant covalent</td><td>Very high</td><td>No (graphite yes)</td><td>–</td></tr>
+<tr><td>Metallic</td><td>High</td><td>Yes (electrons)</td><td>Yes</td></tr>
+</table></div>
+<h3>Other C2 bits that come up</h3>
+<ul>
+<li><b>Polymers</b>: very large molecules. Stronger intermolecular forces than small molecules → solid at room temperature.</li>
+<li><b>States of matter</b>: melting and boiling happen at the same temperature as freezing and condensing. More energy needed = stronger forces between particles.</li>
+<li><b>State symbols</b>: (s) solid, (l) liquid, (g) gas, (aq) dissolved in water.</li>
+</ul>
+</div>
+
+</div></details>
+</section>
+
+<section class="topic" id="C3">
+<div class="th"><div class="tile"><small>C3</small>Mo</div><h2>Quantitative chemistry</h2></div>
+<ul>
+<li><b>Ar</b> = relative atomic mass (big number on the periodic table).</li>
+<li><b>Mr</b> = sum of the Ar of every atom in the formula.</li>
+</ul>
+<div class="formula">MgCl₂ = 24 + (2 × 35.5) = 95 &nbsp;&nbsp; Ca(OH)₂ = 40 + 2×(16+1) = 74</div>
+<h3>Moles</h3>
+<div class="formula">moles = mass ÷ Mr &nbsp;|&nbsp; mass = moles × Mr</div>
+<p>1 mole = <b>6.02 × 10²³</b> particles (Avogadro's constant).</p>
+<h3>Mass from an equation: 4 steps</h3>
+<ol>
+<li>Moles of what you know = mass ÷ Mr</li>
+<li>Use the big numbers for the ratio</li>
+<li>Moles of what you want</li>
+<li>Mass = moles × Mr</li>
+</ol>
+<div class="formula">2NaClO₃ → 2NaCl + 3O₂ : 0.4 mol NaClO₃ → 0.6 mol O₂ → 0.6 × 32 = 19.2 g</div>
+<p><b>Limiting reactant</b>: used up first, so it limits how much product forms. The other is <b>in excess</b>.</p>
+<h3>Conservation of mass</h3>
+<ul>
+<li>Mass seems to <b>increase</b> if a reactant is a gas from the air (Mg + O₂ from air → MgO).</li>
+<li>Mass seems to <b>decrease</b> if a product is a gas that escapes (CaCO₃ → CaO + CO₂).</li>
+</ul>
+<h3>Concentration</h3>
+<div class="formula">concentration (g/dm³) = mass (g) ÷ volume of solution (dm³)</div>
+<div class="warn"><b>Watch out:</b> it's volume of <b>solution</b>, not solvent. cm³ → dm³: <b>÷ 1000</b>.</div>
+</section>
+
+<section class="topic" id="C4">
+<div class="th"><div class="tile"><small>C4</small>pH</div><h2>Chemical changes</h2></div>
+<div class="ph" aria-hidden="true">
+<span style="background:#D7263D"></span><span style="background:#E4572E"></span><span style="background:#F08A24"></span><span style="background:#F4B400"></span><span style="background:#E9D737"></span><span style="background:#B9D23C"></span><span style="background:#5DBB46"></span><span style="background:#2E9E5B"></span><span style="background:#1F9A8A"></span><span style="background:#2477B8"></span><span style="background:#2D5DA8"></span><span style="background:#3D3F9B"></span><span style="background:#563592"></span><span style="background:#6A2C8E"></span><span style="background:#4A1E6B"></span>
+</div>
+<div class="phl"><span>0 strong acid</span><span>7 neutral</span><span>14 strong alkali</span></div>
+<ul>
+<li>Universal indicator: red/orange acid, green neutral, blue/purple alkali.</li>
+<li><b>Acids</b> → <b>H⁺</b> ions in water. <b>Alkalis</b> → <b>OH⁻</b> ions in water.</li>
+<li><b>Base</b>: neutralises an acid → salt + water. <b>Alkali</b>: a base that dissolves in water.</li>
+<li>Neutralisation: <span class="f">H⁺ + OH⁻ → H₂O</span></li>
+<li><b>Strong</b> acid: <b>completely</b> ionises in water (HCl, H₂SO₄, HNO₃). <b>Weak</b>: partially ionises (ethanoic acid).</li>
+</ul>
+<h3>Acid reactions and naming salts</h3>
+<ul>
+<li>acid + metal → salt + hydrogen</li>
+<li>acid + metal oxide/hydroxide → salt + water</li>
+<li>acid + metal carbonate → salt + water + carbon dioxide</li>
+<li>Hydro<b>chlor</b>ic → <b>chloride</b>; <b>sulf</b>uric → <b>sulfate</b>; <b>nitr</b>ic → <b>nitrate</b>. Zinc + hydrochloric acid → zinc chloride + hydrogen.</li>
+</ul>
+<h3>Making a soluble salt (required practical)</h3>
+<p>Copper oxide + sulfuric acid → copper sulfate + water. Warm acid → add oxide until <b>excess</b> → <b>filter</b> → heat filtrate to evaporate some water → leave to <b>crystallise</b> → dry.</p>
+<h3>Redox: OIL RIG</h3>
+<ul>
+<li><b>O</b>xidation <b>I</b>s <b>L</b>oss of electrons. <b>R</b>eduction <b>I</b>s <b>G</b>ain.</li>
+<li>Mg + CuSO₄ → MgSO₄ + Cu: Mg loses electrons (oxidised), Cu²⁺ gains them (reduced).</li>
+</ul>
+<h3>Electrolysis</h3>
+<ul>
+<li>Electrolyte must be <b>molten or dissolved</b> so ions can move.</li>
+<li>Positive ions → <b>cathode</b> (−), <b>gain</b> electrons → reduced.</li>
+<li>Negative ions → <b>anode</b> (+), <b>lose</b> electrons → oxidised.</li>
+<li>Molten lead bromide: <span class="f">Pb²⁺ + 2e⁻ → Pb</span> at cathode; <span class="f">2Br⁻ → Br₂ + 2e⁻</span> at anode.</li>
+</ul>
+<p>Trick: <b>PANIC</b> – Positive Anode, Negative Is Cathode.</p>
+<h3>Reactivity series and extracting metals</h3>
+<div class="formula">K · Na · Li · Ca · Mg · <i>C</i> · Zn · Fe · <i>H</i> · Cu · Ag · Au</div>
+<ul>
+<li>More reactive metals lose electrons (form positive ions) more easily. They react faster with water and acid.</li>
+<li>A more reactive metal <b>displaces</b> a less reactive one from its compound: magnesium + copper sulfate → magnesium sulfate + copper.</li>
+<li>Metals <b>below carbon</b> (zinc, iron, copper) are extracted by heating the oxide with carbon. The oxide loses oxygen, so it's <b>reduced</b>.</li>
+<li>Metals <b>above carbon</b> (e.g. aluminium) are extracted by electrolysis, which uses a lot of energy.</li>
+<li>Gold is so unreactive it's found as the metal itself.</li>
+<li>Oxidation can also mean <b>gaining oxygen</b>; reduction can mean <b>losing oxygen</b>.</li>
+</ul>
+<h3>Electrolysis of solutions</h3>
+<ul>
+<li>Water gives extra H⁺ and OH⁻ ions.</li>
+<li>Cathode: the metal forms only if it's less reactive than hydrogen; otherwise hydrogen.</li>
+<li>Anode: a halogen forms if there are halide ions; otherwise oxygen.</li>
+<li>See the Practicals tab for the full method and gas tests.</li>
+</ul>
+</section>
+
+<section class="topic" id="C5">
+<div class="th"><div class="tile"><small>C5</small>En</div><h2>Energy changes</h2></div>
+<ul>
+<li><b>Exothermic</b>: energy released to surroundings, temperature <b>rises</b>. Burning, neutralisation, hand warmers.</li>
+<li><b>Endothermic</b>: energy taken in, temperature <b>falls</b>. Thermal decomposition, sports ice packs.</li>
+<li>Breaking bonds <b>takes in</b> energy. Making bonds <b>releases</b> energy.</li>
+<li><b>Activation energy</b>: minimum energy needed for particles to react.</li>
+</ul>
+<div class="formula">Energy change = bonds broken − bonds made &nbsp;(negative → exothermic)</div>
+<p>H₂ + Cl₂ → 2HCl (H–H 436, Cl–Cl 243, H–Cl 432): broken = 679, made = 2 × 432 = 864 → 679 − 864 = <b>−185 kJ/mol</b></p>
+<h3>Reaction profiles</h3>
+<ul>
+<li>Exothermic: products <b>lower</b> than reactants. Endothermic: products <b>higher</b>.</li>
+<li>Activation energy: reactants up to the peak. Overall change: reactants to products.</li>
+</ul>
+<h3>Temperature change practical</h3>
+<p>Polystyrene cup with a lid (insulates, less heat loss), thermometer, measure start and highest/lowest temperature.</p>
+</section>
+</div>
+
+<!-- CARDS -->
+<div id="p-fc" hidden>
+<div class="chips" id="fcf"></div>
+<div class="meta"><span id="fcpos"></span><span id="fcleft"></span></div>
+<button class="card" id="card" aria-live="polite"></button>
+<div class="row"><button class="btn b" id="fcagain">Again</button><button class="btn g" id="fcgot">Got it</button></div>
+<div class="row"><button class="btn" id="fcshuf">Shuffle &amp; restart</button></div>
+</div>
+
+
+<!-- PRACTICALS -->
+<div id="p-rp" hidden>
+<p style="margin-bottom:14px">Required practicals are worth around 15% of the marks, and 6-mark "describe a method" questions usually come from them. For each one, know the method, the variables and the safety points.</p>
+
+<details class="rc" open><summary>RP · Making a soluble salt</summary><div class="in">
+<p>Example: copper sulfate from copper oxide and sulfuric acid. <span class="f">CuO + H₂SO₄ → CuSO₄ + H₂O</span></p>
+<ol class="steps">
+<li>Measure 40 cm³ of dilute sulfuric acid into a beaker and warm it gently with a Bunsen burner.</li>
+<li>Add copper oxide one spatula at a time, stirring, until no more dissolves. The oxide is now <b>in excess</b>, so all the acid has reacted.</li>
+<li><b>Filter</b> to remove the excess copper oxide. Collect the blue filtrate in an evaporating basin.</li>
+<li>Heat the filtrate on a water bath until crystals start to form at the edge, then stop.</li>
+<li>Leave to cool and <b>crystallise</b>. Filter off the crystals and pat them dry with filter paper.</li>
+</ol>
+<dl class="vars"><dt>Why excess?</dt><dd>So all the acid is used up and the salt isn't contaminated with acid.</dd><dt>Why warm?</dt><dd>Speeds up the reaction.</dd><dt>Safety</dt><dd>Eye protection (acid irritant, copper sulfate harmful); don't heat to dryness (crystals can spit).</dd></dl>
+</div></details>
+
+<details class="rc"><summary>RP · Titration <span class="pill t">Triple</span></summary><div class="in">
+<ol class="steps">
+<li>Use a <b>pipette</b> and filler to measure exactly 25.0 cm³ of alkali into a conical flask.</li>
+<li>Add a few drops of indicator (phenolphthalein or methyl orange). Stand the flask on a white tile.</li>
+<li>Fill a <b>burette</b> with acid and record the starting volume at eye level.</li>
+<li>Add acid, swirling, then drop by drop near the end, until the indicator <b>just</b> changes colour (the end point).</li>
+<li>Record the final volume. Titre = final − start.</li>
+<li>Repeat until you get <b>concordant</b> results (within 0.10 cm³ of each other) and calculate a mean.</li>
+</ol>
+<div class="formula">moles = concentration (mol/dm³) × volume (dm³) &nbsp;<span class="pill h">HT</span></div>
+<dl class="vars"><dt>Indicator</dt><dd>Phenolphthalein: pink in alkali → colourless. Methyl orange: yellow in alkali → red in acid.</dd><dt>White tile</dt><dd>To see the colour change clearly.</dd></dl>
+<div class="warn"><b>Don't use universal indicator:</b> it changes colour gradually, so there's no sharp end point.</div>
+</div></details>
+
+<details class="rc"><summary>RP · Electrolysis of aqueous solutions</summary><div class="in">
+<ol class="steps">
+<li>Pour the solution (e.g. copper chloride, sodium chloride) into a beaker.</li>
+<li>Put in two inert <b>graphite</b> electrodes that don't touch, connected to a low-voltage d.c. supply.</li>
+<li>Collect any gas in inverted test tubes over the electrodes. Observe each electrode.</li>
+<li>Test the gases.</li>
+</ol>
+<h3>What forms where</h3>
+<div class="tbl"><table>
+<tr><th>Electrode</th><th>Rule</th></tr>
+<tr><td>Cathode (−)</td><td>The <b>metal</b> forms if it's <b>less reactive than hydrogen</b> (e.g. copper). Otherwise <b>hydrogen</b> forms.</td></tr>
+<tr><td>Anode (+)</td><td>A <b>halogen</b> forms if the solution has halide ions (Cl⁻, Br⁻, I⁻). Otherwise <b>oxygen</b> forms.</td></tr>
+</table></div>
+<h3>Gas tests</h3>
+<div class="tbl"><table>
+<tr><th>Gas</th><th>Test</th><th>Result</th></tr>
+<tr><td>Hydrogen</td><td>Lighted splint</td><td>Squeaky pop</td></tr>
+<tr><td>Oxygen</td><td>Glowing splint</td><td>Relights</td></tr>
+<tr><td>Chlorine</td><td>Damp blue litmus paper</td><td>Bleached white (may turn red first)</td></tr>
+<tr><td>Carbon dioxide</td><td>Bubble through limewater</td><td>Turns cloudy</td></tr>
+</table></div>
+<p>Copper chloride solution: copper at the cathode, chlorine at the anode. Sodium chloride solution: hydrogen at the cathode, chlorine at the anode.</p>
+</div></details>
+
+<details class="rc"><summary>RP · Temperature changes</summary><div class="in">
+<ol class="steps">
+<li>Measure 30 cm³ of hydrochloric acid into a polystyrene cup, standing in a beaker so it doesn't tip.</li>
+<li>Record the starting temperature with a thermometer.</li>
+<li>Add 5 cm³ of sodium hydroxide solution, stir, put the lid on and record the highest temperature.</li>
+<li>Repeat with 10, 15, 20… cm³ of sodium hydroxide.</li>
+<li>Repeat the whole experiment and calculate means. Plot temperature rise against volume.</li>
+</ol>
+<dl class="vars"><dt>IV</dt><dd>Volume of sodium hydroxide</dd><dt>DV</dt><dd>Temperature change</dd><dt>Control</dt><dd>Volume and concentration of acid, same cup, starting temperature</dd></dl>
+<ul>
+<li>Polystyrene and a lid reduce energy lost to the surroundings.</li>
+<li>The temperature rise peaks when the acid is exactly neutralised, then falls as extra cold alkali is added.</li>
+</ul>
+</div></details>
+
+<details class="rc"><summary>Practical words you must know</summary><div class="in">
+<div class="tbl"><table>
+<tr><th>Word</th><th>Meaning</th></tr>
+<tr><td>Independent variable</td><td>The one you change</td></tr>
+<tr><td>Dependent variable</td><td>The one you measure</td></tr>
+<tr><td>Control variable</td><td>Kept the same so it's a fair test</td></tr>
+<tr><td>Repeatable</td><td>Same person, same method → similar results</td></tr>
+<tr><td>Reproducible</td><td>Different person or method → similar results</td></tr>
+<tr><td>Accurate</td><td>Close to the true value</td></tr>
+<tr><td>Precise</td><td>Repeat results close together</td></tr>
+<tr><td>Concordant</td><td>Titres within 0.10 cm³ of each other</td></tr>
+<tr><td>Anomalous</td><td>Doesn't fit the pattern. Leave it out of the mean.</td></tr>
+</table></div>
+</div></details>
+</div>
+
+<!-- TECHNIQUE -->
+<div id="p-rc" hidden>
+<p style="margin-bottom:14px">These are the question types that come up on every paper. Learn the pattern and you'll pick up marks even on topics you're shaky on.</p>
+<details class="rc" open><summary>Unfamiliar context? Don't panic</summary><div class="in">
+<p>Lots of marks are on things you haven't been taught directly: an element you've never met, a new compound, a new reaction. They're always testing a topic you <i>do</i> know.</p>
+<ol class="steps">
+<li><b>Find the topic</b>: an element at the bottom of Group 1 = group trends. A substance with a weird melting point = structure and bonding. A new equation = moles and ratios.</li>
+<li><b>Use the pattern</b>: if it's in the same group, it behaves like the others, just more or less reactive.</li>
+<li><b>Use the data given</b>. Quote numbers from the table. The examiner put them there for you.</li>
+<li>"Predict" and "suggest" mean any sensible answer based on a pattern can score. Always write something.</li>
+</ol>
+</div></details>
+
+
+<details class="rc"><summary>Command words: what they want</summary><div class="in">
+<div class="tbl"><table>
+<tr><th>Word</th><th>Do this</th></tr>
+<tr><td>Give / State / Name</td><td>A short answer. No explanation.</td></tr>
+<tr><td>Describe</td><td>Say what happens or what it's like. No "why" needed.</td></tr>
+<tr><td>Explain</td><td>Say <b>why</b>. Link each point with "because" or "so".</td></tr>
+<tr><td>Compare</td><td>Similarities and/or differences. Use "whereas".</td></tr>
+<tr><td>Calculate</td><td>Show working; give units.</td></tr>
+<tr><td>Suggest</td><td>Apply what you know to something new. Any sensible answer can score.</td></tr>
+</table></div>
+<p><b>Marks = points.</b> A 3-mark question needs 3 separate correct ideas.</p>
+</div></details>
+
+<details class="rc"><summary>"Explain why X has a high/low melting point"</summary><div class="in">
+<ol class="steps">
+<li>Name the <b>structure</b> (giant ionic, simple molecular, giant covalent, metallic).</li>
+<li>Name <b>what holds it together</b> (electrostatic forces between ions / covalent bonds / intermolecular forces).</li>
+<li>Say whether they're <b>strong or weak</b>.</li>
+<li>Link to <b>energy</b>: a lot / little energy needed to overcome them.</li>
+</ol>
+<div class="eg"><b>Example</b><br>Methane is a simple molecule with weak intermolecular forces between molecules, so little energy is needed to overcome them.</div>
+<div class="warn"><b>Mark killer:</b> saying covalent bonds break when a simple molecule melts or boils. That gets 0.</div>
+</div></details>
+
+<details class="rc"><summary>"Explain why X conducts (or doesn't)"</summary><div class="in">
+<ol class="steps">
+<li>Name the <b>charged particle</b>: ions or delocalised electrons.</li>
+<li>Say they're <b>free to move</b>.</li>
+<li>Say they <b>carry charge</b> (current) through the substance.</li>
+</ol>
+<div class="eg"><b>Example</b><br>Molten NaCl conducts because the ions are free to move and carry charge. Solid NaCl doesn't because the ions are fixed in the lattice.</div>
+<div class="warn"><b>Mark killer:</b> "electrons move" for an ionic compound. In ionic compounds it's always the <b>ions</b>.</div>
+</div></details>
+
+<details class="rc"><summary>Group 1 and Group 7 reactivity</summary><div class="in">
+<p><b>Group 1, more reactive going down:</b></p>
+<ol class="steps">
+<li>More shells, so outer electron is further from the nucleus.</li>
+<li>Weaker attraction to the nucleus (more shielding).</li>
+<li>Outer electron is <b>lost</b> more easily.</li>
+</ol>
+<p><b>Group 7, less reactive going down:</b> same first two points, but they need to <b>gain</b> an electron, so it gets harder.</p>
+<div class="warn"><b>Mark killer:</b> "the atom is bigger so it's more reactive". You need the attraction and losing/gaining an electron.</div>
+</div></details>
+
+<details class="rc"><summary>Mole calculations from an equation</summary><div class="in">
+<ol class="steps">
+<li>Write the Mr of what you know and what you want.</li>
+<li>Moles of known = mass ÷ Mr.</li>
+<li>Use the balancing numbers for the ratio.</li>
+<li>Mass of unknown = moles × Mr.</li>
+</ol>
+<div class="eg"><b>Example</b><br>4.8 g Mg in Mg + 2HCl → MgCl₂ + H₂. Moles Mg = 4.8 ÷ 24 = 0.2. Ratio 1:1, so 0.2 mol MgCl₂. Mass = 0.2 × 95 = 19 g.</div>
+<p>Always show working. Even with the wrong final answer you can get 2–3 marks out of 4.</p>
+</div></details>
+
+<details class="rc"><summary>Concentration and unit traps</summary><div class="in">
+<ol class="steps">
+<li>Convert cm³ to dm³: ÷ 1000.</li>
+<li>Concentration = mass ÷ volume.</li>
+<li>Rearrange when needed: mass = concentration × volume.</li>
+</ol>
+<div class="eg"><b>Example</b><br>5.0 g in 200 cm³ → 0.200 dm³ → 5.0 ÷ 0.200 = 25 g/dm³.</div>
+</div></details>
+
+<details class="rc"><summary>Bond energy calculations</summary><div class="in">
+<ol class="steps">
+<li>Draw out or list every bond in the reactants. Add them up (bonds broken).</li>
+<li>Do the same for the products (bonds made). Remember the big numbers: 2HCl = 2 H–Cl bonds.</li>
+<li>Energy change = broken − made.</li>
+<li>Negative means exothermic, positive means endothermic.</li>
+</ol>
+</div></details>
+
+<details class="rc"><summary>6-mark method questions</summary><div class="in">
+<p>Marked in levels, not points. To get Level 3 (5–6 marks) you need a <b>complete method in a logical order</b> that someone else could follow.</p>
+<ol class="steps">
+<li>Write numbered steps, one action per step.</li>
+<li>Name equipment (beaker, filter funnel, evaporating basin, Bunsen).</li>
+<li>Say why for the key steps ("add copper oxide until in excess so all the acid reacts").</li>
+<li>Finish the job: get to dry crystals or a pure product.</li>
+</ol>
+<p>Learn the two classics: <b>salt from rock salt</b> and <b>copper sulfate from copper oxide</b>. Both are in the paper.</p>
+</div></details>
+
+<details class="rc"><summary>Electrolysis questions</summary><div class="in">
+<ol class="steps">
+<li>Metal (or hydrogen) goes to the <b>cathode</b> (−). Non-metal to the <b>anode</b> (+).</li>
+<li>Cathode: ions <b>gain</b> electrons = <b>reduction</b>. Anode: ions <b>lose</b> electrons = <b>oxidation</b>.</li>
+<li>Half equations: count charge. Pb²⁺ needs 2e⁻. Two Br⁻ make Br₂ and give 2e⁻.</li>
+<li>Must be molten or dissolved so <b>ions are free to move</b>.</li>
+</ol>
+</div></details>
+</div>
+
+<!-- EXAM QS -->
+<div id="p-ex" hidden>
+<div class="cover">
+<h2>Exam questions: C1–C5</h2>
+<p>Written in the style of AQA GCSE Chemistry Paper 1, with original questions. Pick a set:</p>
+<div class="chips" id="sets" style="margin:10px 0 0"></div>
+<div class="mode" role="group" aria-label="Mode">
+  <button class="chip" id="m-learn">Learn mode: hints on</button>
+  <button class="chip" id="m-exam">Exam mode: no hints</button>
+</div>
+</div>
+<div class="score">
+  <b id="sc">0 / 0</b><span id="scsub">marks on parts you've answered</span>
+  <button class="btn sm" id="reset">Reset all</button>
+  <div style="flex-basis:100%"><div class="bars" id="bars"></div><div class="weak" id="weak"></div></div>
+</div>
+<div id="paper"></div>
+</div>
+</div>
+
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script src="shared/study.js"></script>
+<script>
+const TOPICS={C1:"Atoms",C2:"Bonding",C3:"Moles",C4:"Changes",C5:"Energy"};
+const CARDS=[
+["C1","Relative mass and charge of a proton?","Mass 1, charge +1"],
+["C1","Relative mass and charge of a neutron?","Mass 1, charge 0"],
+["C1","Relative mass and charge of an electron?","Very small mass, charge −1"],
+["C1","What does the atomic number tell you?","Number of protons (and electrons in a neutral atom)"],
+["C1","What does the mass number tell you?","Protons + neutrons"],
+["C1","What is an isotope?","Atoms of the same element with the same protons but different neutrons"],
+["C1","What is an ion?","An atom with a different number of electrons, so it has a charge"],
+["C1","Order the subatomic particles were discovered","Electron → proton → neutron"],
+["C1","What did the alpha scattering experiment show?","Most passed through (mostly empty space); a few deflected (small, positive nucleus)"],
+["C1","Plum pudding model","Ball of positive charge with electrons embedded in it"],
+["C1","Who discovered the neutron?","Chadwick"],
+["C1","Formula for relative atomic mass","Σ(abundance × mass no.) ÷ total abundance"],
+["C1","Names of Group 1, Group 7, Group 0","Alkali metals, halogens, noble gases"],
+["C1","Group 1 metal + water →","Metal hydroxide + hydrogen"],
+["C1","Why does Group 1 get more reactive going down?","Outer electron further from nucleus, weaker attraction, lost more easily"],
+["C1","Why does Group 7 get less reactive going down?","Outer shell further from nucleus, weaker attraction, harder to gain an electron"],
+["C1","Chlorine + potassium bromide →","Potassium chloride + bromine (chlorine is more reactive, displaces bromine)"],
+["C1","Why are noble gases unreactive?","Full outer shell of electrons (stable)"],
+["C2","Ionic bonding","Electrons transferred from metal to non-metal, forming oppositely charged ions"],
+["C2","Covalent bonding","Non-metals share pairs of electrons"],
+["C2","Metallic bonding","Positive metal ions attracted to a sea of delocalised electrons"],
+["C2","Why does NaCl have a high melting point?","Giant ionic lattice; strong electrostatic forces between oppositely charged ions need lots of energy to overcome"],
+["C2","When do ionic compounds conduct?","When molten or dissolved, because the ions are free to move"],
+["C2","Why do simple molecules have low boiling points?","Only weak intermolecular forces are overcome, not covalent bonds"],
+["C2","Why does graphite conduct?","Each carbon makes 3 bonds, leaving one delocalised electron that can move"],
+["C2","Why is graphite soft?","Weak forces between layers, so layers slide"],
+["C2","Why is diamond so hard?","Each carbon has 4 strong covalent bonds in a giant structure"],
+["C2","Monomer vs polymer","Monomer = small molecule; polymer = long chain of monomers"],
+["C2","Why are alloys harder than pure metals?","Different-sized atoms distort the layers, so they can't slide"],
+["C3","Mr meaning","Relative formula mass: sum of Ar values in the formula"],
+["C3","Moles formula","moles = mass ÷ Mr"],
+["C3","Avogadro's constant","6.02 × 10²³ particles per mole"],
+["C3","Concentration formula","mass (g) ÷ volume of solution (dm³)"],
+["C3","cm³ to dm³","Divide by 1000"],
+["C3","Limiting reactant","The reactant used up first; it limits the amount of product"],
+["C3","Why does Mg gain mass when heated in air?","It reacts with oxygen from the air; the oxygen's mass is added"],
+["C3","Why does CaCO₃ lose mass when heated?","Carbon dioxide gas is produced and escapes"],
+["C4","Acids form which ions in water?","H⁺"],
+["C4","Alkalis form which ions in water?","OH⁻"],
+["C4","Base vs alkali","A base neutralises an acid; an alkali is a base that dissolves in water"],
+["C4","Neutralisation ionic equation","H⁺ + OH⁻ → H₂O"],
+["C4","Strong acid","Completely ionises in water"],
+["C4","Acid + metal carbonate →","Salt + water + carbon dioxide"],
+["C4","Salt from sulfuric acid","…sulfate"],
+["C4","OIL RIG","Oxidation Is Loss, Reduction Is Gain (of electrons)"],
+["C4","Electrolysis: where do positive ions go?","Cathode (−); gain electrons, reduced"],
+["C4","Electrolysis: where do negative ions go?","Anode (+); lose electrons, oxidised"],
+["C4","Why must the electrolyte be molten or dissolved?","So the ions are free to move"],
+["C5","Exothermic","Releases energy to surroundings; temperature rises"],
+["C5","Endothermic","Takes in energy from surroundings; temperature falls"],
+["C5","Bond breaking: exo or endo?","Endothermic (takes in energy)"],
+["C5","Bond making: exo or endo?","Exothermic (releases energy)"],
+["C5","Activation energy","Minimum energy needed for particles to react"],
+["C5","Energy change from bond energies","Bonds broken − bonds made"],
+["C5","Filtration separates…","An insoluble solid from a liquid"],
+["C5","Crystallisation method","Heat gently until crystals start to form, leave to cool, filter, dry"],
+["C5","Simple distillation separates…","A solvent from a solution (e.g. water from ink)"],
+["C5","Fractional distillation separates…","Liquids with different boiling points"],
+];
+
+const PROFILE=`<svg viewBox="0 0 330 210" width="330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Reaction profile with arrows A, B and C">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+<g fill="none" stroke="currentColor" stroke-width="1.5">
+<path d="M40 15V185H320"/>
+<path d="M50 120H110C140 120 150 45 175 45C200 45 210 155 240 155H310" stroke-width="2.5"/>
+<path d="M110 120H300" stroke-dasharray="4 4" opacity=".5"/>
+<path d="M175 45H225" stroke-dasharray="4 4" opacity=".5"/>
+<path d="M150 118V50" marker-start="ah" marker-end="ah"/>
+<path d="M290 122V151" marker-start="ah" marker-end="ah"/>
+<path d="M222 152V49" marker-start="ah" marker-end="ah"/>
+</g>
+<g fill="currentColor" font-family="JetBrains Mono, monospace" font-size="13" font-weight="700">
+<text x="132" y="90">A</text><text x="298" y="142">B</text><text x="228" y="105">C</text>
+</g>
+<g fill="currentColor" font-family="Atkinson Hyperlegible, sans-serif" font-size="11">
+<text x="52" y="112">Reactants</text><text x="250" y="170">Products</text>
+<text x="14" y="120" transform="rotate(-90 14 120)">Energy</text>
+<text x="140" y="203">Progress of reaction</text>
+</g></svg>`;
+
+/* C2 diagrams, generated so coordinates stay consistent */
+const S=(w,h,inner,label)=>`<svg viewBox="0 0 ${w} ${h}" width="${w}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${label}">${inner}</svg>`;
+const pt=(cx,cy,r,deg)=>[cx+r*Math.cos(deg*Math.PI/180),cy+r*Math.sin(deg*Math.PI/180)];
+const dot=(x,y)=>`<circle class="ed" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.8"/>`;
+const crs=(x,y)=>`<text class="ex" x="${x.toFixed(1)}" y="${(y+4).toFixed(1)}" text-anchor="middle">×</text>`;
+function ion(cx,cy,r,sym,charge,ndots,ncross){
+  let s=`<circle class="shell" cx="${cx}" cy="${cy}" r="${r}"/><text class="el" x="${cx}" y="${cy+6}" text-anchor="middle">${sym}</text>`;
+  const n=ndots+ncross;for(let i=0;i<n;i++){const deg=-90+i*360/n+(i%2?-8:8)*0;const [x,y]=pt(cx,cy,r,-67.5+i*45);s+=i<ndots?dot(x,y):crs(x,y)}
+  const l=cx-r-10,rr=cx+r+10;
+  s+=`<path class="ln" d="M${l+6} ${cy-r-8}H${l}V${cy+r+8}H${l+6}"/><path class="ln" d="M${rr-6} ${cy-r-8}H${rr}V${cy+r+8}H${rr-6}"/>`;
+  s+=`<text class="el" x="${rr+4}" y="${cy-r-2}">${charge}</text>`;return s}
+const FIGS={
+ nacl:()=>S(320,150,ion(80,70,36,"Na","+",8,0)+ion(220,70,36,"Cl","−",7,1)+`<text class="cap" x="80" y="140" text-anchor="middle">Na⁺ (2,8)</text><text class="cap" x="220" y="140" text-anchor="middle">Cl⁻ (2,8,8)</text>`,"Dot and cross diagram of sodium and chloride ions"),
+ water:()=>{const O=[160,62],H1=[118,102],H2=[202,102],rO=36,rH=24;
+  let s=`<circle class="shell" cx="${O[0]}" cy="${O[1]}" r="${rO}"/><circle class="shell" cx="${H1[0]}" cy="${H1[1]}" r="${rH}"/><circle class="shell" cx="${H2[0]}" cy="${H2[1]}" r="${rH}"/>`;
+  s+=`<text class="el" x="${O[0]}" y="${O[1]+6}" text-anchor="middle">O</text><text class="el" x="${H1[0]-6}" y="${H1[1]+10}" text-anchor="middle">H</text><text class="el" x="${H2[0]+6}" y="${H2[1]+10}" text-anchor="middle">H</text>`;
+  [H1,H2].forEach(H=>{const dx=H[0]-O[0],dy=H[1]-O[1],d=Math.hypot(dx,dy),ux=dx/d,uy=dy/d,m=(rO+d-rH)/2,mx=O[0]+ux*m,my=O[1]+uy*m;s+=dot(mx-uy*6,my+ux*6)+crs(mx+uy*6,my-ux*6)});
+  [-140,-115,-65,-40].forEach(a=>{const [x,y]=pt(O[0],O[1],rO,a);s+=dot(x,y)});
+  s+=`<text class="cap" x="160" y="150" text-anchor="middle">• oxygen's electrons   × hydrogen's electrons</text>`;
+  return S(320,160,s,"Dot and cross diagram of a water molecule")},
+ lattice:()=>{let s="";for(let r=0;r<4;r++)for(let c=0;c<6;c++){const p=(r+c)%2===0,x=34+c*46,y=24+r*40;s+=`<circle class="${p?"pos":"neg"}" cx="${x}" cy="${y}" r="${p?12:17}"/><text class="lb" x="${x}" y="${y+4}" text-anchor="middle">${p?"Na⁺":"Cl⁻"}</text>`}
+  return S(300,170,s,"Giant ionic lattice of alternating sodium and chloride ions")},
+ molecules:()=>{const ms=[[50,50],[150,40],[250,58],[95,125],[205,120]];let s="";
+  [[0,1],[1,2],[0,3],[1,3],[1,4],[2,4],[3,4]].forEach(([a,b])=>s+=`<path class="dash" d="M${ms[a][0]} ${ms[a][1]}L${ms[b][0]} ${ms[b][1]}"/>`);
+  ms.forEach(([x,y])=>s+=`<circle class="atom" cx="${x-13}" cy="${y+9}" r="7"/><circle class="atom" cx="${x+13}" cy="${y+9}" r="7"/><circle class="pos" cx="${x}" cy="${y}" r="12"/><text class="lb" x="${x}" y="${y+4}" text-anchor="middle">O</text>`);
+  s+=`<path class="ln" d="M20 172h18"/><text class="cap" x="44" y="176">strong bonds inside</text><path class="dash" d="M170 172h18"/><text class="cap" x="194" y="176">weak forces between</text>`;
+  return S(300,186,s,"Simple molecules with weak forces between them")},
+ carbon:()=>{let s="";
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++){const x=22+c*36,y=30+r*36;if(c<3)s+=`<path class="ln" d="M${x} ${y}h36"/>`;if(r<2)s+=`<path class="ln" d="M${x} ${y}v36"/>`}
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++)s+=`<circle class="atom" cx="${22+c*36}" cy="${30+r*36}" r="6"/>`;
+  s+=`<text class="cap" x="76" y="128" text-anchor="middle">Diamond: 4 bonds each</text>`;
+  for(let L=0;L<3;L++){const y=28+L*38;let d="",pts=[];for(let i=0;i<=6;i++){const x=175+i*20,yy=y+(i%2?10:0);d+=`${i?"L":"M"}${x} ${yy}`;pts.push([x,yy])}
+   s+=`<path class="ln" d="${d}"/>`;pts.forEach(([x,yy])=>s+=`<circle class="atom" cx="${x}" cy="${yy}" r="5"/>`);s+=`<text class="ee" x="${190+L*14}" y="${y+24}">e⁻</text>`;
+   if(L<2)s+=`<path class="dash" d="M205 ${y+14}v22M255 ${y+14}v22"/>`}
+  s+=`<text class="cap" x="235" y="128" text-anchor="middle">Graphite: layers, 3 bonds</text>`;
+  return S(320,138,s,"Diamond with four bonds per carbon beside graphite layers")},
+ metal:()=>{let s="";for(let r=0;r<3;r++)for(let c=0;c<6;c++){const x=34+c*46,y=26+r*42;s+=`<circle class="pos" cx="${x}" cy="${y}" r="15"/><text class="lb" x="${x}" y="${y+4}" text-anchor="middle">+</text>`}
+  for(let r=0;r<2;r++)for(let c=0;c<5;c++){s+=`<text class="ee" x="${50+c*46+(r?6:-4)}" y="${50+r*42}">e⁻</text>`}
+  return S(300,126,s,"Metal ions in a sea of delocalised electrons")},
+ alloy:()=>{let s="";
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++)s+=`<circle class="pos" cx="${24+c*28}" cy="${24+r*28}" r="13"/>`;
+  s+=`<path class="ln" d="M24 4h70"/><path class="ln" d="M86 0l8 4l-8 4"/><text class="cap" x="66" y="112" text-anchor="middle">Pure: layers slide</text>`;
+  const off=[[0,-5],[0,-8],[0,-8],[0,-5]];
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++){if(r===1&&c===2)continue;let dy=0;if(r===0)dy=(c===1||c===2)?-7:-2;if(r===2)dy=(c===1||c===2)?7:2;const dx=r===1?(c===1?-6:c===3?6:0):0;s+=`<circle class="pos" cx="${200+c*28+dx}" cy="${24+r*28+dy}" r="13"/>`}
+  s+=`<circle class="big" cx="256" cy="52" r="19"/><text class="cap" x="242" y="112" text-anchor="middle">Alloy: layers distorted</text>`;
+  return S(320,120,s,"Pure metal layers sliding compared with distorted alloy layers")}
+};
+const PROFILE_FIG=()=>PROFILE;
+
+const DRILL=[
+ ["Melts at 801 °C. Conducts when molten or dissolved, but not as a solid.",0,"Only ionic compounds conduct when molten but not solid, because only then are the ions free to move."],
+ ["Boils at −182 °C. Doesn't conduct.",1,"Very low boiling point → weak intermolecular forces → simple molecules."],
+ ["Melts at 3550 °C. Doesn't conduct. Extremely hard.",2,"Very high melting point, no conduction, hard → giant covalent (diamond)."],
+ ["Melts at 1538 °C. Conducts as a solid and as a liquid. Can be hammered into shape.",3,"Conducts as a solid and malleable → metallic."],
+ ["Melts at 3600 °C. Conducts as a solid. Soft and slippery.",2,"Trap: conducts as a solid but it's graphite, a giant covalent structure. Very high melting point gives it away."],
+ ["Magnesium oxide, MgO",0,"Metal + non-metal → ionic."],
+ ["Carbon dioxide, CO₂",1,"Non-metals only, not one of the 4 giant ones → simple molecular."],
+ ["Silicon dioxide, SiO₂ (sand)",2,"One of the 4 giant covalent structures to learn."],
+ ["Copper, Cu",3,"Metal element → metallic."],
+ ["Melts at 0 °C. Doesn't conduct (when pure).",1,"Low melting point → simple molecular (this is water)."],
+ ["Potassium chloride, KCl",0,"Metal + non-metal → ionic."],
+ ["Poly(ethene), a polymer",1,"Polymers are covalent molecules, just very large ones. Not a giant covalent lattice."],
+ ["Steel (iron with carbon)",3,"An alloy is still metallic bonding."],
+ ["Methane, CH₄",1,"Non-metals, small molecule → simple molecular."]
+];
+const DOPTS=["Giant ionic","Simple molecular","Giant covalent","Metallic"];
+
+const BOOT=[
+ {id:"B1",k:"w",mk:4,q:"Magnesium (2,8,2) reacts with oxygen (2,6) to form magnesium oxide. Describe what happens to the electrons and give the charge on each ion.",ms:["Magnesium loses 2 electrons","Oxygen gains 2 electrons","Mg²⁺ and O²⁻ ions formed","Both have full outer shells / stable arrangement"],model:"Each magnesium atom loses its 2 outer electrons to an oxygen atom, which gains them. This forms Mg²⁺ and O²⁻ ions, which both have a full outer shell (2,8).",hint:"Same as NaCl but with 2 electrons. Who loses, who gains, what ions, what shells.",mist:"Saying the electrons are shared, or giving Mg a negative charge."},
+ {id:"B2",k:"m",mk:1,q:"What is the formula of the compound formed from Mg²⁺ ions and Cl⁻ ions? Tick one box.",o:["MgCl","MgCl₂","Mg₂Cl","Mg₂Cl₂"],a:1,ex:"Charges must cancel: one 2+ needs two 1−, so MgCl₂.",hint:"Make the total charge zero."},
+ {id:"B3",k:"m",mk:1,q:"What is the formula of aluminium oxide? Al forms Al³⁺ and O forms O²⁻. Tick one box.",o:["AlO","Al₃O₂","Al₂O₃","AlO₃"],a:2,ex:"2 × 3+ = 6+ and 3 × 2− = 6−, so Al₂O₃.",hint:"Find a number both charges go into (6)."},
+ {id:"B4",k:"n",mk:1,q:"How many covalent bonds are there in one molecule of methane, CH₄?",ans:4,tol:0,unit:"",ex:"Carbon shares one pair with each of the 4 hydrogens: 4 bonds.",hint:"One bond per hydrogen."},
+ {id:"B5",k:"m",mk:1,q:"Which state symbol shows a substance dissolved in water? Tick one box.",o:["(s)","(l)","(g)","(aq)"],a:3,ex:"(aq) = aqueous, dissolved in water.",hint:"'Aqua' = water."},
+ {id:"B6",k:"w",mk:1,q:"Give one limitation of using a dot-and-cross diagram to represent sodium chloride.",ms:["Doesn't show the 3D arrangement / lattice / relative sizes of the ions (any one)"],model:"It doesn't show how the ions are arranged in a 3D lattice.",hint:"What does a flat diagram miss?"},
+ {id:"B7",k:"w",mk:3,q:"Explain why diamond has a very high melting point.",ms:["Giant covalent structure","Many / lots of strong covalent bonds","A lot of energy needed to break them"],model:"Diamond has a giant covalent structure with many strong covalent bonds. A lot of energy is needed to break these bonds, so the melting point is very high.",hint:"Sentence 3 from Step 1.",mist:"Mentioning intermolecular forces. Diamond has no separate molecules."},
+ {id:"B8",k:"w",mk:2,q:"Ethene is a gas at room temperature. Poly(ethene) is a solid. Explain why.",ms:["Poly(ethene) molecules are much larger","So the intermolecular forces are stronger and need more energy to overcome"],model:"Poly(ethene) molecules are much larger than ethene molecules, so the intermolecular forces between them are stronger and more energy is needed to overcome them.",hint:"Bigger molecules → stronger forces between them."},
+ {id:"B9",k:"w",mk:3,q:"Copper conducts electricity when solid, but solid copper chloride does not. Explain why.",ms:["Copper has delocalised electrons","Which can move through the metal and carry charge","In solid copper chloride the ions are fixed in place / can't move"],model:"Copper contains delocalised electrons which are free to move through the structure and carry charge. In solid copper chloride, the ions are held in fixed positions in the lattice, so they can't move.",hint:"Sentence 4 twice: once for electrons, once for ions."},
+ {id:"B10",k:"m",mk:1,q:"What is graphene? Tick one box.",o:["A hollow ball of carbon atoms","A single layer of graphite","An alloy of carbon and iron","A polymer of ethene"],a:1,ex:"Graphene is one layer of graphite: one atom thick.",hint:"Think of peeling one sheet off graphite."},
+ {id:"B11",k:"L",mk:6,q:"Sodium chloride melts at 801 °C. Chlorine boils at −34 °C. Compare the structure and bonding of sodium chloride and chlorine, and explain the difference in their melting/boiling points.",levels:["Level 3 (5–6): clear comparison of both structures linked to the energy needed, with correct forces named for each","Level 2 (3–4): describes both structures, some link to melting/boiling point","Level 1 (1–2): simple statements about one substance"],ms:["Sodium chloride: ionic bonding / electrons transferred","Giant ionic lattice","Strong electrostatic forces between oppositely charged ions","Lots of energy needed to overcome → high melting point","Chlorine: covalent bonding / shared pair of electrons; simple molecules (Cl₂)","Weak intermolecular forces between molecules","Little energy needed to overcome → low boiling point (covalent bonds not broken)"],model:"Sodium chloride has ionic bonding: sodium transfers an electron to chlorine, forming Na⁺ and Cl⁻ ions. These form a giant ionic lattice with strong electrostatic forces between the oppositely charged ions in all directions. A lot of energy is needed to overcome these forces, so it has a high melting point. Chlorine has covalent bonding: two Cl atoms share a pair of electrons to form Cl₂ molecules. Chlorine is a simple molecular substance with only weak intermolecular forces between molecules. Little energy is needed to overcome these, so chlorine has a low boiling point. The covalent bonds inside the molecules do not break.",hint:"Do it in two halves: NaCl (bonding → structure → forces → energy), then chlorine the same way. Use 'whereas' to compare."}
+];
+
+/* Part kinds: m = tick one box, n = numeric, f = several numeric fields, w = written (self-marked), L = levels-marked 6-marker */
+const PAPER=[
+{n:"01",t:"C1",title:"This question is about atoms.",parts:[
+ {id:"1.1",k:"m",mk:1,q:"Which particle has a very small relative mass and a relative charge of −1? Tick one box.",o:["Neutron","Proton","Electron","Nucleus"],a:2,ex:"Electron.",hint:"Look at your particle table. Only one particle is negative."},
+ {id:"1.2",k:"f",mk:3,q:"An atom of potassium is shown as ³⁹₁₉K. Give the number of each particle in this atom.",fs:[["Protons",19],["Neutrons",20],["Electrons",19]],ex:"Protons = atomic number = 19. Neutrons = 39 − 19 = 20. Electrons = protons in a neutral atom = 19.",hint:"Bottom number = protons. Top − bottom = neutrons. Neutral atom: electrons = protons.",mist:"Putting 39 as neutrons. 39 is protons + neutrons together."},
+ {id:"1.3",k:"n",mk:1,q:"Potassium forms the ion K⁺. How many electrons are in a K⁺ ion?",ans:18,tol:0,unit:"",ex:"K has 19 electrons. A 1+ ion has lost one electron: 19 − 1 = 18.",hint:"Positive ion = electrons lost. Subtract the charge from the atom's electrons.",mist:"Adding an electron for a positive ion. Positive means it lost electrons."},
+ {id:"1.4",k:"w",mk:2,q:"Chlorine has two isotopes, ³⁵Cl and ³⁷Cl. Explain why these are isotopes of the same element.",ms:["Same number of protons / same atomic number (so same element)","Different number of neutrons (so different mass number)"],model:"They both have 17 protons, so they are the same element, but ³⁵Cl has 18 neutrons and ³⁷Cl has 20 neutrons.",hint:"2 marks: one point about protons, one about neutrons."},
+ {id:"1.5",k:"n",mk:2,q:"A sample of chlorine is 75.8% ³⁵Cl and 24.2% ³⁷Cl. Calculate the relative atomic mass of chlorine. Give your answer to 1 decimal place.",ans:35.5,tol:.06,unit:"",ex:"(75.8 × 35) + (24.2 × 37) = 2653 + 895.4 = 3548.4. ÷ 100 = 35.484 → 35.5",hint:"Multiply each mass by its percentage, add them, divide by 100.",mist:"Forgetting to divide by 100, or not rounding to 1 decimal place."},
+ {id:"1.6",k:"w",mk:3,q:"Describe the differences between the plum pudding model and the nuclear model of the atom.",ms:["Nuclear model has a nucleus; plum pudding has none","Nuclear model: positive charge concentrated in the nucleus, whereas plum pudding: positive charge spread through the atom","Nuclear model: mass concentrated in the nucleus / mostly empty space","Nuclear model: electrons in shells / orbit the nucleus, whereas plum pudding: electrons embedded in positive ball","Allow: nuclear model has neutrons"],model:"In the plum pudding model the atom is a ball of positive charge with electrons embedded in it. In the nuclear model the positive charge and most of the mass are concentrated in a small nucleus in the centre, the atom is mostly empty space, and the electrons orbit in shells.",hint:"'Differences' means compare. Use 'whereas'. Think: where's the positive charge, where's the mass, where are the electrons?"},
+ {id:"1.7",k:"w",mk:3,q:"In the alpha particle scattering experiment, alpha particles were fired at thin gold foil. Explain how the results showed that the plum pudding model was wrong.",ms:["Most alpha particles went straight through → atom is mostly empty space","Some alpha particles were deflected / a few bounced back","So the positive charge (and mass) must be concentrated in a small nucleus"],model:"Most alpha particles passed straight through, showing the atom is mostly empty space. A few were deflected or bounced back, which showed that the positive charge and mass are concentrated in a tiny nucleus. The plum pudding model couldn't explain this.",hint:"Result → what it means. Do this twice: 'most went through' and 'some deflected'.",mist:"Just describing the results without saying what they show."}
+]},
+{n:"02",t:"C1",title:"This question is about the periodic table.",parts:[
+ {id:"2.1",k:"m",mk:1,q:"What is the name for the elements in Group 7? Tick one box.",o:["Alkali metals","Halogens","Noble gases","Transition metals"],a:1,ex:"Halogens.",hint:"Group 1 = alkali metals, Group 0 = noble gases."},
+ {id:"2.2",k:"w",mk:1,q:"Explain why the noble gases are unreactive.",ms:["They have a full outer shell (of electrons) / stable arrangement of electrons"],model:"They have a full outer shell of electrons, so they don't need to lose or gain electrons.",hint:"1 mark: think about their outer shell."},
+ {id:"2.3",k:"w",mk:2,q:"Potassium reacts with water. Complete the word equation: potassium + water → ______ + ______",ms:["Potassium hydroxide","Hydrogen"],model:"potassium + water → potassium hydroxide + hydrogen",hint:"Group 1 metal + water → metal hydroxide + a gas.",mist:"Writing 'potassium oxide' or 'oxygen'."},
+ {id:"2.4",k:"w",mk:3,q:"Potassium is more reactive than sodium. Explain why, in terms of electrons.",ms:["Potassium's outer electron is further from the nucleus / potassium has more shells","So there is weaker attraction between the nucleus and the outer electron (more shielding)","So the outer electron is lost more easily"],model:"Potassium has more electron shells, so its outer electron is further from the nucleus. This means the attraction between the nucleus and the outer electron is weaker, so the electron is lost more easily.",hint:"Use the Group 1 recipe in Technique: distance → attraction → electron lost more easily.",mist:"'Potassium is bigger so it's more reactive.' That alone scores 0."},
+ {id:"2.5",k:"w",mk:2,q:"Chlorine water is added to potassium bromide solution. The solution turns orange. Explain this observation.",ms:["Chlorine is more reactive than bromine","Chlorine displaces bromine / bromine is formed (which is orange)"],model:"Chlorine is more reactive than bromine, so it displaces bromine from potassium bromide. The bromine formed makes the solution orange.",hint:"This is a displacement reaction. Which halogen is higher in Group 7?"},
+ {id:"2.6",k:"m",mk:1,q:"Which shows the balanced equation for sodium reacting with chlorine? Tick one box.",o:["Na + Cl₂ → NaCl","2Na + Cl₂ → 2NaCl","Na + Cl → NaCl₂","2Na + 2Cl₂ → 2NaCl"],a:1,ex:"Chlorine exists as Cl₂, which gives 2 Cl atoms, so you need 2NaCl and 2Na.",hint:"Count atoms each side. Chlorine is diatomic (Cl₂)."}
+]},
+{n:"03",t:"C5",title:"This question is about separating mixtures.",intro:"Rock salt is a mixture of sand and salt (sodium chloride). Salt dissolves in water. Sand does not.",parts:[
+ {id:"3.1",k:"m",mk:1,q:"Which method would remove the sand from salty water? Tick one box.",o:["Crystallisation","Distillation","Filtration","Chromatography"],a:2,ex:"Filtration removes insoluble solids from a liquid.",hint:"Sand is insoluble."},
+ {id:"3.2",k:"L",mk:6,q:"Describe a method to obtain pure, dry salt crystals from rock salt.",levels:["Level 3 (5–6): a complete, logical method that would produce dry crystals","Level 2 (3–4): the main steps (dissolve, filter, evaporate/crystallise) but some detail missing or order unclear","Level 1 (1–2): one or two relevant steps"],ms:["Grind the rock salt (pestle and mortar)","Add water and stir (warm) to dissolve the salt","Filter: sand stays as the residue","Collect the filtrate (salt solution)","Heat in an evaporating basin to evaporate some water / until crystals start to form","Leave to cool so crystals form","Dry crystals with filter paper / in a warm oven"],model:"1. Grind the rock salt with a pestle and mortar. 2. Put it in a beaker of water, warm it and stir until all the salt dissolves. 3. Filter the mixture through filter paper in a funnel. The sand stays on the paper and the salt solution passes through. 4. Pour the filtrate into an evaporating basin and heat it gently to evaporate some of the water until crystals start to form. 5. Leave it to cool so more crystals form. 6. Pat the crystals dry with filter paper.",hint:"Numbered steps. Dissolve → filter → crystallise → dry. Name the equipment."},
+ {id:"3.3",k:"m",mk:1,q:"A student wants to collect pure water from ink. Which method should they use? Tick one box.",o:["Filtration","Simple distillation","Fractional distillation","Crystallisation"],a:1,ex:"Simple distillation separates a solvent from a solution.",hint:"You want the liquid back, not the solid."},
+ {id:"3.4",k:"w",mk:3,q:"Explain how simple distillation separates water from ink.",ms:["Water evaporates / boils (at 100 °C)","Water vapour is cooled in the condenser and condenses back to a liquid","The dyes/solids stay in the flask (higher boiling point)"],model:"When the ink is heated, the water boils and turns to vapour. The vapour passes into the condenser, where it cools and condenses back into liquid water, which is collected. The dyes have a much higher boiling point so they stay in the flask.",hint:"Follow the water: boils → vapour → condenser → liquid."},
+ {id:"3.5",k:"w",mk:2,q:"Ethanol boils at 78 °C and water boils at 100 °C. Name the method used to separate them and explain why it works.",ms:["Fractional distillation","They have different boiling points (ethanol evaporates first / is collected first)"],model:"Fractional distillation. The liquids have different boiling points, so ethanol evaporates first and is collected before the water.",hint:"Two liquids mixed together → which distillation?"}
+]},
+{n:"04",t:"C2",title:"This question is about bonding and structure.",parts:[
+ {id:"4.1",k:"w",mk:4,q:"Sodium (2,8,1) reacts with chlorine (2,8,7) to form sodium chloride. Describe what happens to the electrons when sodium chloride forms.",ms:["Sodium atom loses one electron","Chlorine atom gains one electron","Forming Na⁺ and Cl⁻ ions","Both have a full outer shell / stable electronic structure (2,8 and 2,8,8)"],model:"Each sodium atom loses its one outer electron to a chlorine atom, which gains it. This forms Na⁺ and Cl⁻ ions, which both have full outer shells.",hint:"4 marks: who loses, who gains, what ions form, what's special about their shells.",mist:"Saying the electrons are 'shared'. That's covalent, not ionic."},
+ {id:"4.2",k:"w",mk:3,q:"Explain why sodium chloride has a high melting point.",ms:["Giant (ionic) lattice","Strong electrostatic forces of attraction between oppositely charged ions","Large amount of energy needed to overcome these forces"],model:"Sodium chloride has a giant ionic lattice. There are strong electrostatic forces between the oppositely charged ions, so a lot of energy is needed to overcome them.",hint:"Recipe: structure → forces → strong → energy."},
+ {id:"4.3",k:"w",mk:2,q:"Sodium chloride conducts electricity when dissolved in water but not when solid. Explain why.",ms:["When dissolved, the ions are free to move (and carry charge)","In the solid, the ions are held in fixed positions / can't move"],model:"When dissolved, the ions are free to move and carry charge. In the solid the ions are fixed in the lattice so they can't move.",hint:"Ionic compound → it's the ions that move, not electrons.",mist:"Saying electrons move through sodium chloride."},
+ {id:"4.4",k:"w",mk:2,q:"Methane (CH₄) is a gas at room temperature. Explain why, in terms of its structure.",ms:["Simple molecules with weak intermolecular forces (between molecules)","Little energy needed to overcome them, so low boiling point"],model:"Methane is made of simple molecules with weak intermolecular forces between them. Only a small amount of energy is needed to overcome these forces, so it has a low boiling point.",hint:"Simple molecular → weak forces BETWEEN molecules.",mist:"'The covalent bonds are weak.' Covalent bonds are strong and don't break when it boils."},
+ {id:"4.5",k:"w",mk:4,q:"Graphite and diamond are both made of carbon atoms. Explain why graphite is soft and conducts electricity, but diamond does not.",ms:["Graphite: layers with weak forces between them, so layers slide (soft)","Graphite: each carbon forms 3 covalent bonds","So graphite has delocalised electrons that move through the structure and carry charge","Diamond: each carbon forms 4 covalent bonds, so it's rigid/hard and has no delocalised electrons"],model:"In graphite each carbon forms 3 covalent bonds in layers. There are weak forces between the layers so they can slide, making it soft. Each carbon has one delocalised electron that can move and carry charge. In diamond each carbon forms 4 strong covalent bonds, so it is rigid and there are no free electrons.",hint:"Two properties × two substances. Count bonds per carbon: 3 vs 4."},
+ {id:"4.6",k:"w",mk:3,q:"Pure iron is soft. Steel is an alloy of iron and is harder. Explain why.",ms:["In pure iron the atoms are in layers which can slide over each other","Steel contains atoms of different sizes","Which distort the layers so they can't slide as easily"],model:"In pure iron the atoms are arranged in layers that can slide over each other. Steel contains other atoms of different sizes, which distort the layers, so it is harder for them to slide.",hint:"Pure metal: layers slide. Alloy: different-sized atoms → distorted layers."}
+]},
+{n:"05",t:"C3",title:"This question is about calculations.",intro:"Relative atomic masses (Ar): H = 1, C = 12, O = 16, Mg = 24, Na = 23, Cl = 35.5, Ca = 40",parts:[
+ {id:"5.1",k:"n",mk:1,q:"Calculate the relative formula mass (Mr) of calcium hydroxide, Ca(OH)₂.",ans:74,tol:0,unit:"",ex:"40 + 2 × (16 + 1) = 40 + 34 = 74",hint:"The 2 outside the bracket multiplies everything inside it.",mist:"Getting 58 by only doubling the H: 40 + 16 + 2."},
+ {id:"5.2",k:"n",mk:2,q:"Calculate the number of moles in 4.8 g of magnesium.",ans:.2,tol:.001,unit:"mol",ex:"moles = mass ÷ Ar = 4.8 ÷ 24 = 0.2 mol",hint:"moles = mass ÷ Mr (or Ar for an element)."},
+ {id:"5.3",k:"n",mk:3,q:"Mg + 2HCl → MgCl₂ + H₂. Calculate the mass of magnesium chloride made from 4.8 g of magnesium.",ans:19,tol:.1,unit:"g",ex:"Moles Mg = 0.2. Ratio Mg : MgCl₂ = 1 : 1 so 0.2 mol MgCl₂. Mr MgCl₂ = 24 + 71 = 95. Mass = 0.2 × 95 = 19 g",hint:"4 steps: moles of Mg → ratio → moles MgCl₂ → × Mr."},
+ {id:"5.4",k:"n",mk:4,q:"2NaClO₃ → 2NaCl + 3O₂. Calculate the mass of oxygen produced from 42.6 g of NaClO₃. (Mr of NaClO₃ = 106.5)",ans:19.2,tol:.05,unit:"g",ex:"Moles NaClO₃ = 42.6 ÷ 106.5 = 0.4. Ratio 2 : 3, so O₂ = 0.4 × 3 ÷ 2 = 0.6 mol. Mr O₂ = 32. Mass = 0.6 × 32 = 19.2 g",hint:"Ratio NaClO₃ : O₂ is 2 : 3. Mr of O₂ is 32, not 16.",mist:"Using 16 for oxygen gas. O₂ has two atoms, Mr = 32."},
+ {id:"5.5",k:"n",mk:2,q:"5.0 g of sodium hydroxide is dissolved in water to make 200 cm³ of solution. Calculate the concentration in g/dm³.",ans:25,tol:.01,unit:"g/dm³",ex:"200 cm³ = 0.200 dm³. 5.0 ÷ 0.200 = 25 g/dm³",hint:"Convert cm³ to dm³ first (÷ 1000).",mist:"5.0 ÷ 200 = 0.025, forgetting to convert."},
+ {id:"5.6",k:"n",mk:2,q:"A solution has a concentration of 40 g/dm³. Calculate the mass of solute in 150 cm³ of this solution.",ans:6,tol:.01,unit:"g",ex:"150 cm³ = 0.150 dm³. mass = 40 × 0.150 = 6.0 g",hint:"Rearrange: mass = concentration × volume (in dm³)."},
+ {id:"5.7",k:"w",mk:2,q:"When calcium carbonate is heated in an open tube, the mass decreases. Explain why.",ms:["Carbon dioxide (a gas) is produced","The gas escapes into the air (so its mass is lost from the tube)"],model:"Calcium carbonate decomposes to make calcium oxide and carbon dioxide. The carbon dioxide is a gas and escapes, so the mass in the tube goes down.",hint:"Mass is always conserved. Where did the 'missing' mass go?",mist:"Saying mass is destroyed. Atoms are never lost."},
+ {id:"5.8",k:"w",mk:2,q:"Magnesium reacts with excess hydrochloric acid. Explain what 'excess' means, and which reactant is limiting.",ms:["Magnesium is the limiting reactant (it's all used up)","Excess: there is more hydrochloric acid than needed, so some is left over"],model:"Magnesium is the limiting reactant because it is completely used up. The acid is in excess, which means there is more than enough and some is left over at the end.",hint:"The thing in excess is NOT limiting."}
+]},
+{n:"06",t:"C4",title:"This question is about acids, salts and electrolysis.",parts:[
+ {id:"6.1",k:"m",mk:1,q:"Universal indicator turns purple in a solution. What is the most likely pH? Tick one box.",o:["1","5","7","13"],a:3,ex:"Purple = strongly alkaline, around pH 13–14.",hint:"Red = acid, green = neutral, purple = ?"},
+ {id:"6.2",k:"m",mk:1,q:"Which ion makes a solution acidic? Tick one box.",o:["OH⁻","H⁺","Cl⁻","Na⁺"],a:1,ex:"Acids produce H⁺ ions in water.",hint:"Acid = H⁺. Alkali = OH⁻."},
+ {id:"6.3",k:"w",mk:1,q:"Name the salt produced when zinc reacts with hydrochloric acid.",ms:["Zinc chloride"],model:"Zinc chloride",hint:"Hydrochloric → chloride."},
+ {id:"6.4",k:"w",mk:2,q:"Hydrochloric acid is a strong acid. Ethanoic acid is a weak acid. Explain the difference.",ms:["Strong acid completely ionises in water","Weak acid only partially ionises"],model:"Hydrochloric acid completely ionises in water to release H⁺ ions. Ethanoic acid only partially ionises.",hint:"Key word: ionises.",mist:"Saying strong = concentrated. Strength is about ionising, not how much acid is in the water."},
+ {id:"6.5",k:"L",mk:6,q:"Describe how to make pure, dry crystals of copper sulfate from copper oxide (an insoluble solid) and dilute sulfuric acid.",levels:["Level 3 (5–6): a complete, logical method that would produce dry crystals","Level 2 (3–4): the main steps but some detail missing or order unclear","Level 1 (1–2): one or two relevant steps"],ms:["Warm the sulfuric acid in a beaker","Add copper oxide a spatula at a time, stirring","Until no more dissolves / copper oxide is in excess (so all acid reacts)","Filter to remove excess copper oxide","Heat the filtrate in an evaporating basin to evaporate some water / until crystals start to form","Leave to cool and crystallise","Dry crystals with filter paper"],model:"1. Pour dilute sulfuric acid into a beaker and warm it gently. 2. Add copper oxide one spatula at a time, stirring, until no more dissolves. This means it's in excess and all the acid has reacted. 3. Filter the mixture to remove the excess copper oxide. 4. Heat the blue filtrate in an evaporating basin until crystals start to form. 5. Leave it to cool so crystals form. 6. Dry the crystals between filter paper.",hint:"Same as rock salt, but start with 'add copper oxide until in excess'. Then filter, crystallise, dry."},
+ {id:"6.6",k:"w",mk:2,q:"Mg + CuSO₄ → MgSO₄ + Cu. Which substance is oxidised? Explain your answer in terms of electrons.",ms:["Magnesium is oxidised","Because it loses electrons (Mg → Mg²⁺ + 2e⁻)"],model:"Magnesium is oxidised because it loses two electrons to form Mg²⁺ ions.",hint:"OIL RIG. Which one turns into an ion?"},
+ {id:"6.7",k:"w",mk:2,q:"Molten lead bromide is electrolysed. Name the product at the cathode and the product at the anode.",ms:["Cathode: lead","Anode: bromine"],model:"Lead at the cathode (negative). Bromine at the anode (positive).",hint:"Metal goes to the negative electrode."},
+ {id:"6.8",k:"w",mk:2,q:"Explain why lead bromide must be molten to be electrolysed.",ms:["Ions must be free to move","In a solid the ions are fixed / can't move to the electrodes"],model:"When molten the ions are free to move to the electrodes. In the solid they are held in fixed positions.",hint:"What has to move in electrolysis?"},
+ {id:"6.9",k:"w",mk:2,q:"Complete the half equation for the reaction at the cathode: Pb²⁺ + ___ → Pb. State whether this is oxidation or reduction.",ms:["2e⁻","Reduction (gain of electrons)"],model:"Pb²⁺ + 2e⁻ → Pb. This is reduction because lead ions gain electrons.",hint:"A 2+ ion needs 2 electrons to become a neutral atom. Gain = ?"}
+]},
+{n:"07",t:"C5",title:"This question is about energy changes.",intro:"A student mixes hydrochloric acid and sodium hydroxide solution in a polystyrene cup. The temperature rises from 21 °C to 29 °C.",parts:[
+ {id:"7.1",k:"n",mk:1,q:"Calculate the temperature change.",ans:8,tol:0,unit:"°C",ex:"29 − 21 = 8 °C",hint:"Final − start."},
+ {id:"7.2",k:"w",mk:2,q:"Is this reaction exothermic or endothermic? Give a reason.",ms:["Exothermic","Temperature increased / energy released to the surroundings"],model:"Exothermic, because the temperature went up, so energy was released to the surroundings.",hint:"Temperature up = energy given out."},
+ {id:"7.3",k:"w",mk:1,q:"Suggest one way to improve the experiment to reduce energy loss.",ms:["Put a lid on the cup / insulate the cup / use a second cup"],model:"Put a lid on the polystyrene cup.",hint:"Where does the heat escape?"},
+ {id:"7.4",k:"m",mk:1,q:"Look at the reaction profile below. Which arrow shows the activation energy? Tick one box.",fig:true,o:["A","B","C"],a:0,ex:"A goes from the reactants up to the peak: the activation energy.",hint:"Activation energy starts at the reactants and goes to the top of the hump."},
+ {id:"7.5",k:"m",mk:1,q:"Using the same profile, which arrow shows the overall energy change? Tick one box.",fig:true,o:["A","B","C"],a:1,ex:"B is the difference between reactants and products.",hint:"Overall change = reactants to products."},
+ {id:"7.6",k:"w",mk:3,q:"Explain, in terms of bonds, why a reaction is exothermic.",ms:["Energy is needed/taken in to break bonds in the reactants","Energy is released when new bonds form in the products","More energy is released forming bonds than is needed to break bonds"],model:"Energy is needed to break the bonds in the reactants, and energy is released when new bonds form in the products. In an exothermic reaction, more energy is released making bonds than is taken in breaking them.",hint:"3 points: breaking takes in, making releases, compare the two.",mist:"Saying breaking bonds releases energy. It always takes energy in."},
+ {id:"7.7",k:"n",mk:3,q:"H₂ + Cl₂ → 2HCl. Bond energies (kJ/mol): H–H = 436, Cl–Cl = 243, H–Cl = 432. Calculate the overall energy change.",ans:-185,tol:.5,unit:"kJ/mol",ex:"Broken: 436 + 243 = 679. Made: 2 × 432 = 864. Change = 679 − 864 = −185 kJ/mol",hint:"2HCl means 2 H–Cl bonds. Broken − made.",mist:"Only counting one H–Cl bond, or doing made − broken (wrong sign)."},
+ {id:"7.8",k:"w",mk:2,q:"Give one everyday use of an exothermic reaction and one use of an endothermic reaction.",ms:["Exothermic: hand warmers / self-heating cans","Endothermic: sports injury ice packs"],model:"Exothermic: hand warmers. Endothermic: instant ice packs for sports injuries.",hint:"Something that warms you, something that cools you."}
+]},
+{n:"08",t:"Mixed",title:"Stretch: grade 7+ questions across topics.",intro:"These are harder than the rest of the paper. Ar: H = 1, C = 12, O = 16, Mg = 24, Ca = 40",parts:[
+ {id:"8.1",t:"C3",k:"n",mk:2,q:"Calculate the percentage by mass of oxygen in calcium carbonate, CaCO₃.",ans:48,tol:.1,unit:"%",ex:"Mr = 40 + 12 + 48 = 100. Mass of O = 3 × 16 = 48. 48 ÷ 100 × 100 = 48%",hint:"(mass of that element in the formula ÷ Mr) × 100"},
+ {id:"8.2",t:"C3",k:"m",mk:1,q:"2.4 g of magnesium is added to 0.1 mol of hydrochloric acid. Mg + 2HCl → MgCl₂ + H₂. Which reactant is limiting? Tick one box.",o:["Magnesium","Hydrochloric acid","Neither, they react exactly"],a:1,ex:"Mg = 2.4 ÷ 24 = 0.1 mol. 0.1 mol Mg would need 0.2 mol HCl, but there's only 0.1 mol. So HCl runs out first.",hint:"Work out moles of Mg, then use the 1 : 2 ratio to see how much HCl it needs."},
+ {id:"8.3",t:"C3",k:"n",mk:2,q:"Using your answer to 8.2, calculate the mass of hydrogen gas produced.",ans:.1,tol:.001,unit:"g",ex:"Limiting HCl = 0.1 mol. Ratio HCl : H₂ = 2 : 1 → 0.05 mol H₂. Mr H₂ = 2. Mass = 0.05 × 2 = 0.1 g",hint:"Always calculate from the limiting reactant.",mist:"Using the magnesium moles. Mg is in excess, so it doesn't decide the product."},
+ {id:"8.4",t:"C3",k:"m",mk:1,q:"How many atoms are in 0.5 mol of water, H₂O? Tick one box.",o:["3.01 × 10²³","6.02 × 10²³","9.03 × 10²³","1.81 × 10²⁴"],a:2,ex:"0.5 × 6.02 × 10²³ = 3.01 × 10²³ molecules. Each has 3 atoms: × 3 = 9.03 × 10²³",hint:"Molecules first, then multiply by the atoms in each molecule."},
+ {id:"8.5",t:"C1",k:"w",mk:2,q:"Explain why the relative atomic mass of chlorine (35.5) is not a whole number.",ms:["Chlorine has isotopes / atoms with different masses","Ar is a (weighted) mean of the isotopes' masses, based on their abundance"],model:"Chlorine has two isotopes with different mass numbers. The relative atomic mass is an average of their masses, weighted by how abundant each one is.",hint:"Isotopes + average."},
+ {id:"8.6",t:"C4",k:"w",mk:3,q:"Sodium chloride solution is electrolysed. Hydrogen, not sodium, forms at the cathode. Explain why, and name the product at the anode.",ms:["Sodium is more reactive than hydrogen","So hydrogen ions (from water) gain electrons instead / are discharged","Chlorine at the anode"],model:"Sodium is more reactive than hydrogen, so H⁺ ions from the water are discharged instead and gain electrons to form hydrogen. Chlorine forms at the anode.",hint:"In solutions, if the metal is more reactive than hydrogen, you get hydrogen."},
+ {id:"8.7",t:"C4",k:"w",mk:1,q:"Write the half equation for the formation of chlorine at the anode.",ms:["2Cl⁻ → Cl₂ + 2e⁻ (allow 2Cl⁻ − 2e⁻ → Cl₂)"],model:"2Cl⁻ → Cl₂ + 2e⁻",hint:"Two chloride ions make one Cl₂ and release electrons."},
+ {id:"8.8",t:"C4",k:"m",mk:1,q:"Solution X has pH 2. Solution Y has pH 3. How does the H⁺ concentration in X compare to Y? Tick one box.",o:["The same","2 times greater","10 times greater","100 times greater"],a:2,ex:"Each 1 drop in pH = 10 times more H⁺ ions.",hint:"pH scale goes up in powers of 10."},
+ {id:"8.9",t:"C5",k:"w",mk:2,q:"Describe the reaction profile for an endothermic reaction.",ms:["Products are higher in energy than reactants","Energy is taken in from the surroundings (overall change is positive); activation energy shown from reactants to peak"],model:"The products are at a higher energy level than the reactants because energy is taken in from the surroundings. There is still a hump for the activation energy.",hint:"Opposite of exothermic."}
+]}
+];
+
+
+/* ---- GCSEasy chemistry: retag, new content, init ---- */
+CARDS.forEach(c=>{if(c[0]==="C5"&&/filtration|crystallisation|distillation|solute/i.test(c[1]))c[0]="C1"});
+CARDS.push(
+ ["C4","Order of the reactivity series","K, Na, Li, Ca, Mg, (C), Zn, Fe, (H), Cu, Ag, Au"],
+ ["C4","How are metals below carbon extracted?","Heat the metal oxide with carbon (reduction)"],
+ ["C4","How is aluminium extracted?","Electrolysis (it's more reactive than carbon)"],
+ ["C4","Magnesium + copper sulfate →","Magnesium sulfate + copper (displacement)"],
+ ["C4","Electrolysis of a solution: what forms at the cathode?","The metal if less reactive than hydrogen, otherwise hydrogen"],
+ ["C4","Electrolysis of a solution: what forms at the anode?","A halogen if halide ions are present, otherwise oxygen"],
+ ["C4","Test for hydrogen","Lighted splint → squeaky pop"],
+ ["C4","Test for oxygen","Glowing splint relights"],
+ ["C4","Test for chlorine","Damp litmus paper is bleached"],
+ ["C4","Test for carbon dioxide","Limewater turns cloudy"],
+ ["C4","Why add excess metal oxide when making a salt?","So all the acid reacts"],
+ ["C4","Concordant titres are…","Within 0.10 cm³ of each other"],
+ ["C5","Why use a polystyrene cup with a lid?","Insulates: reduces energy lost to the surroundings"]
+);
+PAPER.find(q=>q.n==="03").t="C1";
+PAPER.forEach(Q=>Q.parts.forEach(p=>{if(p.fig===true)p.fig="profile"}));
+FIGS.profile=()=>PROFILE;
+
+const SPOT=[{n:"SP",t:"C2",title:"Which structure is it?",intro:"Use the master table. Each one is worth 1 mark.",parts:DRILL.map((d,i)=>({id:"SP"+(i+1),k:"m",mk:1,q:d[0],o:DOPTS,a:d[1],ex:d[2]}))}];
+const BONDSET=[{n:"S2",t:"C2",title:"Bonding and structure: set 2",parts:BOOT}];
+
+const UNSEEN=[
+{n:"U1",t:"C1",title:"Elements at the bottom of the table",intro:"Francium is at the bottom of Group 1. Astatine is at the bottom of Group 7. Both are very rare.",parts:[
+ {id:"U1.1",k:"w",mk:3,q:"Predict how francium would react with water. Give the products and explain your prediction.",ms:["Very vigorous / explosive reaction (more reactive than caesium)","Products: francium hydroxide and hydrogen","Outer electron furthest from nucleus / weakest attraction, so lost most easily"],model:"Francium would react explosively with water to form francium hydroxide and hydrogen. It's at the bottom of Group 1, so its outer electron is furthest from the nucleus and the attraction is weakest, so it's lost most easily.",hint:"Same pattern as the rest of Group 1, but further down."},
+ {id:"U1.2",k:"m",mk:1,q:"Astatine solution is added to sodium iodide solution. What happens? Tick one box.",o:["Astatine displaces iodine","No reaction","Iodine displaces astatine","Sodium is displaced"],a:1,ex:"Astatine is below iodine, so it's less reactive and can't displace it.",hint:"Halogens get less reactive going down."},
+ {id:"U1.3",k:"m",mk:1,q:"Predict the state of astatine at room temperature. Tick one box.",o:["Gas","Liquid","Solid"],a:2,ex:"Melting and boiling points increase down Group 7: fluorine and chlorine are gases, bromine is a liquid, iodine is a solid, so astatine is a solid.",hint:"Chlorine gas, bromine liquid, iodine solid…"}
+]},
+{n:"U2",t:"C1",title:"Isotopes of boron",intro:"Boron has two isotopes: 20% is boron-10 and 80% is boron-11.",parts:[
+ {id:"U2.1",k:"n",mk:2,q:"Calculate the relative atomic mass of boron.",ans:10.8,tol:.01,unit:"",ex:"(20 × 10 + 80 × 11) ÷ 100 = (200 + 880) ÷ 100 = 10.8",hint:"Same method as chlorine."},
+ {id:"U2.2",k:"w",mk:1,q:"Explain why both isotopes of boron have the same chemical reactions.",ms:["Same number of electrons / same electronic structure (outer electrons)"],model:"They have the same number of electrons arranged in the same way, and chemical reactions depend on electrons.",hint:"What decides how an atom reacts?"}
+]},
+{n:"U3",t:"C2",title:"Mystery substances",parts:[
+ {id:"U3.1",k:"w",mk:3,q:"Substance Z melts at 2852 °C. It does not conduct as a solid but conducts when molten. Name its structure and explain both properties.",ms:["Giant ionic lattice","High melting point: strong electrostatic forces between oppositely charged ions need lots of energy to overcome","Conducts when molten: ions free to move; solid ions fixed"],model:"Z is a giant ionic lattice. Its melting point is high because there are strong electrostatic forces between oppositely charged ions. It conducts when molten because the ions are free to move and carry charge, but in the solid they're fixed.",hint:"Only one structure conducts when molten but not as a solid."},
+ {id:"U3.2",k:"w",mk:2,q:"Hexagonal boron nitride has layers of atoms like graphite. It is slippery, but it does not conduct electricity. Suggest why.",ms:["Weak forces between layers, so layers slide over each other (slippery)","No delocalised electrons (all outer electrons used in bonds), so it can't carry charge"],model:"Like graphite, there are weak forces between the layers, so they slide. Unlike graphite, there are no delocalised electrons, so there's nothing to carry charge.",hint:"Compare with graphite: what makes graphite slippery, and what makes it conduct?"},
+ {id:"U3.3",k:"m",mk:1,q:"Substance Q boils at 59 °C and does not conduct. What is its structure? Tick one box.",o:["Giant ionic","Simple molecular","Giant covalent","Metallic"],a:1,ex:"A low boiling point and no conduction means simple molecules with weak intermolecular forces.",hint:"Low boiling point."}
+]},
+{n:"U4",t:"C3",title:"Heating copper carbonate",intro:"A student heats 5.00 g of copper carbonate in an open tube. CuCO₃ → CuO + CO₂. After heating, the mass is 3.22 g.",parts:[
+ {id:"U4.1",k:"n",mk:1,q:"Calculate the mass of carbon dioxide given off.",ans:1.78,tol:.005,unit:"g",ex:"5.00 − 3.22 = 1.78 g",hint:"Mass is conserved: where did the missing mass go?"},
+ {id:"U4.2",k:"n",mk:2,q:"Calculate the number of moles of carbon dioxide given off. Give your answer to 3 significant figures. (Mr CO₂ = 44)",ans:.0405,tol:.0002,unit:"mol",ex:"1.78 ÷ 44 = 0.0405 mol",hint:"moles = mass ÷ Mr."}
+]},
+{n:"U5",t:"C3",title:"Iron and sulfur",intro:"5.6 g of iron is heated with 4.0 g of sulfur. Fe + S → FeS. (Ar: Fe = 56, S = 32)",parts:[
+ {id:"U5.1",k:"m",mk:1,q:"Which reactant is limiting? Tick one box.",o:["Iron","Sulfur","Neither"],a:0,ex:"Fe: 5.6 ÷ 56 = 0.10 mol. S: 4.0 ÷ 32 = 0.125 mol. The ratio is 1:1, so iron runs out first.",hint:"Work out moles of each. The ratio is 1 : 1."},
+ {id:"U5.2",k:"n",mk:2,q:"Calculate the maximum mass of iron sulfide that can be made.",ans:8.8,tol:.05,unit:"g",ex:"Limiting Fe = 0.10 mol → 0.10 mol FeS. Mr FeS = 56 + 32 = 88. 0.10 × 88 = 8.8 g",hint:"Calculate from the limiting reactant."}
+]},
+{n:"U6",t:"C4",title:"An unknown metal",intro:"A student adds three metals to dilute acid.",parts:[
+ {id:"U6.1",k:"m",mk:1,data:[["Metal","Observation"],[["A","Fizzes quickly, gets hot"],["B","No bubbles"],["C","A few slow bubbles"]]],q:"Which shows the order of reactivity, most reactive first? Tick one box.",o:["A, B, C","A, C, B","C, A, B","B, C, A"],a:1,ex:"More bubbles faster = more reactive: A, then C, then B.",hint:"More fizzing = more reactive."},
+ {id:"U6.2",k:"w",mk:2,q:"Metal C is less reactive than carbon. Suggest how it could be extracted from its oxide, and explain why this is a reduction.",ms:["Heat the oxide with carbon","The oxide loses oxygen (so it is reduced)"],model:"Heat the metal oxide with carbon. Carbon takes the oxygen away from the metal, so the metal oxide is reduced.",hint:"Where is carbon in the reactivity series?"}
+]},
+{n:"U7",t:"C4",title:"Electrolysis of potassium iodide solution",parts:[
+ {id:"U7.1",k:"w",mk:2,q:"Potassium iodide solution is electrolysed with inert electrodes. Name the product at each electrode.",ms:["Cathode: hydrogen","Anode: iodine"],model:"Hydrogen at the cathode and iodine at the anode.",hint:"Is potassium more or less reactive than hydrogen? Are there halide ions?"},
+ {id:"U7.2",k:"w",mk:1,q:"Explain why potassium is not produced.",ms:["Potassium is more reactive than hydrogen (so hydrogen ions are discharged instead)"],model:"Potassium is more reactive than hydrogen, so hydrogen is produced instead.",hint:"The rule for the cathode."}
+]},
+{n:"U8",t:"C4",title:"Indigestion tablets",intro:"Some indigestion tablets contain magnesium hydroxide. Others contain calcium carbonate. Stomach acid is hydrochloric acid.",parts:[
+ {id:"U8.1",k:"w",mk:2,q:"Write the word equation for magnesium hydroxide reacting with hydrochloric acid.",ms:["magnesium hydroxide + hydrochloric acid →","magnesium chloride + water"],model:"magnesium hydroxide + hydrochloric acid → magnesium chloride + water",hint:"Acid + hydroxide → salt + water. Hydrochloric → chloride."},
+ {id:"U8.2",k:"w",mk:1,q:"Suggest why calcium carbonate tablets can make people burp.",ms:["Carbonate + acid produces carbon dioxide gas"],model:"Calcium carbonate reacts with acid to produce carbon dioxide gas.",hint:"Acid + carbonate → salt + water + ?"}
+]},
+{n:"U9",t:"C5",title:"Self-heating and cold packs",intro:"A self-heating can uses calcium oxide reacting with water. A sports cold pack contains ammonium nitrate that dissolves in water.",parts:[
+ {id:"U9.1",k:"w",mk:2,q:"The temperature of the cold pack falls from 20 °C to 4 °C. Is dissolving ammonium nitrate exothermic or endothermic? Explain.",ms:["Endothermic","Energy is taken in from the surroundings, so the temperature falls"],model:"Endothermic, because it takes in energy from the surroundings, so the temperature drops.",hint:"Temperature down = energy taken in."},
+ {id:"U9.2",k:"w",mk:2,q:"Describe the reaction profile for the self-heating can reaction.",ms:["Products lower in energy than reactants (exothermic)","Activation energy shown as the hump from reactants to the peak"],model:"The products are at a lower energy than the reactants because energy is released. There's a hump showing the activation energy.",hint:"Self-heating = exothermic."}
+]},
+{n:"U10",t:"C5",title:"Burning methane",intro:"CH₄ + 2O₂ → CO₂ + 2H₂O. Bond energies (kJ/mol): C–H 413, O=O 498, C=O 805, O–H 464.",parts:[
+ {id:"U10.1",k:"n",mk:3,q:"Calculate the overall energy change.",ans:-818,tol:.5,unit:"kJ/mol",ex:"Broken: 4 × 413 + 2 × 498 = 1652 + 996 = 2648. Made: 2 × 805 + 4 × 464 = 1610 + 1856 = 3466. 2648 − 3466 = −818 kJ/mol",hint:"CH₄ has 4 C–H bonds. CO₂ has 2 C=O. Each H₂O has 2 O–H, and there are 2 H₂O.",mist:"Forgetting the big numbers: 2O₂ and 2H₂O."}
+]},
+{n:"U11",t:"C3",title:"Yield and titration",intro:"This question is for separate chemistry (triple) only.",parts:[
+ {id:"U11.1",k:"n",mk:2,tag:["Triple"],q:"A reaction should make 8.8 g of product. The student gets 7.0 g. Calculate the percentage yield to 1 decimal place.",ans:79.5,tol:.1,unit:"%",ex:"7.0 ÷ 8.8 × 100 = 79.5%",hint:"actual ÷ theoretical × 100."},
+ {id:"U11.2",k:"n",mk:2,tag:["Triple"],q:"CH₄ + H₂O → CO + 3H₂. Calculate the atom economy for making hydrogen. (Mr: CH₄ 16, H₂O 18, H₂ 2) Give your answer to 1 decimal place.",ans:17.6,tol:.1,unit:"%",ex:"Useful product = 3 × 2 = 6. Total reactants = 16 + 18 = 34. 6 ÷ 34 × 100 = 17.6%",hint:"Mr of useful product ÷ total Mr of reactants × 100."},
+ {id:"U11.3",k:"n",mk:3,tag:["Triple","HT"],q:"25.0 cm³ of sodium hydroxide is neutralised by 20.0 cm³ of 0.100 mol/dm³ hydrochloric acid. NaOH + HCl → NaCl + H₂O. Calculate the concentration of the sodium hydroxide in mol/dm³.",ans:.08,tol:.001,unit:"mol/dm³",ex:"Moles HCl = 0.100 × 0.0200 = 0.00200 mol. Ratio 1:1 → 0.00200 mol NaOH. 0.00200 ÷ 0.0250 = 0.0800 mol/dm³",hint:"Moles of acid first (convert cm³ to dm³), then the ratio, then ÷ volume of alkali."}
+]}
+];
+
+const R=Study.r,Pk=Study.pick;
+const MR=[["H₂O",18,"2×1 + 16"],["CO₂",44,"12 + 2×16"],["NaCl",58.5,"23 + 35.5"],["CaCO₃",100,"40 + 12 + 3×16"],["MgO",40,"24 + 16"],["H₂SO₄",98,"2×1 + 32 + 4×16"],["Ca(OH)₂",74,"40 + 2×(16+1)"],["NH₃",17,"14 + 3×1"],["CH₄",16,"12 + 4×1"],["Na₂CO₃",106,"2×23 + 12 + 3×16"],["MgCl₂",95,"24 + 2×35.5"],["CuSO₄",159.5,"63.5 + 32 + 4×16"],["Al₂O₃",102,"2×27 + 3×16"],["HCl",36.5,"1 + 35.5"],["NaOH",40,"23 + 16 + 1"],["Fe₂O₃",160,"2×56 + 3×16"]];
+const ARS="Ar: H 1, C 12, N 14, O 16, Na 23, Mg 24, Al 27, S 32, Cl 35.5, Ca 40, Fe 56, Cu 63.5";
+const EQS=[["2Mg + O₂ → 2MgO","Mg","MgO",2,2],["2NaClO₃ → 2NaCl + 3O₂","NaClO₃","O₂",2,3],["CH₄ + 2O₂ → CO₂ + 2H₂O","CH₄","H₂O",1,2],["N₂ + 3H₂ → 2NH₃","H₂","NH₃",3,2],["2H₂ + O₂ → 2H₂O","O₂","H₂O",1,2],["CaCO₃ → CaO + CO₂","CaCO₃","CO₂",1,1],["Mg + 2HCl → MgCl₂ + H₂","HCl","H₂",2,1]];
+const CALC=[
+ {name:"Mr",t:"C3",make(){const m=Pk(MR);return {q:`Calculate the Mr of ${m[0]}. (${ARS})`,ans:m[1],unit:"",tol:0,work:`${m[2]} = ${m[1]}`}}},
+ {name:"Moles",t:"C3",make(){const m=Pk(MR),n=Pk([.05,.1,.2,.25,.4,.5,.75,1.5,2,2.5]),mass=+(n*m[1]).toFixed(2);return {q:`How many moles are in ${mass} g of ${m[0]}? (Mr = ${m[1]})`,ans:n,unit:"mol",work:`moles = mass ÷ Mr = ${mass} ÷ ${m[1]} = ${n} mol`}}},
+ {name:"Mass",t:"C3",make(){const m=Pk(MR),n=Pk([.05,.1,.2,.25,.3,.4,.5,1.5,2,3]),mass=+(n*m[1]).toFixed(2);return {q:`Calculate the mass of ${n} mol of ${m[0]}. (Mr = ${m[1]})`,ans:mass,unit:"g",work:`mass = moles × Mr = ${n} × ${m[1]} = ${mass} g`}}},
+ {name:"Ratios",t:"C3",make(){const e=Pk(EQS),n=Pk([.1,.2,.3,.4,.6,.9,1.2]),a=+(n*e[4]/e[3]).toFixed(3);return {q:`${e[0]}. How many moles of ${e[2]} form from ${n} mol of ${e[1]}?`,ans:a,unit:"mol",work:`Ratio ${e[1]} : ${e[2]} = ${e[3]} : ${e[4]}. ${n} × ${e[4]} ÷ ${e[3]} = ${a} mol`}}},
+ {name:"Concentration",t:"C3",make(){const m=R(2,20),v=Pk([50,100,125,200,250,500]),a=+(m/(v/1000)).toFixed(2);return {q:`${m} g of solute is dissolved to make ${v} cm³ of solution. Calculate the concentration in g/dm³.`,ans:a,unit:"g/dm³",work:`${v} cm³ = ${v/1000} dm³. ${m} ÷ ${v/1000} = ${a} g/dm³`}}},
+ {name:"Ar",t:"C1",make(){const pairs=[["Cl",35,37],["Cu",63,65],["B",10,11],["Br",79,81],["Li",6,7],["Ga",69,71]],p=Pk(pairs),x=R(10,90),a=+((x*p[1]+(100-x)*p[2])/100).toFixed(1);return {q:`${p[0]} is ${x}% ${p[0]}-${p[1]} and ${100-x}% ${p[0]}-${p[2]}. Calculate its relative atomic mass to 1 decimal place.`,ans:a,unit:"",tol:.05,work:`(${x} × ${p[1]} + ${100-x} × ${p[2]}) ÷ 100 = ${a}`}}},
+ {name:"Particles",t:"C1",make(){const sub=[["electrons","",0],["neutrons","",1],["protons","",2]],els=[["Na",23,11],["K",39,19],["Mg",24,12],["Al",27,13],["Cl",35,17],["Ca",40,20],["F",19,9],["S",32,16],["Fe",56,26]],e=Pk(els),k=Pk(["protons","neutrons","electrons"]),ion=Pk([0,0,1]);
+   const ch={Na:"+",K:"+",Mg:"2+",Al:"3+",Cl:"−",Ca:"2+",F:"−",S:"2−",Fe:"3+"}[e[0]],chg={"+":-1,"2+":-2,"3+":-3,"−":1,"2−":2}[ch];
+   const nm=ion?`the ion ${e[0]}${ch==="+"?"⁺":ch==="2+"?"²⁺":ch==="3+"?"³⁺":ch==="−"?"⁻":"²⁻"} (mass ${e[1]}, atomic number ${e[2]})`:`an atom of ${e[0]} (mass ${e[1]}, atomic number ${e[2]})`;
+   const a=k==="protons"?e[2]:k==="neutrons"?e[1]-e[2]:e[2]+(ion?chg:0);
+   return {q:`How many ${k} are in ${nm}?`,ans:a,unit:"",tol:0,work:k==="protons"?`Protons = atomic number = ${e[2]}`:k==="neutrons"?`Neutrons = ${e[1]} − ${e[2]} = ${a}`:ion?`Atom has ${e[2]} electrons; charge ${ch} means ${chg>0?"gained":"lost"} ${Math.abs(chg)}: ${a}`:`Neutral atom: electrons = protons = ${e[2]}`}}},
+ {name:"Bond energy",t:"C5",make(){const A=R(150,500),B=R(150,500),Cc=R(200,570),a=A+B-2*Cc;return {q:`X₂ + Y₂ → 2XY. Bond energies (kJ/mol): X–X = ${A}, Y–Y = ${B}, X–Y = ${Cc}. Calculate the energy change.`,ans:a,unit:"kJ/mol",tol:.5,work:`Broken: ${A} + ${B} = ${A+B}. Made: 2 × ${Cc} = ${2*Cc}. ${A+B} − ${2*Cc} = ${a} kJ/mol (${a<0?"exothermic":"endothermic"})`}}},
+ {name:"Temperature",t:"C5",make(){const s=R(17,23,1),d=R(-15,25,1)||6,e=+(s+d).toFixed(1);return {q:`The temperature changes from ${s} °C to ${e} °C. Calculate the temperature change. (Use − for a decrease.)`,ans:+(e-s).toFixed(1),unit:"°C",tol:.05,work:`${e} − ${s} = ${(e-s).toFixed(1)} °C`}}},
+ {name:"Avogadro",t:"C3",make(){const n=Pk([.1,.2,.25,.5,1.5,2,3]),a=+(n*6.02).toFixed(3);return {q:`How many particles are in ${n} mol? Give your answer as ___ × 10²³ and enter the first number.`,ans:a,unit:"× 10²³",work:`${n} × 6.02 × 10²³ = ${a} × 10²³`}}},
+ {name:"% yield",t:"C3",make(){const th=R(5,30,1),ac=+(th*R(55,95)/100).toFixed(1),a=+(ac/th*100).toFixed(1);return {q:`<span class="pill t">Triple</span> The theoretical yield is ${th} g. The actual yield is ${ac} g. Calculate the percentage yield.`,ans:a,unit:"%",tol:.15,work:`${ac} ÷ ${th} × 100 = ${a}%`}}},
+ {name:"mol/dm³",t:"C3",make(){const c=Pk([.05,.1,.2,.25,.5,1]),v=Pk([10,20,25,50,100,250]),a=+(c*v/1000).toFixed(5);return {q:`<span class="pill h">HT</span> How many moles are in ${v} cm³ of a ${c} mol/dm³ solution?`,ans:a,unit:"mol",work:`moles = concentration × volume (dm³) = ${c} × ${v/1000} = ${a} mol`}}}
+];
+
+Study.init({id:"chemistry",key:"chem-mock-v2",topics:TOPICS,cards:CARDS,figs:FIGS,drill:CALC,sets:[
+ {id:"mock",name:"Mock paper",blurb:"8 questions across C1–C5, laid out like a real Paper 1. Question 08 is a stretch question for higher grades.",qs:PAPER},
+ {id:"unseen",name:"Unseen contexts",blurb:"Elements, compounds and reactions you won't have met in class. Each one tests a topic you know. Work out which topic first (see Technique).",qs:UNSEEN},
+ {id:"bonding",name:"Bonding set",blurb:"Extra C2 questions, including a 6-mark comparison.",qs:BONDSET},
+ {id:"spot",name:"Structure spotter",blurb:"Quick-fire: name the structure from its properties.",qs:SPOT}
+]});
+
+</script>
+</body>
+</html>

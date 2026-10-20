@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Free OCR GCSE English Literature revision: An Inspector Calls and Jekyll and Hyde quotes, quote tests, context and essay practice.">
+<link rel="canonical" href="https://gcseasy.pages.dev/english-literature.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free OCR GCSE English Literature revision: An Inspector Calls and Jekyll and Hyde quotes, quote tests, context and essay practice.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/english-literature.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GCSE English Literature Revision: Inspector Calls, Jekyll and Hyde · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&family=Newsreader:ital,opsz,wght@1,6..72,500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>
+/* English accent: annotation red; quotes set in an italic book face */
+:root{--accent:#B04A2A;--accent-soft:#F8E8E2;--quote:"Newsreader",Georgia,"Times New Roman",serif}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--accent:#F0937A;--accent-soft:#3A221B}}
+:root[data-theme="dark"]{--accent:#F0937A;--accent-soft:#3A221B}
+.qbar{display:grid;gap:10px;margin-bottom:14px}
+.qbar .chips{margin:0}
+.qrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.qrow input{flex:1 1 200px;min-width:0;font:500 1rem var(--body);padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink)}
+.qcount{font:500 .8rem var(--mono);color:var(--muted)}
+.qlist{display:grid;gap:12px}
+.qc{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:8px}
+.qtop{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:700 .74rem var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.qn{display:grid;place-items:center;min-width:26px;height:26px;border-radius:6px;border:1.5px solid var(--accent);color:var(--accent)}
+.qw{color:var(--muted)} .qwho{color:var(--accent)}
+.qctx{margin:0;font-size:.95rem;color:var(--muted)}
+blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);text-wrap:pretty}
+.qc details summary{cursor:pointer;font:700 .85rem var(--display);color:var(--accent)}
+.qc details p{margin:6px 0 0;font-size:.95rem}
+.qth{display:flex;flex-wrap:wrap;gap:5px}
+.qth span{font:500 .74rem var(--mono);background:var(--bg);border-radius:5px;padding:2px 7px;color:var(--muted)}
+.nm{background:var(--ink);color:transparent;border-radius:5px;cursor:pointer;user-select:none;padding:0 1px}
+.nm.show{background:var(--hl);color:var(--hl-ink)}
+.nm:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.hrow{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.hrow .chips{margin:0}
+.hlab{font:700 .8rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.rvall{justify-self:start;font:700 .78rem var(--mono);color:var(--accent);background:none;border:1px solid var(--line);border-radius:6px;padding:4px 8px;cursor:pointer}
+.zcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:10px}
+.zprompt{margin:0;font-size:1.02rem}
+.zhint{font:500 1rem var(--mono);color:var(--muted);letter-spacing:.02em;margin:0}
+.zcard textarea{width:100%;min-height:96px;font:italic 500 1.15rem/1.4 var(--quote);padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;box-sizing:border-box}
+.zdiff{font:italic 500 1.2rem/1.7 var(--quote);margin:0}
+.zdiff span{border-radius:4px;padding:0 2px}
+.z-ok{color:var(--good)}
+.z-sp{background:var(--warn-soft);color:var(--warn)}
+.z-sp s{opacity:.7}
+.z-miss{background:var(--bad-soft,var(--warn-soft));color:var(--bad,var(--warn));text-decoration:underline dotted}
+.z-x{color:var(--bad,var(--warn));text-decoration:line-through}
+.zkey{display:flex;flex-wrap:wrap;gap:6px 12px;font:500 .78rem var(--mono);color:var(--muted)}
+.zres{font:700 1.1rem var(--display);margin:0}
+.zstats{font:500 .8rem var(--mono);color:var(--muted)}
+.noresult{color:var(--muted);border:1px dashed var(--line);border-radius:12px;padding:16px;text-align:center}
+.bq{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.brank{font:700 1.6rem var(--display);color:var(--accent);line-height:1}
+.bbody{display:grid;gap:6px}
+.bwho{margin:0;font:500 .82rem var(--mono);color:var(--muted)}
+.from{color:var(--good)} .added{color:var(--accent)}
+.bsec{margin:22px 0 4px;font-size:1.2rem} .bsecp{margin:0 0 12px;color:var(--muted);font-size:.95rem}
+.sqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin-bottom:8px}
+.sq{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;gap:6px;align-content:start}
+.sq blockquote{font-size:1.25rem}
+.sq .bwho{font-size:.78rem}
+.sq p.sw{margin:0;font-size:.9rem}
+.bwhy{margin:0} .bzoom{margin:0;font-size:.93rem;color:var(--muted)}
+.extract{background:var(--bg);border-left:3px solid var(--accent);padding:10px 14px;border-radius:0 10px 10px 0;margin:8px 0 12px;font-size:.95rem}
+.extract p{margin:6px 0} .exl{font:700 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap">
+<p class="crumbs"><a href="index.html#subjects">Subjects</a> / English</p>
+<header class="top">
+  <div class="tile"><small>E</small>Lt</div>
+  <div><h1>English Literature</h1><p class="sub">OCR · J352 · Paper 1 · An Inspector Calls and Jekyll and Hyde</p></div>
+</header>
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-qt" aria-selected="true" data-p="qt">Quotes</button>
+  <button role="tab" id="tab-bq" aria-selected="false" data-p="bq">Best quotes</button>
+  <button role="tab" id="tab-qz" aria-selected="false" data-p="qz">Quote test</button>
+  <button role="tab" id="tab-cx" aria-selected="false" data-p="cx">Context</button>
+  <button role="tab" id="tab-fc" aria-selected="false" data-p="fc">Cards</button>
+  <button role="tab" id="tab-ex" aria-selected="false" data-p="ex">Exam</button>
+</nav>
+
+<div id="p-qt">
+<p style="margin-bottom:12px">Every quote with its analysis. To test yourself, hide some or all of the words, then tap a blank to reveal it one word at a time. For a full test, try the <b>Quote test</b> tab.</p>
+<div class="qbar">
+  <div class="chips" id="qtext"></div>
+  <div class="chips" id="qtheme"></div>
+  <div class="qrow"><input id="qsearch" type="search" placeholder="Search quotes, characters, words…" aria-label="Search quotes"><span class="qcount" id="qcount"></span></div>
+  <div class="hrow"><span class="hlab">Hide</span><div class="chips" id="qhm"></div></div>
+</div>
+<div class="qlist" id="qlist"></div>
+</div>
+
+<div id="p-bq" hidden>
+<p style="margin-bottom:12px">If you can only learn a few quotes, learn these. Each one fits lots of different questions. Hide the words to test yourself, then tap a blank to reveal it.</p>
+<div class="chips" id="btext"></div>
+<div class="hrow" style="margin-bottom:12px"><span class="hlab">Hide</span><div class="chips" id="bhm"></div></div>
+<h2 class="bsec">Short and sharp</h2>
+<p class="bsecp">One to four words each. Quick to learn, easy to drop into any paragraph, and full of words to zoom in on.</p>
+<div class="sqs" id="slist"></div>
+<h2 class="bsec">Versatile quotes</h2>
+<p class="bsecp">Longer quotes that fit lots of different questions.</p>
+<div id="blist"></div>
+</div>
+
+<div id="p-qz" hidden>
+<p style="margin-bottom:12px">Read the prompt and type the quote from memory. Capitals and punctuation don't count. You'll see which words were right, which were misspelt, and which were missing or extra.</p>
+<div class="chips" id="ztext"></div>
+<div class="chips" id="zsrc"></div>
+<div id="zbox"></div>
+</div>
+
+<div id="p-cx" hidden>
+<div class="chips" id="ctxjump"><button class="chip" onclick="document.getElementById('cx-aic').scrollIntoView({behavior:'smooth'})">An Inspector Calls</button><button class="chip" onclick="document.getElementById('cx-jh').scrollIntoView({behavior:'smooth'})">Jekyll and Hyde</button></div>
+
+<section class="topic" id="cx-aic">
+<div class="th"><div class="tile"><small>A</small>IC</div><h2>An Inspector Calls · J.B. Priestley</h2></div>
+<h3>Two dates, one message</h3>
+<div class="tbl"><table>
+<tr><th>Set: spring 1912</th><th>Written: 1945</th></tr>
+<tr><td>Edwardian England: rigid class system, huge gap between rich and poor</td><td>The end of WW2; Britain had survived two world wars in 30 years</td></tr>
+<tr><td>No welfare state: no unemployment pay, no NHS. Working class women like Eva had no safety net</td><td>Labour won a landslide in July 1945, promising a welfare state; the NHS followed in 1948</td></tr>
+<tr><td>Women couldn't vote; middle class women didn't work for pay</td><td>Women had done vital war work; attitudes were changing</td></tr>
+<tr><td>Just before the Titanic sank (April 1912) and WW1 (1914)</td><td>The audience knows Birling is wrong about the Titanic and war: <b>dramatic irony</b></td></tr>
+</table></div>
+<p>Priestley sets the play in 1912 so his 1945 audience can see where selfishness led (two wars) and choose a better, fairer society now.</p>
+<h3>Priestley's beliefs</h3>
+<ul>
+<li>A <b>socialist</b>: he believed society should share wealth and look after the vulnerable. He co-founded the Common Wealth Party (1942).</li>
+<li>His wartime BBC radio talks, the <i>Postscripts</i> (1940), were so popular and left-wing they were taken off air.</li>
+<li>He'd seen poverty growing up in Bradford and fought in WW1. Those experiences shaped the Inspector's warning of 'fire and blood and anguish'.</li>
+</ul>
+<h3>Key ideas to know</h3>
+<ul>
+<li><b>Capitalism</b>: individuals and businesses keep profit for themselves (Birling). <b>Socialism</b>: wealth and responsibility are shared (the Inspector).</li>
+<li><b>Collective responsibility</b>: we are all responsible for each other.</li>
+<li><b>Class hierarchy</b>: upper (Gerald, the Crofts), middle (the Birlings), working (Eva, Edna).</li>
+<li><b>Gender</b>: men had power and money; women were expected to marry and obey.</li>
+</ul>
+<h3>Form and structure</h3>
+<ul>
+<li>A <b>well-made play</b> and a <b>detective thriller</b>: one confession after another, each act ending on a cliffhanger.</li>
+<li>A <b>morality play</b>: the Inspector is like a moral messenger judging sins (pride, greed, lust, envy, gluttony).</li>
+<li><b>Unity of time and place</b>: one evening, one dining room, in real time. The family can't escape.</li>
+<li><b>Cyclical ending</b>: the final phone call means the whole thing will happen again, this time with a real inspector.</li>
+<li>Name: Inspector <b>Goole</b> sounds like 'ghoul', a ghost. Is he real? Priestley leaves it open.</li>
+</ul>
+<h3>Characters at a glance</h3>
+<div class="tbl"><table>
+<tr><th>Character</th><th>Role</th><th>Key quote</th></tr>
+<tr><td>Arthur Birling</td><td>Capitalist businessman; doesn't change</td><td>'a man has to mind his own business'</td></tr>
+<tr><td>Sybil Birling</td><td>Snobbish, cold; doesn't change</td><td>'Girls of that class –'</td></tr>
+<tr><td>Sheila Birling</td><td>Changes the most; voice of hope</td><td>'these girls aren't cheap labour – they're people'</td></tr>
+<tr><td>Eric Birling</td><td>Drinks, guilty secret; changes</td><td>'We did her in all right'</td></tr>
+<tr><td>Gerald Croft</td><td>Upper class; seems sorry, then doesn't change</td><td>'We've been had'</td></tr>
+<tr><td>Inspector Goole</td><td>Priestley's mouthpiece; moral judge</td><td>'We are members of one body'</td></tr>
+<tr><td>Eva Smith / Daisy Renton</td><td>Never seen; symbol of the exploited working class</td><td>'millions and millions… of Eva Smiths'</td></tr>
+</table></div>
+</section>
+
+<section class="topic" id="cx-jh">
+<div class="th"><div class="tile"><small>J</small>JH</div><h2>Strange Case of Dr Jekyll and Mr Hyde · R.L. Stevenson</h2></div>
+<h3>Victorian London (published 1886)</h3>
+<ul>
+<li><b>Respectability and reputation</b> mattered above everything for middle class gentlemen. Scandal could ruin a career, so private vices were hidden: the 'double life'.</li>
+<li><b>Repression</b>: strict moral codes meant desires were pushed down, not expressed. Stevenson suggests this makes them stronger and more dangerous.</li>
+<li><b>London as a divided city</b>: wealthy, respectable squares beside poor, crime-ridden areas like Soho. Jekyll's house is the same: grand front, 'blistered' back door.</li>
+<li>Gentlemen's code: never gossip, never betray a friend's secrets. That's why Utterson, Enfield and Lanyon stay silent.</li>
+</ul>
+<h3>Science and religion</h3>
+<ul>
+<li><b>Charles Darwin</b>'s <i>On the Origin of Species</i> (1859) suggested humans evolved from apes. Many feared people could <b>degenerate</b> back into primitive, animal states: hence Hyde's 'ape-like fury' and 'troglodytic' look.</li>
+<li>Science was advancing fast, and some feared scientists were <b>playing God</b>. Lanyon represents traditional, safe science; Jekyll represents 'transcendental' science that crosses moral lines.</li>
+<li>Religion still shaped morality. Characters keep invoking God and the devil around Hyde ('Satan's signature', 'God bless me').</li>
+<li><b>Physiognomy</b>: the Victorian belief that you could read someone's character in their face. Everyone sees evil in Hyde but can't say why.</li>
+</ul>
+<h3>Stevenson's life</h3>
+<ul>
+<li>Grew up in <b>Edinburgh</b>, a city split between the elegant New Town and the poor Old Town.</li>
+<li>Raised in a strict <b>Calvinist</b> household that taught people are born sinful; he rebelled as a young man.</li>
+<li>Inspired by <b>Deacon Brodie</b>, a respected Edinburgh cabinet-maker by day and burglar by night.</li>
+<li>Said the idea came to him in a nightmare.</li>
+</ul>
+<h3>Form and structure</h3>
+<ul>
+<li><b>Gothic novella</b>: fog, darkness, secrets, the double (<b>doppelgänger</b>). Unusually, the monster comes from inside a respectable man, not from outside.</li>
+<li><b>Detective / mystery</b> structure: we follow Utterson, who knows as little as we do.</li>
+<li><b>Multiple narratives</b>: the truth is held back until the last two chapters, Lanyon's and Jekyll's letters. This delays the reveal and mirrors the theme of secrecy.</li>
+<li><b>Pathetic fallacy</b>: the fog hides the truth, just as characters hide their secrets.</li>
+</ul>
+<h3>Characters at a glance</h3>
+<div class="tbl"><table>
+<tr><th>Character</th><th>Role</th><th>Key quote</th></tr>
+<tr><td>Dr Henry Jekyll</td><td>Respected scientist who splits himself</td><td>'man is not truly one, but truly two'</td></tr>
+<tr><td>Edward Hyde</td><td>Jekyll's evil side; violent, primitive</td><td>'with ape-like fury'</td></tr>
+<tr><td>Gabriel Utterson</td><td>Lawyer, rational detective; repressed</td><td>'I let my brother go to the devil in his own way'</td></tr>
+<tr><td>Dr Hastie Lanyon</td><td>Traditional scientist; Jekyll's foil</td><td>'unscientific balderdash'</td></tr>
+<tr><td>Richard Enfield</td><td>Utterson's cousin; tells the door story</td><td>'like some damned Juggernaut'</td></tr>
+<tr><td>Poole</td><td>Jekyll's loyal butler</td><td>'that masked thing like a monkey'</td></tr>
+<tr><td>Sir Danvers Carew</td><td>Elderly MP murdered by Hyde</td><td>'hailing down a storm of blows'</td></tr>
+</table></div>
+</section>
+
+</div>
+
+<!-- CARDS -->
+<div id="p-fc" hidden>
+<div class="chips" id="fcf"></div>
+<div class="meta"><span id="fcpos"></span><span id="fcleft"></span></div>
+<button class="card" id="card" aria-live="polite"></button>
+<div class="row"><button class="btn b" id="fcagain">Again</button><button class="btn g" id="fcgot">Got it</button></div>
+<div class="row"><button class="btn" id="fcshuf">Shuffle &amp; restart</button></div>
+</div>
+
+
+<!-- EXAM QS -->
+<div id="p-ex" hidden>
+<div id="litguide" style="margin-bottom:18px"></div>
+<div id="enghow">
+<details class="rc"><summary>How to write a top paragraph: What, How, Why</summary><div class="in">
+<ol class="steps">
+<li><b>What</b>: make a point that answers the question, with a short embedded quote. "Priestley presents Birling as selfish when he says a man must 'look after himself and his own'."</li>
+<li><b>How</b>: zoom in on a word or technique. "The possessive 'his own' shows he only cares for his family, never society."</li>
+<li><b>Why</b>: the writer's purpose and context. "Priestley, writing in 1945, wants the audience to reject this capitalist selfishness and vote for a fairer society."</li>
+</ol>
+<p>Always write about the <b>writer</b> ("Priestley presents…", "Stevenson suggests…"), not the characters as if they're real people.</p>
+</div></details>
+<details class="rc"><summary>Part (a): comparing with the unseen extract</summary><div class="in">
+<ul>
+<li>Read the unseen extract twice. Underline 3–4 short quotes linked to the question.</li>
+<li>Every paragraph should mention <b>both</b> extracts. Use comparative connectives: <i>similarly, likewise, whereas, in contrast, however</i>.</li>
+<li>Compare methods too: stage directions, dialogue, pauses, how power shifts.</li>
+<li>Don't spend long on context here; focus on language and drama.</li>
+</ul>
+</div></details>
+<details class="rc"><summary>Part (b) and Section B essays</summary><div class="in">
+<ul>
+<li>Open with a <b>thesis</b>: one or two sentences that answer the question directly, including the writer's purpose.</li>
+<li>Use 3–4 paragraphs, each with a quote you analyse closely.</li>
+<li>Move across the text: beginning, middle, end, so you show the whole play or novella.</li>
+<li>Weave context in where it explains the writer's purpose; don't bolt on a context paragraph.</li>
+<li>For Jekyll and Hyde extract questions, start with the extract (about a third of your answer), then move across the novella.</li>
+<li>Check SPaG in Section B: it's worth 4 marks.</li>
+</ul>
+</div></details>
+<details class="rc"><summary>Useful analytical verbs and phrases</summary><div class="in">
+<p>suggests · implies · conveys · emphasises · highlights · reveals · foreshadows · reinforces · juxtaposes · symbolises · criticises · challenges</p>
+<p>"This could also suggest…" (shows alternative interpretations, a Level 6 skill) · "Perhaps Priestley is…" · "The audience would feel…"</p>
+</div></details>
+</div>
+<div class="cover">
+<h2>Practice questions</h2>
+<p>Written in the style of OCR J352 Paper 1, with original questions. Write your answer (or a plan), then mark it against the levels and the model plan. Pick a set:</p>
+<div class="chips" id="sets" style="margin:10px 0 0"></div>
+<div class="mode" role="group" aria-label="Mode">
+  <button class="chip" id="m-learn">Learn mode: hints on</button>
+  <button class="chip" id="m-exam">Exam mode: no hints</button>
+</div>
+</div>
+<div class="score">
+  <b id="sc">0 / 0</b><span id="scsub">marks on parts you've answered</span>
+  <button class="btn sm" id="reset">Reset all</button>
+  <div style="flex-basis:100%"><div class="bars" id="bars"></div><div class="weak" id="weak"></div></div>
+</div>
+<div id="paper"></div>
+</div>
+</div>
+
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script src="shared/study.js"></script>
+<script src="shared/guide.js"></script>
+<script>
+Guide.render(document.getElementById("litguide"),[{title:"Paper 1: Exploring modern and literary heritage texts",sub:"OCR J352/01 · An Inspector Calls (Section A) and Jekyll and Hyde (Section B) · 80 marks · closed book",total:"2 hrs",split:[["Section A","1 hr"],["Section B","1 hr"]],
+qs:[
+ {n:"(a)",type:"Compare with an unseen extract",marks:20,time:"25 min",paras:"3 paragraphs",pts:["Compare an extract from An Inspector Calls with an unseen extract from another modern text.","Every paragraph mentions both extracts. Use: similarly, whereas, in contrast, however.","Compare methods too: stage directions, dialogue, how power shifts. Keep context light."],flow:["Point on AIC extract","Point on unseen extract","Compare methods","Why"]},
+ {n:"(b)",type:"Explore another moment",marks:20,time:"30 min",paras:"Thesis + 3 paragraphs",pts:["Pick another moment in the play linked to the same theme.","Analyse closely, and weave in context to explain Priestley's purpose."],flow:["Thesis","What","How","Why"]},
+ {n:"B",type:"Jekyll and Hyde essay",marks:40,time:"55 min",paras:"Intro + 3–4 paragraphs",pts:["Choose one: an extract question that links to the whole novella, or an essay question.","36 marks for the essay + 4 for spelling, punctuation and grammar.","Extract option: spend about a third on the extract, then move across the novella."],flow:["5 min plan","Thesis","Extract or first moment","Across the novella","Conclusion","SPaG check"]}
+],
+notes:["Spend about 1 hour per section, with 5 minutes to plan each answer.","Always write about the writer: 'Priestley presents…', 'Stevenson suggests…'.","Move across the text (beginning, middle, end) to show you know the whole play or novella.","It's closed book, so learn short, flexible quotes: use the Quote test tab.","Don't bolt on a context paragraph: link context to the writer's purpose."]}]);
+</script>
+<script>
+/* Quote cards. t: text, n: card number, w: where, who: speaker, c: context line, q: quote(s), a: analysis, th: themes */
+const QUOTES=[
+/* ---------- An Inspector Calls ---------- */
+{t:"AIC",n:1,w:"Big idea",who:"Priestley",c:"Priestley promotes a socialist ideology and argues for collective responsibility.",q:"",a:"Socialism assumes everyone is willing to share their resources and wealth with others; it is about caring about those who are disadvantaged. Having a collective responsibility means that everyone is responsible for each other; that it is right that we look after others.",th:["Responsibility","Socialism"]},
+{t:"AIC",n:2,w:"Big idea",who:"Priestley",c:"Priestley argues that change is possible, and this hope for change lies with the younger generation.",q:"",a:"Priestley is arguing for a move away from capitalism and from people just caring about their own family. He wants people to care about those who are disadvantaged and to see them as equals, as people. He uses Sheila and Eric's sympathy for Eva to show that the younger generation care more.",th:["Generations","Socialism"]},
+{t:"AIC",n:3,w:"Big idea",who:"Priestley",c:"Priestley challenges existing hierarchies of class and gender.",q:"",a:"A hierarchy is a system of power. Upper, middle and working class divides are really clear in the play, with the upper classes (Gerald) in charge, followed by the middle classes (Mrs Birling and her attempts to coach Mr Birling), and the working classes (Eva, Edna) being exploited by the classes above them. Women were seen as less important than men, so working class women were the most exploited of all.",th:["Class","Gender"]},
+{t:"AIC",n:4,w:"Context",who:"Priestley",c:"When was the play written and why is this significant? Priestley is writing in 1945, just after the end of WW2.",q:"",a:"1945 was a year when the Labour government won a landslide victory and began to make society more supportive of the working classes. In 1948, shortly after, the NHS was formed.",th:["Context","Socialism"]},
+{t:"AIC",n:5,w:"Context",who:"Priestley",c:"When was the play set and why is this significant?",q:"",a:"The play is set in spring 1912, just before the Titanic sank in April 1912. This was before WW1, at a time when Britain was extremely successful. Priestley wanted to show the arrogance of the Birlings before world politics changed drastically.",th:["Context","Capitalism"]},
+{t:"AIC",n:6,w:"Context",who:"Priestley",c:"Priestley's choice of form surprises the audience too.",q:"",a:"Instead of a typical detective play where we find out which one committed the murder, this play widens the search for a murderer until we realise that everyone is guilty of contributing to Eva's self-murder. This is really unusual and supports the Inspector's belief that this is a 'chain of events'.",th:["Form","Responsibility"]},
+{t:"AIC",n:7,w:"Act 1",who:"Stage directions",c:"Priestley's stage directions in Act 1 state",q:"The lighting should be pink and intimate until the Inspector arrives, and then it should be brighter and harder",a:"Pink and intimate suggests that the Birlings are looking inwards: they are shutting the world out. Brighter and harder lighting suggests that the Inspector is bringing in the outside world, shattering their calm. He is shining a light on their deeds.",th:["Form","Responsibility"]},
+{t:"AIC",n:8,w:"Act 1",who:"Mr Birling",c:"At the start of the play, Priestley describes Mr Birling in his stage directions as",q:"Rather portentous man […] with fairly easy manner but rather provincial in his speech",a:"Portentous means that Mr Birling speaks in a pompous or overly solemn manner so as to impress. He is trying to move up the social hierarchy where he can (trying to impress Gerald), yet he is originally from a working class background. His wife reminds him how middle class men should behave.",th:["Class","Capitalism"]},
+{t:"AIC",n:9,w:"Act 1",who:"Mrs Birling",c:"At the start of the play, Priestley describes Mrs Birling in his stage directions as",q:"A rather cold woman and her husband's social superior",a:"The adjective 'cold' suggests a lack of emotional warmth, foreshadowing her lack of empathy for Eva and working class women. She is middle class and so has helped Mr Birling rise from working class beginnings to middle class comfort. She coaches Mr Birling in how to behave in company.",th:["Class","Gender"]},
+{t:"AIC",n:10,w:"Act 1",who:"Sheila",c:"At the start of the play, Priestley describes Sheila in his stage directions. She speaks to Gerald in a 'half serious, half playful' way.",q:"Sheila is a pretty girl in her early twenties, very pleased with life and rather excited",a:"Sheila is the same age as Eva and pretty like her. We realise that Eva is Sheila's foil (showing how different life is for a working class woman). Everything is going well for Sheila so far, but that is about to change with the arrival of the Inspector. Like Eric, Sheila is 'half' something: Priestley suggests she isn't fully formed yet, so she has the capacity to change as part of the younger generation (big idea).",th:["Generations","Gender","Class"]},
+{t:"AIC",n:11,w:"Act 1",who:"Gerald",c:"At the start of the play, Priestley describes Gerald in his stage directions as",q:"Attractive chap about thirty… very much the easy well-bred young man-about-town",a:"Well-bred points to Gerald's upper class background: marrying Gerald is socially beneficial for Sheila and the Birlings. Man-about-town suggests that Gerald is sexually active and sleeping with working class women while looking to marry and have children with a middle class woman. He is worldly wise, unlike Sheila, who has never worked and is protected from the world by her parents. Gender and class hierarchies are clear in this description of him.",th:["Class","Gender"]},
+{t:"AIC",n:12,w:"Act 1",who:"Eric",c:"At the start of the play, Priestley describes Eric in his stage directions as",q:"not quite at ease, half shy, half assertive",a:"Eric isn't quite sure of himself yet, and Priestley foreshadows Eric's change towards socialism in the play. Being 'half' suggests that, like Sheila, he is not fully formed. He is part of the younger generation who have the capacity to change, and this should give the audience hope.",th:["Generations"]},
+{t:"AIC",n:13,w:"Act 1",who:"Mrs Birling",c:"In Act 1, Mrs Birling advises Sheila about Gerald that",q:"When you're married you'll realise that men with important work to do sometimes have to spend nearly all their time and energy on their business",a:"Mrs Birling supports the gender hierarchy here, suggesting that men's work is more important than women's and that Sheila needs to realise she won't be Gerald's priority (she isn't even now!) when she is married. Sheila, as a middle class woman, will never work for pay, and this supports the gender hierarchies of 1912: women had little power as they couldn't earn money.",th:["Gender"]},
+{t:"AIC",n:14,w:"Act 1",who:"Sheila",c:"At the start of the play, on receiving her engagement ring from Gerald that he chose,",q:"Oh – Gerald – you've got it – is it the one you wanted me to have?",a:"Again, a quote that reveals the gender hierarchy in the play. Gerald chose the ring; Sheila had no role in choosing it. The ring is a symbol of ownership: wearing it shows Sheila now belongs to Gerald. When she gives the ring back after discovering his affair, this symbolises her refusal to take Gerald's direction any more. At the end, Gerald expects Sheila to forget the affair and accept his ownership once more, but Sheila rejects this.",th:["Gender","Symbolism"]},
+{t:"AIC",n:15,w:"Act 1",who:"Sheila",c:"At the start of Act 1, Sheila looks for her mother's approval of her engagement ring",q:"Oh – it's wonderful! Look – Mummy – isn't it a beauty?",a:"Sheila calls her mother 'Mummy', suggesting that she is infantilised by her family and treated as a child. She needs her mother's approval of the ring. The question shows she is seeking direction from her mother, although she is an adult woman in her 20s. This again supports the big idea of a gender hierarchy: Gerald has important work to do, whereas Sheila has interest only in frivolous things like jewellery.",th:["Gender","Generations"]},
+{t:"AIC",n:16,w:"Act 1",who:"Mr Birling",c:"In Act 1, before the Inspector arrives, Mr Birling tells Gerald and Eric his views on socialism",q:"You'd think everybody has to look after everybody else, as if we were all mixed up together like bees in a hive – community and all that nonsense",a:"Bees work well together and are renowned for their hard work and output. Priestley has Birling use this simile to promote socialism for the audience: being a bee in a hive is a good thing, it is natural. Birling using the comparison as an insult makes him look foolish, and we are encouraged to dislike him and his capitalist views. Priestley promotes socialism by having a foolish character dismiss it.",th:["Socialism","Capitalism","Responsibility"]},
+{t:"AIC",n:17,w:"Act 1",who:"Mr Birling",c:"In Act 1, Mr Birling advises Gerald and Eric how men should behave, instructing them",q:"That a man has to mind his own business and look after himself and his own – and –",a:"Birling promotes a capitalist viewpoint, and because Priestley has presented him as a fool so far (celebrating the Titanic as unsinkable and laughing at the prospect of war), the audience is drawn towards socialism instead. Birling puts himself first (money first), then his family, which reveals how selfish he is. It also foreshadows his treatment of Eva: profit before people.",th:["Capitalism","Responsibility"]},
+{t:"AIC",n:18,w:"Act 1 & 3",who:"Stage directions",c:"In Act 1, during Mr Birling's advice to Gerald and Eric, we hear the 'Sharp ring of the doorbell'. In Act 3, just when the older generation believe they have escaped punishment, we hear",q:"The telephone rings sharply",a:"Priestley interrupts Birling's speech with the Inspector, who is also going to interrupt Birling's future. We know by the end that a scandal will unfold, as Birling is a high-profile man, and that he will not get his knighthood. The word 'sharp' (used again for the phone call at the end) suggests a painful reality is coming for the Birlings, one they will not forget.",th:["Form","Structure"]},
+{t:"AIC",n:19,w:"Act 1",who:"Eric",c:"At the start of the play it is clear that Eric is hiding something: he is drinking heavily, seated downstage so we can't see his face, and grumpy. He is teased by Gerald and his father, with Gerald saying",q:"Unless Eric's been up to something",a:"This characterisation foreshadows Eric's crimes later (he is the only one who can be prosecuted, for his treatment of Eva and for stealing from Birling and Co.). Eric acts very guiltily in the early scenes, and his heavy drinking alerts the audience to a very different life outside his parents' home. Eric has been 'up to' a lot.",th:["Structure","Generations"]},
+{t:"AIC",n:20,w:"Act 1",who:"Inspector",c:"In Act 1, when the Inspector first arrives, he explains to the male characters that Eva's suicide happened because of",q:"A chain of events",a:"This metaphor shows how the Birlings' and Gerald's actions are all linked together to imprison Eva in a life of poverty and misery. A chain is unnatural (it is human-made), restricting and imprisoning; this is exactly what life was like for Eva as a working class woman with no family to support her.",th:["Responsibility","Class"]},
+{t:"AIC",n:21,w:"Act 1",who:"Inspector",c:"In Act 1, during Mr Birling's questioning, the Inspector defends Eva asking for a pay rise",q:"It's better to ask for the earth than to take it",a:"This seems to echo the famous verse from Matthew, 'Blessed are the meek, for they will inherit the earth'. The Inspector condemns Birling for being greedy and bold, taking the earth (making as much profit as he can): an anti-Christian way to behave according to Jesus. Eva was asking for a small pay rise so she could afford to eat and house herself. The Inspector is promoting socialism here.",th:["Socialism","Capitalism","Class"]},
+{t:"AIC",n:22,w:"Act 1",who:"Eric",c:"In Act 1, when Mr Birling is questioned on his sacking of Eva, Eric questions",q:"Why shouldn't they try for higher wages? We try for the highest possible prices",a:"Eric promotes socialism for Priestley, showing how the working classes should be able to share the wealth generated by their work. Eric questions his own father and the business he will presumably inherit one day. This gives the audience hope in the younger generation, as Eric will do things differently when he is in charge.",th:["Socialism","Generations","Capitalism"]},
+{t:"AIC",n:23,w:"Act 1",who:"Sheila",c:"In Act 1, Sheila says to the Inspector when she is first told about Eva's suicide",q:"It's just that I can't help thinking about this girl – destroying herself so horribly – and I've been so happy tonight. Oh I wish you hadn't told me",a:"Priestley draws attention to the fact that Eva is Sheila's foil: they are really similar apart from one defining feature, their class. Eva is dying alone, pregnant and penniless, while Sheila celebrates with her family and is about to marry a wealthy upper class man, meaning she will never have to work or worry about money.",th:["Class","Gender"]},
+{t:"AIC",n:24,w:"Act 1",who:"Sheila",c:"In Act 1, before the Inspector begins to question Sheila, she argues against her father",q:"But these girls aren't cheap labour – they're people",a:"The juxtaposition of 'cheap labour' and 'people' contrasts a capitalist view with a socialist one. Birling and capitalists see working class people (the bottom of the hierarchy) as expendable, to be used cheaply for work. Sheila and socialists see working class people as humans to value and care for.",th:["Class","Socialism","Generations"]},
+{t:"AIC",n:25,w:"Act 1",who:"Sheila",c:"In Act 1, after she has been questioned by the Inspector, Sheila shows remorse",q:"It's the only time I've ever done anything like that, and I'll never, never do it again to anybody",a:"The repetition of 'never' shows how deeply Sheila has taken responsibility for her part in Eva's death. She accepts responsibility immediately, and this gives the audience hope. She is part of a new, younger generation who value people regardless of their social position in Edwardian society.",th:["Responsibility","Generations"]},
+{t:"AIC",n:26,w:"Act 2",who:"Mrs Birling",c:"In Act 2, Mrs Birling refuses to acknowledge the family's part in Eva's suicide, dismissing the Inspector's questioning with",q:"Girls of that class –",a:"Mrs Birling helps keep the existing hierarchies of Edwardian society. She calls Eva a 'girl' when she is a woman in her twenties, infantilising and patronising her. 'That class' refers to the working class, revealing that Mrs Birling believes working class women are completely different from upper and middle class women, without the same feelings or morals. She is 'othering' the working class.",th:["Class","Gender"]},
+{t:"AIC",n:27,w:"Act 2",who:"Sheila",c:"In Act 2, just before Mrs Birling is questioned by the Inspector, Sheila warns her",q:"You mustn't try to build up a kind of wall between us and that girl",a:"The wall is a metaphor for the class hierarchy that Priestley is trying to break down. Sheila realises that her mother sees working class women as different from herself and urges her not to. Priestley uses Sheila to challenge existing class hierarchies here.",th:["Class","Generations"]},
+{t:"AIC",n:28,w:"Act 2",who:"Gerald",c:"In Act 2, Gerald comments about Eva when he met her in the Palace Bar, unlike the other prostitutes, who he says 'I hate those hard-eyed dough-faced women'",q:"She looked young and fresh and charming",a:"The rule of three emphasises how taken Gerald was with Eva, but objectifying her as 'fresh' (like a piece of food with an expiry date) is really disturbing. He uses a food metaphor again when he criticises the older prostitutes as 'dough-faced' (presumably their faces heavy with stress lines) and 'hard-eyed' because they have endured abuse from men like him. Gerald sees these working class women as there to provide him with a service: 'cheap labour'.",th:["Gender","Class"]},
+{t:"AIC",n:29,w:"Act 2",who:"Sheila",c:"In Act 2, Sheila sarcastically tells Gerald about his 'relationship' with Eva",q:"You were the wonderful Fairy Prince. You must have adored it, Gerald",a:"Comparing Gerald to the 'Fairy Prince', a fictional character, shows that Sheila understands how false and artificial Gerald's 'relationship' with Eva was. She sees how Gerald uses the gender hierarchy to paint himself as a hero saving Eva, when in fact he was manipulating her because he is a rich upper class man. Her sarcasm shows that she is questioning the hierarchies that allow a man like Gerald to abuse Eva.",th:["Gender","Class","Generations"]},
+{t:"AIC",n:30,w:"Act 2",who:"Inspector",c:"In Act 2, just before the Inspector begins to question Mrs Birling, he admonishes Mr Birling with",q:"Public men, Mr Birling, have responsibilities as well as privileges",a:"The Inspector holds Mr Birling to account. His public roles (Lord Mayor, magistrate, successful businessman) should require a sense of socialism (caring for others and sharing wealth), but Birling only holds them to move up the social ladder and for selfish ends. The Inspector is promoting collective responsibility here.",th:["Responsibility","Class","Socialism"]},
+{t:"AIC",n:31,w:"Act 2",who:"Mrs Birling",c:"In Act 2, Mrs Birling criticises Eva's visit to her charity committee and dismisses her to the Inspector",q:"She was claiming elaborate fine feelings and scruples that were simply absurd in a girl in her position",a:"Mrs Birling again treats working class women as if they were different from other women, not capable of the same emotions and sense of right and wrong. Again she calls Eva a 'girl', infantilising her. This is the 'wall' Sheila refers to that keeps the social classes separated.",th:["Class","Gender"]},
+{t:"AIC",n:32,w:"Act 3",who:"Eric",c:"During Act 3, when Eric is asked about his first evening meeting Eva. Also: 'And I didn't even remember – that's the hellish thing'",q:"Well I was in that state when a chap easily turns nasty",a:"Eric talks about himself in the third person, 'a chap', separating himself from his actions: sexually assaulting and possibly raping Eva. He is not owning up to his behaviour at first. He can't remember what happened and calls that the 'hellish thing', but surely the hellish thing is what Eva had to experience?",th:["Gender","Responsibility"]},
+{t:"AIC",n:33,w:"Act 3",who:"Inspector",c:"In Act 3, in his last speech before he exits the play, the Inspector tells the Birling family",q:"We are members of one body. We are responsible for each other.",a:"The first person plural pronoun 'we' shows the Inspector promoting collective responsibility: he too must be responsible for others. The metaphor of 'one body' suggests that all people (all classes) are needed for the body, society, to work. If the working class are the arms and the middle class the legs, all limbs need to work well for the body to be healthy.",th:["Responsibility","Socialism","Class"]},
+{t:"AIC",n:34,w:"Act 3",who:"Inspector",c:"In Act 3, in his last speech before he exits the play, the Inspector tells the Birling family",q:"And I tell you that the time will soon come when, if men will not learn that lesson, then they will be taught it in fire and blood and anguish.",a:"The rule of three is ambiguous and could mean different things. Is 'fire and blood and anguish' a prediction of WW1 and WW2 if greedy capitalist governments keep fighting each other for land and power? Or is the Inspector a moral crusader warning of eternal damnation (hell) if people are not kinder to others on earth?",th:["Responsibility","Context","Socialism"]},
+{t:"AIC",n:35,w:"Act 3",who:"Mr Birling",c:"In Act 3, after the Inspector leaves, Mr Birling tries to justify his behaviour towards Eva",q:"There's every excuse for what your mother and I did – it turned out unfortunately, that's all –",a:"Mr Birling has learned nothing from the Inspector's visit. He is part of the older generation who will not change. He takes no responsibility for Eva's death, claiming he and his wife have 'every excuse'. He keeps his view that working class women are there to be used and to make profit for men like him.",th:["Generations","Responsibility","Capitalism"]},
+{t:"AIC",n:36,w:"Act 3",who:"Mrs Birling",c:"In Act 3, when Gerald confirms there isn't an Inspector Goole at the police station, Mrs Birling states triumphantly",q:"Didn't I say I couldn't imagine a real police inspector talking like that to us?",a:"Mrs Birling is still preoccupied with class. She thinks a real police inspector wouldn't talk to her as Goole did, because he would respect their middle class status and Mr Birling's public life. She feels her status excuses her behaviour and entitles her to respect.",th:["Class","Generations"]},
+{t:"AIC",n:37,w:"Act 3",who:"Gerald",c:"Gerald returns in Act 3 to announce to the Birlings that he had asked a police sergeant patrolling the streets and found out",q:"There isn't any such inspector. We've been had",a:"Gerald is also keen to avoid any responsibility for Eva's death. When he left claiming to be upset and needing to be alone, he was busy finding out whether Inspector Goole was real. He feels it is all a practical joke ('we've been had'), and once he realises this he stops remembering his part in Eva's life. He feels no collective responsibility at all.",th:["Responsibility","Class"]},
+{t:"AIC",n:38,w:"Act 3",who:"Sheila",c:"In Act 3, when Gerald returns and begins to question whether the Inspector is real, Sheila says",q:"Well, he inspected us all right. And don't let's start dodging and pretending now. Between us we drove that girl to commit suicide",a:"Sheila, the younger generation, doesn't care that Goole is not a real inspector. Her verb 'inspected' makes clear that she doesn't care who encouraged them to take collective responsibility; she welcomes it. She uses the Inspector's first person pronouns 'us' and 'we' to encourage her family to feel collective responsibility for Eva too.",th:["Responsibility","Generations"]},
+{t:"AIC",n:39,w:"Act 3",who:"Eric",c:"In Act 3, Eric turns on his parents and tries to hold them all accountable",q:"The money's not the important thing. It's what happened to the girl and what we all did to her that matters",a:"Eric contrasts capitalism and socialism. The money Birling focuses on is not important, but Eva, the working class woman, is. Again Eric uses the first person plural 'we' to show that he takes responsibility and wants his family to as well.",th:["Responsibility","Socialism","Generations"]},
+{t:"AIC",n:40,w:"Act 3",who:"Eric",c:"In Act 3, Eric miserably summarises the impact they all had on Eva",q:"We did her in all right",a:"This informal summary shows Eric has taken full responsibility for his part in Eva's death and wants his family to do the same. He says it assertively at the end of the play (he has grown; he is not 'half shy' any more) against the ridicule of his parents and Gerald, who treat the whole thing as a joke and refuse to take any responsibility.",th:["Responsibility","Generations"]},
+{t:"AIC",n:41,w:"Act 3",who:"Sheila & Mrs Birling",c:"At the end of the play, just before the telephone rings sharply, Sheila says sarcastically 'We can all go on behaving just as we did', and Mrs Birling answers",q:"Well, why shouldn't we?",a:"This contrast shows the younger generation (taking collective responsibility and wanting to change class hierarchies) against the older generation (manipulating those lower down the hierarchy for their own profit and reputation). Sheila has changed because of the Inspector's visit, and Mrs Birling has learned nothing at all.",th:["Generations","Responsibility"]},
+{t:"AIC",n:42,w:"Act 3",who:"Gerald & Sheila",c:"Once everyone realises in Act 3 that Inspector Goole is not real, Gerald says to Sheila 'Everything's all right now, Sheila. What about this ring?' and she answers",q:"No, not yet. It's so soon. I must think",a:"Gerald believes 'everything's all right now' because the Inspector is not real and his actions (and the Birlings') will not be made public. He expects Sheila to forget his six-month affair and pretend it hasn't happened because he is a wealthy upper class man. Sheila asking for time to think leaves us hopeful that she will refuse to be infantilised by him or her family in future.",th:["Gender","Generations","Symbolism"]},
+{t:"AIC",n:43,w:"Act 3",who:"Mr Birling",c:"In Act 3, when Mr Birling realises that Inspector Goole is not a real inspector, he laughs at Sheila and Eric's unhappiness",q:"Look at the pair of them – the famous younger generation who know it all.",a:"Priestley draws attention to his message that hope lies in the younger generation. By this point the audience admire Sheila and Eric for owning their part in Eva's death and wanting to change how they treat those of lower classes. The audience sees the irony: it is the older generation who think they know it all and are unwilling to change.",th:["Generations","Irony"]},
+{t:"AIC",n:44,w:"Act 3",who:"Stage directions",c:"In Act 3, just when the older generation believe they have escaped punishment, we hear",q:"The telephone rings sharply",a:"Because Mr and Mrs Birling and Gerald did not learn their lesson, a woman does die, and now a real inspector will hold them accountable; once again the spotlight will be turned on their behaviour. The adverb 'sharply' cuts through their arrogance and refusal to take responsibility for their role in Eva's death. Now it will all be made public.",th:["Structure","Responsibility"]},
+/* ---------- Jekyll and Hyde ---------- */
+{t:"JH",n:1,w:"Big idea",who:"Stevenson",c:"Stevenson argues that the duality of nature (the need to do good and the urge to commit evil) does exist in everyone, but attempting to separate the two has devastating consequences.",q:"",a:"The world is made up of opposites: night and day, birth and death, good and evil. Human beings have both sides, but the problem, according to Stevenson, is that Jekyll wants to separate the two in an unnatural way.",th:["Duality"]},
+{t:"JH",n:2,w:"Big idea",who:"Stevenson",c:"Stevenson explores the dangers of unchecked scientific ambition that attempts to play God.",q:"",a:"Dr Jekyll breaks the Hippocratic Oath (taken by doctors and kept by Lanyon throughout the novella; Lanyon is Jekyll's foil in the world of medicine) through his dangerous, non-consensual experimentation on himself and others, and by failing in his duty to protect life and well-being.",th:["Science"]},
+{t:"JH",n:2.5,w:"Big idea",who:"Stevenson",c:"Stevenson explores the devastating consequences of repression and secrecy as a result of Victorian expectations.",q:"",a:"Stevenson sets his novella in London with middle class professional gentlemen as his main characters. Unlike most Gothic novels, his supernatural danger comes from within a character rather than an outside threat. One of the biggest threats to these gentlemen is their reputation. Utterson has a safe for his clients' private documents; letters are sealed until the owner is dead and their reputation irrelevant; and characters never betray each other's confidences, even when the horror leads to their premature death (Lanyon).",th:["Repression","Reputation"]},
+{t:"JH",n:3,w:"Ch 1",who:"Utterson",c:"Stevenson creates a logical, calm detective in Utterson, who keeps his inner desires deeply controlled (drinks gin instead of wine, avoids the theatre), yet he",q:"sometimes wonder[s], almost with envy, at the high pressure of spirits involved in [others'] misdeeds",a:"Utterson is completely different from Jekyll: he refuses to take pleasure in activities that bring him joy, thinking they are frivolous. He has learned to repress his inner desires and has made a living as a lawyer helping those who couldn't. He is so controlled that he is almost envious of those who can follow their desires.",th:["Repression","Duality"]},
+{t:"JH",n:4,w:"Ch 1",who:"Enfield",c:"In chapter 1, Enfield describes watching Hyde trample over the girl",q:"It wasn't like a man: it was like some damned Juggernaut",a:"The simile compares Hyde to a huge chariot in an Indian festival that runs down worshippers. It objectifies Hyde, foreshadowing his lack of humanity. The adjective 'damned' suggests something hellish in Hyde; he seems like the devil even here. Again, it is implied that he is not an ordinary man: he is different and abnormal in Enfield's eyes, because what Jekyll has done is dangerous and unnatural.",th:["Violence","Duality","Religion"]},
+{t:"JH",n:5,w:"Ch 1",who:"Enfield",c:"In chapter 1, Enfield describes the reactions of others to Hyde",q:"we were keeping the women off him […] they were as wild as harpies",a:"Everyone who meets Hyde wants to hurt him because they are looking at someone who is not fully human, made up only of Jekyll's inner desires. Comparing the women (expected to be gentle and kind) to harpies, mythological creatures, half woman and half bird, sent to deliver punishment from the gods, suggests that Hyde's evil makes people act out of character towards him; they sense he is unnatural.",th:["Violence","Duality"]},
+{t:"JH",n:6,w:"Ch 2",who:"Lanyon",c:"In chapter 2, we learn that Lanyon and Jekyll fell out over ten years ago because Lanyon believed that Jekyll",q:"began to go wrong, wrong in mind […] such unscientific balderdash",a:"They fell out over medical matters. The repetition of 'wrong' emphasises how troubled Lanyon was by the direction Jekyll was heading. Calling his work 'unscientific' is a real insult to a fellow scientist, and dismissing it as 'balderdash' (nonsense) adds to the force of the disagreement. It has lasted ten years, so we are meant to think it is significant. Lanyon does not approve of Jekyll's unnatural pursuits.",th:["Science"]},
+{t:"JH",n:7,w:"Ch 2",who:"Utterson",c:"In chapter 2, when Utterson finally sees Hyde, he remarks afterwards",q:"God bless me, the man seems hardly human! Something troglodytic, shall we say?",a:"Characters often invoke God when they meet or deal with Hyde, implying they need protection from whatever devil he is. Utterson, like Enfield, suggests Hyde is not fully human (and he isn't: he is made up of Jekyll's lower desires). The metaphor 'troglodytic' (a cave dweller) implies Hyde is undeveloped, primitive and feral. Utterson seems desperate for a comparison because he has never experienced anything like Hyde; he is unnatural.",th:["Duality","Religion","Science"]},
+{t:"JH",n:8,w:"Ch 1–2",who:"Narrator",c:"In chapter 2, we are introduced to Jekyll's house, whereas in chapter 1 the back door to the laboratory is described as 'blistered and distained'. The front",q:"wore a great air of wealth and comfort",a:"Jekyll's house symbolises his character. Jekyll is acceptable and welcomed in Victorian society. The metaphor 'wore' suggests that, like his house, Jekyll has a façade of respectability that isn't real. The door represents Hyde, his inner desires: both are ugly, repulsive and hidden, and most of society doesn't realise both belong to Jekyll – the acceptable façade and the distained character behind it.",th:["Duality","Reputation","Setting"]},
+{t:"JH",n:9,w:"Ch 3",who:"Narrator",c:"In chapter 3, Jekyll is described after hosting a party as 'a large, well-made man of fifty, with something of a slyish cast perhaps', and when Utterson mentions Hyde, Jekyll",q:"grew pale to the very lips, and there came a blackness about his eyes",a:"Again we see duality: the façade of the respectable Jekyll, yet when Hyde is mentioned Jekyll has a physical reaction. The paleness and blackness show the unnaturalness of separating the evil from the good side of himself. This makes the reader suspicious: what hold does Hyde have over the respectable doctor that he won't reveal?",th:["Duality","Reputation"]},
+{t:"JH",n:10,w:"Ch 3",who:"Jekyll",c:"In chapter 3, Jekyll dismisses Lanyon as a 'hide-bound pedant' who was angry",q:"at what he called my scientific heresies",a:"We learn more about the disagreement ten years ago. Lanyon called Jekyll's work 'unscientific balderdash' to Utterson and condemned his experiments as 'scientific heresies' to Jekyll himself. Stevenson uses Lanyon's words to show the dangers of unchecked scientific ambition that attempts to play God. Jekyll criticises his old friend as old-fashioned and narrow-minded: 'hide-bound'.",th:["Science","Religion"]},
+{t:"JH",n:11,w:"Ch 4",who:"Narrator",c:"In chapter 4, during the murder of Carew, Hyde is described as having 'broke out of all bounds' and",q:"with ape-like fury […] trampl[ed] his victim under foot",a:"The metaphor 'broke out of all bounds' refers to the bounds of morality and respectability: Hyde, being just the evil side of Jekyll, is not constrained by any morals. The simile 'ape-like' again makes Hyde seem less than human, not morally developed. Again he tramples his victim (like the girl in chapter 1), showing his lack of compassion and humanity. This is the danger of separating evil from good: it is uncontrolled and dangerous to others.",th:["Violence","Duality","Science"]},
+{t:"JH",n:12,w:"Ch 4",who:"Narrator",c:"In chapter 4, the brutality of the murder is emphasised with",q:"hailing down a storm of blows under which the bones were audibly shattered",a:"The metaphors 'hailing' and 'storm' emphasise the force and number of the blows. The bones are heard not just to break but to 'shatter', reinforcing the unnecessary force with which Hyde kills the elderly Carew. He is not just killing him but mangling the body afterwards.",th:["Violence"]},
+{t:"JH",n:13,w:"Ch 4",who:"Narrator",c:"In chapter 4, Hyde's house is 'in a dingy street' in 'blackguardly surroundings'. Pathetic fallacy is used with the fog cutting off the view",q:"as brown as umber",a:"This home directly contrasts with Jekyll's home in chapter 2; its surroundings, and the weather as Utterson travels there with the police, are frightening and ominous. Hyde's home is in a crime-infested area of Soho, yet inside there is expensive wine, paintings and silver plate: there is always a sense of duality in Stevenson's places. The fog stops the characters from seeing who Hyde really is.",th:["Setting","Duality","Gothic"]},
+{t:"JH",n:14,w:"Ch 6",who:"Lanyon",c:"In chapter 6, when Utterson visits a sick Lanyon, Lanyon looks as if he has a",q:"deep-seated terror of the mind",a:"The adjective 'deep-seated' implies the terror is great and has reached the very heart of Lanyon, causing great suffering. 'Terror of the mind' suggests psychological suffering, and the noun 'terror' emphasises its horror. Whatever happened (Lanyon knows the truth about Jekyll splitting himself) is killing him with the shock, reinforcing that splitting the self is dangerous and brings dire consequences for those around Jekyll as well as himself.",th:["Science","Repression"]},
+{t:"JH",n:15,w:"Ch 6",who:"Jekyll",c:"In chapter 6, Utterson receives a letter from Jekyll saying he will now lead a life of seclusion, where Jekyll states",q:"If I am the chief of sinners, I am the chief of sufferers also",a:"The repetition and hyperbole highlight Jekyll's self-pity. 'Chief' shows the magnitude of what he has done (creating Hyde and the violence that follows), but the nouns 'sinners' and 'sufferers' show Jekyll believes he suffers most from his sins. He wants Utterson's pity but doesn't say what he has done.",th:["Religion","Repression","Duality"]},
+{t:"JH",n:16,w:"Ch 8",who:"Poole",c:"In chapter 8, Poole describes to Utterson",q:"when that masked thing like a monkey […] whipped into the cabinet, it went down my spine like ice",a:"Because Hyde is unnatural and shouldn't exist, everyone has an extreme reaction to him. The simile reminds the reader of other comparisons of Hyde to less evolved creatures ('ape-like fury', 'troglodytic'). Poole compares his feeling to ice down his spine: shocking and painful.",th:["Duality","Science","Gothic"]},
+{t:"JH",n:17,w:"Ch 9",who:"Hyde",c:"In chapter 9, Lanyon's letter reveals that, before Lanyon watched Hyde transform back into Jekyll, Hyde boasted",q:"you who have denied the virtues of transcendental medicine, you who have derided your superiors – behold!",a:"There is arrogance in Hyde's (and so Jekyll's) words. Hyde wants to prove Lanyon wrong and feels superior to him as a scientist: he has gone further. 'Behold!' is a command to watch the transformation, a told-you-so moment. Hyde boasts of the 'virtues' of the splitting, but there are none: Stevenson shows the arrogance and danger of unchecked ambition.",th:["Science","Religion"]},
+{t:"JH",n:18,w:"Ch 9",who:"Lanyon",c:"In chapter 9, Lanyon describes the effect that seeing the unnatural transformation of Hyde into Jekyll had on him",q:"my soul sickened at it",a:"The word 'soul' makes this a spiritual reaction: the transformation is so morally wrong that Lanyon is spiritually broken. This emphasises the danger of unchecked ambition, of playing God: it ruins people's lives and minds. The sibilance reinforces the unnatural sight Lanyon saw.",th:["Science","Religion"]},
+{t:"JH",n:19,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll explains that his discovery had 'doomed [himself] to such a dreadful shipwreck':",q:"that man is not truly one, but truly two",a:"The metaphor of a shipwreck implies Jekyll becomes stuck and stranded on this idea; he cannot sail past it and continue his life's journey. The idea of man as two distinct parts is unnatural, and 'dreadful' emphasises this: because of his discovery, he is doomed. Life changes and cannot return to what it was after the unnatural discovery.",th:["Duality","Science"]},
+{t:"JH",n:20,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll describes being Hyde as a 'solution of the bonds of obligation, an unknown but not an innocent freedom of the soul', and when he first saw Hyde in the mirror he felt",q:"a leap of welcome",a:"The metaphor of 'bonds' reminds us of chapter 4, when Hyde 'broke out of all bounds': Jekyll relishes not having to be respectable in Victorian society. But the freedom is 'not an innocent' one, because he is unleashing his dark side to do things Jekyll normally wouldn't. 'A leap of welcome' shows Jekyll embraces Hyde, unlike everyone else who meets him, because he knows Hyde has always been part of him – he recognises himself.",th:["Duality","Repression"]},
+{t:"JH",n:21,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll describes turning into Hyde to fulfil his inner desires; he felt as if he could",q:"spring headlong into the sea of liberty",a:"The verb 'spring' and the adverb 'headlong' suggest the joy and freedom of letting go of everything Jekyll had to repress. The metaphor 'sea of liberty' shows all the actions now open to him as Hyde: an abundance of opportunity, like the open sea. 'Liberty' implies he felt free and unbound. This shows the danger of repression: repressed desires build an energy that can be dangerous, as Hyde shows in chapter 4.",th:["Repression","Duality"]},
+{t:"JH",n:22,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll realises he has little control over Hyde, who grows more powerful the more Jekyll becomes him. Carew was murdered because Jekyll's 'devil had been long caged, he came out roaring', and enjoying the sun in a park he is aware of",q:"the animal within me licking the chops of memory",a:"Jekyll joins in the negative descriptions of Hyde, comparing him to an animal (like 'ape-like fury' and 'troglodytic'), implying Hyde's actions are bestial, not human. Hyde is like an animal inside Jekyll, intent on remembering when he was free. Zoomorphism is used when Hyde 'roars'. Jekyll also calls Hyde a 'devil', which reminds us of Lanyon's 'soul' that 'sickened': there is something terrifyingly evil about Hyde.",th:["Repression","Violence","Science"]},
+{t:"JH",n:23,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll explains that he now has to take the potion not to become Hyde but to",q:"wear the countenance of Jekyll",a:"Now Hyde seems to be in control and Jekyll is a façade for Hyde! Hyde is so developed (because Jekyll has given him so many experiences) that he is as strong as Jekyll and wants more. Jekyll is just a 'countenance', a mask Hyde wears when he needs to. Jekyll would 'leap [into Hyde] almost without transition': 'leap' recalls the 'leap of welcome', but now Jekyll doesn't welcome it, because he isn't in control.",th:["Duality","Reputation"]},
+{t:"JH",n:24,w:"Ch 10",who:"Jekyll",c:"In chapter 10, Jekyll hated and resented Hyde; he felt that Hyde was",q:"closer than a wife, closer than an eye; lay caged in his flesh",a:"A horrific set of images that all emphasise Jekyll cannot separate himself from Hyde: Hyde is always present, wrestling to regain control. The intimacy is disturbing: closer than a wife, closer than an eye always watching. 'Caged in his flesh' suggests Hyde wants to burst out of Jekyll's body, a painful and frightening image. Jekyll realises, too late, that he should never have split himself: instead of freeing him, it has trapped him.",th:["Duality","Repression"]}
+];
+
+/* Versatile quotes: work for almost any question. card: matching quote card number, or 0 */
+const BEST=[
+{t:"AIC",q:"We are members of one body. We are responsible for each other.",who:"Inspector, Act 3",card:33,use:["Responsibility","Socialism","Class","The Inspector","Any character's guilt"],why:"Priestley's message in one line. Works for any question about responsibility, class or what the play is 'for'.",zoom:"'one body': society as a single living thing; 'we' includes the Inspector and the audience."},
+{t:"AIC",q:"a man has to mind his own business and look after himself and his own",who:"Mr Birling, Act 1",card:17,use:["Capitalism","Responsibility","Mr Birling","Generations","Dramatic irony"],why:"The opposite of the Inspector's 'one body'. Pair them in any essay to show Priestley's argument.",zoom:"'himself and his own': self first, then family, never society. The doorbell interrupts him."},
+{t:"AIC",q:"fire and blood and anguish",who:"Inspector, Act 3",card:34,use:["Responsibility","Context: WW1 & WW2","The Inspector","Endings","Religion"],why:"Links the play to the wars the 1945 audience had just lived through. Great for AO3.",zoom:"Polysyndeton ('and… and') piles up the suffering; biblical, prophetic tone."},
+{t:"AIC",q:"But these girls aren't cheap labour – they're people",who:"Sheila, Act 1",card:24,use:["Class","Gender","Sheila","Generations","Socialism"],why:"Shows Sheila's change starting early, and the clash of capitalist and socialist views.",zoom:"Juxtaposition of 'cheap labour' (a product) with 'people' (human beings)."},
+{t:"AIC",q:"the famous younger generation who know it all",who:"Mr Birling, Act 3",card:43,use:["Generations","Mr Birling","Endings","Dramatic irony","Change"],why:"Birling mocks the young, but the audience agrees with them. Use for any question on age, change or hope.",zoom:"Sarcastic 'famous'; the irony is that the old are the ones who 'know it all'."},
+{t:"AIC",q:"There are millions and millions and millions of Eva Smiths and John Smiths still left with us",who:"Inspector, Act 3",card:0,use:["Class","Eva Smith","Responsibility","Socialism"],why:"Turns Eva into a symbol of the whole working class, so it fits questions on Eva, class or the Inspector.",zoom:"Repetition of 'millions'; 'Smith' is the most common English surname: she is everyone."},
+{t:"AIC",q:"Public men, Mr Birling, have responsibilities as well as privileges",who:"Inspector, Act 2",card:30,use:["Class","Responsibility","Mr Birling","Power"],why:"Works for any question about power, status or the rich.",zoom:"Balanced antithesis: 'responsibilities' vs 'privileges'."},
+{t:"AIC",q:"Girls of that class –",who:"Mrs Birling, Act 2",card:26,use:["Class","Gender","Mrs Birling","Prejudice"],why:"Three words that sum up Mrs Birling's prejudice. Fits class, gender or older-generation questions.",zoom:"'Girls' infantilises; 'that class' others; the dash shows she won't even finish the thought."},
+{t:"AIC",q:"unsinkable, absolutely unsinkable",who:"Mr Birling, Act 1 (on the Titanic)",card:0,use:["Dramatic irony","Mr Birling","Capitalism","Context: 1912"],why:"The audience knows the Titanic sank, so Birling's judgement is destroyed in a line.",zoom:"Repetition and the adverb 'absolutely' show arrogant certainty."},
+{t:"AIC",q:"But each of you helped to kill her. Remember that. Never forget it.",who:"Inspector, Act 3",card:0,use:["Responsibility","The Inspector","Guilt","Structure"],why:"Makes the 'chain of events' personal. Short imperatives give it force.",zoom:"Imperatives 'Remember', 'Never forget'; 'each of you' leaves no one out."},
+{t:"AIC",q:"an impression of massiveness, solidity and purposefulness",who:"Stage directions, the Inspector's entrance",card:0,use:["The Inspector","Power","Form"],why:"The go-to quote for how Priestley presents the Inspector.",zoom:"Rule of three of abstract nouns: he fills the room, morally and physically."},
+{t:"AIC",q:"Well, he inspected us all right.",who:"Sheila, Act 3",card:38,use:["Sheila","Generations","Responsibility","Endings"],why:"Shows it doesn't matter who the Inspector was; the lesson is what counts.",zoom:"The verb 'inspected' and the collective 'us'."},
+{t:"JH",q:"man is not truly one, but truly two",who:"Jekyll, Ch 10",card:19,use:["Duality","Science","Jekyll","Victorian society"],why:"The novella's central idea. Fits nearly every question.",zoom:"Balanced antithesis 'one'/'two'; 'truly' repeated as if it's a scientific fact."},
+{t:"JH",q:"If ever I read Satan's signature upon a face, it is on that of your new friend",who:"Utterson, Ch 2",card:0,use:["Hyde","Evil","Religion","Appearance","Gothic"],why:"Links Hyde to the devil. Use for evil, religion, or how Hyde is presented.",zoom:"Metaphor: evil is written on Hyde like a signature. Victorians believed you could read character in a face (physiognomy)."},
+{t:"JH",q:"with ape-like fury",who:"Narrator, Ch 4",card:11,use:["Violence","Hyde","Science: Darwin","Duality"],why:"Ties Hyde to Victorian fears of degeneration after Darwin. Great for AO3.",zoom:"Simile 'ape-like': primitive, less evolved; 'fury' is uncontrolled emotion."},
+{t:"JH",q:"I was slowly losing hold of my original and better self, and becoming slowly incorporated with my second and worse",who:"Jekyll, Ch 10",card:0,use:["Duality","Jekyll","Control","Consequences","Endings"],why:"Shows the cost of Jekyll's experiment. Fits any question on Jekyll, control or punishment.",zoom:"Repetition of 'slowly'; 'incorporated' (from Latin corpus, body) means Hyde is taking over his body."},
+{t:"JH",q:"my devil had been long caged, he came out roaring",who:"Jekyll, Ch 10",card:22,use:["Repression","Violence","Victorian society","Religion"],why:"Explains why repression is dangerous. Pair with Utterson's self-control.",zoom:"Metaphor 'caged' and the animal verb 'roaring'; calling Hyde his own 'devil'."},
+{t:"JH",q:"I incline to Cain's heresy… I let my brother go to the devil in his own way",who:"Utterson, Ch 1",card:0,use:["Utterson","Reputation","Secrecy","Friendship","Religion"],why:"Shows Victorian gentlemen look away from each other's sins to protect reputations.",zoom:"Biblical allusion to Cain ('Am I my brother's keeper?'): Utterson won't judge, but won't save either."},
+{t:"JH",q:"There is something wrong with his appearance; something displeasing, something downright detestable",who:"Enfield, Ch 1",card:0,use:["Hyde","Appearance","Gothic","Mystery"],why:"No one can say exactly what's wrong with Hyde. Use for mystery, fear or Hyde.",zoom:"Tricolon of 'something': vague, because Hyde can't be described in normal terms."},
+{t:"JH",q:"the moment I choose, I can be rid of Mr Hyde",who:"Jekyll, Ch 3",card:0,use:["Jekyll","Control","Science","Dramatic irony"],why:"Jekyll's confidence becomes ironic when he loses control. Great for structure.",zoom:"Sounds like an addict's denial; 'I choose' shows false belief in control."},
+{t:"JH",q:"wore a great air of wealth and comfort",who:"Narrator, Ch 2 (Jekyll's house)",card:8,use:["Duality","Reputation","Setting","Victorian society"],why:"The house as a symbol of the double life: respectable front, 'blistered and distained' back door.",zoom:"'wore': the respectability is something put on, like clothes or a mask."},
+{t:"JH",q:"my soul sickened at it",who:"Lanyon, Ch 9",card:18,use:["Science","Religion","Lanyon","Consequences"],why:"Shows playing God has spiritual consequences. Fits science or religion questions.",zoom:"'soul': a spiritual wound, not just shock; sibilance."}
+];
+/* Short and sharp: one to four words, easy to learn, fit lots of questions */
+const SHORT=[
+{t:"JH",q:"troglodytic",who:"Utterson, Ch 2",use:["Hyde","Evil","Science","Appearance"],why:"Hyde as a primitive cave-dweller: a step backwards in evolution. Links to Darwin and fears of degeneration."},
+{t:"JH",q:"ape-like fury",who:"Narrator (the maid's account), Ch 4",use:["Hyde","Violence","Evil","Duality"],why:"Animal imagery from the Carew murder. Hyde is less than human; links to Darwin and degeneration."},
+{t:"JH",q:"like some damned Juggernaut",who:"Enfield, Ch 1",use:["Hyde","Violence","Evil"],why:"Hyde as an unstoppable, inhuman force crushing the girl. Our very first picture of him."},
+{t:"JH",q:"pale and dwarfish",who:"Narrator, Ch 2",use:["Hyde","Appearance","Duality"],why:"Hyde is smaller because Jekyll's evil side has been less used. Victorians linked looks with morals (physiognomy)."},
+{t:"JH",q:"Satan's signature",who:"Utterson, Ch 2",use:["Hyde","Evil","Religion","Appearance"],why:"Evil is written on Hyde's face. Religious language a Victorian reader would recognise at once."},
+{t:"JH",q:"hissing intake of the breath",who:"Narrator, Ch 2",use:["Hyde","Evil","Religion"],why:"Snake-like sound: links Hyde to the serpent in Eden and to temptation."},
+{t:"JH",q:"the very pink of the proprieties",who:"Enfield, Ch 1",use:["Reputation","Respectability","Duality","Secrecy"],why:"Mocks the perfect gentleman who is secretly linked to Hyde. Respectability as a mask."},
+{t:"JH",q:"Black Mail House",who:"Enfield, Ch 1",use:["Secrecy","Reputation","Setting"],why:"Enfield assumes the respectable man is being blackmailed: in this society, everyone hides something."},
+{t:"JH",q:"the style of the day of judgment",who:"Enfield, Ch 1",use:["Secrecy","Reputation","Religion"],why:"Asking questions feels like judging someone, so gentlemen stay silent. Shows repression."},
+{t:"JH",q:"unscientific balderdash",who:"Lanyon, Ch 2",use:["Science","Lanyon","Jekyll"],why:"Lanyon rejects Jekyll's experiments: traditional science against dangerous ambition."},
+{t:"JH",q:"I shall never recover",who:"Lanyon, Ch 6",use:["Science","Lanyon","Supernatural","Death"],why:"Seeing the transformation destroys him. Some knowledge is too dangerous to know."},
+{t:"JH",q:"not truly one, but truly two",who:"Jekyll, Ch 10",use:["Duality","Jekyll","Science","Big idea"],why:"The novella's central idea in one line: every person has a good and an evil side."},
+{t:"JH",q:"my original and better self",who:"Jekyll, Ch 10",use:["Duality","Jekyll","Endings","Addiction"],why:"Jekyll admits he is losing control: the evil side is taking over for good."},
+{t:"AIC",q:"heavily-built, rather portentous",who:"Stage directions, Act 1",use:["Mr Birling","Capitalism","Class"],why:"Birling is physically and verbally pompous: he takes himself too seriously."},
+{t:"AIC",q:"pink and intimate",who:"Stage directions, Act 1",use:["Setting","The Inspector","Birling family"],why:"The cosy, rose-tinted lighting changes to brighter and harder when the Inspector arrives: their comfort is exposed."},
+{t:"AIC",q:"unsinkable, absolutely unsinkable",who:"Mr Birling, Act 1",use:["Mr Birling","Dramatic irony","Capitalism"],why:"The Titanic sank days later. The audience laughs at him, so they distrust everything he says."},
+{t:"AIC",q:"lower costs and higher prices",who:"Mr Birling, Act 1",use:["Mr Birling","Capitalism","Class"],why:"Profit is all he cares about. Priestley shows capitalism exploits workers like Eva."},
+{t:"AIC",q:"like bees in a hive",who:"Mr Birling, Act 1",use:["Mr Birling","Socialism","Responsibility"],why:"Birling mocks community, but bees working together is exactly Priestley's message."},
+{t:"AIC",q:"massiveness, solidity and purposefulness",who:"Stage directions, Act 1",use:["The Inspector","Responsibility","Power"],why:"The Inspector's presence alone is powerful: he is solid and certain, unlike the family."},
+{t:"AIC",q:"You're squiffy",who:"Sheila, Act 1",use:["Eric","Gender","Generations","Secrecy"],why:"Early hint that Eric drinks too much, which the family ignores. Also shows Sheila's playful, informal side."},
+{t:"AIC",q:"half shy, half assertive",who:"Stage directions, Act 1",use:["Eric","Generations"],why:"Eric is uneasy and divided from the start: a sign he has something to hide."},
+{t:"AIC",q:"girls of that class",who:"Mrs Birling, Act 2",use:["Mrs Birling","Class","Gender","Prejudice"],why:"She sees working class women as a different, lower kind of person. Pure class prejudice."},
+{t:"AIC",q:"responsibilities as well as privileges",who:"Inspector, Act 2",use:["The Inspector","Responsibility","Class","Socialism"],why:"The rich owe something to society. A short version of Priestley's whole message."},
+{t:"AIC",q:"more impressionable",who:"Inspector, Act 2",use:["Generations","Sheila","Eric","Change"],why:"The young can change; Priestley's hope for the future lies with them."},
+{t:"AIC",q:"It frightens me the way you talk",who:"Sheila, Act 3",use:["Sheila","Generations","Change","Responsibility"],why:"Sheila has changed and her parents haven't. The generation gap at its sharpest."},
+{t:"AIC",q:"fire and blood and anguish",who:"Inspector, Act 3",use:["The Inspector","Context: WW1 & WW2","Responsibility"],why:"A warning of the wars to come. The 1945 audience had lived through both."}
+];
+
+/* Extra flashcards for context and key terms */
+const EXTRA_CARDS=[
+["AIC","When is An Inspector Calls set?","Spring 1912, in Brumley, an industrial city in the North Midlands"],
+["AIC","When was it written and first performed?","Written 1945; first performed 1945 (in Moscow), 1946 in London"],
+["AIC","What happened in the 1945 general election?","Labour won a landslide, leading to the welfare state and the NHS (1948)"],
+["AIC","What is a 'well-made play'?","A tightly structured play with a secret revealed step by step, building to a climax"],
+["AIC","Name the Inspector's name and what it suggests","Goole – sounds like 'ghoul', a ghost or spirit"],
+["AIC","What job does Mr Birling hope to get?","A knighthood (he's been Lord Mayor and is a magistrate)"],
+["AIC","Who are Eva Smith's 'chain' of employers and contacts, in order?","Mr Birling (sacks her) → Sheila (has her fired from Milwards) → Gerald (affair) → Mrs Birling (refuses charity) → Eric (gets her pregnant)"],
+["AIC","Which character is Priestley's mouthpiece?","The Inspector"],
+["AIC","Dramatic irony example in Act 1","Birling says the Titanic is 'unsinkable' and that there will be no war"],
+["JH","When was Jekyll and Hyde published?","1886"],
+["JH","Who wrote On the Origin of Species, and when?","Charles Darwin, 1859"],
+["JH","What is the Gothic genre?","Fiction of horror, mystery and the supernatural: dark settings, doubles, secrets"],
+["JH","What is a doppelgänger?","A double of a person, often an evil twin"],
+["JH","Who narrates most of the novella?","A third-person narrator following Utterson; the last two chapters are letters from Lanyon and Jekyll"],
+["JH","Who does Hyde murder?","Sir Danvers Carew, an MP"],
+["JH","What does Lanyon see in chapter 9?","Hyde drinking the potion and turning into Jekyll"],
+["JH","Real-life inspiration for the double life","Deacon William Brodie of Edinburgh: respectable cabinet-maker by day, burglar by night"],
+["JH","Where does Hyde live?","Soho, a poor and crime-ridden area of London"]
+];
+
+const LV20=["Level 6 (18–20): sustained critical response; precise, well-chosen quotes; sophisticated analysis of language, form and structure; context woven in","Level 5 (15–17): thoughtful, developed response; good quotes; clear analysis of methods","Level 4 (12–14): clear, relevant response; some analysis of methods","Level 3 (9–11): some relevant points; some quotes; some comment on methods","Level 1–2 (1–8): limited points, mostly narrative"];
+const LV40=["Level 6 (31–36 + SPaG): perceptive argument across the whole novella; precise quotes analysed closely; context integrated","Level 5 (25–30): thoughtful, developed argument; well-chosen quotes; good analysis","Level 4 (19–24): clear argument; relevant quotes; some analysis","Level 3 (13–18): some relevant points and quotes; explanation more than analysis","Level 1–2 (1–12): limited, mostly retelling the story","Plus up to 4 marks for spelling, punctuation, grammar and vocabulary"];
+const UNSEEN_EXTRACT=`<div class="extract"><p class="exl">Unseen extract (written for GCSEasy practice)</p><p><b>MR HARGREAVES</b> <i>(not looking up from his papers)</i>: If the girls at the mill want more money, they can find another mill. That's how business works, Mrs Pryce.</p><p><b>MRS PRYCE</b> <i>(standing very still)</i>: Thirty of them, Mr Hargreaves. Thirty families on bread and dripping since Christmas.</p><p><b>MR HARGREAVES</b>: I didn't make the world. I just run my part of it.</p><p><b>MRS PRYCE</b>: You run it, so you're answerable for it. <i>(She places a single pay slip on his desk.)</i> That's Annie Doyle's. She's fourteen.</p><p><i>(A long pause. For the first time, HARGREAVES looks up.)</i></p></div>`;
+const AIC_QS=[
+{n:"A1",t:"AIC",title:"Section A, part (a): compare with an unseen extract",intro:UNSEEN_EXTRACT,parts:[
+ {id:"A1a",k:"L",mk:20,q:"Compare how characters challenge people in power in this extract and in the moment in Act 1 of An Inspector Calls when the Inspector questions Mr Birling about sacking Eva.",levels:LV20,ms:["Both: a powerful businessman puts profit before workers (Hargreaves 'find another mill'; Birling 'a man has to mind his own business')","Both challengers are calm and controlled (stage directions 'standing very still'; the Inspector's 'massiveness, solidity')","Both make the victim personal: Annie Doyle aged fourteen vs Eva Smith; a single pay slip vs the photograph","Language: Mrs Pryce's short, factual sentences; the Inspector's 'It's better to ask for the earth than to take it'","Stage directions show power shifting: Hargreaves finally 'looks up'; lighting becomes 'brighter and harder'","Comparative connectives throughout (similarly, whereas, in contrast)"],model:"Thesis: In both, a calm outsider forces a self-interested businessman to see his workers as people, but Priestley's Inspector goes further by making the challenge a lesson for the audience. ¶1 Both businessmen dismiss workers' needs: Hargreaves's 'find another mill' echoes Birling's 'a man has to mind his own business'; both treat workers as replaceable. ¶2 Both challengers are physically calm: Mrs Pryce is 'standing very still', whereas the Inspector has 'massiveness, solidity and purposefulness'; stillness shows moral authority. ¶3 Both make the victim real: Annie Doyle's pay slip and age (fourteen) mirror Eva's photograph and her request for a pay rise. ¶4 Difference: Mrs Pryce's challenge is personal and local, whereas the Inspector's 'ask for the earth' turns it into a socialist argument aimed at a 1945 audience.",modelTitle:"Model plan",hint:"Spend about 25 minutes. Make every paragraph compare: point about the extract + 'similarly/whereas' + point about AIC."}]},
+{n:"A2",t:"AIC",title:"Section A, part (b) practice",parts:[
+ {id:"A2b",k:"L",mk:20,q:"Explore another moment in An Inspector Calls where Priestley presents the conflict between the older and younger generations.",levels:LV20,ms:["Choose one clear moment, e.g. the end of Act 3 after Gerald returns","Sheila: 'he inspected us all right… Between us we drove that girl to commit suicide'","Eric: 'We did her in all right' / 'The money's not the important thing'","Birling: 'the famous younger generation who know it all' (dramatic irony)","Mrs Birling: 'Well, why shouldn't we?'","Purpose: hope lies with the young; 1945 audience must choose to change","Methods: stage directions, pronouns 'we/us', sarcasm, structure (phone call)"],model:"Thesis: At the end of Act 3, Priestley splits the family by age to show his 1945 audience that hope lies with the young. ¶1 The older generation try to escape: Birling's mocking 'the famous younger generation who know it all' is ironic, as the audience can see it is the old who think they know it all. ¶2 Sheila refuses to forget: 'he inspected us all right' uses the Inspector's collective 'us', showing she has adopted his socialist values. ¶3 Mrs Birling's 'Well, why shouldn't we?' shows she has learned nothing, so the 'telephone rings sharply' to punish them. ¶4 Context: written as Labour won in 1945, the play urges young voters to build a fairer society.",modelTitle:"Model plan",hint:"Pick ONE moment and zoom in. Use 3–4 quotes from it."}]},
+{n:"A3",t:"AIC",title:"Section A, part (b) practice",parts:[
+ {id:"A3b",k:"L",mk:20,q:"Explore another moment in the play where Priestley presents the Inspector as a powerful figure.",levels:LV20,ms:["Moment: the Inspector's final speech (Act 3) or his arrival (Act 1)","'We are members of one body. We are responsible for each other.'","'fire and blood and anguish': prophetic, links to WW1 and WW2","'Public men… have responsibilities as well as privileges'","Stage direction: 'massiveness, solidity and purposefulness'; lighting 'brighter and harder'","Name Goole/ghoul; mouthpiece for Priestley; morality play","Effect on audience and context of 1945"],model:"Thesis: In his final speech, Priestley makes the Inspector powerful not through force but through moral authority, so he speaks for Priestley to the audience. ¶1 Collective pronouns: 'We are members of one body' includes everyone; the metaphor presents society as one living thing. ¶2 Prophecy: 'fire and blood and anguish' warns of WW1 and WW2, which the 1945 audience had lived through, so his power comes from being right. ¶3 Structure: he exits immediately, leaving silence and a family split by age. ¶4 Mystery: 'Goole' sounds like 'ghoul', suggesting he is something beyond an ordinary policeman, like a morality-play messenger.",modelTitle:"Model plan",hint:"Power = how he controls the room AND the message he delivers."}]},
+{n:"A4",t:"AIC",title:"Section A, part (b) practice",parts:[
+ {id:"A4b",k:"L",mk:20,q:"Explore another moment where Priestley presents the treatment of women.",levels:LV20,ms:["Moment: Gerald's confession in Act 2, or Mrs Birling and the charity committee","Gerald: 'young and fresh and charming' vs 'hard-eyed dough-faced women': objectification","Sheila: 'You were the wonderful Fairy Prince': sarcasm, challenging him","Mrs Birling: 'Girls of that class' / 'elaborate fine feelings… absurd in a girl in her position'","Ring as symbol of ownership; 'Mummy' infantilising Sheila","Context: 1912 women had no vote, little money or power"],model:"Thesis: In Act 2, Priestley uses Gerald's confession to expose how men of power treated working class women as objects, while showing Sheila beginning to see through it. ¶1 Gerald's food imagery 'young and fresh' turns Eva into something to be consumed. ¶2 His contempt for 'hard-eyed dough-faced women' shows he values women only for their looks. ¶3 Sheila's sarcastic 'wonderful Fairy Prince' shows her new independence; later she returns the ring, rejecting his ownership. ¶4 Context: in 1912 women could not vote, and Eva had no protection, so Priestley argues for a society that protects the vulnerable.",modelTitle:"Model plan",hint:"Gender AND class work together: Eva is exploited twice."}]}
+];
+const JH_QS=[
+{n:"J1",t:"JH",title:"Section B: discursive essay",intro:"Section B is worth 40 marks, including 4 for spelling, punctuation and grammar. You choose either an extract question or an essay question like these.",parts:[
+ {id:"J1",k:"L",mk:40,q:"'Stevenson shows that repressing your desires is more dangerous than giving in to them.' How far do you agree? Explore at least two moments from the novella.",levels:LV40,ms:["Thesis that answers 'how far'","Utterson: drinks gin 'to mortify a taste for vintages'; 'almost with envy' at others' misdeeds","Jekyll: 'my devil had been long caged, he came out roaring' → Carew's murder","'spring headlong into the sea of liberty': release feels joyful but leads to violence","Counter: giving in (becoming Hyde) destroys Jekyll: 'losing hold of my original and better self'","Context: Victorian respectability and reputation; secrecy of gentlemen","Methods: metaphor, animal imagery, structure of delayed confession"],model:"Thesis: I largely agree: Stevenson shows that Victorian repression doesn't remove desire but builds it up until it explodes, yet he also shows that giving in completely is fatal. ¶1 Utterson's controlled life ('almost with envy') shows desires don't disappear when repressed. ¶2 'my devil had been long caged, he came out roaring': the metaphor of a caged animal explains the savagery of Carew's murder ('ape-like fury'). ¶3 Counter: Jekyll's 'sea of liberty' turns into 'losing hold of my original and better self', so giving in is equally destructive. ¶4 Context: Stevenson criticises a society obsessed with reputation, where gentlemen hide sins rather than face them. Conclusion: the real danger is the split itself.",modelTitle:"Model plan",hint:"Plan 5 minutes: thesis, 3–4 points across the novella, a counter-argument."}]},
+{n:"J2",t:"JH",title:"Section B: discursive essay",parts:[
+ {id:"J2",k:"L",mk:40,q:"How does Stevenson present the dangers of science in the novella?",levels:LV40,ms:["Big idea: unchecked scientific ambition that 'plays God'","Lanyon: 'unscientific balderdash'; 'scientific heresies' (religious language)","Hyde: 'you who have denied the virtues of transcendental medicine… behold!': arrogance","Lanyon: 'my soul sickened at it'; 'deep-seated terror of the mind' → death","'man is not truly one, but truly two': discovery 'doomed' Jekyll ('shipwreck')","Context: Darwin 1859, fears of degeneration; science vs religion; Hippocratic Oath","Lanyon as Jekyll's foil"],model:"Thesis: Stevenson presents science that ignores moral limits as a kind of blasphemy, destroying both the scientist and those around him. ¶1 Lanyon's 'scientific heresies' uses religious language: Jekyll's science is a sin against God. ¶2 Hyde's 'behold!' shows the arrogance of a scientist who believes he has surpassed his 'superiors'. ¶3 Consequence: Lanyon's 'soul sickened' and he dies; Jekyll is 'doomed' to a 'dreadful shipwreck'. ¶4 Context: after Darwin, Victorians feared humans could degenerate; Hyde's 'ape-like' form embodies that fear.",modelTitle:"Model plan",hint:"Use Lanyon as the 'safe' scientist to contrast with Jekyll."}]},
+{n:"J3",t:"JH",title:"Section B: discursive essay",parts:[
+ {id:"J3",k:"L",mk:40,q:"Explore how Stevenson presents Hyde as a frightening figure.",levels:LV40,ms:["Animal/primitive imagery: 'ape-like fury', 'troglodytic', 'masked thing like a monkey'","Devil/religion: 'damned Juggernaut', 'Satan's signature', 'God bless me'","Others' reactions: 'wild as harpies', 'went down my spine like ice'","Violence: 'hailing down a storm of blows… bones audibly shattered'","Indescribable: 'something displeasing, something downright detestable'","Context: Darwin, physiognomy, Victorian fear of the hidden self","Twist: Hyde is part of a respectable man, so he's frightening because he's within everyone"],model:"Thesis: Hyde is frightening because he is presented as both less than human and as evil itself, but most of all because he comes from inside a respectable gentleman. ¶1 Animal imagery ('ape-like fury', 'troglodytic') links him to Victorian fears of degeneration. ¶2 Religious language ('Satan's signature') presents him as the devil. ¶3 Everyone reacts with instinctive horror ('like ice'), yet no one can describe why. ¶4 The final chapter reveals he is Jekyll, so the real horror is that every respectable Victorian might have a Hyde.",modelTitle:"Model plan",hint:"Group your quotes: animal, devil, reactions, violence."}]},
+{n:"J4",t:"JH",title:"Section B: extract-style question",intro:"Extract question practice: use this moment from Chapter 4 and then the wider novella.",parts:[
+ {id:"J4",k:"L",mk:40,q:"Using the murder of Sir Danvers Carew in Chapter 4 as a starting point, explore how Stevenson presents violence in the novella.",levels:LV40,ms:["Start with the extract: 'with ape-like fury', 'broke out of all bounds'","'hailing down a storm of blows under which the bones were audibly shattered'","Pathetic fallacy: fog 'as brown as umber' after the murder","Link back to Ch 1: Hyde tramples the girl, 'like some damned Juggernaut'","Link forward: 'my devil had been long caged, he came out roaring' (Ch 10): violence as released repression","Contrast: Carew as an innocent, respectable old MP","Context: Victorian fear of hidden violence beneath respectable society"],model:"Thesis: Stevenson presents violence as the explosive result of repressed desires, made more shocking by being directed at the innocent. ¶1 Extract: 'broke out of all bounds' presents violence as escaping moral limits; 'ape-like fury' makes it bestial. ¶2 The weather metaphors 'hailing' and 'storm' make the attack overwhelming. ¶3 Wider text: the trampled girl (Ch 1) shows a pattern of violence against the vulnerable. ¶4 Explanation (Ch 10): the 'long caged' devil 'came out roaring', so Stevenson blames repression itself.",modelTitle:"Model plan",hint:"Extract first (about a third of your answer), then move across the novella."}]}
+];
+
+const TOPICS={AIC:"Inspector Calls",JH:"Jekyll & Hyde"};
+const CARDS=[...QUOTES.map(q=>q.q?[q.t,`${q.w} · ${q.who}: ${q.c}`,q.q]:[q.t,`${q.w}: ${q.c}`,q.a]),...EXTRA_CARDS];
+Study.init({id:"english-literature",key:"englit-v1",topics:TOPICS,cards:CARDS,figs:{},sets:[
+ {id:"aic",name:"An Inspector Calls",blurb:"Section A practice: one unseen-extract comparison (part a) and three 'another moment' questions (part b). Each is worth 20 marks.",qs:AIC_QS},
+ {id:"jh",name:"Jekyll and Hyde",blurb:"Section B practice: essay and extract-style questions worth 40 marks each. Even just writing a 5-minute plan and checking it against the model plan is great practice.",qs:JH_QS}
+]});
+/* ---- English page: quote bank, best quotes ---- */
+(function(){
+const $=id=>document.getElementById(id);
+const NAME={AIC:"An Inspector Calls",JH:"Jekyll and Hyde"};
+const KEY="eng-q-v1";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+let text=st.text||"AIC",theme="All",hide=!!st.hide,term="";
+const esc=s=>s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const STOP=new Set("a an the and but or of to in on at is it i you he she we they be as by for with that this my your his her its our their me him us them so if not no do am are was were has have had will shall all one".split(" "));
+let hm=st.hm||"off",bhm=st.bhm||"off";
+const HM=[["off","Nothing"],["key","Key words"],["all","Every word"]];
+/* Wrap the quote so each hidden word is its own tap-to-reveal blank */
+function quoteHTML(q,mode){if(mode==="off")return esc(q);
+  return q.split(/(\s+)/).map(tok=>{if(/^\s+$/.test(tok)||!tok)return tok;
+    const m=tok.match(/^([^A-Za-z0-9]*)(.*?)([^A-Za-z0-9]*)$/);const core=m[2];
+    if(!core||(mode==="key"&&(STOP.has(core.toLowerCase().replace(/[’']/g,""))||core.length<3)))return esc(tok);
+    return esc(m[1])+`<span class="nm" tabindex="0" role="button" aria-label="Hidden word: tap to reveal">${esc(core)}</span>`+esc(m[3])}).join("")}
+function wireReveal(box){box.querySelectorAll(".nm").forEach(n=>{const f=()=>n.classList.add("show");n.onclick=f;n.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();f()}}});
+  box.querySelectorAll(".rvall").forEach(b=>b.onclick=()=>{const c=b.closest("article");const ns=c.querySelectorAll(".nm");const all=[...ns].every(n=>n.classList.contains("show"));ns.forEach(n=>n.classList.toggle("show",!all));b.textContent=all?"Show all words":"Hide them again"})}
+function chip(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
+function draw(){
+  chip($("qtext"),[["AIC","An Inspector Calls"],["JH","Jekyll and Hyde"]],text,k=>{text=k;theme="All";st.text=k;save();draw()});
+  const ths=["All",...[...new Set(QUOTES.filter(q=>q.t===text).flatMap(q=>q.th))].sort()];
+  chip($("qtheme"),ths.map(x=>[x,x]),theme,k=>{theme=k;draw()});
+  chip($("qhm"),HM,hm,k=>{hm=k;st.hm=k;save();draw()});
+  const t=term.toLowerCase();
+  const list=QUOTES.filter(q=>q.t===text&&(theme==="All"||q.th.includes(theme))&&(!t||(q.q+q.c+q.a+q.who).toLowerCase().includes(t)));
+  const box=$("qlist");
+  box.innerHTML=list.length?list.map(q=>`<article class="qc">
+   <div class="qtop"><span class="qn">${q.n}</span><span class="qw">${q.w}</span><span class="qwho">${q.who}</span></div>
+   <p class="qctx">${esc(q.c)}</p>
+   ${q.q?`<blockquote>‘${quoteHTML(q.q,hm)}’</blockquote>${hm!=="off"?`<button class="rvall" type="button">Show all words</button>`:""}`:""}
+   <details${q.q?"":" open"}><summary>${q.q?"Analysis":"Notes"}</summary><p>${esc(q.a)}</p></details>
+   <div class="qth">${q.th.map(x=>`<span>${x}</span>`).join("")}</div></article>`).join(""):`<p class="noresult">No cards match.</p>`;
+  $("qcount").textContent=`${list.length} of ${QUOTES.filter(q=>q.t===text).length} cards`;
+  wireReveal(box);
+}
+$("qsearch").addEventListener("input",e=>{term=e.target.value;draw()});
+draw();
+/* best quotes */
+let btext="AIC";
+function drawBest(){chip($("btext"),[["AIC","An Inspector Calls"],["JH","Jekyll and Hyde"]],btext,k=>{btext=k;drawBest()});
+  chip($("bhm"),HM,bhm,k=>{bhm=k;st.bhm=k;save();drawBest()});
+  $("slist").innerHTML=SHORT.filter(b=>b.t===btext).map(b=>`<article class="sq"><blockquote>‘${quoteHTML(b.q,bhm)}’</blockquote>${bhm!=="off"?`<button class="rvall" type="button">Show all words</button>`:""}<p class="bwho">${b.who}</p><p class="sw">${esc(b.why)}</p><div class="qth">${b.use.map(x=>`<span>${x}</span>`).join("")}</div></article>`).join("");wireReveal($("slist"));
+  $("blist").innerHTML=BEST.filter(b=>b.t===btext).map((b,i)=>`<article class="bq"><div class="brank">${i+1}</div><div class="bbody">
+   <blockquote>‘${quoteHTML(b.q,bhm)}’</blockquote>${bhm!=="off"?`<button class="rvall" type="button">Show all words</button>`:""}<p class="bwho">${b.who}</p>
+   <p class="bwhy">${esc(b.why)}</p><p class="bzoom"><b>Zoom in:</b> ${esc(b.zoom)}</p>
+   <div class="qth">${b.use.map(x=>`<span>${x}</span>`).join("")}</div></div></article>`).join("");wireReveal($("blist"))}
+drawBest();
+/* ---- quote test ---- */
+const norm=w=>w.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9]/g,"");
+const toks=s=>s.split(/[\s–—-]+/).map(w=>({d:w,n:norm(w)})).filter(w=>w.n);
+function lev(a,b){const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]}
+const close=(a,b)=>{const L=Math.max(a.length,b.length);return lev(a,b)<=(L<=4?1:L<=8?2:3)};
+/* Align typed words to the real quote: ok, spelling slip, missing, extra */
+function align(want,got){const n=want.length,m=got.length,C=[],P=[];
+  for(let i=0;i<=n;i++){C.push(new Array(m+1).fill(0));P.push(new Array(m+1).fill(""))}
+  for(let i=1;i<=n;i++){C[i][0]=i;P[i][0]="miss"}for(let j=1;j<=m;j++){C[0][j]=j;P[0][j]="x"}
+  for(let i=1;i<=n;i++)for(let j=1;j<=m;j++){const a=want[i-1].n,b=got[j-1].n;
+    const opts=[[C[i-1][j]+1,"miss"],[C[i][j-1]+1,"x"]];
+    if(a===b)opts.push([C[i-1][j-1],"ok"]);else if(close(a,b))opts.push([C[i-1][j-1]+.6,"sp"]);
+    opts.sort((p,q)=>p[0]-q[0]);C[i][j]=opts[0][0];P[i][j]=opts[0][1]}
+  const out=[];let i=n,j=m;while(i>0||j>0){const p=P[i][j];
+    if(p==="ok"||p==="sp"){out.push({k:p,w:want[i-1].d,g:got[j-1].d});i--;j--}else if(p==="miss"){out.push({k:"miss",w:want[i-1].d});i--}else{out.push({k:"x",g:got[j-1].d});j--}}
+  return out.reverse()}
+const ZK="eng-qtest-v1";let zs={};try{zs=JSON.parse(localStorage.getItem(ZK)||"{}")||{}}catch(e){zs={}}
+const zsave=()=>{try{localStorage.setItem(ZK,JSON.stringify(zs))}catch(e){}};
+let ztext=st.ztext||"AIC",zsrc=st.zsrc||"best",zcur=null,zlast=null;
+const qkey=q=>q.t+":"+q.q.slice(0,40);
+function zpool(){const tx=x=>ztext==="both"||x.t===ztext;
+  const best=BEST.filter(tx).map(b=>{const c=b.card&&QUOTES.find(q=>q.t===b.t&&q.n===b.card);return {t:b.t,q:b.q,who:b.who,c:c&&c.c?c.c:b.why}});
+  const all=QUOTES.filter(q=>q.q&&tx(q)).map(q=>({t:q.t,q:q.q,who:q.who+(q.w?" · "+q.w:""),c:q.c}));
+  const short=SHORT.filter(tx).map(b=>({t:b.t,q:b.q,who:b.who,c:b.why}));
+  if(zsrc==="short")return short;if(zsrc==="best")return best;if(zsrc==="all")return all;
+  const seen=new Set(),both=[...short,...best,...all].filter(q=>{const k=qkey(q);if(seen.has(k))return false;seen.add(k);return true});
+  return both.filter(q=>zs[qkey(q)]&&!zs[qkey(q)].last)}
+function zchips(){chip($("ztext"),[["AIC","An Inspector Calls"],["JH","Jekyll and Hyde"],["both","Both texts"]],ztext,k=>{ztext=k;st.ztext=k;save();znext()});
+  const fix=(()=>{const z=zsrc;zsrc="fix";const n=zpool().length;zsrc=z;return n})();
+  chip($("zsrc"),[["short","Short quotes"],["best","Best quotes"],["all","All quotes"],["fix",`Ones to fix (${fix})`]],zsrc,k=>{zsrc=k;st.zsrc=k;save();znext()})}
+function znext(){zchips();const p=zpool();
+  if(!p.length){$("zbox").innerHTML=`<p class="noresult">${zsrc==="fix"?"Nothing to fix. Every quote you've tried is perfect.":"No quotes here."}</p>`;return}
+  let q;do{q=p[Math.floor(Math.random()*p.length)]}while(p.length>1&&zlast&&qkey(q)===zlast);zcur=q;zlast=qkey(q);zdraw()}
+function zdraw(){const q=zcur,r=zs[qkey(q)];
+  $("zbox").innerHTML=`<article class="zcard"><div class="qtop"><span class="qwho">${q.who}</span>${ztext==="both"?`<span class="qw">${NAME[q.t]}</span>`:""}</div>
+  <p class="zprompt">${esc(q.c)}</p>
+  <p class="zhint" id="zhint" hidden></p>
+  <textarea id="zin" placeholder="Type the quote…" aria-label="Type the quote" autocomplete="off" autocapitalize="off" spellcheck="false"></textarea>
+  <div class="row" style="margin:0"><button class="btn p" id="zchk">Check</button><button class="btn" id="zh">First few words</button><button class="btn" id="zskip">Show me</button></div>
+  <p class="zstats">${r?`Tried ${r.n} time${r.n>1?"s":""} · ${r.p} perfect`:"New quote"}</p><div id="zfb"></div></article>`;
+  const hw=q.q.trim().split(/\s+/);let hn=0;
+  $("zh").onclick=()=>{hn=hn?hn+1:(hw.length<=4?1:hw.length<=8?2:3);const h=$("zhint");h.hidden=false;h.textContent="‘"+hw.slice(0,hn).join(" ")+(hn<hw.length?" …":"’");
+    if(hn>=hw.length-1)$("zh").disabled=true;else $("zh").textContent="One more word"};
+  $("zchk").onclick=()=>zcheck(false);$("zskip").onclick=()=>zcheck(true);
+  $("zin").onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();zcheck(false)}};$("zin").focus({preventScroll:true})}
+function zcheck(gaveUp){const q=zcur,want=toks(q.q),got=gaveUp?[]:toks($("zin").value);
+  if(!gaveUp&&!got.length){$("zfb").innerHTML='<div class="fb no">Type the quote first, or tap Show me.</div>';return}
+  const ops=align(want,got),c=k=>ops.filter(o=>o.k===k).length,ok=c("ok"),sp=c("sp"),miss=c("miss"),x=c("x");
+  const perfect=!gaveUp&&ok===want.length&&!x;
+  const r=zs[qkey(q)]||{n:0,p:0};r.n++;if(perfect)r.p++;r.last=perfect;zs[qkey(q)]=r;zsave();
+  const html=ops.map(o=>o.k==="ok"?`<span class="z-ok">${esc(o.w)}</span>`:o.k==="sp"?`<span class="z-sp" title="You wrote ${esc(o.g)}"><s>${esc(o.g)}</s> ${esc(o.w)}</span>`:o.k==="miss"?`<span class="z-miss" title="Missing word">${esc(o.w)}</span>`:`<span class="z-x" title="Not in the quote">${esc(o.g)}</span>`).join(" ");
+  const pct=Math.round(ok/want.length*100);
+  const res=gaveUp?"Here it is. Read it, then try it again.":perfect?"Perfect, word for word.":!miss&&!x?`Nearly: ${sp} spelling slip${sp>1?"s":""}. The words are all right.`:pct>=75?`Close: ${ok} of ${want.length} words exact.`:`${ok} of ${want.length} words exact. Keep going.`;
+  $("zfb").innerHTML=`<div class="panel ${perfect?"model":"ms"}"><p class="zres">${res}</p>${gaveUp?"":`<p class="zdiff">${html}</p><div class="zkey"><span class="z-ok">right</span><span class="z-sp">spelling</span><span class="z-miss">missing</span><span class="z-x">extra</span></div>`}<p class="zdiff" style="margin-top:8px;color:var(--muted)">‘${esc(q.q)}’</p></div>
+  <div class="row"><button class="btn p" id="znx">Next quote</button><button class="btn" id="zre">Try this one again</button></div>`;
+  $("zin").disabled=true;$("zchk").disabled=true;$("zskip").disabled=true;
+  $("znx").onclick=znext;$("zre").onclick=zdraw;zchips();$("znx").focus({preventScroll:true})}
+znext();
+})();
+
+</script>
+</body>
+</html>

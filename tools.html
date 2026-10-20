@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Free revision tools: revision tracker with daily goals, focus timer, exam countdown, revision methods and GCSE command words.">
+<link rel="canonical" href="https://gcseasy.pages.dev/tools.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free revision tools: revision tracker with daily goals, focus timer, exam countdown, revision methods and GCSE command words.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/tools.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Revision Tools and Tracker · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>
+.tools-page{display:grid;gap:40px}
+.intro h1{font-size:2rem}
+.intro p{color:var(--muted);font-size:1.05rem;max-width:56ch}
+.tool{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.tool>h2{font-size:1.3rem;margin-bottom:4px}
+.tool>p.lead{color:var(--muted);margin:0 0 16px}
+/* timer */
+.modes{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.clock{font:700 clamp(3.6rem,16vw,6rem) var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.03em;line-height:1;text-align:center;margin:8px 0 6px}
+.phase{text-align:center;font:700 .82rem var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.phase.focus{color:var(--good)} .phase.break{color:var(--warn)}
+.track{height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin:14px 0 4px}
+.track i{display:block;height:100%;width:0;background:var(--ink)}
+.done{text-align:center;color:var(--muted);font-size:.9rem;margin-top:8px}
+/* exams */
+form.add{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:8px;align-items:end;margin-bottom:14px}
+form.add label{display:grid;gap:4px;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);min-width:0}
+form.add input{font:500 1rem var(--body);padding:10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
+@media (max-width:520px){form.add{grid-template-columns:1fr 1fr}form.add .btn{grid-column:1/-1}}
+.exams{display:grid;gap:8px;list-style:none;padding:0;margin:0}
+.exams li{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.days{min-width:58px;text-align:center;font:700 1.3rem var(--display);font-variant-numeric:tabular-nums;line-height:1}
+.days small{display:block;font:500 .66rem var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.exams .nm{font-weight:700}
+.exams .dt{font:500 .8rem var(--mono);color:var(--muted)}
+.exams li.past{opacity:.6}
+.exams li.soon .days{color:var(--bad)}
+.del{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:6px 10px;font:700 .8rem var(--display);cursor:pointer}
+.del:hover{color:var(--bad);border-color:var(--bad)}
+.empty{color:var(--muted);border:1px dashed var(--line);border-radius:10px;padding:14px;text-align:center}
+/* tracker */
+.tstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,130px),1fr));gap:8px;margin-bottom:18px}
+.tstats div{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--bg)}
+.tstats b{display:block;font:700 1.5rem var(--display);font-variant-numeric:tabular-nums}
+.tstats span{font-size:.84rem;color:var(--muted)}
+.trk h3{font-size:1rem;margin:18px 0 8px}
+.week{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;align-items:end;height:130px}
+.week div{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto;min-width:0;overflow:hidden;height:100%;text-align:center;gap:4px}
+.week .bar{align-self:end;background:var(--ink);border-radius:5px 5px 2px 2px;min-height:2px}
+.week .bar.z{background:var(--line)}
+.week small{font:500 .7rem var(--mono);color:var(--muted)}
+.week em{font:700 .72rem var(--mono);font-style:normal;color:var(--muted)}
+.subs{display:grid;gap:6px}
+.subs .r{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr) auto;gap:10px;align-items:center;font-size:.92rem}
+.subs .r>span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.subs .tr{height:10px;border-radius:5px;background:var(--line);overflow:hidden}.subs .tr i{display:block;height:100%;background:var(--ink)}
+.subs .v{font:500 .82rem var(--mono);color:var(--muted)}
+.tgoalrow{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:-4px 0 14px}
+.tgoalrow>span{font:700 .76rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-right:4px}
+.tgoalrow b{margin-left:6px;font-size:.92rem}
+.sess{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.sess li{margin:0;display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--bg);font-size:.92rem}
+.sess .when{font:500 .78rem var(--mono);color:var(--muted)}
+/* methods */
+.methods{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px}
+.methods div{border:1px solid var(--line);border-radius:12px;padding:14px;background:var(--bg)}
+.methods b{display:block;font-family:var(--display);font-size:1.02rem;margin-bottom:4px}
+.methods span{color:var(--muted);font-size:.93rem}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects">Subjects</a><a href="tools.html" aria-current="page">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap" style="padding-top:28px">
+<div class="tools-page">
+<section class="intro">
+  <h1>Study tools</h1>
+  <p>Simple tools that work with any subject: a revision tracker, a focus timer, a countdown to your exams, the revision methods that actually work, and the command words every paper uses.</p>
+</section>
+
+<section class="tool trk" id="tracker">
+  <h2>Revision tracker</h2>
+  <p class="lead">Tap the <b>stopwatch</b> at the top of any page when you start revising, then <b>Stop and save</b> when you finish. You can pause for breaks. Saved only on this device.</p>
+  <div class="tgoalrow" id="tkgoal"></div>
+  <div class="tstats" id="tkstats"></div>
+  <h3>Last 7 days</h3><div class="week" id="tkweek"></div>
+  <h3>By subject</h3><div class="subs" id="tksubs"></div>
+  <h3>Recent sessions</h3><ul class="sess" id="tksess"></ul>
+  <div class="row" style="margin-top:12px"><button class="btn sm" id="tkclear" type="button">Clear all sessions</button></div>
+</section>
+
+<section class="tool" id="timer">
+  <h2>Focus timer</h2>
+  <p class="lead">Work in short, focused blocks with breaks in between. Put your phone in another room.</p>
+  <div class="modes" id="tmodes"></div>
+  <div class="phase focus" id="tphase">Focus</div>
+  <div class="clock" id="tclock" aria-live="off">25:00</div>
+  <div class="track"><i id="tbar"></i></div>
+  <div class="row"><button class="btn p" id="tstart">Start</button><button class="btn" id="treset">Reset</button><button class="btn" id="tskip">Skip</button></div>
+  <p class="done" id="tdone">0 focus blocks done today</p>
+</section>
+
+<section class="tool" id="exams">
+  <h2>My exam countdown</h2>
+  <p class="lead">Add your own exams. They're saved only in this browser, so nobody else sees them.</p>
+  <form class="add" id="addexam">
+    <label for="exname">Exam<input id="exname" placeholder="e.g. Biology Paper 1" required maxlength="60"></label>
+    <label for="exdate">Date<input id="exdate" type="date" required></label>
+    <button class="btn p" type="submit">Add exam</button>
+  </form>
+  <ul class="exams" id="exlist"></ul>
+</section>
+
+<section class="tool" id="methods">
+  <h2>Revision methods that work</h2>
+  <p class="lead">Re-reading and highlighting feel productive but don't stick. These do.</p>
+  <div class="methods">
+    <div><b>Active recall</b><span>Test yourself instead of re-reading. Flashcards and exam questions force your brain to retrieve the answer.</span></div>
+    <div><b>Spaced repetition</b><span>Come back to a topic after 1 day, 3 days, then a week. Each return makes it stick for longer.</span></div>
+    <div><b>Interleaving</b><span>Mix topics in one session instead of doing one topic for hours. It's harder, and that's why it works.</span></div>
+    <div><b>Past papers</b><span>Do them timed, mark them with the real mark scheme, then redo what you got wrong.</span></div>
+    <div><b>Blurting</b><span>Write everything you remember about a topic on blank paper, then check your notes and fill the gaps in another colour.</span></div>
+    <div><b>Sleep</b><span>Your memory sorts what you learned while you sleep. A late-night cram costs you more than it gains.</span></div>
+  </div>
+</section>
+
+<section class="tool" id="words">
+  <h2>Command words</h2>
+  <p class="lead">The first word of a question tells you what the examiner wants. These mean the same thing in almost every subject.</p>
+  <div class="tbl"><table>
+  <tr><th>Word</th><th>What to do</th></tr>
+  <tr><td><b>State / Give / Name</b></td><td>A short answer. No explanation needed.</td></tr>
+  <tr><td><b>Describe</b></td><td>Say what something is like or what happens. No "why".</td></tr>
+  <tr><td><b>Explain</b></td><td>Say why or how. Link your points with "because" and "so".</td></tr>
+  <tr><td><b>Compare</b></td><td>Similarities and differences. Use "whereas".</td></tr>
+  <tr><td><b>Suggest</b></td><td>Apply what you know to something new. Any sensible answer can score.</td></tr>
+  <tr><td><b>Evaluate / Assess</b></td><td>Arguments for and against, then a justified conclusion.</td></tr>
+  <tr><td><b>To what extent</b></td><td>Weigh up both sides and say how far you agree.</td></tr>
+  <tr><td><b>Analyse</b></td><td>Break it down and show how the parts link. In English: how language creates an effect.</td></tr>
+  <tr><td><b>Calculate</b></td><td>Work out a number. Show working and give units.</td></tr>
+  <tr><td><b>Justify</b></td><td>Back up your answer with evidence or reasons.</td></tr>
+  </table></div>
+  <p style="margin-top:10px;color:var(--muted);font-size:.92rem">Count the marks: a 3-mark question needs 3 separate points.</p>
+</section>
+</div>
+</div>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script>
+/* revision tracker */
+(function(){const G=window.GCSEasy,$=id=>document.getElementById(id);
+const day=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()};
+const hm=ms=>{const m=Math.round(ms/60000);return m<60?m+" min":Math.floor(m/60)+" h "+(m%60?m%60+" min":"")};
+let armed=false;
+function draw(){const L=G.getLog().filter(x=>x&&x.e>x.s),run=G.getRun(),now=Date.now(),today=day(now);
+  const all=run?[...L,{s:now-G.elapsed(run),e:now,subj:run.subj,live:true}]:L;
+  const sum=f=>all.filter(f).reduce((a,x)=>a+(x.e-x.s),0);
+  const wk=today-6*864e5;
+  const days=new Set(all.map(x=>day(x.s)));let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
+  const g=G.getGoal(),tm=Math.round(sum(x=>day(x.s)===today)/60000);
+  $("tkgoal").innerHTML=`<span>Daily goal</span>${[15,30,45,60,90,120,180].map(m=>`<button type="button" class="chip${m===g?" on":""}" data-g="${m}">${m<60?m+" min":m/60+" h"}</button>`).join("")}<b>${tm>=g?"Goal hit today ✓":(g-tm)+" min to go today"}</b>`;
+  $("tkgoal").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{G.setGoal(+b.dataset.g);draw()});
+  $("tkstats").innerHTML=[[hm(sum(x=>day(x.s)===today)),"today"],[hm(sum(x=>x.s>=wk)),"last 7 days"],[streak+(streak===1?" day":" days"),"streak"],[hm(sum(()=>true)),"all time · "+L.length+" session"+(L.length===1?"":"s")]].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("");
+  const per=[];for(let i=6;i>=0;i--){const d0=today-i*864e5;per.push([d0,sum(x=>day(x.s)===d0)])}const mx=Math.max(...per.map(p=>p[1]),1);
+  $("tkweek").innerHTML=per.map(([d0,v])=>`<div><em>${v?Math.round(v/60000):""}</em><span class="bar${v?"":" z"}" style="height:${Math.max(2,v/mx*100)}%"></span><small>${new Date(d0).toLocaleDateString("en-GB",{weekday:"short"})}</small></div>`).join("");
+  const by={};all.forEach(x=>{by[x.subj]=(by[x.subj]||0)+(x.e-x.s)});const bs=Object.entries(by).sort((a,b)=>b[1]-a[1]),bm=bs.length?bs[0][1]:1;
+  $("tksubs").innerHTML=bs.length?bs.map(([k,v])=>`<div class="r"><span>${G.nameOf(k)}</span><span class="tr"><i style="width:${v/bm*100}%"></i></span><span class="v">${hm(v)}</span></div>`).join(""):`<p class="empty">No sessions yet. Tap the stopwatch at the top of any page to log your first one.</p>`;
+  $("tksess").innerHTML=all.slice().sort((a,b)=>b.s-a.s).slice(0,12).map(x=>`<li><span><b>${G.nameOf(x.subj)}</b><br><span class="when">${new Date(x.s).toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short"})} · ${new Date(x.s).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}${x.live?" · running now":""}</span></span><span class="when">${hm(x.e-x.s)}</span>${x.live?"<span></span>":`<button class="del" data-s="${x.s}" aria-label="Delete this session">✕</button>`}</li>`).join("")||`<li class="empty" style="display:block">Nothing logged yet.</li>`;
+  $("tksess").querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{G.setLog(G.getLog().filter(x=>String(x.s)!==b.dataset.s));draw()});
+  $("tkclear").hidden=!L.length}
+$("tkclear").onclick=()=>{if(!armed){armed=true;$("tkclear").textContent="Tap again to delete every session";setTimeout(()=>{armed=false;$("tkclear").textContent="Clear all sessions"},4000);return}
+  G.setLog([]);armed=false;$("tkclear").textContent="Clear all sessions";draw()};
+window.addEventListener("storage",draw);document.addEventListener("gcseasy-timer",draw);
+setInterval(draw,30000);draw()})();
+/* focus timer */
+const T0=document.title;
+const MODES=[["25 / 5",25,5],["45 / 10",45,10],["15 / 3",15,3]];
+let mode=0,phase="focus",left=MODES[0][1]*60,total=left,timer=null,ac=null;
+const $=id=>document.getElementById(id);
+const DKEY="gcseasy-focus-"+new Date().toISOString().slice(0,10);
+let doneToday=0;try{doneToday=+localStorage.getItem(DKEY)||0}catch(e){}
+function draw(){const m=Math.floor(left/60),s=left%60;$("tclock").textContent=`${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
+  $("tphase").textContent=phase==="focus"?"Focus":"Break";$("tphase").className="phase "+phase;$("tbar").style.width=(100-left/total*100)+"%";
+  $("tstart").textContent=timer?"Pause":"Start";$("tdone").textContent=`${doneToday} focus block${doneToday===1?"":"s"} done today`;
+  document.title=timer?`${$("tclock").textContent} ${phase==="focus"?"Focus":"Break"} · GCSEasy`:T0}
+function beep(){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();[0,.25,.5].forEach(t=>{const o=ac.createOscillator(),g=ac.createGain();o.frequency.value=880;g.gain.setValueAtTime(.15,ac.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,ac.currentTime+t+.2);o.connect(g).connect(ac.destination);o.start(ac.currentTime+t);o.stop(ac.currentTime+t+.2)})}catch(e){}}
+function setPhase(p){phase=p;left=total=(p==="focus"?MODES[mode][1]:MODES[mode][2])*60}
+function tick(){left--;if(left<=0){beep();if(phase==="focus"){doneToday++;try{localStorage.setItem(DKEY,doneToday)}catch(e){}}setPhase(phase==="focus"?"break":"focus")}draw()}
+$("tstart").onclick=()=>{if(timer){clearInterval(timer);timer=null}else{try{ac=ac||new (window.AudioContext||window.webkitAudioContext)()}catch(e){}timer=setInterval(tick,1000)}draw()};
+$("treset").onclick=()=>{clearInterval(timer);timer=null;setPhase("focus");draw()};
+$("tskip").onclick=()=>{setPhase(phase==="focus"?"break":"focus");draw()};
+function drawModes(){const el=$("tmodes");el.innerHTML="";MODES.forEach((m,i)=>{const b=document.createElement("button");b.className="chip"+(i===mode?" on":"");b.textContent=m[0]+" min";b.onclick=()=>{mode=i;clearInterval(timer);timer=null;setPhase("focus");drawModes();draw()};el.appendChild(b)})}
+drawModes();draw();
+
+/* exam countdown */
+const EKEY="gcseasy-exams";
+let exams=[];try{exams=JSON.parse(localStorage.getItem(EKEY)||"[]")||[]}catch(e){exams=[]}
+function saveEx(){try{localStorage.setItem(EKEY,JSON.stringify(exams))}catch(e){}}
+function drawEx(){const ul=$("exlist");ul.innerHTML="";
+  if(!exams.length){ul.innerHTML='<li class="empty" style="display:block">No exams yet. Add one above to see how many days you have left.</li>';return}
+  const today=new Date();today.setHours(0,0,0,0);
+  exams.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{const d=new Date(e.date+"T00:00:00"),days=Math.round((d-today)/864e5);
+    const li=document.createElement("li");li.className=days<0?"past":days<=3?"soon":"";
+    li.innerHTML=`<div class="days">${days<0?"✓":days}<small>${days<0?"done":days===1?"day":"days"}</small></div><div><div class="nm"></div><div class="dt">${d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div></div><button class="del" type="button">Remove</button>`;
+    li.querySelector(".nm").textContent=e.name;
+    li.querySelector(".del").onclick=()=>{exams=exams.filter(x=>x!==e);saveEx();drawEx()};ul.appendChild(li)})}
+$("addexam").addEventListener("submit",ev=>{ev.preventDefault();const n=$("exname").value.trim(),d=$("exdate").value;if(!n||!d)return;exams.push({name:n,date:d});saveEx();$("exname").value="";drawEx();$("exname").focus()});
+drawEx();
+</script>
+</body>
+</html>

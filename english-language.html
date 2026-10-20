@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Free AQA GCSE English Language revision: Paper 1 and Paper 2 question-by-question guides and Question 5 writing practice with AI marking.">
+<link rel="canonical" href="https://gcseasy.pages.dev/english-language.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free AQA GCSE English Language revision: Paper 1 and Paper 2 question-by-question guides and Question 5 writing practice with AI marking.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/english-language.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>GCSE English Language Revision (AQA) · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>
+:root{--accent:#B04A2A;--accent-soft:#F8E8E2}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--accent:#F0937A;--accent-soft:#3A221B}}
+:root[data-theme="dark"]{--accent:#F0937A;--accent-soft:#3A221B}
+.lede{margin:0 0 14px}
+.wp{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;gap:12px}
+.wp .task{margin:0;font:700 1.08rem/1.45 var(--display)}
+.wp .form{font:700 .76rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.wp textarea{width:100%;min-height:300px;box-sizing:border-box;font:400 1.02rem/1.6 var(--body);padding:14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical}
+.wbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font:500 .84rem var(--mono);color:var(--muted)}
+.wbar b{color:var(--ink)} .wbar .ok{color:var(--good)} .wbar .lo{color:var(--warn)}
+.wscore{display:flex;flex-wrap:wrap;gap:10px}
+.wscore div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg);display:grid;min-width:90px}
+.wscore b{font:700 1.4rem var(--display)} .wscore span{font-size:.8rem;color:var(--muted)}
+.wfb p.h{margin:12px 0 2px;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.wfb ul{margin:0;padding-left:18px}
+.wfb details{margin-top:10px} .wfb summary{cursor:pointer;font-weight:700;color:var(--accent)}
+.wfb .note{font-size:.82rem;color:var(--muted)}
+.kit{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin-top:8px}
+.kit div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kit h3{margin:0 0 6px;font-size:1rem}
+.kit p{margin:0;font-size:.93rem;color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap">
+<p class="crumbs"><a href="index.html#subjects">Subjects</a> / English Language</p>
+<header class="top">
+  <div class="tile"><small>E</small>El</div>
+  <div><h1>English Language</h1><p class="sub">AQA · 8700 · Paper 1 and Paper 2</p></div>
+</header>
+<p class="lede">How each paper works, question by question: the marks, how long to spend, how many paragraphs, and the structure to follow. Learn these so nothing in the exam surprises you.</p>
+<div class="chips" id="pick"></div>
+<div id="guide"></div>
+
+<h2 style="margin-top:30px" id="practice">Question 5 writing practice</h2>
+<p class="lede">Get a task, write your answer here (or on paper and type it up), then mark it. Aim for 450–650 words in 45 minutes.</p>
+<div class="chips" id="wpick"></div>
+<div class="wp">
+  <div><div class="form" id="wform"></div><p class="task" id="wtask"></p></div>
+  <textarea id="wtext" placeholder="Plan for 5 minutes, then start writing…" aria-label="Your answer"></textarea>
+  <div class="wbar"><span><b id="wcount">0</b> words</span><span id="wtarget"></span><span>Time <b id="wtime">0:00</b></span></div>
+  <div class="row" style="margin:0"><button class="btn p ai" id="wai" hidden>✦ Mark with AI</button><button class="btn" id="wself">Mark it myself</button><button class="btn" id="wnew">New task</button></div>
+  <div class="wfb" id="wfb"></div>
+</div>
+
+<h2 style="margin-top:30px">Your toolkit</h2>
+<div class="kit">
+<div><h3>Language methods (P1 Q2, P2 Q3)</h3><p>Metaphor · simile · personification · verbs and adjectives · semantic field · sensory language · repetition · lists · alliteration · tone · sentence types</p></div>
+<div><h3>Structure methods (P1 Q3)</h3><p>Opening focus · shift in focus (zoom in/out) · flashback · change of setting or time · dialogue · short paragraph for effect · cyclical ending · build-up of tension · climax</p></div>
+<div><h3>Viewpoint methods (P2 Q4, Q5)</h3><p>Tone (angry, sarcastic, nostalgic) · direct address · rhetorical questions · statistics and facts · anecdotes · expert opinion · emotive language · rule of three</p></div>
+<div><h3>Phrases that score</h3><p>"The writer uses… to suggest…" · "This makes the reader feel…" · "Perhaps the writer wanted…" · "Whereas Source A…, Source B…" · "Both writers…"</p></div>
+</div>
+</div>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a></nav><p>Free GCSE revision. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script src="shared/guide.js"></script>
+<script>
+const P1={title:"Paper 1: Explorations in Creative Reading and Writing",sub:"One fiction extract (Section A), then your own creative writing (Section B). 80 marks.",total:"1 hr 45",split:[["Section A","1 hr"],["Section B","45 min"]],
+qs:[
+ {n:"Q1",type:"List four things",marks:4,time:"4–5 min",pts:["Pick four true, simple facts from the lines given. Short phrases or quotes are fine.","Stay inside the line numbers the question gives you."]},
+ {n:"Q2",type:"Language analysis",marks:8,time:"10 min",paras:"2 paragraphs",pts:["Zoom in on words and phrases from the lines given."],flow:["Method","Quote","Effect","Why the writer chose it"]},
+ {n:"Q3",type:"Structure analysis",marks:8,time:"10 min",paras:"2 paragraphs",pts:["Paragraph 1: the beginning and middle.","Paragraph 2: the middle and end.","Write about the whole extract: what the focus is on, and how and why it shifts."]},
+ {n:"Q4",type:"Evaluation",marks:20,time:"20–25 min",paras:"2 big paragraphs",pts:["Say how far you agree with the statement, then back it up.","Conclusion if you have time."],flow:["Judgement","Evidence","Language + structure","How far you agree"]},
+ {n:"Q5",type:"Creative writing",marks:40,time:"45 min",paras:"~5 paragraphs",pts:["Descriptive or narrative: you choose one task.","24 marks for content and organisation, 16 for spelling, punctuation and grammar."],flow:["Plan","Write","SPaG check"]},
+ {n:"",type:"Q5 shape",marks:40,time:"5 parts",flow:["Opening image","Development","Focus shift","Climax","Impactful end"]}
+],
+notes:["For Q2 and Q3 keep quotes short: a word or two you can zoom in on.","Q4 is the highest-skill reading question: evaluation = your opinion + the writer's methods.","For Q5 don't waffle, vary your sentence openings and have a clear focus shift.","Write a moment, not a full story.","450–600 words is ideal, about 2–3 sides of paper."]};
+P1.qs[5].marks=null;
+const P2={title:"Paper 2: Writers' Viewpoints and Perspectives",sub:"Two non-fiction sources, one modern and one older (Section A), then your own viewpoint writing (Section B). 80 marks.",total:"1 hr 45",split:[["Section A","1 hr"],["Section B","45 min"]],
+qs:[
+ {n:"Q1",type:"True statements",marks:4,time:"5 min",pts:["Shade the four true statements about Source A. Check each one against the lines given."]},
+ {n:"Q2",type:"Summary: compare and infer",marks:8,time:"10 min",paras:"1 paragraph",pts:["A summary of the differences (or similarities) between the two sources. Infer: what does each detail suggest?"],flow:["Point about A + evidence","Point about B + evidence","Clear comparison"]},
+ {n:"Q3",type:"Language analysis",marks:12,time:"12–15 min",paras:"2–3 paragraphs",pts:["One source only. Go deeper than Paper 1 Q2: link every method to the writer's viewpoint."],flow:["Method","Quote","Effect","Viewpoint"]},
+ {n:"Q4",type:"Compare perspectives",marks:16,time:"20 min",paras:"2 paragraphs",pts:["Paragraph 1: writer A, then writer B, then compare.","Paragraph 2: another idea, then compare.","Compare ideas and methods. Conclusion if you have time."],flow:["Writer A","Writer B","Compare"]},
+ {n:"Q5",type:"Viewpoint writing",marks:40,time:"45 min",paras:"5 paragraphs",pts:["Could be a leaflet, article, letter, speech or blog post.","About 5–10 min planning, 30–35 min writing, 5 min SPaG check.","24 marks for content and organisation, 16 for spelling, punctuation and grammar."],flow:["Hook","Argument 1","Argument 2","Counter-argument","Memorable ending"]}
+],
+notes:["Q2 is not language analysis: it's about what the sources say, not how.","Q3 goes deeper than Paper 1 Q2: show the writer's viewpoint.","For Q4 use comparative connectives (whereas, similarly, in contrast) and compare ideas and methods.","Q5 must sound like the form: use anecdotes, statistics and rhetorical questions to build your argument.","500–650 words."]};
+(function(){
+const box=document.getElementById("guide"),pick=document.getElementById("pick");
+let cur="both";try{cur=localStorage.getItem("englang-guide")||"both"}catch(e){}
+function draw(){pick.innerHTML="";[["both","Both papers"],["p1","Paper 1"],["p2","Paper 2"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;
+  b.onclick=()=>{cur=k;try{localStorage.setItem("englang-guide",k)}catch(e){}draw()};pick.appendChild(b)});
+  Guide.render(box,cur==="p1"?[P1]:cur==="p2"?[P2]:[P1,P2]);
+  box.querySelectorAll(".nbmeta .mk").forEach(m=>{if(m.textContent.startsWith("null"))m.remove()})}
+draw()})();
+
+/* ---- Question 5 practice ---- */
+(function(){
+const TASKS={
+ p1:[["Descriptive","Describe a busy train station late at night, as suggested by this picture: rain on the glass roof, a last train waiting, a few tired people under yellow lights."],
+  ["Narrative","Write a story that begins with a door being left open."],
+  ["Descriptive","Describe a market in the early morning as the traders set up their stalls."],
+  ["Narrative","Write the opening part of a story about a place that has been abandoned."],
+  ["Descriptive","Describe a seaside town in winter, when the tourists have gone."],
+  ["Narrative","Write a story about a time when someone had to make a difficult choice."],
+  ["Descriptive","Describe a storm arriving over a city, as suggested by this picture: dark clouds above tall buildings, people running, lights coming on in the windows."],
+  ["Narrative","Write a story with the title 'The Last Day'."],
+  ["Descriptive","Describe the moment just before an important performance or race begins."],
+  ["Narrative","Write a story set in a place where something is not quite what it seems."]],
+ p2:[["Article","'Teenagers spend too much time on their phones, and schools should ban them completely.' Write an article for a broadsheet newspaper in which you argue for or against this statement."],
+  ["Speech","'Homework does more harm than good.' Write a speech for a school debate in which you explain your point of view on this statement."],
+  ["Letter","'Zoos are cruel and should be closed.' Write a letter to your local council arguing your point of view."],
+  ["Article","'Young people today are more stressed than any generation before them.' Write an article for a magazine in which you explain your point of view."],
+  ["Blog post","'Everyone should spend a year volunteering before starting work or university.' Write a blog post arguing for or against this idea."],
+  ["Leaflet","'Fast fashion is destroying the planet.' Write the text for a leaflet aimed at teenagers, persuading them to change how they buy clothes."],
+  ["Speech","'Sport should be a much bigger part of the school day.' Write a speech to be given to parents and governors."],
+  ["Letter","'Social media influencers are bad role models for young people.' Write a letter to a newspaper editor giving your views."],
+  ["Article","'Travel is the best education.' Write an article for a travel website explaining your point of view."],
+  ["Speech","'The voting age should be lowered to 16.' Write a speech for a youth parliament arguing your point of view."]]};
+const K="englang-q5";let st={};try{st=JSON.parse(localStorage.getItem(K)||"{}")||{}}catch(e){st={}}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+st.p=st.p||"p1";if(st.i==null)st.i=0;
+let tick=null;
+function words(){return ($("wtext").value.trim().match(/\S+/g)||[]).length}
+function upd(){const n=words();$("wcount").textContent=n;const [lo,hi]=st.p==="p1"?[450,600]:[500,650];
+  $("wtarget").innerHTML=n<lo?`<span class="lo">aim for ${lo}–${hi}</span>`:n<=hi+100?`<span class="ok">good length</span>`:`<span class="lo">over ${hi}: check quality, not quantity</span>`}
+function clock(){clearInterval(tick);const t0=st.t0;const f=()=>{if(!st.t0){$("wtime").textContent="0:00";return}const s=Math.floor((Date.now()-st.t0)/1000);$("wtime").textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0")+(s>2700?" (over 45 min)":"")};f();if(t0)tick=setInterval(f,1000)}
+function draw(){const w=$("wpick");w.innerHTML="";[["p1","Paper 1: creative"],["p2","Paper 2: viewpoint"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===st.p?" on":"");b.textContent=l;b.onclick=()=>{if(k===st.p)return;st.p=k;st.i=0;st.txt="";st.t0=0;st.fb=null;save();draw()};w.appendChild(b)});
+  const t=TASKS[st.p][st.i%TASKS[st.p].length];$("wform").textContent=t[0];$("wtask").textContent=t[1];
+  $("wtext").value=st.txt||"";upd();clock();$("wfb").innerHTML="";if(st.fb)showFB(st.fb)}
+$("wtext").addEventListener("input",()=>{if(!st.t0){st.t0=Date.now();clock()}st.txt=$("wtext").value;save();upd()});
+$("wnew").onclick=()=>{if(words()>30&&!$("wnew").dataset.sure){$("wnew").dataset.sure=1;$("wnew").textContent="Tap again: this clears your answer";setTimeout(()=>{delete $("wnew").dataset.sure;$("wnew").textContent="New task"},4000);return}
+  delete $("wnew").dataset.sure;$("wnew").textContent="New task";st.i=(st.i+1+Math.floor(Math.random()*(TASKS[st.p].length-1)))%TASKS[st.p].length;st.txt="";st.t0=0;st.fb=null;save();draw()};
+const BANDS=["Level 4 (19–24 content, 13–16 accuracy): compelling and convincing; ambitious vocabulary; varied, crafted structure; virtually no errors","Level 3 (13–18 content, 9–12 accuracy): clear and consistent; vocabulary chosen for effect; paragraphs used well; mostly accurate","Level 2 (7–12 content, 5–8 accuracy): some success; some attempts at effects; some paragraphs; some errors","Level 1 (1–6 content, 1–4 accuracy): simple; limited vocabulary and control; frequent errors"];
+$("wself").onclick=()=>{$("wfb").innerHTML=`<p class="h">AQA mark bands (40 marks = 24 content and organisation + 16 technical accuracy)</p><ul>${BANDS.map(b=>`<li>${b}</li>`).join("")}</ul>
+  <p class="h">Check yourself</p><ul><li>Does it ${st.p==="p1"?"have a clear focus shift and a strong ending that links back to the opening":"sound like the form (headline, greeting, address the audience) and keep one clear viewpoint"}?</li><li>Have you varied sentence openings and lengths, including at least one very short sentence?</li><li>Have you used a range of punctuation: ; : – ? ! and speech marks if needed?</li><li>${st.p==="p1"?"Have you used the senses and at least two striking images?":"Have you used a statistic, an anecdote, a rhetorical question and a counter-argument?"}</li><li>Spend the last 5 minutes checking spelling, capitals and full stops.</li></ul>`};
+let sample=null;
+GCSEasy.aiClient().then(f=>{if(f){sample=f;$("wai").hidden=false}}).catch(()=>{});
+$("wai").onclick=async()=>{const n=words();if(n<80){$("wfb").innerHTML='<div class="fb no">Write at least 80 words first, so there is something to mark.</div>';return}
+  const t=TASKS[st.p][st.i%TASKS[st.p].length];const btn=$("wai");btn.disabled=true;btn.textContent="Marking…";
+  $("wfb").innerHTML='<div class="panel ai"><div class="t">AI examiner</div><p class="aiwait">Reading your writing… this can take up to a minute.</p></div>';
+  const prompt=`You are an experienced, fair AQA GCSE English Language examiner (8700, Paper ${st.p==="p1"?"1 Question 5, descriptive or narrative writing":"2 Question 5, writing to present a viewpoint"}). Mark the student's writing exactly as AQA would. AO5 (content and organisation) is out of 24; AO6 (technical accuracy: spelling, punctuation, grammar, sentence variety, vocabulary) is out of 16. Total 40. AQA levels: Level 4 compelling/convincing (AO5 19-24, AO6 13-16); Level 3 clear/consistent (13-18, 9-12); Level 2 some success (7-12, 5-8); Level 1 simple/limited (1-6, 1-4). ${st.p==="p2"?"Check it matches the form, audience and purpose.":"Check the response fits the task and is a crafted moment rather than a rushed plot."} The student had about 45 minutes. Be honest but encouraging; don't inflate marks.
+
+TASK (${t[0]}): ${t[1]}
+
+STUDENT WRITING (${n} words):
+"""${$("wtext").value.slice(0,15000)}"""
+
+Reply with only a JSON object:
+{"content": integer 0-24, "accuracy": integer 0-16, "level": "e.g. Level 3", "summary": "1-2 sentences to the student as 'you'", "good": ["up to 3 specific strengths, quoting their words"], "improve": ["up to 4 specific, actionable targets, most important first"], "errors": ["up to 6 actual spelling/punctuation/grammar errors from their text, each as 'wrong → right'"], "better": "rewrite ONE weak paragraph of theirs (say which) at a Level 4 standard, keeping their ideas"}`;
+  try{const r=await sample.json(prompt);
+    r.content=Math.max(0,Math.min(24,Math.round(+r.content||0)));r.accuracy=Math.max(0,Math.min(16,Math.round(+r.accuracy||0)));st.fb=r;save();showFB(r)}
+  catch(e){const code=e&&e.code;$("wfb").innerHTML=`<div class="fb no">${{daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"AI marking wasn't allowed. Use Mark it myself.",sampling_disabled:"AI marking isn't available on this account.",rate_limited:"Too many AI requests right now. Try again in a bit.",session_expired:"Sign in to Claude again to use AI marking.",invalid_json:"The AI reply came back garbled. Try again."}[code]||"AI marking failed. Try again, or use Mark it myself."}</div>`;if(code==="not_granted"||code==="sampling_disabled")btn.hidden=true}
+  finally{btn.disabled=false;btn.textContent="✦ Mark again with AI"}};
+function showFB(r){const L=a=>Array.isArray(a)&&a.length?"<ul>"+a.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>":"";
+  $("wfb").innerHTML=`<div class="panel ai"><div class="t">AI examiner${r.level?" · "+esc(r.level):""}</div>
+  <div class="wscore"><div><b>${r.content+r.accuracy} / 40</b><span>total</span></div><div><b>${r.content} / 24</b><span>content and organisation</span></div><div><b>${r.accuracy} / 16</b><span>technical accuracy</span></div></div>
+  <p class="aisum" style="margin-top:10px">${esc(r.summary)}</p>
+  ${L(r.good)?`<p class="h">What went well</p>${L(r.good)}`:""}${L(r.improve)?`<p class="h">How to improve</p>${L(r.improve)}`:""}${L(r.errors)?`<p class="h">Spelling, punctuation and grammar</p>${L(r.errors)}`:""}
+  ${r.better?`<details><summary>One paragraph, improved</summary><p>${esc(r.better).replace(/\n+/g,"</p><p>")}</p></details>`:""}
+  <p class="note">AI marking is a guide, not an official mark.</p></div>`}
+draw()})();
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+/* GCSEasy site chrome: header, footer, theme switch, subject colours.
+   Relies on the page tokens (--bg --surface --ink --muted --line). */
+:root{
+  --hl:#FFE36E; --hl-ink:#16212E;
+  --bio:#1E63C7; --chem:#1E63C7; --phys:#1E63C7; --math:#0F7A7A; --eng:#B04A2A;
+  --hum:#2F7A4E; --lang:#5146B8; --arts:#B03366; --tech:#4D5B6B;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --hl:#6E5A12; --hl-ink:#F4EFD9;
+  --bio:#6FA6F5; --chem:#6FA6F5; --phys:#6FA6F5; --math:#5CC9C9; --eng:#F0937A;
+  --hum:#6CC596; --lang:#A39CF0; --arts:#F08AB4; --tech:#A7B4C2}}
+:root[data-theme="dark"]{
+  --hl:#6E5A12; --hl-ink:#F4EFD9;
+  --bio:#6FA6F5; --chem:#6FA6F5; --phys:#6FA6F5; --math:#5CC9C9; --eng:#F0937A;
+  --hum:#6CC596; --lang:#A39CF0; --arts:#F08AB4; --tech:#A7B4C2}
+.sitebar{border-bottom:1px solid var(--line);background:var(--surface)}
+.sitebar .in{max-width:var(--site-w,720px);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font:700 1.3rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
+.brand mark,.hl{background:linear-gradient(transparent 40%,var(--hl) 40%,var(--hl) 90%,transparent 90%);color:inherit;padding:0 1px}
+.sitenav{display:flex;align-items:center;gap:14px}
+.sitenav a{font:700 .9rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;color:var(--muted);text-decoration:none;white-space:nowrap}
+.sitenav a:hover,.sitenav a[aria-current="page"]{color:var(--ink)}
+.themebtn{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;padding:0}
+.themebtn i{display:block;width:15px;height:15px;border-radius:50%;border:2px solid currentColor;background:linear-gradient(90deg,currentColor 50%,transparent 50%)}
+.themebtn:focus-visible,.sitenav a:focus-visible,.brand:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+@media (max-width:400px){.sitenav{gap:10px}.sitenav a{font-size:.84rem}}
+.crumbs{font:500 .8rem "JetBrains Mono",ui-monospace,monospace;color:var(--muted);margin:0 0 10px}
+.crumbs a{color:var(--muted);text-decoration:none}
+.crumbs a:hover{color:var(--ink)}
+.sitefoot{border-top:1px solid var(--line);margin-top:40px}
+.sitefoot .in{max-width:var(--site-w,720px);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 34px;display:flex;flex-wrap:wrap;gap:10px 24px;justify-content:space-between;color:var(--muted);font-size:.86rem}
+.sitefoot .brand{font-size:1.05rem}
+.sitefoot nav{display:flex;gap:16px;flex-wrap:wrap}
+.sitefoot nav a{color:var(--muted);text-decoration:none;font-weight:700}
+.sitefoot nav a:hover{color:var(--ink)}
+.sitefoot p{margin:0;flex-basis:100%}
+
+/* nav: short labels on small phones */
+.sitenav .ns{display:none}
+@media (max-width:440px){.sitenav{gap:10px}.sitenav .nl{display:none}.sitenav .ns{display:inline}}
+/* past papers section */
+.ppsec{border-top:1px solid var(--line);margin-top:40px}
+.ppsec .in{max-width:var(--site-w,720px);margin:0 auto;padding:24px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
+.ppsec h2{margin:0 0 6px;font:700 1.35rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;color:var(--ink)}
+.ppsec p{margin:0 0 14px;color:var(--muted)}
+.pplinks{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:10px}
+.pplinks a{display:grid;gap:3px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink);text-decoration:none}
+.pplinks a:hover{border-color:var(--ink)}
+.pplinks span{font-size:.86rem;color:var(--muted)}
+.ppsec+.sitefoot{margin-top:24px}
+/* header revision timer */
+.tbtn{display:flex;align-items:center;gap:6px;height:34px;min-width:34px;justify-content:center;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer;padding:0 8px;font:700 .84rem "JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.tbtn.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tdot{width:8px;height:8px;border-radius:50%;background:#E5484D;animation:spulse 1.4s infinite;flex:none}
+.tbtn.paused .tdot{animation:none;background:#F5A524}
+@keyframes spulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.tdot{animation:none}}
+.tbtn:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.tpop{position:fixed;top:62px;right:max(16px,env(safe-area-inset-right,0px));z-index:70;width:min(300px,calc(100vw - 32px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:0 10px 30px rgba(0,0,0,.18);display:grid;gap:10px}
+.tpop[hidden]{display:none}
+.tpop .th{margin:0;font:700 1rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif}
+.tpop .tbig{margin:0;font:700 2.4rem "JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;line-height:1}
+.tpop .tsub{margin:-4px 0 0;color:#B26B00;font-weight:700;font-size:.86rem}
+.tpop .tl{font:700 .74rem "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.tpop select{font:500 1rem system-ui,sans-serif;padding:9px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.tbtns{display:flex;gap:8px}
+.tb1,.tb2{flex:1;border-radius:10px;padding:11px 12px;font:700 .95rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;cursor:pointer}
+.tb1{background:var(--ink);color:var(--bg);border:1px solid var(--ink)}
+.tb2{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.tlink{background:none;border:0;padding:0;color:var(--muted);font:inherit;font-size:.86rem;text-decoration:underline;cursor:pointer;justify-self:start}
+.tgoal{display:flex;gap:12px;align-items:center;border-top:1px solid var(--line);padding-top:10px}
+.tgoal div:last-child{display:grid;font-size:.9rem}.tgoal span{color:var(--muted);font-size:.82rem}
+.tring{--p:0;width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;background:conic-gradient(var(--good,#1A7F4B) calc(var(--p)*1%),var(--line) 0)}
+.tring span{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--surface);font:700 .7rem "JetBrains Mono",monospace;color:var(--ink)}
+.stoast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:71;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.92rem;width:max-content;max-width:calc(100vw - 32px);box-shadow:0 4px 18px rgba(0,0,0,.25)}
+.stoast a{color:inherit}
+.tb1:focus-visible,.tb2:focus-visible,.tlink:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+@media (max-width:440px){.sitenav{gap:8px}.brand{font-size:1.05rem}}
+@media (max-width:380px){.tbtn.on .tt{display:none}}
+
+/* ---- v2 chrome: light header; on phones the main links live in a bottom bar ---- */
+.sitebar{background:var(--bg);border-bottom:0}
+.sitebar .in{padding-block:10px}
+.botnav{display:none}
+@media (max-width:640px){
+  .sitenav>a{display:none}
+  .brand{font-size:1.25rem}
+  body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+  .botnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:65;background:color-mix(in srgb,var(--surface) 94%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .botnav a{display:grid;justify-items:center;gap:2px;padding:6px 0;border-radius:12px;color:var(--muted);text-decoration:none;font:700 .72rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif}
+  .botnav a svg{width:22px;height:22px}
+  .botnav a[aria-current="page"]{color:var(--ink)}
+  .botnav a[aria-current="page"] svg{color:var(--accent,var(--ink))}
+  .stoast{bottom:calc(80px + env(safe-area-inset-bottom,0px))}
+  .tpop{top:56px}
+  .sitefoot nav{display:none}
+}
+.sitefoot{border-top:0}
+.sitefoot .in{padding-block:18px 28px}

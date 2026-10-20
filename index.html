@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Free GCSE revision: notes, flashcards, exam-style questions with mark schemes and AI marking, a daily challenge and class leaderboards. AQA, OCR and Edexcel.">
+<link rel="canonical" href="https://gcseasy.pages.dev/">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="Free GCSE revision: notes, flashcards, exam-style questions with mark schemes and AI marking, a daily challenge and class leaderboards. AQA, OCR and Edexcel.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>GCSEasy: Free GCSE Revision, Flashcards and Exam Questions</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js" charset="utf-8"></script>
+<style>
+/* Home v2. Layout: compact promise → your progress → subject tiles → how/tools/papers; phone-first single column, two columns from 820px. */
+:root{--site-w:1040px}
+body{font-size:16.5px}
+.home{max-width:var(--site-w);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:18px 24px;display:grid;gap:44px}
+.home>*{min-width:0}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:40px;align-items:center}
+@media (max-width:820px){.hero{grid-template-columns:minmax(0,1fr);gap:22px}}
+.eyebrow{display:inline-block;font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--hl-ink);background:var(--hl);padding:4px 10px;border-radius:999px;margin-bottom:14px}
+.hero h1{font-size:clamp(2.15rem,7.6vw,3.6rem);line-height:1.02;letter-spacing:-.03em;text-wrap:balance}
+.hero h1 mark{background:linear-gradient(transparent 50%,var(--hl) 50%,var(--hl) 92%,transparent 92%);color:inherit;padding:0 3px}
+.hero .lede{font-size:1.08rem;color:var(--muted);max-width:44ch;margin-top:14px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.cta{display:inline-flex;align-items:center;justify-content:center;min-height:50px;font:700 1rem var(--display);padding:0 22px;border-radius:14px;text-decoration:none;flex:1 1 auto}
+@media (min-width:821px){.cta{flex:none}}
+.cta.main{background:var(--ink);color:var(--bg)}
+.cta.alt{color:var(--ink);background:var(--surface);box-shadow:var(--shadow)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:22px;max-width:440px}
+.stats div{display:grid;background:var(--surface);border-radius:14px;padding:10px 12px;box-shadow:var(--shadow)}
+.stats div:nth-child(4){display:none}
+.stats b{font:700 1.45rem var(--display);font-variant-numeric:tabular-nums;line-height:1.1}
+.stats span{font-size:.78rem;color:var(--muted);line-height:1.3}
+/* try a question */
+.tryq{background:var(--surface);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
+.tryq .top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;background:none;padding:0;border-radius:0}
+.tryq .lab{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.tryq .sub{font:700 .74rem var(--display);padding:4px 10px;border-radius:999px;background:var(--bg);color:var(--c)}
+.tryq .q{font:700 1.18rem/1.3 var(--display);margin:0 0 14px;text-wrap:balance}
+.tryq .fb{font-weight:700;margin-top:12px}
+.tryq .why{margin-top:6px;font-size:.94rem;color:var(--muted)}
+.tryq .next{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.tryq .next a{font:700 .9rem var(--display);color:var(--c)}
+.tryq .tally{margin-left:auto;font:500 .8rem var(--mono);color:var(--muted);font-variant-numeric:tabular-nums}
+.tryq .opts{display:grid;gap:8px}
+.tryq .opt{min-height:50px;text-align:left;font:inherit;padding:11px 14px;border-radius:14px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;display:flex;gap:10px;align-items:center}
+.tryq .opt::before{content:"";flex:none;width:18px;height:18px;border:1.5px solid var(--muted);border-radius:50%}
+.tryq .opt.right{background:var(--good-soft);border-color:var(--good)}.tryq .opt.right::before{background:var(--good);border-color:var(--good)}
+.tryq .opt.wrong{background:var(--bad-soft);border-color:var(--bad)}.tryq .opt.wrong::before{background:var(--bad);border-color:var(--bad)}
+.tryq .sub{display:inline-block;margin-bottom:8px}
+.ddots{display:flex;gap:6px;margin:2px 0 14px}.ddots i{flex:1;height:6px;border-radius:3px;background:var(--line)}.ddots i.now{background:var(--ink)}.ddots i.ok{background:var(--good)}.ddots i.no{background:var(--bad)}
+.dstreak{white-space:nowrap;font:700 .78rem var(--display);background:var(--hl);color:var(--hl-ink);padding:4px 10px;border-radius:999px}
+.dbtn{min-height:44px;padding:0 18px;border-radius:12px;border:0;background:var(--ink);color:var(--bg);font:700 .95rem var(--display);cursor:pointer}
+.dbtn.alt{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.gform{display:grid;gap:12px;background:var(--surface);border-radius:22px;padding:18px;box-shadow:var(--shadow)}
+.gform label{font:700 .9rem var(--display);display:block;margin-bottom:6px}.gform label span{font:400 .8rem var(--body);color:var(--muted)}
+.gform input{width:100%;min-height:48px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--body);padding:0 14px;margin-bottom:8px}
+.gtwo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+.gmsg{margin:0;color:var(--muted);font-size:.9rem;min-height:1.2em}
+.gcard{background:var(--surface);border-radius:22px;padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.ghead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.ghead b{display:block;font:700 1.1rem var(--display)}.ghead span{font-size:.82rem;color:var(--muted)}
+.gcode{border:0;background:var(--hl);color:var(--hl-ink);font:700 .85rem var(--mono);padding:8px 12px;border-radius:10px;cursor:pointer;white-space:nowrap}
+.gtbl{overflow-x:auto}.gtbl table{width:100%;border-collapse:collapse;font-size:.92rem;background:transparent}.gtbl th,.gtbl td{padding:8px 6px;border:0;border-bottom:1px solid var(--line);text-align:left}.gtbl th{background:transparent;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.gtbl .rn{text-align:right;font-variant-numeric:tabular-nums}.gtbl tr.you td{font-weight:700}.gtbl tr:last-child td{border-bottom:0}
+.gfoot{display:flex;justify-content:flex-end;margin-top:8px}
+.today h2{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px}
+.trows2{display:grid;gap:8px}
+.trow{display:flex;gap:12px;align-items:center;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink)}
+.trow i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--accent)}
+.trow.done i{background:var(--good)} .trow.info i{background:var(--hl)}
+.trow span{display:grid;min-width:0}.trow b{font:700 1rem var(--display)}.trow small{color:var(--muted);font-size:.84rem}
+.trow::after{content:"→";margin-left:auto;font:700 1.1rem var(--display);color:var(--muted)}
+.facts{display:grid;gap:8px}
+.fact{display:grid;gap:3px;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink);border-left:4px solid var(--c)}
+.fact .fs{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.fact b{font-family:var(--display)}.fact span:last-child{color:var(--muted);font-size:.94rem}
+/* sections */
+.sec h2{font-size:1.5rem;letter-spacing:-.015em}
+.sec .sdesc{color:var(--muted);margin:6px 0 18px;max-width:60ch;font-size:.98rem}
+.mine{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:var(--ink);color:var(--bg);border-radius:22px;padding:18px 20px;margin:0}
+.mine h2{font:700 .74rem var(--display);margin:0;flex-basis:100%;text-transform:uppercase;letter-spacing:.1em;opacity:.7}
+.mine div{display:grid}.mine b{font:700 1.4rem var(--display);font-variant-numeric:tabular-nums}.mine span{font-size:.8rem;opacity:.75}
+.mine a{color:var(--bg)!important}
+.mine a.go{margin-left:auto;font-weight:700;background:var(--hl);color:var(--hl-ink)!important;padding:12px 16px;border-radius:12px;text-decoration:none}
+@media (max-width:520px){.mine a.go{margin-left:0;flex:1 1 100%;text-align:center}}
+.filter{display:grid;gap:10px;margin-bottom:18px}
+.search{width:100%;min-height:50px;font:500 1rem var(--body);padding:0 16px;border-radius:14px;border:0;background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+.search:focus-visible{outline:3px solid var(--accent);outline-offset:1px}
+.filter .chips{margin:0}
+.group{margin-bottom:26px}
+.group h3{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:10px}
+@media (max-width:520px){.sgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.scard{display:grid;gap:10px;align-content:start;background:var(--surface);border-radius:18px;padding:14px;text-decoration:none;color:var(--ink);min-width:0;box-shadow:var(--shadow);position:relative;transition:transform .15s}
+.scard:active{transform:scale(.98)}
+.scard .tile{width:44px;height:44px;font-size:16px;border-radius:12px;background:color-mix(in srgb,var(--c) 14%,var(--surface));color:var(--c);box-shadow:none}
+.scard b{display:block;font-family:var(--display);font-size:1.02rem;line-height:1.2;overflow-wrap:anywhere}
+.scard span{display:block;font-size:.76rem}
+.scard .bd{color:var(--muted);margin-top:2px}
+.scard .st-ready{position:absolute;top:14px;right:14px;font:700 .7rem var(--display);color:var(--good);background:var(--good-soft);padding:3px 8px;border-radius:999px}
+.scard .st-soon{position:absolute;top:14px;right:14px;font:700 .7rem var(--display);color:var(--muted)}
+.scard.soon{background:transparent;box-shadow:none;border:1.5px dashed var(--line)}
+.scard.soon .tile{background:var(--line);color:var(--muted)}
+.noresult{color:var(--muted);border:1.5px dashed var(--line);border-radius:14px;padding:16px;text-align:center}
+.how{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:10px;counter-reset:h;list-style:none;padding:0;margin:0}
+.how li{counter-increment:h;margin:0;background:var(--surface);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow);display:grid;grid-template-columns:auto 1fr;gap:2px 14px;align-items:start}
+.how li::before{content:counter(h);grid-row:span 2;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--hl);color:var(--hl-ink);font:700 .95rem var(--display)}
+.how b{display:block;font-family:var(--display);font-size:1.04rem}
+.how span{color:var(--muted);font-size:.93rem}
+.toolrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:10px}
+@media (max-width:520px){.toolrow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.toolrow a{display:grid;align-content:start;background:var(--surface);border-radius:18px;padding:16px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.toolrow b{display:block;font-family:var(--display);font-size:1.04rem}
+.toolrow span{display:block;color:var(--muted);font-size:.88rem;margin-top:4px;line-height:1.4}
+.toolrow em{display:block;font-style:normal;font:700 .86rem var(--display);margin-top:10px;color:var(--accent)}
+.links{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+.links a{display:block;background:var(--surface);border-radius:18px;padding:16px 18px;text-decoration:none;color:var(--ink);box-shadow:var(--shadow)}
+.links b{font-family:var(--display);font-size:1.05rem}
+.links span{display:block;color:var(--muted);font-size:.92rem;margin-top:2px}
+</style>
+
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="#subjects">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+
+<main class="home">
+<section class="hero">
+  <div>
+    <p class="eyebrow">Free GCSE revision</p>
+    <h1>Revise less. Remember more. Get <mark>exam ready</mark>.</h1>
+    <p class="lede">Notes, flashcards and exam questions with real mark schemes, for every topic. Free, no sign-up.</p>
+    <div class="ctas"><a class="cta main" href="#subjects">Choose a subject</a><a class="cta alt" href="tools.html">Study tools</a></div>
+    <div class="stats" id="stats"></div>
+  </div>
+  <div class="tryq" id="tryq" aria-live="polite"></div>
+</section>
+
+<section class="today" id="today" aria-label="Today"></section>
+
+<section class="mine" id="mine" hidden aria-label="Your revision"></section>
+
+<section class="sec" id="groups">
+  <h2>Class leaderboard</h2>
+  <p class="sdesc">Start a group, share the code with friends, and compare streaks, daily challenge scores and revision time. No sign-up.</p>
+  <div class="gbody"></div>
+</section>
+
+<section class="sec" id="subjects">
+  <h2>Subjects</h2>
+  <p class="sdesc">Tap a subject to start. Each one shows its exam board, so check it matches yours.</p>
+  <div class="filter">
+    <input class="search" id="q" type="search" placeholder="Search subjects or any fact, e.g. osmosis" aria-label="Search subjects and facts">
+    <div class="chips" id="cats"></div>
+  </div>
+  <div id="facts"></div>
+  <div id="all"></div>
+</section>
+
+<section class="sec">
+  <h2>How to revise with GCSEasy</h2>
+  <p class="sdesc">Work through the tabs on a subject page in order. Most people need two or three sessions per topic.</p>
+  <ol class="how">
+    <li><b>Read the notes</b><span>Go through the topic once. "Triple" and "HT" mark content that isn't on every paper.</span></li>
+    <li><b>Test with flashcards</b><span>Keep going until the deck is empty. Cards you get wrong come back.</span></li>
+    <li><b>Learn the technique</b><span>See how examiners want answers written. That's worth more marks than any single fact.</span></li>
+    <li><b>Do exam questions</b><span>Write your answer, then mark it. Your weakest topic shows up in the score bars.</span></li>
+  </ol>
+</section>
+
+<section class="sec">
+  <h2>Study tools</h2>
+  <p class="sdesc">Tools that work for every subject.</p>
+  <div class="toolrow">
+    <a href="tools.html#timer"><b>Focus timer</b><span>25-minute focus blocks with short breaks.</span><em>Open timer →</em></a>
+    <a href="tools.html#exams"><b>Exam countdown</b><span>Add your own exam dates and see the days left.</span><em>Add exams →</em></a>
+    <a href="tools.html#methods"><b>Revision methods</b><span>What actually works: active recall, spacing, past papers.</span><em>Read →</em></a>
+    <a href="tools.html#words"><b>Command words</b><span>What "explain", "evaluate" and "suggest" really ask for.</span><em>Read →</em></a>
+  </div>
+</section>
+
+<section class="sec" id="papers">
+  <h2>Real past papers</h2>
+  <p class="sdesc">GCSEasy questions are original, written in the style of the real exams. Finish your revision with real papers and mark schemes.</p>
+  <div class="links">
+    <a href="https://www.aqa.org.uk/find-past-papers-and-mark-schemes" target="_blank" rel="noopener"><b>AQA</b><span>Official past papers and mark schemes</span></a>
+    <a href="https://www.physicsandmathstutor.com/" target="_blank" rel="noopener"><b>Physics &amp; Maths Tutor</b><span>Past papers and questions sorted by topic</span></a>
+    <a href="https://www.savemyexams.com/" target="_blank" rel="noopener"><b>Save My Exams</b><span>Revision notes and past papers</span></a>
+  </div>
+</section>
+</main>
+
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+
+<script src="shared/bank.js"></script>
+<script>
+const {SUBJECTS,CATS,progress}=GCSEasy;
+const $=id=>document.getElementById(id);
+const live=SUBJECTS.filter(s=>s.live),prog=progress();
+
+/* stats: real counts from the live pages */
+$("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).length||670,"flashcards"],[955,"exam-style marks"],[SUBJECTS.length-live.length,"more on the way"]].map(([n,l])=>`<div><b>${n}</b><span>${l}</span></div>`).join("");
+
+/* your revision: only shown once something has been saved on this device */
+(function(){const L=GCSEasy.getLog(),now=Date.now(),day=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()},today=day(now);
+  const ents=Object.entries(prog).filter(([,v])=>v&&v.at).sort((a,b)=>b[1].at-a[1].at);
+  let ex=[];try{ex=JSON.parse(localStorage.getItem("gcseasy-exams")||"[]")||[]}catch(e){}
+  const next=ex.map(x=>({n:x.name,d:Math.round((new Date(x.date+"T00:00:00").getTime()-today)/864e5)})).filter(x=>x.d>=0).sort((a,b)=>a.d-b.d)[0];
+  if(!L.length&&!ents.length&&!next)return;
+  const mins=f=>Math.round(L.filter(f).reduce((a,x)=>a+(x.e-x.s),0)/60000);
+  const days=new Set(L.map(x=>day(x.s)));let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
+  const lastL=L.length?L[L.length-1]:null;
+  const lastId=(lastL&&(!ents.length||lastL.e>ents[0][1].at))?lastL.subj:(ents[0]&&ents[0][0]);
+  const last=SUBJECTS.find(x=>x.id===lastId);
+  const el=$("mine");el.hidden=false;
+  const g=GCSEasy.getGoal(),tm=mins(x=>day(x.s)===today);
+  el.innerHTML=`<h2>Your revision</h2><div><b>${tm} min</b><span>today · goal ${g} min${tm>=g?" ✓":""}</span></div><div><b>${mins(x=>x.s>=today-6*864e5)} min</b><span>last 7 days</span></div><div><b>${streak} day${streak===1?"":"s"}</b><span>streak</span></div>${next?`<div><b>${next.d===0?"Today":next.d===1?"Tomorrow":next.d+" days"}</b><span>until ${String(next.n).replace(/[<>&"]/g,"")}</span></div>`:""}${last&&last.href?`<a class="go" href="${last.href}">Carry on: ${last.name} →</a>`:""}<a href="tools.html#tracker" style="font-size:.88rem;color:var(--muted)">Full tracker</a>`})();
+
+/* ---- daily challenge: the same 5 questions for everyone each day ---- */
+(function(){const box=$("tryq");const BANK=(window.GCSE_BANK||[]).filter(q=>!q.tri),CARDS=window.GCSE_CARDS||[];if(!BANK.length&&!CARDS.length){box.hidden=true;return}
+  const dkey=d=>{const x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
+  const TODAY=dkey(Date.now());
+  const rng=seed=>{let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return ((h^=h>>>16)>>>0)/4294967296}};
+  const R=rng("gcseasy-"+TODAY),pick=a=>a[Math.floor(R()*a.length)],shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(R()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+  const subs=shuf([...new Set([...BANK,...CARDS].map(x=>x.s))]);
+  const Q=[];for(let k=0;k<5;k++){const s=subs[k%subs.length];const useBank=R()<.45&&BANK.some(b=>b.s===s);
+    if(useBank){const b=pick(BANK.filter(x=>x.s===s&&!Q.some(q=>q.q===x.q)));const order=shuf(b.o.map((_,i)=>i));Q.push({s,q:b.q,o:order.map(i=>b.o[i]),a:order.indexOf(b.a),ex:b.ex})}
+    else{const pool=CARDS.filter(x=>x.s===s);const c=pick(pool.filter(x=>!Q.some(q=>q.q===x.q)));let wrong=shuf(pool.filter(x=>x.t===c.t&&x.a!==c.a).map(x=>x.a));if(wrong.length<3)wrong=wrong.concat(shuf(pool.filter(x=>x.a!==c.a&&!wrong.includes(x.a)).map(x=>x.a)));
+      const o=shuf([c.a,...[...new Set(wrong)].slice(0,3)]);Q.push({s,q:c.q,o,a:o.indexOf(c.a),ex:""})}}
+  let st={};try{st=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}st.done=st.done||{};
+  const save=()=>{try{localStorage.setItem("gcseasy-daily",JSON.stringify(st))}catch(e){}};
+  let cur=st.cur&&st.cur.date===TODAY?st.cur:{date:TODAY,i:0,ans:[]};
+  const streak=()=>{let n=0,d=new Date();d.setHours(12);if(!st.done[dkey(d)])d.setDate(d.getDate()-1);while(st.done[dkey(d)]){n++;d.setDate(d.getDate()-1)}return n};
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const nm=id=>(SUBJECTS.find(x=>x.id===id)||{name:id}).name,col=id=>(SUBJECTS.find(x=>x.id===id)||{c:"--accent"}).c;
+  const dots=()=>`<div class="ddots">${Q.map((_,k)=>{const a=cur.ans[k];return `<i class="${a==null?(k===cur.i?"now":""):(a===Q[k].a?"ok":"no")}"></i>`}).join("")}</div>`;
+  const head=()=>`<div class="top"><span class="lab">Daily challenge · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span><span class="dstreak" title="Days in a row">${streak()} day streak${streak()===1?"":""}</span></div>`;
+  function draw(){const done=st.done[TODAY];
+    if(done){const sc=done.score,grid=done.ans.map((a,k)=>a===Q[k].a?"🟩":"🟥").join("");
+      box.innerHTML=head()+dots().replace(/class="now"/,"")+`<p class="q">${sc} / 5 today${sc===5?". Perfect.":sc>=3?". Nice.":". Come back tomorrow."}</p><p class="why">New questions every day at midnight. Keep your streak going and compare with friends in a group below.</p>
+      <div class="next"><button class="dbtn" id="dshare" type="button">Copy my result</button><a href="#groups">Leaderboard →</a></div><div id="dmsg" class="why"></div>`;
+      $("dshare").onclick=async()=>{const t=`GCSEasy daily challenge ${TODAY}: ${sc}/5 ${grid} · ${streak()} day streak`;try{await navigator.clipboard.writeText(t);$("dmsg").textContent="Copied. Paste it in your group chat."}catch(e){$("dmsg").textContent=t}};return}
+    const q=Q[cur.i],c=col(q.s);
+    box.style.setProperty("--c",`var(${c})`);
+    box.innerHTML=head()+dots()+`<span class="sub" style="--c:var(${c})">${esc(nm(q.s))}</span><p class="q">${esc(q.q)}</p><div class="opts">${q.o.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div><div id="dfb"></div>`;
+    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k;cur.ans[cur.i]=k;box.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(j===q.a)x.classList.add("right");else if(j===k)x.classList.add("wrong")});
+      const ok=k===q.a;const last=cur.i>=Q.length-1;$("dfb").innerHTML=`<div class="fb" style="color:var(${ok?"--good":"--bad"})">${ok?"Correct":"Not quite"}</div>${q.ex?`<div class="why">${esc(q.ex)}</div>`:""}<div class="next"><button class="dbtn" id="dnext" type="button">${last?"See my score":"Next question"}</button></div>`;
+      st.cur=cur;save();
+      $("dnext").onclick=()=>{if(last){const score=cur.ans.filter((a,j)=>a===Q[j].a).length;st.done[TODAY]={score,of:5,ans:cur.ans};delete st.cur;save();if(GCSEasy.lbSync)GCSEasy.lbSync(true).then(()=>window.drawGroups&&drawGroups())}else{cur.i++;st.cur=cur;save()}draw()}})}
+  draw()})();
+
+/* ---- class leaderboards ---- */
+(function(){const host=$("groups");if(!host)return;const G=GCSEasy;const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  if(!G.API){host.querySelector(".gbody").innerHTML=`<p class="sdesc" style="margin:0">Class leaderboards work on the main GCSEasy site. Open it there to create or join a group.</p>`;return}
+  const body=host.querySelector(".gbody");let msg="",adding=false;
+  window.drawGroups=async function(){const m=G.me();
+    if(adding||!m.name||!m.groups.length){body.innerHTML=`<div class="gform">
+      <label for="gnick">Your nickname <span>(shown to your group; don't use your full name)</span></label><input id="gnick" maxlength="20" autocomplete="off" value="${esc(m.name||"")}" placeholder="e.g. Sam G">
+      <div class="gtwo"><div><label for="gcode">Join a group</label><input id="gcode" maxlength="8" autocomplete="off" placeholder="Code, e.g. K7Q2MX" style="text-transform:uppercase"><button class="dbtn" id="gjoin" type="button">Join</button></div>
+      <div><label for="gname">Or start a new group</label><input id="gname" maxlength="20" autocomplete="off" placeholder="e.g. 11F Science"><button class="dbtn alt" id="gmake" type="button">Create group</button></div></div>
+      <p class="gmsg" id="gmsg" role="status">${esc(msg)}</p></div>`;
+      const nick=()=>$("gnick").value.trim();
+      const go=async(path,payload)=>{if(nick().length<2){$("gmsg").textContent="Add a nickname first (at least 2 letters).";return}
+        $("gmsg").textContent="Just a sec…";try{const g=await G.lbCall(path,Object.assign({id:m.id,nick:nick()},payload));const mm=G.me();mm.name=nick();if(!mm.groups.includes(g.code))mm.groups.push(g.code);G.saveMe(mm);adding=false;await G.lbSync(true);msg="";drawGroups()}
+        catch(e){$("gmsg").textContent=e.message||({not_found:"No group with that code. Check it and try again.",bad_name:"Pick a different nickname."}[e.code])||"That didn't work. Try again."}};
+      $("gjoin").onclick=()=>go("/lb/join",{code:$("gcode").value.trim().toUpperCase()});$("gmake").onclick=()=>go("/lb/create",{name:$("gname").value.trim()});return}
+    body.innerHTML=`<p class="sdesc" style="margin:0">Loading your groups…</p>`;
+    const parts=await Promise.all(m.groups.map(c=>G.lbCall("/lb/"+c).catch(e=>({code:c,err:e}))));
+    body.innerHTML=parts.map(g=>{if(g.err)return `<div class="gcard"><p>Group ${esc(g.code)} couldn't be loaded.</p></div>`;
+      const you=m.id.slice(0,8);
+      return `<div class="gcard"><div class="ghead"><div><b>${esc(g.name)}</b><span>${g.members.length} member${g.members.length===1?"":"s"}</span></div><button class="gcode" data-code="${g.code}" type="button" title="Copy the join code">Code ${g.code}</button></div>
+      <div class="gtbl"><table><tr><th>#</th><th>Name</th><th class="rn">Streak</th><th class="rn">Today</th><th class="rn">Mins (7d)</th></tr>${g.members.map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}</td><td class="rn">${x.streak}</td><td class="rn">${x.daily?x.daily.score+"/"+x.daily.of:"–"}</td><td class="rn">${x.mins}</td></tr>`).join("")}</table></div>
+      <div class="gfoot"><button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button></div></div>`}).join("")+
+      `<div class="gfoot"><button class="dbtn alt" id="gadd" type="button">Join or create another group</button></div>`;
+    body.querySelectorAll(".gcode").forEach(b=>b.onclick=async()=>{const t=`Join my GCSEasy revision group: code ${b.dataset.code}`;try{await navigator.clipboard.writeText(t);b.textContent="Copied"}catch(e){b.textContent=b.dataset.code}setTimeout(()=>b.textContent="Code "+b.dataset.code,2000)});
+    body.querySelectorAll("[data-leave]").forEach(b=>b.onclick=async()=>{if(b.dataset.sure){await G.lbCall("/lb/leave",{code:b.dataset.leave,id:m.id}).catch(()=>{});m.groups=m.groups.filter(c=>c!==b.dataset.leave);G.saveMe(m);drawGroups()}else{b.dataset.sure=1;b.textContent="Tap again to leave"}});
+    $("gadd").onclick=()=>{adding=true;drawGroups()}};
+  G.lbSync(true).finally(drawGroups)})();
+
+/* ---- today: what to do next ---- */
+(function(){const el=$("today");const KEYS={biology:"bio-mock-v1",chemistry:"chem-mock-v2",physics:"phys-v1",geography:"geo-v1","english-literature":"englit-v1",citizenship:"cit-v1",french:"fr-v1",maths:"maths-cards-v1"};
+  const CARDS=window.GCSE_CARDS||[],now=Date.now(),rows=[];const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  let dc={};try{dc=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}
+  const td=new Date(),tk=td.getFullYear()+"-"+String(td.getMonth()+1).padStart(2,"0")+"-"+String(td.getDate()).padStart(2,"0");
+  rows.push(dc.done&&dc.done[tk]?["done","Daily challenge done",`${dc.done[tk].score}/5 today`,"#tryq"]:["go","Do today's daily challenge","5 questions, about 2 minutes","#tryq"]);
+  Object.entries(KEYS).forEach(([id,k])=>{let st=null;try{st=JSON.parse(localStorage.getItem(k)||"null")}catch(e){}if(!st||!st.srs)return;
+    const tier=(()=>{try{return localStorage.getItem("gcseasy-tier")}catch(e){return null}})();
+    const due=CARDS.filter(c=>c.s===id&&!(tier==="combined"&&/\(Triple\)/.test(c.q))).filter(c=>{const r=st.srs[c.t+"|"+c.q.slice(0,60)];return !r||r.due<=now}).length;
+    const s=SUBJECTS.find(x=>x.id===id);if(due&&s)rows.push(["go",`${due} ${s.name} flashcard${due===1?"":"s"} due`,"Spaced repetition: review them before you forget",s.href+"#fc"])});
+  let ex=[];try{ex=JSON.parse(localStorage.getItem("gcseasy-exams")||"[]")||[]}catch(e){}
+  const day0=new Date();day0.setHours(0,0,0,0);
+  const nx=ex.map(x=>({n:x.name,d:Math.round((new Date(x.date+"T00:00:00")-day0)/864e5)})).filter(x=>x.d>=0).sort((a,b)=>a.d-b.d)[0];
+  rows.push(nx?["info",`${esc(nx.n)} ${nx.d===0?"is today":nx.d===1?"is tomorrow":"in "+nx.d+" days"}`,"From your exam countdown","tools.html#exams"]:["info","Add your exam dates","See a countdown here every day","tools.html#exams"]);
+  if(rows.filter(r=>r[0]==="go").length<2)rows.splice(1,0,["go","Pick a subject and open Cards","Each card you learn comes back at the right time","#subjects"]);
+  el.innerHTML=`<h2>Today</h2><div class="trows2">${rows.map(([k,a,b,h])=>`<a class="trow ${k}" href="${h}"><i aria-hidden="true"></i><span><b>${a}</b><small>${b}</small></span></a>`).join("")}</div>`})();
+
+/* ---- search any fact across every subject ---- */
+function drawFacts(){const term=$("q").value.trim().toLowerCase(),box=$("facts");if(term.length<3){box.innerHTML="";return}
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const hits=(window.GCSE_CARDS||[]).filter(c=>(c.q+" "+c.a).toLowerCase().includes(term)).slice(0,8);
+  box.innerHTML=hits.length?`<div class="group"><h3>Facts matching “${esc(term)}”</h3><div class="facts">${hits.map(c=>{const s=SUBJECTS.find(x=>x.id===c.s)||{};return `<a class="fact" href="${s.href||"#"}" style="--c:var(${s.c||"--accent"})"><span class="fs">${esc(s.name||c.s)} · ${esc(c.t)}</span><b>${esc(c.q)}</b><span>${esc(c.a)}</span></a>`}).join("")}</div></div>`:""}
+$("q").addEventListener("input",drawFacts);
+
+/* all subjects: search + category */
+let cat="all";
+function drawCats(){const el=$("cats");el.innerHTML="";[["all","All"],...CATS].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cat?" on":"");b.textContent=l;b.onclick=()=>{cat=k;drawCats();drawAll()};el.appendChild(b)})}
+function drawAll(){
+  const term=$("q").value.trim().toLowerCase();
+  const html=CATS.filter(([k])=>cat==="all"||cat===k).map(([k,l])=>{
+    const list=SUBJECTS.filter(s=>s.cat===k&&(!term||s.name.toLowerCase().includes(term)));
+    if(!list.length)return "";
+    return `<div class="group"><h3>${l}</h3><div class="sgrid">${list.map(s=>`<a class="scard${s.live?"":" soon"}" href="${s.href}" style="--c:var(${s.c})"><div class="tile"><small>${s.code[0]}</small>${s.code}</div><div><b>${s.name}</b><span class="bd">${s.board.split(" · ").slice(0,2).join(" · ")}</span><span class="${s.live?"st-ready":"st-soon"}">${!s.live?"Soon":prog[s.id]&&prog[s.id].answered?`${prog[s.id].answered} of ${prog[s.id].parts} done`:"Ready"}</span></div></a>`).join("")}</div></div>`}).join("");
+  $("all").innerHTML=html||`<p class="noresult">No subjects match "${term.replace(/[<>&"]/g,"")}".</p>`;
+}
+$("q").addEventListener("input",drawAll);
+drawCats();drawAll();
+</script>
+
+</html>
