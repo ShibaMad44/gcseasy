@@ -6,10 +6,12 @@ export async function onRequest(ctx) {
   const path = u.pathname.replace(/^\/api/, "") || "/";
   if (ctx.env.AI && ctx.env.LB) {
     u.pathname = path;
-    return api.fetch(new Request(u.toString(), ctx.request), ctx.env);
+    const r = await api.fetch(new Request(u.toString(), ctx.request), ctx.env);
+    const out = new Response(r.body, r); out.headers.set("X-GCSEasy-Mode", "direct"); return out;
   }
   const target = "https://gcseasy-api.pandoplayzrblx.workers.dev" + path + u.search;
   const init = { method: ctx.request.method, headers: { "Content-Type": "application/json", "X-Forwarded-For": ctx.request.headers.get("CF-Connecting-IP") || "" } };
   if (ctx.request.method === "POST") init.body = await ctx.request.text();
-  return fetch(target, init);
+  const r = await fetch(target, init);
+  const out = new Response(r.body, r); out.headers.set("X-GCSEasy-Mode", "forward"); return out;
 }
