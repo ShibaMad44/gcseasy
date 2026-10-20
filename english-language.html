@@ -65,6 +65,7 @@
   <textarea id="wtext" placeholder="Plan for 5 minutes, then start writing…" aria-label="Your answer"></textarea>
   <div class="wbar"><span><b id="wcount">0</b> words</span><span id="wtarget"></span><span>Time <b id="wtime">0:00</b></span></div>
   <div class="row" style="margin:0"><button class="btn p ai" id="wai" hidden>✦ Mark with AI</button><button class="btn" id="wself">Mark it myself</button><button class="btn" id="wnew">New task</button></div>
+  <p class="aiquota" hidden></p>
   <div class="wfb" id="wfb"></div>
 </div>
 
@@ -166,7 +167,7 @@ Reply with only a JSON object:
 {"content": integer 0-24, "accuracy": integer 0-16, "level": "e.g. Level 3", "summary": "1-2 sentences to the student as 'you'", "good": ["up to 3 specific strengths, quoting their words"], "improve": ["up to 4 specific, actionable targets, most important first"], "errors": ["up to 6 actual spelling/punctuation/grammar errors from their text, each as 'wrong → right'"], "better": "rewrite ONE weak paragraph of theirs (say which) at a Level 4 standard, keeping their ideas"}`;
   try{const r=await sample.json(prompt);
     r.content=Math.max(0,Math.min(24,Math.round(+r.content||0)));r.accuracy=Math.max(0,Math.min(16,Math.round(+r.accuracy||0)));st.fb=r;save();showFB(r);if(window.GCSEasy)GCSEasy.addXP(Math.round((r.content+r.accuracy)/2),"writing",60,"q5:"+st.p+":"+st.i+":"+(st.t0||0))}
-  catch(e){const code=e&&e.code;$("wfb").innerHTML=`<div class="fb no">${{daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"AI marking wasn't allowed. Use Mark it myself.",sampling_disabled:"AI marking isn't available on this account.",rate_limited:"Too many AI requests right now. Try again in a bit.",session_expired:"Sign in to Claude again to use AI marking.",invalid_json:"The AI reply came back garbled. Try again."}[code]||"AI marking failed. Try again, or use Mark it myself."}</div>`;if(code==="not_granted"||code==="sampling_disabled")btn.hidden=true}
+  catch(e){const code=e&&e.code;$("wfb").innerHTML=`<div class="fb no">${{daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"AI marking wasn't allowed. Use Mark it myself.",sampling_disabled:"AI marking isn't available on this account.",rate_limited:(window.GCSEasy&&GCSEasy.aiLimitMsg?GCSEasy.aiLimitMsg():"You've used today's AI marks."),session_expired:"Sign in to Claude again to use AI marking.",invalid_json:"The AI reply came back garbled. Try again."}[code]||"AI marking failed. Try again, or use Mark it myself."}</div>`;if(code==="not_granted"||code==="sampling_disabled")btn.hidden=true}
   finally{btn.disabled=false;btn.textContent="✦ Mark again with AI"}};
 function showFB(r){const L=a=>Array.isArray(a)&&a.length?"<ul>"+a.map(x=>"<li>"+esc(x)+"</li>").join("")+"</ul>":"";
   $("wfb").innerHTML=`<div class="panel ai"><div class="t">AI examiner${r.level?" · "+esc(r.level):""}</div>

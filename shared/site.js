@@ -143,7 +143,7 @@ function aiClient(){if(_ai)return _ai;
   _ai=(async()=>{
     if(window.claude&&typeof window.claude.use==="function"){try{const f=await window.claude.use("sample");if(f)return {kind:"claude",json:(p,o)=>f.json(p,Object.assign({modelTier:"default",cache:false},o||{})),text:async(p,o)=>(await f(p,Object.assign({cache:false},o||{}))).text}}catch(e){}}
     if(API){const call=async(prompt,json)=>{let r;try{r=await fetch(API+"/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:String(prompt).slice(0,24000),json})})}catch(e){throw {code:"upstream_error"}}
-        const d=await r.json().catch(()=>({}));if(!r.ok)throw {code:d.code||(r.status===429?"rate_limited":"upstream_error"),message:d.error};return d.text};
+        const d=await r.json().catch(()=>({}));if(d&&d.limit)setQuota(d);if(!r.ok)throw {code:d.code||(r.status===429?"rate_limited":"upstream_error"),message:d.error};return d.text};
       return {kind:"server",json:async p=>parseJSON(await call(p,true)),text:p=>call(p,false)}}
     return null})();
   return _ai}
@@ -164,6 +164,16 @@ function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td
   for(let i=0;i<7;i++){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");week+=(x.days[k]||{}).pts||0}
   today=(x.days[td]||{}).pts||0;const level=Math.floor(Math.sqrt(x.total/40))+1,lo=40*(level-1)**2,hi=40*level**2;
   return {total:x.total,week,today,level,into:x.total-lo,need:hi-lo}}
+/* ---- AI quota: "3 of 40 used today · resets at 1:00am" on any element with class aiquota ---- */
+let QUOTA=null;
+const resetTime=()=>{const t=QUOTA&&QUOTA.resetsAt?new Date(QUOTA.resetsAt):(()=>{const d=new Date();d.setUTCHours(24,0,0,0);return d})();return t.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit",hour12:true}).replace(" ","").replace(":00","")};
+function quotaText(){if(!QUOTA)return "";const left=Math.max(0,QUOTA.limit-QUOTA.used);
+  if(QUOTA.siteUsed!=null&&QUOTA.siteUsed>=QUOTA.siteLimit)return `The free AI has hit today's limit for the whole site. It resets at ${resetTime()}.`;
+  return left?`AI marking: ${QUOTA.used} of ${QUOTA.limit} used today · resets at ${resetTime()}`:`You've used all ${QUOTA.limit} AI marks today. They reset at ${resetTime()}.`}
+function setQuota(d){QUOTA=Object.assign(QUOTA||{},d);drawQuota()}
+function drawQuota(){const t=quotaText();document.querySelectorAll(".aiquota").forEach(el=>{el.textContent=t;el.hidden=!t;el.classList.toggle("out",!!QUOTA&&QUOTA.used>=QUOTA.limit)})}
+async function loadQuota(){if(!API||(window.claude&&window.claude.use))return;try{const r=await fetch(API+"/ai/usage");if(r.ok)setQuota(await r.json())}catch(e){}}
+function aiLimitMsg(){return `You've used all ${QUOTA?QUOTA.limit:40} AI marks today. They reset at ${resetTime()}. Use the mark scheme for now.`}
 /* ---- class leaderboards (server only) ---- */
 const LBK="gcseasy-me";
 function me(){let m=null;try{m=JSON.parse(localStorage.getItem(LBK)||"null")}catch(e){}if(!m||!m.id){m={id:(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()),name:"",groups:[]};try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}return m}
@@ -181,7 +191,7 @@ async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)ret
   if(!force&&last.sig===sig&&Date.now()-(last.t||0)<6*3600e3)return;
   for(const g of m.groups){try{await lbCall("/lb/score",{code:g,id:m.id,name:m.name,stats:st})}catch(e){}}
   try{localStorage.setItem("gcseasy-lbsent",JSON.stringify({sig,t:Date.now()}))}catch(e){}}
-function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500)}
+function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500);loadQuota()}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+window.GCSEasy={SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();

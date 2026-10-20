@@ -222,7 +222,7 @@ function renderPart(p){
         const mark=Math.max(0,Math.min(p.mk,Math.round(+r.mark||0)));r.mark=mark;
         state.ai[p.id]=r;state.txt[p.id]=ta.value;setMark(p.id,mark);save();showAI(aiBox,p,r);reveal();
         out.querySelectorAll(".mk").forEach(x=>x.classList.toggle("on",+x.textContent===mark))}
-      catch(e){const msg={daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"AI marking wasn't allowed, so it's switched off for now. Use Mark it to mark yourself.",sampling_disabled:"AI marking isn't available on this account. Use Mark it to mark yourself.",rate_limited:"Too many AI requests right now. Wait a bit, then try again.",session_expired:"Sign in to Claude again to use AI marking.",invalid_json:"The AI reply came back garbled. Try again."}[e&&e.code]||"AI marking failed. Try again, or use Mark it.";
+      catch(e){const msg={daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"AI marking wasn't allowed, so it's switched off for now. Use Mark it to mark yourself.",sampling_disabled:"AI marking isn't available on this account. Use Mark it to mark yourself.",rate_limited:(window.GCSEasy&&GCSEasy.aiLimitMsg?GCSEasy.aiLimitMsg():"You've used today's AI marks."),session_expired:"Sign in to Claude again to use AI marking.",invalid_json:"The AI reply came back garbled. Try again."}[e&&e.code]||"AI marking failed. Try again, or use Mark it.";
         aiBox.innerHTML=`<div class="fb no">${msg}</div>`;if(e&&(e.code==="not_granted"||e.code==="sampling_disabled"))ab.hidden=true}
       finally{ab.disabled=false;ab.textContent="✦ Mark again with AI"}};
     if(state.m[p.id]!=null)reveal();
@@ -307,14 +307,14 @@ function renderAI(host){const si=subjInfo();
   const links=`<p class="ailinks">For real past papers: ${si.papers?`<a href="${si.papers}" target="_blank" rel="noopener">${escH(si.exam)} past papers and mark schemes</a> · `:""}<a href="https://www.physicsandmathstutor.com/" target="_blank" rel="noopener">Physics &amp; Maths Tutor</a> (questions by topic) · <a href="https://www.savemyexams.com/" target="_blank" rel="noopener">Save My Exams</a></p>`;
   host.innerHTML=`<p class="setblurb">A new question every time, written in the style of real ${escH(si.board.split("·").slice(0,2).join("·"))} papers: same command words, mark allocations and layout. Answer it, then check it or mark it with AI. These don't count towards the paper score.</p>
   <div class="aibar"><div><span class="lab2">Topic</span><div class="chips" id="aitop"></div></div><div><span class="lab2">Level</span><div class="chips" id="ailev"></div></div><div><span class="lab2">Type</span><div class="chips" id="aityp"></div></div></div>
-  <div class="row" style="margin:6px 0 12px"><button class="btn p" id="aigo">✦ New question</button></div><div id="aiq"></div>${links}`;
+  <div class="row" style="margin:6px 0 12px"><button class="btn p" id="aigo">✦ New question</button></div><p class="aiquota" hidden></p><div id="aiq"></div>${links}`;
   chipRow($("aitop"),[["Mixed","Any topic"],...Object.keys(C.topics).map(k=>[k,k===C.topics[k]?k:k+" "+C.topics[k]])],aiTopic,k=>{aiTopic=k;renderAI(host)});
   chipRow($("ailev"),[["Mixed","Mixed"],["Core","Grade 4–6"],["Stretch","Grade 7–9"]],aiLevel,k=>{aiLevel=k;renderAI(host)});
   chipRow($("aityp"),[["Mixed","Mixed"],["Short","Short answer"],["Long","Extended (6+ marks)"]].concat(C.drill?[["Calc","Calculations"]]:[]),aiType,k=>{aiType=k;renderAI(host)});
   const box=$("aiq");
   getSample().then(f=>{if(!f){$("aigo").disabled=true;box.innerHTML=`<div class="panel ms"><div class="t">AI not available here</div>Endless questions need the AI, which isn't available on this copy of the site. Use GCSEasy at its main address, or try the other sets and the past paper links below.</div>`}});
   if(state.aiq&&!aiBusy)drawAIQ(box,state.aiq);
-  $("aigo").onclick=()=>genAI(box)}
+  $("aigo").onclick=()=>genAI(box);if(window.GCSEasy&&GCSEasy.drawQuota)GCSEasy.drawQuota()}
 async function genAI(box){const f=await getSample();if(!f)return;const go=$("aigo");go.disabled=true;go.textContent="Writing a question…";
   box.innerHTML=`<div class="panel ai"><div class="t">✦ Writing your question</div><p class="aiwait">This usually takes 10–40 seconds.</p></div>`;aiBusy=true;
   const keys=Object.keys(C.topics),tk=aiTopic==="Mixed"?keys[Math.floor(Math.random()*keys.length)]:aiTopic;
@@ -344,7 +344,7 @@ Use only the part types needed. For "n", ans must be a plain number and tol a se
   try{const r=await f.json(prompt,{modelTier:"default",cache:false});const q=cleanAI(r,tk);if(!q)throw {code:"invalid_json"};
     (state.aiq&&state.aiq.parts||[]).forEach(p=>{delete state.m[p.id];delete state.a[p.id];delete state.txt[p.id];delete state.ai[p.id]});
     state.aiq=q;save();drawAIQ(box,q)}
-  catch(e){const c=e&&e.code;box.innerHTML=`<div class="fb no">${{daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"Claude wasn't allowed, so endless questions are off for now.",sampling_disabled:"Claude isn't available on this account.",rate_limited:"Too many requests right now. Wait a bit, then try again.",session_expired:"Sign in to Claude again, then try again.",invalid_json:"The question came back garbled. Tap New question to try again."}[c]||"Something went wrong. Tap New question to try again."}</div>`}
+  catch(e){const c=e&&e.code;box.innerHTML=`<div class="fb no">${{daily_limit:"The free AI has used up today's allowance. It resets overnight, so try again tomorrow, or use the mark scheme for now.",busy:"Lots of people are using the AI right now. Try again in a minute.",not_granted:"Claude wasn't allowed, so endless questions are off for now.",sampling_disabled:"Claude isn't available on this account.",rate_limited:(window.GCSEasy&&GCSEasy.aiLimitMsg?GCSEasy.aiLimitMsg():"You've used today's AI marks."),session_expired:"Sign in to Claude again, then try again.",invalid_json:"The question came back garbled. Tap New question to try again."}[c]||"Something went wrong. Tap New question to try again."}</div>`}
   finally{aiBusy=null;go.disabled=false;go.textContent="✦ New question"}}
 function cleanAI(r,tk){if(!r||!Array.isArray(r.parts))return null;const stamp=Date.now().toString(36);let i=0;
   const parts=r.parts.map(p=>{if(!p||typeof p.q!=="string")return null;const mk=Math.max(1,Math.min(40,Math.round(+p.mk||1)));const id=`AI${stamp}.${++i}`;const base={id,label:String(i),mk,q:escH(p.q),hint:null};
@@ -388,6 +388,7 @@ function applyTier(){if(!SCI.includes(C.id))return;const comb=tier()==="combined
     t.querySelectorAll("button").forEach(b=>b.onclick=()=>{try{localStorage.setItem("gcseasy-tier",b.dataset.t)}catch(e){}location.reload()})}}
 function init(cfg){
   C=cfg;KEY=cfg.key;load();applyTier();window.__STUDY=C;
+  const cov=document.querySelector("#p-ex .cover");if(cov&&!cov.querySelector(".aiquota")){const q=document.createElement("p");q.className="aiquota";q.hidden=true;cov.appendChild(q)}
   ALL=[];C.sets.forEach(s=>s.qs.forEach(Q=>Q.parts.forEach(p=>ALL.push([p.t||Q.t,p]))));TOTAL=ALL.reduce((s,[,p])=>s+p.mk,0);
   setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();
   document.querySelectorAll("[data-fig]").forEach(el=>{if(C.figs[el.dataset.fig])el.innerHTML=C.figs[el.dataset.fig]()});

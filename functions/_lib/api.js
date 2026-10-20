@@ -24,7 +24,13 @@ async function bump(env, key, limit) {
   const n = parseInt((await env.LB.get(key)) || "0", 10);
   if (n >= limit) return false;
   await env.LB.put(key, String(n + 1), { expirationTtl: 60 * 60 * 30 });
-  return true;
+  return n + 1;
+}
+const nextReset = () => { const d = new Date(); d.setUTCHours(24, 0, 0, 0); return d.toISOString(); };
+async function usage(env, ip) {
+  const used = parseInt((await env.LB.get(`rl:${ip}:${today()}`)) || "0", 10);
+  const site = parseInt((await env.LB.get(`ai:${today()}`)) || "0", 10);
+  return { used, limit: PER_IP_DAILY, siteUsed: site, siteLimit: SITE_DAILY, resetsAt: nextReset() };
 }
 
 async function runAI(env, prompt, wantJson) {
@@ -80,13 +86,15 @@ export default {
       if (path === "" || path === "/") return json({ ok: true, service: "GCSEasy API" });
 
       // ---- AI ----
+      if (path === "/ai/usage" && req.method === "GET") return json(await usage(env, ip));
       if (path === "/ai" && req.method === "POST") {
         const prompt = String(body.prompt || "");
         if (prompt.length < 20 || prompt.length > 24000) return fail("bad_request", "Prompt length not allowed.");
-        if (!(await bump(env, `rl:${ip}:${today()}`, PER_IP_DAILY))) return fail("rate_limited", "You've used your AI marks for today.", 429);
-        if (!(await bump(env, `ai:${today()}`, SITE_DAILY))) return fail("daily_limit", "Site AI limit reached for today.", 429);
+        const mine = await bump(env, `rl:${ip}:${today()}`, PER_IP_DAILY);
+        if (!mine) return json({ code: "rate_limited", error: "You've used your AI marks for today.", used: PER_IP_DAILY, limit: PER_IP_DAILY, resetsAt: nextReset() }, 429);
+        if (!(await bump(env, `ai:${today()}`, SITE_DAILY))) return json({ code: "daily_limit", error: "Site AI limit reached for today.", used: mine, limit: PER_IP_DAILY, resetsAt: nextReset() }, 429);
         const text = await runAI(env, prompt, !!body.json);
-        return json({ text });
+        return json({ text, used: mine, limit: PER_IP_DAILY, resetsAt: nextReset() });
       }
 
       // ---- leaderboards ----
