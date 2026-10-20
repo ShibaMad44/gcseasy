@@ -86,7 +86,7 @@
   .sitenav>a{display:none}
   .brand{font-size:1.25rem}
   body{padding-bottom:calc(68px + env(safe-area-inset-bottom,0px))}
-  .botnav{display:grid;grid-template-columns:repeat(4,1fr);position:fixed;left:0;right:0;bottom:0;z-index:65;background:color-mix(in srgb,var(--surface) 94%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+  .botnav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:65;background:color-mix(in srgb,var(--surface) 94%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
   .botnav a{display:grid;justify-items:center;gap:2px;padding:6px 0;border-radius:12px;color:var(--muted);text-decoration:none;font:700 .72rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif}
   .botnav a svg{width:22px;height:22px}
   .botnav a[aria-current="page"]{color:var(--ink)}

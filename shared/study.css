@@ -337,3 +337,17 @@ body.qzopen{overflow:hidden}
 .aiquota{margin:10px 0 0;font-size:.84rem;color:var(--muted)}
 .aiquota::before{content:"✦ ";color:var(--accent)}
 .aiquota.out{color:var(--bad);font-weight:700}
+/* grouped chips (Paper 1 / Paper 2) */
+.cgroups{display:grid;gap:10px}
+.cgroup{display:grid;gap:6px}
+.cglab,.qzgh>span,.pgh{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.cgroup .chips{margin:0}
+.qzgh{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0 6px}
+.pgroup{border:1px solid var(--line);border-radius:14px;padding:12px 12px 4px;margin-bottom:12px;background:var(--bg)}
+.pgh{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px;color:var(--ink)}
+.psec{margin-bottom:10px}
+.psec>.sh{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.85rem;font-weight:700;color:var(--muted);margin-bottom:6px}
+.linkbtn.sm{font-size:.82rem}
+.pgroup .chips,.cgroups .chips{flex-wrap:wrap!important;overflow:visible!important;padding:0!important;margin:0!important;mask-image:none!important;-webkit-mask-image:none!important}
+.cgroup .cglab{padding-left:2px}
+@media (max-width:560px){header.top{flex-wrap:wrap}header.top>.tier{order:3;flex:1 1 100%;justify-content:flex-start}}

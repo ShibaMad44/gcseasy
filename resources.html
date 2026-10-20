@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="The best free GCSE revision resources by subject: videos, notes, practice sites and official past papers.">
+<link rel="canonical" href="https://gcseasy.pages.dev/resources.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="The best free GCSE revision resources by subject: videos, notes, practice sites and official past papers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/resources.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Best Free GCSE Revision Resources · GCSEasy</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/site.js"></script>
+<style>.intro h1{font-size:2rem}.intro p{color:var(--muted);font-size:1.05rem;max-width:60ch}.jumpres{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.jumpres a{text-decoration:none}.gen{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}</style>
+<script src="shared/resources.js" defer></script>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html" aria-current="page">Resources</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap">
+<section class="intro"><h1>Best free GCSE resources</h1><p>The videos, sites and past papers that actually help, sorted by subject. Everything here is free. YouTube links may be blocked on some school networks, so watch those at home.</p>
+<div class="jumpres chips" id="jumpres"></div></section>
+<section class="resbox"><h2>For every subject</h2><div class="gen"><a class="reslink" href="https://www.thenational.academy/" target="_blank" rel="noopener"><b>Oak National Academy</b><span>Free full video lessons for every GCSE subject, made by teachers</span></a><a class="reslink" href="https://senecalearning.com/en-GB/" target="_blank" rel="noopener"><b>Seneca</b><span>Interactive courses that quiz you as you learn</span></a><a class="reslink" href="https://www.bbc.co.uk/bitesize" target="_blank" rel="noopener"><b>BBC Bitesize</b><span>Notes, videos and quick tests</span></a><a class="reslink" href="https://apps.ankiweb.net/" target="_blank" rel="noopener"><b>Anki</b><span>Free flashcard app with spaced repetition (like the Cards tab here)</span></a><a class="reslink" href="https://quizlet.com/" target="_blank" rel="noopener"><b>Quizlet</b><span>Flashcards: search your board and topic for ready-made sets</span></a><a class="reslink" href="https://www.physicsandmathstutor.com/" target="_blank" rel="noopener"><b>Physics & Maths Tutor</b><span>Past paper questions sorted by topic for most subjects</span></a></div></section>
+<div id="allres"></div>
+<section class="resbox"><h2>How to use them well</h2><ul>
+<li><b>Watch, then test.</b> After a video, close it and write down or say what you remember. Then check. Watching alone feels productive but doesn't stick.</li>
+<li><b>Past papers are king.</b> Once a topic is learned, do exam questions on it and mark them with the mark scheme. Read the examiner report to see where people lose marks.</li>
+<li><b>Little and often.</b> 25 minutes of focus and a 5-minute break beats a 3-hour cram. Use the timer in the header.</li>
+</ul></section>
+</div>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<script>document.addEventListener("DOMContentLoaded",()=>{const R=window.GCSE_RES||{};document.getElementById("jumpres").innerHTML=Object.entries(R).filter(([k])=>k!=="combined-science").map(([k,r])=>`<a class="chip" href="#res-${k}">${r.name}</a>`).join("")});</script>
+</body>
+</html>

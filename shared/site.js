@@ -128,9 +128,9 @@ function setupPapers(){const nav=document.querySelector(".sitenav");
   document.querySelectorAll('.sitefoot a[href$="#papers"]').forEach(a=>a.setAttribute("href","#papers"))}
 /* phone bottom bar: Home, Subjects, Tools, Papers */
 function setupBotnav(){if(document.querySelector(".botnav"))return;const path=location.pathname.split("/").pop()||"index.html";
-  const I={home:'<path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',subj:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',tools:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/>',pp:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>'};
-  const isSubj=!/^(index|tools)\.html$/.test(path);
-  const items=[["index.html","Home","home",path==="index.html"],["index.html#subjects","Subjects","subj",isSubj],["tools.html","Tools","tools",path==="tools.html"],["#papers","Papers","pp",false]];
+  const I={home:'<path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',subj:'<rect x="3.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.5"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.5"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.5"/>',tools:'<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/>',pp:'<path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/>',res:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5z"/>'};
+  const isSubj=!/^(index|tools|resources)\.html$/.test(path);
+  const items=[["index.html","Home","home",path==="index.html"],["index.html#subjects","Subjects","subj",isSubj],["tools.html","Tools","tools",path==="tools.html"],["resources.html","Resources","res",path==="resources.html"],["#papers","Papers","pp",false]];
   const n=document.createElement("nav");n.className="botnav";n.setAttribute("aria-label","Main");
   n.innerHTML=items.map(([h,l,i,on])=>`<a href="${h}"${on?' aria-current="page"':""}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[i]}</svg>${l}</a>`).join("");
   document.body.appendChild(n)}

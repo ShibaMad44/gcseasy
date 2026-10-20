@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="shared/site.css">
 <script src="shared/config.js"></script>
 <script src="shared/site.js"></script>
+<script src="shared/resources.js" defer></script>
 <style>
 /* Geography accent: Ordnance Survey woodland green */
 :root{--accent:#2F7A4E;--accent-soft:#E3F1E8}
@@ -62,7 +63,7 @@
 </style>
 </head>
 <body>
-<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects" aria-current="page">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
 <div class="wrap">
 <p class="crumbs"><a href="index.html#subjects">Subjects</a> / Humanities</p>
 <header class="top">
@@ -681,9 +682,9 @@
 <div class="chips viewsw" id="csview"></div>
 <div id="cs-learn">
 <p style="margin-bottom:12px">Each card has the facts examiners reward: places, dates and numbers. Turn on <b>Hide the numbers</b> to test yourself, and tap a blank to check it.</p>
-<div class="csbar"><div class="chips" id="csfilter"></div><button class="btn sm" id="cshide" type="button" aria-pressed="false">Hide the numbers</button></div>
+<div id="csfilter" style="margin-bottom:12px"></div><div class="csbar"><button class="btn sm" id="cshide" type="button" aria-pressed="false">Hide the numbers</button></div>
 <div class="cases" id="cslist"></div>
-<h3 style="margin-top:28px">Japan vs Nepal at a glance</h3>
+<div id="jncmp"><h3 style="margin-top:28px">Japan vs Nepal at a glance</h3>
 <div class="tbl cmp"><table>
 <tr><th></th><th>Japan 2011 (HIC)</th><th>Nepal 2015 (LIC)</th></tr>
 <tr><td>Magnitude</td><td>9.0</td><td>7.9</td></tr>
@@ -691,7 +692,17 @@
 <tr><td>Homeless</td><td>500 000</td><td>3 million</td></tr>
 <tr><td>Damage</td><td>$245bn</td><td>$5bn</td></tr>
 <tr><td>Why the difference</td><td>Earthquake-proof buildings, warnings, evacuation, fast repairs</td><td>Weak buildings, landslides blocked roads, relied on international aid</td></tr>
-</table></div>
+</table></div></div>
+<div id="rccmp"><h3 style="margin-top:28px">Rio vs Cambridge at a glance</h3>
+<div class="tbl cmp"><table>
+<tr><th></th><th>Rio de Janeiro (NEE)</th><th>Cambridge (UK)</th></tr>
+<tr><td>Location</td><td>South-east coast of Brazil</td><td>East of England, inland, ~80 km north of London</td></tr>
+<tr><td>Why it grows</td><td>Rural-urban migration (65% migrants), natural increase</td><td>University and science jobs; national and international migration</td></tr>
+<tr><td>Big opportunity</td><td>Multiplier effect (2 steel jobs → 13); 105 hospitals</td><td>Cambridge North station; AstraZeneca and Science Park jobs</td></tr>
+<tr><td>Big challenge</td><td>Favelas: 50% no sewer, infant mortality 50 per 1 000</td><td>Inequality: Newnham ~2× GCSEs vs Abbey; sprawl; congestion</td></tr>
+<tr><td>Scheme</td><td>Favela Bairro (planning, ~$1bn)</td><td>CB1 (regeneration), Eddington (sustainability)</td></tr>
+</table></div></div>
+
 </div>
 <div id="cs-quiz" hidden><div id="quizbox"></div></div>
 </div>
@@ -811,7 +822,7 @@
 </div>
 </div>
 
-<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><a href="index.html#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
 <script src="shared/study.js"></script>
 <script>
 const TOPICS={A1:"Tectonic",A2:"Weather",A3:"Climate",B1:"Ecosystems",B2:"Rainforests",B3:"Deserts",C1:"Coasts",C2:"Rivers",U1:"Urban trends",U2:"Rio",U3:"Cambridge",U4:"Sustainability"};
@@ -1351,7 +1362,7 @@ const MOCK2=[
  {id:"P2.9",t:"U4",k:"w",mk:1,q:"Give one strategy used to reduce traffic congestion in a UK city.",ms:["e.g. Park & Ride / expensive parking (£3.60/h) / bus lanes / 20 mph / cycle lanes"],model:"Park & Ride sites let people leave their cars outside the city.",hint:"Name and example."}
 ]}
 ];
-Study.init({id:"geography",key:"geo-v1",topics:TOPICS,cards:CARDS,figs:FIGS,drill:DRILL,sets:[
+Study.init({id:"geography",key:"geo-v1",topics:TOPICS,groups:[["Paper 1 · Physical",["A1","A2","A3","B1","B2","B3","C1","C2"]],["Paper 2 · Human",["U1","U2","U3","U4"]]],cards:CARDS,figs:FIGS,drill:DRILL,sets:[
  {id:"mock",name:"Mock paper",blurb:"Questions 1–4 laid out like Paper 1: Section A, Section B, then Coasts and Rivers from Section C. The 9-markers are where the big marks are.",qs:MOCK},
  {id:"mock2",name:"Paper 2 mock",blurb:"Section A of Paper 2: urban trends, Rio de Janeiro and Cambridge. 33 marks (with SPaG) in about 35 minutes.",qs:MOCK2},
  {id:"unseen",name:"Unseen contexts",blurb:"New places, graphs and data you won't have seen. Use the skills (TEA, PEEL) and link them to what you know.",qs:UNSEEN}
@@ -1359,7 +1370,9 @@ Study.init({id:"geography",key:"geo-v1",topics:TOPICS,cards:CARDS,figs:FIGS,dril
 /* ---- Case studies tab: cards, hide-the-numbers recall, and the pick-a-case-study quiz ---- */
 (function(){
 const $=id=>document.getElementById(id);
-const SEC={A:"Section A · Hazards",B:"Section B · Living World",C:"Section C · Coasts & Rivers",U:"Paper 2 · Urban"};
+const SEC={A:"Paper 1 · Hazards",B:"Paper 1 · Living World",C:"Paper 1 · Coasts & Rivers",U:"Paper 2 · Urban"};
+const SECN={A:"Section A · Natural hazards",B:"Section B · Living world",C:"Section C · Coasts & rivers",U:"Section A · Urban issues"};
+const PAPERS=[["Paper 1 · Physical",["A","B","C"]],["Paper 2 · Human",["U"]]];
 const KEY="geo-cs-v1";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){st={}}
 st.best=st.best||{};const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const NUM=/((?:[$£~+#]|about )?\d[\d,.]*(?:\s\d{3})*(?:\s?(?:%|km²|km|mm|m|MW|bn|mn|million|billion|ha|t|°C|th|rd|nd|st)\b)?\+?)/g;
@@ -1367,10 +1380,13 @@ const hideNums=s=>s.replace(NUM,'<span class="nm" tabindex="0">$1</span>');
 let filt="all",view=st.view||"learn",hidden=!!st.hidden;
 function chip(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
 function drawCards(){
-  chip($("csfilter"),[["all","All "+CASES.length],["A","Hazards"],["B","Living World"],["C","Coasts & Rivers"],["U","Urban (Paper 2)"]],filt,k=>{filt=k;drawCards()});
+  const fl=$("csfilter");fl.className="cgroups";const n=s=>CASES.filter(c=>s.includes(c.sec)).length;
+  fl.innerHTML=`<div class="chips" style="margin:0"><button class="chip${filt==="all"?" on":""}" data-f="all">All ${CASES.length}</button></div>`+PAPERS.map(([pl,secs])=>`<div class="cgroup"><span class="cglab">${pl}</span><div class="chips" style="margin:0"><button class="chip${filt===secs.join("")?" on":""}" data-f="${secs.join("")}">Whole paper (${n(secs)})</button>${secs.length>1?secs.map(sc=>`<button class="chip${filt===sc?" on":""}" data-f="${sc}">${SECN[sc].split(" · ")[1]} (${n([sc])})</button>`).join(""):""}</div></div>`).join("");
+  fl.querySelectorAll("[data-f]").forEach(b=>b.onclick=()=>{filt=b.dataset.f;drawCards()});
+  const jn=document.getElementById("jncmp");if(jn)jn.hidden=!(filt==="all"||filt.includes("A"));const rc=document.getElementById("rccmp");if(rc)rc.hidden=!(filt==="all"||filt.includes("U"));
   $("cshide").setAttribute("aria-pressed",hidden);$("cshide").textContent=hidden?"Show the numbers":"Hide the numbers";
   $("cslist").classList.toggle("hiding",hidden);
-  $("cslist").innerHTML=CASES.filter(c=>filt==="all"||c.sec===filt).map(c=>`
+  $("cslist").innerHTML=CASES.filter(c=>filt==="all"||filt.includes(c.sec)).map(c=>`
   <article class="case" id="cs-${c.id}">
     <header><div class="cmeta"><span class="sec">${SEC[c.sec]}</span><span class="use">${c.use}</span></div><h3>${c.name}</h3><p class="where">${hideNums(c.where)}</p></header>
     <div class="stats">${c.stats.map(([n,l])=>`<div><b>${/\d/.test(n)?`<span class="nm" tabindex="0">${n}</span>`:n}</b><span>${l}</span></div>`).join("")}</div>
@@ -1390,8 +1406,17 @@ function setView(v){view=v;st.view=v;save();$("cs-learn").hidden=v!=="learn";$("
 function drawSetup(){run=null;
   const box=$("quizbox");
   box.innerHTML=`<p class="qlab">1. Pick case studies</p><div class="chips" id="qsel"></div><p class="qlab">2. Pick question type</p><div class="chips" id="qtype"></div><div class="row"><button class="btn p" id="qgo">Start quiz</button></div><p class="qinfo" id="qinfo"></p>`;
-  const items=[["all","All"],...CASES.map(c=>[c.id,c.name.replace(/,? \d{4}$/,"").replace(/^Malaysia: causes of deforestation$/,"Malaysia")])];
-  const drawSel=()=>{const el=$("qsel");el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");const on=sel.includes(k);b.className="chip"+(on?" on":"");b.textContent=l+(st.best[k]!=null?` · ${st.best[k]}%`:"");b.onclick=()=>{if(k==="all")sel=["all"];else{sel=sel.filter(x=>x!=="all");sel=on?sel.filter(x=>x!==k):[...sel,k];if(!sel.length)sel=["all"]}st.sel=sel;save();drawSel();info()};el.appendChild(b)})};
+  const short=c=>c.name.replace(/,? \d{4}$/,"").replace(/^Malaysia: causes of deforestation$/,"Malaysia");
+  const drawSel=()=>{const el=$("qsel");const isOn=id=>sel.includes("all")||sel.includes(id);
+    const tog=ids=>{const cur=sel.includes("all")?CASES.map(c=>c.id):sel.slice();const all=ids.every(i=>cur.includes(i));let n=all?cur.filter(i=>!ids.includes(i)):[...new Set([...cur,...ids])];sel=n.length===CASES.length?["all"]:(n.length?n:["all"]);st.sel=sel;save();drawSel();info()};
+    const btn=(ids,lab)=>{const all=ids.every(isOn);return `<button type="button" class="linkbtn sm" data-ids="${ids.join(",")}">${all?"Clear":"Select all"}${lab?" "+lab:""}</button>`};
+    el.className="";
+    el.innerHTML=`<div class="row" style="margin:0 0 10px"><button type="button" class="chip${sel.includes("all")?" on":""}" data-allc>Everything (${CASES.length})</button></div>`+PAPERS.map(([pl,secs])=>{const pids=CASES.filter(c=>secs.includes(c.sec)).map(c=>c.id);
+      return `<div class="pgroup"><div class="pgh"><span>${pl}</span>${btn(pids,"")}</div>${secs.map(sc=>{const cs=CASES.filter(c=>c.sec===sc);return `<div class="psec"><div class="sh"><span>${SECN[sc]}</span>${btn(cs.map(c=>c.id),"")}</div><div class="chips" style="margin:0">${cs.map(c=>`<button type="button" class="chip${isOn(c.id)?" on":""}" data-c="${c.id}">${short(c)}${st.best[c.id]!=null?` · ${st.best[c.id]}%`:""}</button>`).join("")}</div></div>`}).join("")}</div>`}).join("");
+    el.querySelector("[data-allc]").onclick=()=>{sel=["all"];st.sel=sel;save();drawSel();info()};
+    el.querySelectorAll("[data-ids]").forEach(b=>b.onclick=()=>tog(b.dataset.ids.split(",")));
+    el.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{const k=b.dataset.c;let cur=sel.includes("all")?CASES.map(c=>c.id):sel.slice();cur=cur.includes(k)?cur.filter(x=>x!==k):[...cur,k];sel=cur.length===CASES.length?["all"]:cur;if(!sel.length)sel=["all"];st.sel=sel;save();drawSel();info()});
+  };
   const drawType=()=>chip($("qtype"),[["recall","Quick recall"],["exam","Exam-style answers"],["mixed","Mixed"]],qmode,k=>{qmode=k;st.qmode=k;save();drawType();info()});
   const info=()=>{$("qinfo").textContent=`${pool().length} questions. ${qmode==="recall"?"Tick-box and number questions on the facts.":qmode==="exam"?"Write a full answer, then mark it against the mark scheme.":"Facts first, then an exam question for each case study."}`};
   drawSel();drawType();info();$("qgo").onclick=startQuiz;

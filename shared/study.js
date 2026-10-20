@@ -9,7 +9,9 @@ function load(){try{state=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(
   state.m=state.m||{};state.a=state.a||{};state.txt=state.txt||{};state.ai=state.ai||{};if(state.learn==null)state.learn=true;state.dr=state.dr||{r:0,t:0}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
 function chipRow(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
-function topicItems(){return [["All","All"],...Object.keys(C.topics).map(k=>[k,k])]}
+function topicItems(){return [["All","All"],...(C.groups||[]).map((g,i)=>["@"+i,g[0]]),...Object.keys(C.topics).map(k=>[k,k])]}
+const inTopic=(sel,k)=>sel==="All"||sel===k||(sel[0]==="@"&&C.groups[+sel.slice(1)][1].includes(k));
+const tlab=k=>k===C.topics[k]?k:k+" "+C.topics[k];
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
 /* tabs */
@@ -51,12 +53,13 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
   const close=()=>{sheet.hidden=true;document.body.classList.remove("qzopen");QZ=null};
   const top=(title)=>`<div class="qzbar"><b>${title}</b><button type="button" class="qzx" id="qzx" aria-label="Close quiz">✕</button></div>`;
   function setup(){const n=quizPool(sel).length;
-    sheet.innerHTML=top("Quiz me")+`<div class="qzin"><p class="qzlab">Choose topics</p><div class="qzchips">${keys.map(k=>`<button type="button" class="chip${sel.includes(k)?" on":""}" data-k="${k}" aria-pressed="${sel.includes(k)}">${k===C.topics[k]?k:k+" "+C.topics[k]}</button>`).join("")}</div>
+    sheet.innerHTML=top("Quiz me")+`<div class="qzin"><p class="qzlab">Choose topics</p>${(C.groups||[["",keys]]).map(([lab,gk],gi)=>{gk=gk.filter(k=>keys.includes(k));if(!gk.length)return"";const allOn=gk.every(k=>sel.includes(k));return `${lab?`<div class="qzgh"><span>${lab}</span><button type="button" class="linkbtn" data-g="${gi}">${allOn?"Clear":"Select all"} ${lab}</button></div>`:""}<div class="qzchips">${gk.map(k=>`<button type="button" class="chip${sel.includes(k)?" on":""}" data-k="${k}" aria-pressed="${sel.includes(k)}">${tlab(k)}</button>`).join("")}</div>`}).join("")}
       <div class="qzrow"><button type="button" class="linkbtn" id="qzall">${sel.length===keys.length?"Clear all":"Select all"}</button><span>${n} questions available</span></div>
       <p class="qzlab">How many questions?</p><div class="qzchips">${[5,10,20].map(x=>`<button type="button" class="chip${x===len?" on":""}" data-len="${x}">${x}</button>`).join("")}</div>
       <button type="button" class="btn p qzgo" id="qzgo"${n?"":" disabled"}>Start quiz</button></div>`;
     $("qzx").onclick=close;
     sheet.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=b.dataset.k;sel=sel.includes(k)?sel.filter(x=>x!==k):[...sel,k];setup()});
+    sheet.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const gk=C.groups[+b.dataset.g][1].filter(k=>keys.includes(k));const allOn=gk.every(k=>sel.includes(k));sel=allOn?sel.filter(k=>!gk.includes(k)):[...new Set([...sel,...gk])];setup()});
     sheet.querySelectorAll("[data-len]").forEach(b=>b.onclick=()=>{len=+b.dataset.len;setup()});
     $("qzall").onclick=()=>{sel=sel.length===keys.length?[]:keys.slice();setup()};
     $("qzgo").onclick=()=>start(shuffle(quizPool(sel)).slice(0,len))}
@@ -83,7 +86,10 @@ function setupTopicQuiz(){const rev=$("p-rev");if(!rev||!C.cards.length)return;
     const b=document.createElement("button");b.type="button";b.className="btn p qzbtn";b.textContent="Quiz me on "+(k===C.topics[k]?k:C.topics[k]);b.onclick=()=>openQuiz([k]);host.appendChild(b)});
   const bar=rev.querySelector(".revtools");const b=document.createElement("button");b.type="button";b.className="qzopenbtn";b.textContent="Quiz me";b.onclick=()=>openQuiz();
   if(bar)bar.prepend(b);else{const d=document.createElement("div");d.className="revtools";d.appendChild(b);rev.prepend(d)}}
-function setupJump(){const el=$("jump");if(!el)return;Object.entries(C.topics).forEach(([k,v])=>{const b=document.createElement("button");b.className="chip";b.textContent=k===v?k:k+" "+v;b.onclick=()=>{const s=$(k);if(s){if(s.classList.contains("acc")&&!s.classList.contains("open"))s.querySelector(".th").click();s.scrollIntoView({behavior:"smooth"})}};el.appendChild(b)})}
+function setupJump(){const el=$("jump");if(!el)return;
+  const mk=(host,k)=>{const b=document.createElement("button");b.className="chip";b.textContent=tlab(k);b.onclick=()=>{const s=$(k);if(s){if(s.classList.contains("acc")&&!s.classList.contains("open"))s.querySelector(".th").click();s.scrollIntoView({behavior:"smooth"})}};host.appendChild(b)};
+  if(C.groups){el.classList.add("cgroups");C.groups.forEach(([lab,ks])=>{const g=document.createElement("div");g.className="cgroup";g.innerHTML=`<span class="cglab">${lab}</span>`;const r=document.createElement("div");r.className="chips";ks.forEach(k=>mk(r,k));g.appendChild(r);el.appendChild(g)})}
+  else Object.keys(C.topics).forEach(k=>mk(el,k))}
 
 /* flashcards */
 let fcTopic="All",deck=[],idx=0,flipped=false;
@@ -96,7 +102,7 @@ function setupCards(){
   const mrow=document.createElement("div");mrow.className="chips";mrow.id="fcm";$("fcf").before(mrow);
   const prog=document.createElement("div");prog.className="fcprog";$("card").before(prog);
   const now=()=>Date.now(),isDue=c=>{const r=state.srs[ckey(c)];return !r||r.due<=now()};
-  const pool=()=>C.cards.filter(c=>fcTopic==="All"||c[0]===fcTopic);
+  const pool=()=>C.cards.filter(c=>inTopic(fcTopic,c[0]));
   const build=()=>{let d=pool();if(state.fcMode==="due")d=d.filter(isDue);deck=shuffle(d);idx=0;flipped=false;render()};
   const render=()=>{
     const p=pool(),due=p.filter(isDue).length,known=p.filter(c=>(state.srs[ckey(c)]||{}).b>=3).length;
