@@ -6,8 +6,8 @@ const css=`
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--nb-rule:rgba(111,166,245,.13);--nb-margin:#8E4A4A}}
 :root[data-theme="dark"]{--nb-rule:rgba(111,166,245,.13);--nb-margin:#8E4A4A}
 .nbs{display:grid;gap:22px}
-.nb{position:relative;background-color:var(--surface);background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--nb-rule) 31px,var(--nb-rule) 32px);border:1px solid var(--line);border-radius:6px 14px 14px 6px;padding:22px 18px 22px 66px;box-shadow:0 2px 0 var(--line)}
-.nb::before{content:"";position:absolute;top:0;bottom:0;left:50px;border-left:2px solid var(--nb-margin)}
+.nb{position:relative;background:var(--surface);border-radius:var(--r-lg,20px);padding:22px 18px 22px 66px;box-shadow:var(--shadow,0 1px 2px rgba(0,0,0,.06))}
+
 .nbhead{display:flex;flex-wrap:wrap;gap:12px 18px;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
 .nbhead h2{margin:0;font:700 1.35rem/1.25 var(--display)}
 .nbhead p{margin:4px 0 0;color:var(--muted);font-size:.92rem}
@@ -29,7 +29,7 @@ const css=`
 .nbnotes{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--bg);border:1px solid var(--line)}
 .nbnotes h3{margin:0 0 6px;font:700 .8rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
 .nbnotes ul{margin:0;padding-left:18px}
-@media (max-width:480px){.nb{padding:18px 14px 18px 46px}.nb::before{left:34px}.nbq .nbn{left:-44px;width:30px;font-size:.92rem}.nbtime{text-align:left}}
+@media (max-width:480px){.nb{padding:18px 14px 18px 46px}.nbq .nbn{left:-44px;width:30px;font-size:.92rem}.nbtime{text-align:left}}
 `;
 const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
 function render(el,papers){
