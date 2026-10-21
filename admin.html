@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="GCSE revision on GCSEasy.">
+<link rel="canonical" href="https://gcseasy.pages.dev/admin.html">
+<meta property="og:title" content="GCSEasy">
+<meta property="og:description" content="GCSE revision on GCSEasy.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gcseasy.pages.dev/admin.html">
+<meta name="theme-color" content="#F3F6F9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151C" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Owner dashboard · GCSEasy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;700&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="shared/study.css">
+<link rel="stylesheet" href="shared/site.css">
+<script src="shared/config.js"></script>
+<script src="shared/account.js"></script>
+<script src="shared/site.js"></script>
+<style>
+.dash h1{font-size:1.9rem;margin:0}.dash .dsub{color:var(--muted);margin:4px 0 0}
+.dhead{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:20px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px;min-width:0}
+.kpi .lab{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.kpi .val{font:700 2rem/1.1 var(--display);margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.kpi .sm{color:var(--muted);font-size:.86rem}
+.panel2{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;min-width:0}
+.panel2 h2{font-size:1.1rem;margin:0 0 2px}.panel2 .pd{color:var(--muted);font-size:.88rem;margin:0 0 10px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.chart{position:relative}.chart svg{display:block;width:100%;height:auto;overflow:visible}
+.chart .gl{stroke:var(--line);stroke-width:1}.chart .ax{fill:var(--muted);font:500 11px var(--mono)}
+.chart .bar{fill:var(--accent)}.chart .hit{fill:transparent;cursor:crosshair}.chart .hit:hover+.bar,.chart g.on .bar{fill:var(--ink)}
+.tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--surface);border-radius:8px;padding:6px 9px;font-size:.82rem;white-space:nowrap;transform:translate(-50%,-110%);z-index:2}
+.tip[hidden]{display:none}
+.blist{display:grid;gap:7px;margin:0;padding:0;list-style:none}
+.blist li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 10px;font-size:.92rem}
+.blist .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.blist .n{font-variant-numeric:tabular-nums;color:var(--muted)}
+.blist .tr{grid-column:1/-1;height:6px;border-radius:3px;background:var(--bg);overflow:hidden}.blist .tr i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.dtbl{width:100%;border-collapse:collapse;font-size:.9rem}.dtbl th,.dtbl td{text-align:left;padding:7px 6px;border-bottom:1px solid var(--line)}.dtbl td.r,.dtbl th.r{text-align:right;font-variant-numeric:tabular-nums}
+.gate{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px;max-width:560px}
+.gate h2{margin-top:0}.gate ol{padding-left:20px;line-height:1.6}
+.empty{color:var(--muted);font-size:.92rem;margin:4px 0}
+details.tv{margin-top:8px}details.tv summary{cursor:pointer;color:var(--muted);font-size:.85rem}
+</style>
+</head>
+<body>
+<header class="sitebar"><div class="in"><a class="brand" href="index.html" aria-label="GCSEasy home">GCS<mark>Easy</mark></a><nav class="sitenav" aria-label="Site"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><button class="themebtn" type="button" data-theme-toggle><i></i></button></nav></div></header>
+<div class="wrap dash">
+<div class="dhead"><div><h1>Owner dashboard</h1><p class="dsub" id="dsub">Private: only the site owner's account can see this.</p></div><button class="btn sm" type="button" id="dref" hidden>Refresh</button></div>
+<div id="dbody"><p class="empty">Loading…</p></div>
+</div>
+<script>
+(function(){
+const $=id=>document.getElementById(id),A=window.GCSEasyAuth,API=(window.GCSEASY_API||"").replace(/\/$/,"");
+const esc=t=>String(t==null?"":t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const nf=n=>Number(n||0).toLocaleString("en-GB");
+const days=n=>{const out=[];for(let i=n-1;i>=0;i--)out.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));return out};
+const short=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:"UTC"});
+function gate(title,body,btn){$("dbody").innerHTML=`<div class="gate"><h2>${title}</h2>${body}${btn?`<button class="btn p" type="button" id="dgo">${btn}</button>`:""}</div>`;if(btn)$("dgo").onclick=()=>A.open()}
+function bars(id,data,label,fmt){ // one series, so no legend: the title names it
+  const el0=document.getElementById(id),W=Math.max(280,Math.round(el0.clientWidth||640)),H=Math.round(Math.min(220,Math.max(160,W*.42))),L=34,R=6,T=10,B=24,n=data.length,max=Math.max(1,...data.map(d=>d.v)),step=Math.pow(10,Math.floor(Math.log10(max))),nice=Math.ceil(max/step)*step||1;
+  const bw=(W-L-R)/n,x=i=>L+i*bw,y=v=>T+(H-T-B)*(1-v/nice);
+  let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
+  [0,.5,1].forEach(f=>{const v=Math.round(nice*f),yy=y(v);s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}"/><text class="ax" x="${L-6}" y="${yy+4}" text-anchor="end">${nf(v)}</text>`});
+  data.forEach((d,i)=>{const h=Math.max(0,y(0)-y(d.v)),w=Math.max(2,bw-2),bx=x(i)+1,r=Math.min(4,w/2,h);
+    const path=h<=0?"":`M${bx},${y(0)} V${y(0)-h+r} Q${bx},${y(0)-h} ${bx+r},${y(0)-h} H${bx+w-r} Q${bx+w},${y(0)-h} ${bx+w},${y(0)-h+r} V${y(0)} Z`;
+    s+=`<g data-i="${i}"><rect class="hit" x="${x(i)}" y="${T}" width="${bw}" height="${H-T-B}"/><path class="bar" d="${path}"/></g>`;
+    if(i%7===(n-1)%7)s+=`<text class="ax" x="${i===n-1?x(i)+bw:x(i)+bw/2}" y="${H-6}" text-anchor="${i===n-1?"end":"middle"}">${short(d.d)}</text>`});
+  s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" style="stroke:var(--muted)"/></svg><div class="tip" hidden></div>`;
+  const el=$(id);el.innerHTML=s;const tip=el.querySelector(".tip"),svg=el.querySelector("svg");
+  el.querySelectorAll("g[data-i]").forEach(g=>{const d=data[+g.dataset.i];
+    const show=()=>{el.querySelectorAll("g.on").forEach(o=>o.classList.remove("on"));g.classList.add("on");const r=svg.getBoundingClientRect(),k=r.width/W;
+      tip.innerHTML=`<b>${short(d.d)}</b> · ${fmt(d)}`;tip.style.left=Math.min(r.width-60,Math.max(60,(x(+g.dataset.i)+bw/2)*k))+"px";tip.style.top=(y(d.v)*k)+"px";tip.hidden=false};
+    g.addEventListener("pointerenter",show);g.addEventListener("click",show)});
+  el.addEventListener("pointerleave",()=>{tip.hidden=true;el.querySelectorAll("g.on").forEach(o=>o.classList.remove("on"))})}
+function blist(rows,key,lab){if(!rows.length)return `<p class="empty">Nothing yet.</p>`;const max=Math.max(...rows.map(r=>r.n));
+  return `<ul class="blist">${rows.map(r=>`<li><span class="nm">${esc(lab?lab(r[key]):r[key])}</span><span class="n">${nf(r.n)}</span><span class="tr"><i style="width:${r.n/max*100}%"></i></span></li>`).join("")}</ul>`}
+const PN={"/":"Home","/index.html":"Home"};const pname=p=>PN[p]||p.replace(/^\//,"").replace(/\.html$/,"").replace(/-/g," ").replace(/^\w/,c=>c.toUpperCase());
+async function load(){
+  if(!API){gate("Not connected","<p>The site isn't connected to its server here. Open the dashboard on the live site.</p>");return}
+  if(!A||!A.enabled){gate("Accounts aren't switched on yet","<p>The dashboard appears once sign-in (Firebase) and the database (D1) are set up.</p>");return}
+  if(!A.user()){gate("Sign in to see the dashboard","<p>Sign in with the owner account (the email set as <code>ADMIN_EMAIL</code> in Cloudflare).</p>","Sign in");return}
+  $("dbody").innerHTML=`<p class="empty">Loading…</p>`;
+  let d;try{const r=await fetch(API+"/admin/stats",{headers:await A.headers()});d=await r.json();
+    if(r.status===403){gate("This isn't the owner account",`<p>You're signed in as <b>${esc(A.user().email)}</b>. Only the email set as <code>ADMIN_EMAIL</code> in Cloudflare can see this page, and it must be verified.</p>`,"Switch account");return}
+    if(!r.ok)throw new Error(d.error||"Couldn't load stats")}catch(e){gate("Couldn't load the dashboard",`<p>${esc(e.message)}</p>`);return}
+  $("dref").hidden=false;$("dsub").textContent="Updated "+new Date().toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit"})+". Visitors are counted once per day per device.";
+  const T=d.totals,U=d.users,vb=Object.fromEntries(d.byDay.map(r=>[r.day,r])),nb=Object.fromEntries(d.newByDay.map(r=>[r.day,r.n]));
+  const vis=days(30).map(k=>({d:k,v:(vb[k]||{}).visitors||0,views:(vb[k]||{}).views||0})),sig=days(30).map(k=>({d:k,v:nb[k]||0}));
+  const dev=Object.fromEntries(d.devs.map(r=>[r.dev,r.n])),devTot=d.devs.reduce((a,r)=>a+r.n,0)||1;
+  $("dbody").innerHTML=`
+  <div class="kpis">
+    <div class="kpi"><div class="lab">Visitors today</div><div class="val">${nf(T.u1)}</div><div class="sm">${nf(T.v1)} page views</div></div>
+    <div class="kpi"><div class="lab">Visitors · 7 days</div><div class="val">${nf(T.u7)}</div><div class="sm">${nf(T.v7)} page views</div></div>
+    <div class="kpi"><div class="lab">Visitors · 30 days</div><div class="val">${nf(T.u30)}</div><div class="sm">${nf(T.v30)} views · ${nf(T.s30)} signed in</div></div>
+    <div class="kpi"><div class="lab">Accounts</div><div class="val">${nf(U.total)}</div><div class="sm">+${nf(U.new1)} today · +${nf(U.new7)} this week</div></div>
+    <div class="kpi"><div class="lab">Active accounts · 7 days</div><div class="val">${nf(U.active7)}</div><div class="sm">${nf(U.verified)} verified</div></div>
+    <div class="kpi"><div class="lab">AI marks today</div><div class="val">${nf(d.ai.today)}</div><div class="sm">of ${nf(d.ai.siteLimit)} site limit · ${nf(d.ai.yesterday)} yesterday</div></div>
+    <div class="kpi"><div class="lab">Classes</div><div class="val">${d.classes==null?"–":nf(d.classes)}</div><div class="sm">groups created</div></div>
+  </div>
+  <div class="panel2"><h2>Visitors per day</h2><p class="pd">Last 30 days. Hover or tap a bar for details.</p><div class="chart" id="cvis"></div>
+    <details class="tv"><summary>Show as a table</summary><table class="dtbl"><tr><th>Day</th><th class="r">Visitors</th><th class="r">Page views</th></tr>${vis.slice().reverse().map(r=>`<tr><td>${short(r.d)}</td><td class="r">${nf(r.v)}</td><td class="r">${nf(r.views)}</td></tr>`).join("")}</table></details></div>
+  <div class="panel2"><h2>New accounts per day</h2><p class="pd">Last 30 days.</p><div class="chart" id="csig"></div>
+    <details class="tv"><summary>Show as a table</summary><table class="dtbl"><tr><th>Day</th><th class="r">New accounts</th></tr>${sig.slice().reverse().map(r=>`<tr><td>${short(r.d)}</td><td class="r">${nf(r.v)}</td></tr>`).join("")}</table></details></div>
+  <div class="grid2">
+    <div class="panel2"><h2>Top pages</h2><p class="pd">Page views, last 7 days.</p>${blist(d.pages,"path",pname)}</div>
+    <div class="panel2"><h2>Where visitors come from</h2><p class="pd">Other websites, last 30 days. Most visits are direct or from search.</p>${blist(d.refs,"ref")}</div>
+    <div class="panel2"><h2>Devices</h2><p class="pd">Visitors, last 7 days.</p>${blist(["mobile","desktop","tablet"].filter(k=>dev[k]).map(k=>({k:k[0].toUpperCase()+k.slice(1)+" · "+Math.round(dev[k]/devTot*100)+"%",n:dev[k]})),"k")}</div>
+    <div class="panel2"><h2>Latest sign-ups</h2><p class="pd">Emails are partly hidden.</p>${d.recent.length?`<table class="dtbl"><tr><th>Account</th><th>Joined</th><th>Verified</th></tr>${d.recent.map(r=>`<tr><td>${esc(r.email)}</td><td>${new Date(r.created).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</td><td>${r.verified?"Yes":"Not yet"}</td></tr>`).join("")}</table>`:`<p class="empty">No accounts yet.</p>`}</div>
+  </div>`;
+  window.onresize=()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{bars("cvis",vis,"Visitors per day, last 30 days",r=>`${nf(r.v)} visitors · ${nf(r.views)} views`);bars("csig",sig,"New accounts per day, last 30 days",r=>`${nf(r.v)} new account${r.v===1?"":"s"}`)},150)};
+  bars("cvis",vis,"Visitors per day, last 30 days",r=>`${nf(r.v)} visitors · ${nf(r.views)} views`);
+  bars("csig",sig,"New accounts per day, last 30 days",r=>`${nf(r.v)} new account${r.v===1?"":"s"}`);
+}
+$("dref").onclick=load;
+document.addEventListener("DOMContentLoaded",()=>{load();if(A&&A.onChange){let was=!!(A.user());A.onChange(u=>{if(!!u!==was){was=!!u;load()}})}});
+})();
+</script>
+</body>
+</html>

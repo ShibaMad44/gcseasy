@@ -136,14 +136,16 @@ function setupBotnav(){if(document.querySelector(".botnav"))return;const path=lo
   document.body.appendChild(n)}
 /* ---- AI: Claude when the page runs inside Claude, otherwise the GCSEasy server (free Cloudflare AI) ---- */
 const API=(window.GCSEASY_API||"").replace(/\/$/,"");
+const authH=async()=>{try{return window.GCSEasyAuth&&GCSEasyAuth.enabled?await GCSEasyAuth.headers():{}}catch(e){return {}}};
 function parseJSON(t){t=String(t||"").trim();try{return JSON.parse(t)}catch(e){}const f=t.match(/```(?:json)?\s*([\s\S]*?)```/);if(f){try{return JSON.parse(f[1])}catch(e){}}
   const a=t.indexOf("{"),b=t.lastIndexOf("}");if(a>=0&&b>a){try{return JSON.parse(t.slice(a,b+1))}catch(e){}}const err=new Error("bad json");err.code="invalid_json";err.text=t;throw err}
 let _ai;
 function aiClient(){if(_ai)return _ai;
   _ai=(async()=>{
     if(window.claude&&typeof window.claude.use==="function"){try{const f=await window.claude.use("sample");if(f)return {kind:"claude",json:(p,o)=>f.json(p,Object.assign({modelTier:"default",cache:false},o||{})),text:async(p,o)=>(await f(p,Object.assign({cache:false},o||{}))).text}}catch(e){}}
-    if(API){const call=async(prompt,json)=>{let r;try{r=await fetch(API+"/ai",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt:String(prompt).slice(0,24000),json})})}catch(e){throw {code:"upstream_error"}}
-        const d=await r.json().catch(()=>({}));if(d&&d.limit)setQuota(d);if(!r.ok)throw {code:d.code||(r.status===429?"rate_limited":"upstream_error"),message:d.error};return d.text};
+    if(API){const call=async(prompt,json)=>{let r;try{r=await fetch(API+"/ai",{method:"POST",headers:Object.assign({"Content-Type":"application/json"},await authH()),body:JSON.stringify({prompt:String(prompt).slice(0,24000),json})})}catch(e){throw {code:"upstream_error"}}
+        const d=await r.json().catch(()=>({}));if(d&&d.limit)setQuota(d);
+        if(!r.ok){if((d.code==="signin"||d.code==="verify")&&window.GCSEasyAuth)GCSEasyAuth.open(d.code);throw {code:d.code||(r.status===429?"rate_limited":"upstream_error"),message:d.error}}return d.text};
       return {kind:"server",json:async p=>parseJSON(await call(p,true)),text:p=>call(p,false)}}
     return null})();
   return _ai}
@@ -167,18 +169,19 @@ function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td
 /* ---- AI quota: "3 of 40 used today · resets at 1:00am" on any element with class aiquota ---- */
 let QUOTA=null;
 const resetTime=()=>{const t=QUOTA&&QUOTA.resetsAt?new Date(QUOTA.resetsAt):(()=>{const d=new Date();d.setUTCHours(24,0,0,0);return d})();return t.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit",hour12:true}).replace(" ","").replace(":00","")};
-function quotaText(){if(!QUOTA)return "";const left=Math.max(0,QUOTA.limit-QUOTA.used);
+function quotaText(){if(!QUOTA)return "";if(QUOTA.signin)return "AI marking: make a free account to get 40 marks a day.";const left=Math.max(0,QUOTA.limit-QUOTA.used);
   if(QUOTA.siteUsed!=null&&QUOTA.siteUsed>=QUOTA.siteLimit)return `The free AI has hit today's limit for the whole site. It resets at ${resetTime()}.`;
   return left?`AI marking: ${QUOTA.used} of ${QUOTA.limit} used today · resets at ${resetTime()}`:`You've used all ${QUOTA.limit} AI marks today. They reset at ${resetTime()}.`}
 function setQuota(d){QUOTA=Object.assign(QUOTA||{},d);drawQuota()}
 function drawQuota(){const t=quotaText();document.querySelectorAll(".aiquota").forEach(el=>{el.textContent=t;el.hidden=!t;el.classList.toggle("out",!!QUOTA&&QUOTA.used>=QUOTA.limit)})}
-async function loadQuota(){if(!API||(window.claude&&window.claude.use))return;try{const r=await fetch(API+"/ai/usage");if(r.ok)setQuota(await r.json())}catch(e){}}
+async function loadQuota(){if(!API||(window.claude&&window.claude.use))return;try{const r=await fetch(API+"/ai/usage",{headers:await authH()});if(r.ok){const d=await r.json();QUOTA=null;setQuota(Object.assign({signin:false},d))}}catch(e){}}
 function aiLimitMsg(){return `You've used all ${QUOTA?QUOTA.limit:40} AI marks today. They reset at ${resetTime()}. Use the mark scheme for now.`}
 /* ---- class leaderboards (server only) ---- */
 const LBK="gcseasy-me";
 function me(){let m=null;try{m=JSON.parse(localStorage.getItem(LBK)||"null")}catch(e){}if(!m||!m.id){m={id:(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()),name:"",groups:[]};try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}return m}
 function saveMe(m){try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}
-async function lbCall(path,body){if(!API)throw {code:"no_server"};const r=await fetch(API+path,body?{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)}:{});const d=await r.json().catch(()=>({}));if(!r.ok)throw {code:d.code||"error",message:d.error};return d}
+async function lbCall(path,body){if(!API)throw {code:"no_server"};const h=await authH();const r=await fetch(API+path,body?{method:"POST",headers:Object.assign({"Content-Type":"application/json"},h),body:JSON.stringify(body)}:{headers:h});const d=await r.json().catch(()=>({}));
+  if(!r.ok){if(d.code==="signin"&&window.GCSEasyAuth)GCSEasyAuth.open("classes");throw {code:d.code||"error",message:d.error}}return d}
 function myStats(){const L=getLog(),t=dayStart();const days=new Set(L.map(x=>{const d=new Date(x.s);d.setHours(0,0,0,0);return d.getTime()}));
   let dc={};try{dc=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}
   Object.keys(dc.done||{}).forEach(k=>days.add(new Date(k+"T00:00:00").getTime()));
@@ -191,7 +194,20 @@ async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)ret
   if(!force&&last.sig===sig&&Date.now()-(last.t||0)<6*3600e3)return;
   for(const g of m.groups){try{await lbCall("/lb/score",{code:g,id:m.id,name:m.name,stats:st})}catch(e){}}
   try{localStorage.setItem("gcseasy-lbsent",JSON.stringify({sig,t:Date.now()}))}catch(e){}}
-function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500);loadQuota()}
+/* ---- anonymous page-view count for the owner dashboard (no cookies; the visitor ID changes every day) ---- */
+function hit(){if(!API||!/^https?:$/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
+  try{fetch(API+"/hit",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer,s:!!(window.GCSEasyAuth&&GCSEasyAuth.user())})}).catch(()=>{})}catch(e){}}
+/* ---- installable app: offline copy + home-screen icon ---- */
+let installEvt=null;
+const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function paintInstall(){document.querySelectorAll("[data-install]").forEach(el=>{const mode=standalone()?"done":installEvt?"prompt":isIOS()?"ios":"manual";el.dataset.mode=mode;el.hidden=mode==="done"})}
+async function install(){if(installEvt){installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;paintInstall();return "prompted"}return isIOS()?"ios":"manual"}
+addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;paintInstall()});
+addEventListener("appinstalled",()=>{installEvt=null;paintInstall()});
+function setupSW(){if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/sw.js").catch(()=>{})}
+function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+  if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+window.GCSEasy={install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();

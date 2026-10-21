@@ -1,0 +1,8 @@
+/sw.js
+  Cache-Control: no-cache
+/admin.html
+  X-Robots-Tag: noindex
+  Cache-Control: no-store
+/admin
+  X-Robots-Tag: noindex
+  Cache-Control: no-store

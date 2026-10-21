@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="shared/study.css">
 <link rel="stylesheet" href="shared/site.css">
 <script src="shared/config.js"></script>
+<script src="shared/account.js"></script>
 <script src="shared/site.js" charset="utf-8"></script>
 <style>
 /* Home v2. Layout: compact promise → your progress → subject tiles → how/tools/papers; phone-first single column, two columns from 820px. */
@@ -91,6 +92,12 @@ body{font-size:16.5px}
 /* sections */
 .sec h2{font-size:1.5rem;letter-spacing:-.015em}
 .sec .sdesc{color:var(--muted);margin:6px 0 18px;max-width:60ch;font-size:.98rem}
+.appcard{display:flex;gap:18px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px}
+.appicon{flex:0 0 64px;height:64px;border-radius:16px;background:#16212E;display:grid;place-items:center;position:relative;overflow:hidden}
+.appicon::before{content:"";position:absolute;left:16%;right:16%;top:53%;height:19%;background:#FFD84D;border-radius:4px}
+.appicon span{position:relative;color:#fff;font:700 1.55rem Arial,sans-serif;margin-top:14%}
+.appcard .sdesc{margin-bottom:14px}.apphelp{margin-top:12px!important;color:var(--ink)!important}
+@media (max-width:480px){.appcard{flex-direction:column}}
 .mine{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:var(--ink);color:var(--bg);border-radius:22px;padding:18px 20px;margin:0}
 .mine h2{font:700 .74rem var(--display);margin:0;flex-basis:100%;text-transform:uppercase;letter-spacing:.1em;opacity:.7}
 .mine div{display:grid}.mine b{font:700 1.4rem var(--display);font-variant-numeric:tabular-nums}.mine span{font-size:.8rem;opacity:.75}
@@ -140,7 +147,7 @@ body{font-size:16.5px}
   <div>
     <p class="eyebrow">Free GCSE revision</p>
     <h1>Revise less. Remember more. Get <mark>exam ready</mark>.</h1>
-    <p class="lede">Notes, flashcards and exam questions with real mark schemes, for every topic. Free, no sign-up.</p>
+    <p class="lede">Notes, flashcards and exam questions with real mark schemes, for every topic. Free, and no sign-up needed to revise.</p>
     <div class="ctas"><a class="cta main" href="#subjects">Choose a subject</a><a class="cta alt" href="tools.html">Study tools</a></div>
     <div class="stats" id="stats"></div>
   </div>
@@ -198,6 +205,14 @@ body{font-size:16.5px}
   </div>
 </section>
 
+<section class="sec appsec" id="app" data-install hidden>
+<div class="appcard"><div class="appicon" aria-hidden="true"><span>GE</span></div><div>
+<h2>Get the GCSEasy app</h2>
+<p class="sdesc">Install it on your phone, tablet or laptop. It opens full-screen from your home screen, and pages you've opened work offline.</p>
+<button class="cta main" type="button" id="appbtn">Install the app</button>
+<p class="sdesc apphelp" id="apphelp" hidden></p></div></div>
+</section>
+
 <section class="sec" id="papers">
   <h2>Real past papers</h2>
   <p class="sdesc">GCSEasy questions are original, written in the style of the real exams. Finish your revision with real papers and mark schemes.</p>
@@ -209,7 +224,7 @@ body{font-size:16.5px}
 </section>
 </main>
 
-<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress is saved only in your browser.</p></div></footer>
+<footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
 
 <script src="shared/bank.js"></script>
 <script>
@@ -269,6 +284,11 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
       $("dnext").onclick=()=>{if(last){const score=cur.ans.filter((a,j)=>a===Q[j].a).length;st.done[TODAY]={score,of:5,ans:cur.ans};delete st.cur;save();GCSEasy.addXP(score*2+5+(score===5?5:0),"daily",0,"daily:"+TODAY);if(GCSEasy.lbSync)GCSEasy.lbSync(true).then(()=>window.drawGroups&&drawGroups())}else{cur.i++;st.cur=cur;save()}draw()}})}
   draw()})();
 
+/* ---- install the app ---- */
+(function(){const b=$("appbtn");if(!b)return;b.onclick=async()=>{const r=await GCSEasy.install();const h=$("apphelp");
+  if(r==="ios"){h.hidden=false;h.innerHTML="On iPhone or iPad: open this page in <b>Safari</b>, tap the <b>Share</b> button (the square with an arrow), then <b>Add to Home Screen</b>."}
+  else if(r==="manual"){h.hidden=false;h.innerHTML="Open the browser menu (<b>⋮</b> in Chrome or Edge) and choose <b>Install app</b> or <b>Add to Home screen</b>. On a school computer this may be turned off."}}})();
+
 /* ---- class leaderboards ---- */
 (function(){const host=$("groups");if(!host)return;const G=GCSEasy;const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   if(!G.API){host.querySelector(".gbody").innerHTML=`<p class="sdesc" style="margin:0">Class leaderboards work on the main GCSEasy site. Open it there to create or join a group.</p>`;return}
@@ -281,6 +301,7 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
       <p class="gmsg" id="gmsg" role="status">${esc(msg)}</p></div>`;
       const nick=()=>$("gnick").value.trim();
       const go=async(path,payload)=>{if(nick().length<2){$("gmsg").textContent="Add a nickname first (at least 2 letters).";return}
+        if(window.GCSEasyAuth&&GCSEasyAuth.enabled&&!GCSEasyAuth.user()){$("gmsg").textContent="Make a free account first, so your class place follows you to any device.";GCSEasyAuth.open("classes");return}
         $("gmsg").textContent="Just a sec…";try{const g=await G.lbCall(path,Object.assign({id:m.id,nick:nick()},payload));const mm=G.me();mm.name=nick();if(!mm.groups.includes(g.code))mm.groups.push(g.code);G.saveMe(mm);adding=false;await G.lbSync(true);msg="";drawGroups()}
         catch(e){$("gmsg").textContent=e.message||({not_found:"No group with that code. Check it and try again.",bad_name:"Pick a different nickname."}[e.code])||"That didn't work. Try again."}};
       $("gjoin").onclick=()=>go("/lb/join",{code:$("gcode").value.trim().toUpperCase()});$("gmake").onclick=()=>go("/lb/create",{name:$("gname").value.trim()});return}
