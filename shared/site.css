@@ -20,8 +20,7 @@
 /* logo: flashcard icon + wordmark with a yellow underline under "Easy" */
 .brand{display:inline-flex;align-items:center}
 .brand::before{content:"";flex:0 0 auto;margin-right:.42em;width:1.38em;height:1.38em;border-radius:.34em;background:url(../icon.svg) center/contain no-repeat}
-.brand mark{background:none;color:inherit;padding:0;position:relative}
-.brand mark::after{content:"";position:absolute;left:.04em;right:.04em;bottom:-.2em;height:.16em;border-radius:.1em;background:#FFD84D}
+.brand mark{background:linear-gradient(transparent 40%,var(--hl) 40%,var(--hl) 90%,transparent 90%);color:inherit;padding:0 1px}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .brand::before{box-shadow:0 0 0 1px rgba(255,255,255,.16)}}
 :root[data-theme="dark"] .brand::before{box-shadow:0 0 0 1px rgba(255,255,255,.16)}
 .sitenav{display:flex;align-items:center;gap:14px}
