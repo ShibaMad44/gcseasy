@@ -74,7 +74,7 @@ body{font-size:16.5px}
 .gcode{border:0;background:var(--hl);color:var(--hl-ink);font:700 .85rem var(--mono);padding:8px 12px;border-radius:10px;cursor:pointer;white-space:nowrap}
 .gtbl{overflow-x:auto}.gtbl table{width:100%;border-collapse:collapse;font-size:.92rem;background:transparent}.gtbl th,.gtbl td{padding:8px 6px;border:0;border-bottom:1px solid var(--line);text-align:left}.gtbl th{background:transparent;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .gtbl .rn{text-align:right;font-variant-numeric:tabular-nums}.gtbl tr.you td{font-weight:700}.gtbl tr:last-child td{border-bottom:0}
-.gfoot{display:flex;justify-content:flex-end;margin-top:8px}
+.gfoot{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:6px 16px;margin-top:8px}.gdel{color:var(--bad,#c0392b)!important}
 .today h2{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px}
 .trows2{display:grid;gap:8px}
 .trow{display:flex;gap:12px;align-items:center;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink)}
@@ -304,14 +304,19 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
         catch(e){$("gmsg").textContent=e.message||({not_found:"No group with that code. Check it and try again.",bad_name:"Pick a different nickname."}[e.code])||"That didn't work. Try again."}};
       $("gjoin").onclick=()=>go("/lb/join",{code:$("gcode").value.trim().toUpperCase()});$("gmake").onclick=()=>go("/lb/create",{name:$("gname").value.trim()});return}
     body.innerHTML=`<p class="sdesc" style="margin:0">Loading your groups…</p>`;
-    const parts=await Promise.all(m.groups.map(c=>G.lbCall("/lb/"+c).catch(e=>({code:c,err:e}))));
+    let parts=await Promise.all(m.groups.map(c=>G.lbCall("/lb/"+c).catch(e=>({code:c,err:e}))));
+    const gone=parts.filter(g=>g.err&&g.err.code==="not_found").map(g=>g.code); // class was deleted or emptied: forget it
+    if(gone.length){m.groups=m.groups.filter(c=>!gone.includes(c));G.saveMe(m);parts=parts.filter(g=>!gone.includes(g.code));
+      if(!parts.length){msg="That class no longer exists. Join or create another.";adding=true;drawGroups();return}}
     body.innerHTML=parts.map(g=>{if(g.err)return `<div class="gcard"><p>Group ${esc(g.code)} couldn't be loaded.</p></div>`;
       const you=m.id.slice(0,8);
       return `<div class="gcard"><div class="ghead"><div><b>${esc(g.name)}</b><span>${g.members.length} member${g.members.length===1?"":"s"}</span></div><button class="gcode" data-code="${g.code}" type="button" title="Copy the join code">Code ${g.code}</button></div>
       <div class="gtbl"><table><tr><th>#</th><th>Name</th><th class="rn">XP (7d)</th><th class="rn">Streak</th><th class="rn">Today</th></tr>${g.members.slice().sort((a,b)=>b.mins-a.mins||b.streak-a.streak).map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}</td><td class="rn"><b>${x.mins}</b></td><td class="rn">${x.streak}</td><td class="rn">${x.daily?x.daily.score+"/"+x.daily.of:"–"}</td></tr>`).join("")}</table></div>
-      <div class="gfoot"><button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button></div></div>`}).join("")+
+      <div class="gfoot"><button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button>${g.owner&&g.owner===you?`<button class="linkbtn gdel" data-del="${g.code}" type="button">Delete class for everyone</button>`:""}</div></div>`}).join("")+
       `<div class="gfoot"><button class="dbtn alt" id="gadd" type="button">Join or create another group</button></div>`;
     body.querySelectorAll(".gcode").forEach(b=>b.onclick=async()=>{const t=`Join my GCSEasy revision group: code ${b.dataset.code}`;try{await navigator.clipboard.writeText(t);b.textContent="Copied"}catch(e){b.textContent=b.dataset.code}setTimeout(()=>b.textContent="Code "+b.dataset.code,2000)});
+    body.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again: this removes it for everyone";return}
+      b.textContent="Deleting\u2026";try{await G.lbCall("/lb/delete",{code:b.dataset.del,id:m.id});m.groups=m.groups.filter(c=>c!==b.dataset.del);G.saveMe(m);drawGroups()}catch(e){b.textContent=e.message||"Couldn't delete it"}});
     body.querySelectorAll("[data-leave]").forEach(b=>b.onclick=async()=>{if(b.dataset.sure){await G.lbCall("/lb/leave",{code:b.dataset.leave,id:m.id}).catch(()=>{});m.groups=m.groups.filter(c=>c!==b.dataset.leave);G.saveMe(m);drawGroups()}else{b.dataset.sure=1;b.textContent="Tap again to leave"}});
     $("gadd").onclick=()=>{adding=true;drawGroups()}};
   G.lbSync(true).finally(drawGroups)})();

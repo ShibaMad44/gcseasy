@@ -126,7 +126,7 @@ function pub(g) {
     daily: m.dl && m.dl.date === today() ? m.dl : null, answered: m.ca || 0, seen: m.t || 0,
   }));
   members.sort((a, b) => b.streak - a.streak || (b.daily?.score ?? -1) - (a.daily?.score ?? -1) || b.mins - a.mins);
-  return { code: g.code, name: g.name, members };
+  return { code: g.code, name: g.name, owner: g.owner ? g.owner.slice(0, 8) : null, members };
 }
 
 async function getGroup(env, code) {
@@ -233,11 +233,25 @@ export default {
         ])).map((r) => r.results || []);
         const [live, inst, appRow, hours, acts, countries, weekdays] = extra;
         const aiToday = parseInt((await env.LB.get(`ai:${t0}`)) || "0", 10), aiYest = parseInt((await env.LB.get(`ai:${day(1)}`)) || "0", 10);
-        let classes = null; try { classes = (await env.LB.list({ prefix: "g:", limit: 1000 })).keys.length; } catch {}
+        let classes = null, classList = [];
+        try {
+          const keys = (await env.LB.list({ prefix: "g:", limit: 1000 })).keys;
+          const wk = Date.now() - 7 * 864e5;
+          for (const k of keys.slice(0, 300)) {
+            let g = null; try { g = JSON.parse((await env.LB.get(k.name)) || "null"); } catch {}
+            if (!g) continue;
+            const ms = Object.values(g.members || {});
+            if (!ms.length) { await env.LB.delete(k.name); continue; } // tidy up any empty class
+            classList.push({ name: g.name, code: g.code, members: ms.length, active7: ms.filter((m) => (m.t || 0) >= wk).length,
+              created: g.created || null, last: Math.max(...ms.map((m) => m.t || 0)), xp7: ms.reduce((a, m) => a + (m.mi || 0), 0) });
+          }
+          classList.sort((a, b) => b.members - a.members || b.last - a.last);
+          classes = classList.length;
+        } catch {}
         if (Math.random() < 0.2) await q("DELETE FROM hits WHERE day < ?", day(120)).run();
         return json({ today: t0, byDay, totals: tot[0] || {}, pages, refs, devs, users: users[0] || {}, newByDay,
           recent: recent.map((r) => ({ email: mask(r.email), created: r.created, last_seen: r.last_seen, verified: !!r.verified })),
-          ai: { today: aiToday, yesterday: aiYest, siteLimit: SITE_DAILY, perUser: PER_IP_DAILY }, classes,
+          ai: { today: aiToday, yesterday: aiYest, siteLimit: SITE_DAILY, perUser: PER_IP_DAILY }, classes, classList,
           live: (live[0] || {}).live || 0, installs: inst[0] || {}, app: appRow[0] || {}, hours, acts, countries, weekdays, now: Date.now() });
       }
       if (path === "/ai" && req.method === "POST") {
@@ -274,7 +288,7 @@ export default {
           code = Array.from(crypto.getRandomValues(new Uint8Array(6)), (b) => A[b % A.length]).join("");
           if (!(await env.LB.get("g:" + code))) break;
         }
-        const g = { code, name: gname, created: Date.now(), members: { [id]: { n: nick, t: Date.now() } } };
+        const g = { code, name: gname, created: Date.now(), owner: id, members: { [id]: { n: nick, t: Date.now() } } };
         await env.LB.put("g:" + code, JSON.stringify(g));
         return json(pub(g));
       }
@@ -313,8 +327,19 @@ export default {
         const g = await getGroup(env, body.code);
         if (g && g.members[String(body.id)]) {
           delete g.members[String(body.id)];
-          await env.LB.put("g:" + g.code, JSON.stringify(g));
+          if (!Object.keys(g.members).length) await env.LB.delete("g:" + g.code); // last one out: the class is gone
+          else {
+            if (g.owner === String(body.id)) g.owner = Object.entries(g.members).sort((a, b) => (a[1].t || 0) - (b[1].t || 0))[0][0]; // hand it on
+            await env.LB.put("g:" + g.code, JSON.stringify(g));
+          }
         }
+        return json({ ok: true });
+      }
+      if (path === "/lb/delete" && req.method === "POST") { // the class creator can delete it for everyone
+        const g = await getGroup(env, body.code);
+        if (!g) return json({ ok: true });
+        if (!g.owner || g.owner !== String(body.id || "")) return fail("forbidden", "Only the person who made this class can delete it.", 403);
+        await env.LB.delete("g:" + g.code);
         return json({ ok: true });
       }
       if (path.startsWith("/lb/") && req.method === "GET") {
