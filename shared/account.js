@@ -8,19 +8,19 @@ const LS=window.localStorage,origSet=Storage.prototype.setItem,origRemove=Storag
 const enabled=!!(FB&&FB.apiKey&&API);
 const read=k=>{try{return JSON.parse(LS.getItem(k)||"null")}catch(e){return null}};
 const write=(k,v)=>{try{origSet.call(LS,k,JSON.stringify(v))}catch(e){}};
-let sess=enabled?read(AK):null,info=null,listeners=[];
+let sess=enabled?read(AK):null,info=null,listeners=[],verifyErr="",verifyAt=0;
 const emit=()=>listeners.forEach(f=>{try{f(sess,info)}catch(e){}});
 
 /* ---------- Firebase REST ---------- */
 const ERR={EMAIL_EXISTS:"There's already an account with that email. Sign in instead.",INVALID_LOGIN_CREDENTIALS:"That email and password don't match. Check them, or reset your password.",
   EMAIL_NOT_FOUND:"No account with that email.",INVALID_PASSWORD:"Wrong password.",INVALID_EMAIL:"That doesn't look like an email address.",
-  MISSING_PASSWORD:"Type a password.",USER_DISABLED:"This account has been turned off.",TOO_MANY_ATTEMPTS_TRY_LATER:"Too many tries. Wait a few minutes, then try again.",
+  MISSING_PASSWORD:"Type a password.",USER_DISABLED:"This account has been turned off.",TOO_MANY_ATTEMPTS_TRY_LATER:"Too many tries. Wait a few minutes, then try again.",QUOTA_EXCEEDED:"Too many emails sent today. Try again tomorrow.",
   WEAK_PASSWORD:"Use a longer password (at least 8 characters).",TOKEN_EXPIRED:"Please sign in again.",USER_NOT_FOUND:"Please sign in again.",INVALID_ID_TOKEN:"Please sign in again.",
   OPERATION_NOT_ALLOWED:"Sign-up with email isn't switched on yet. Try again later.",CONFIGURATION_NOT_FOUND:"Sign-in isn't set up yet. Try again later.",CREDENTIAL_TOO_OLD_LOGIN_AGAIN:"For safety, sign out and back in, then try again."};
 async function idt(method,body){
   let r;try{r=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${FB.apiKey}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})}
   catch(e){throw new Error("Can't reach the sign-in service. Check your connection.")}
-  const d=await r.json().catch(()=>({}));if(!r.ok){const code=((d.error&&d.error.message)||"").split(" ")[0].replace(/:$/,"");throw Object.assign(new Error(ERR[code]||"Something went wrong. Try again."),{code})}return d}
+  const d=await r.json().catch(()=>({}));if(!r.ok){const code=((d.error&&d.error.message)||"").split(" ")[0].replace(/:$/,"");throw Object.assign(new Error(ERR[code]||("Something went wrong"+(code?" ("+code+")":"")+". Try again.")),{code})}return d}
 function setSess(d){sess={uid:d.localId||d.user_id,email:(d.email||sess&&sess.email||"").toLowerCase(),idToken:d.idToken||d.id_token,refreshToken:d.refreshToken||d.refresh_token,
   exp:Date.now()+(+(d.expiresIn||d.expires_in||3600))*1000};write(AK,sess)}
 async function refresh(){const r=await fetch(`https://securetoken.googleapis.com/v1/token?key=${FB.apiKey}`,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},
@@ -46,7 +46,7 @@ let timer=null,syncing=false,lastSync=read("gcseasy-sync-at")||0,syncErr="";
 function schedule(){if(!sess)return;clearTimeout(timer);timer=setTimeout(()=>sync(),4000)}
 function localKeys(){const out={};for(let i=0;i<LS.length;i++){const k=LS.key(i);if(NOSYNC.has(k))continue;out[k]={v:LS.getItem(k),t:meta[k]||1}}
   for(const k in meta)if(!k.startsWith("__")&&!NOSYNC.has(k)&&LS.getItem(k)==null)out[k]={v:null,t:meta[k]};return out}
-async function sync(opts){if(!sess||syncing)return;syncing=true;opts=opts||{};const first=!meta.__synced;
+async function sync(opts){if(!sess||syncing||!info||!info.verified)return;syncing=true;opts=opts||{};const first=!meta.__synced;
   try{const local=localKeys();
     // first sync on a device: take what's already saved online, then upload anything only this device has
     const d=await server("/sync",{keys:first?{}:local});let changed=0;
@@ -64,20 +64,20 @@ document.addEventListener("visibilitychange",()=>{if(document.visibilityState===
 
 /* ---------- account actions ---------- */
 async function signUp(email,pw){const d=await idt("signUp",{email,password:pw,returnSecureToken:true});setSess(d);
-  try{await idt("sendOobCode",{requestType:"VERIFY_EMAIL",idToken:sess.idToken})}catch(e){}
+  verifyErr="";try{await idt("sendOobCode",{requestType:"VERIFY_EMAIL",idToken:sess.idToken});verifyAt=Date.now()}catch(e){verifyErr=e.message}
   await afterSignIn()}
 async function signIn(email,pw){const d=await idt("signInWithPassword",{email,password:pw,returnSecureToken:true});setSess(d);await afterSignIn()}
 async function afterSignIn(){emit();await loadMe();await sync();emit();try{window.GCSEasy&&GCSEasy.lbSync&&GCSEasy.lbSync(true)}catch(e){}}
-async function resend(){await idt("sendOobCode",{requestType:"VERIFY_EMAIL",idToken:await token()})}
+async function resend(){verifyErr="";try{await idt("sendOobCode",{requestType:"VERIFY_EMAIL",idToken:await token(true)});verifyAt=Date.now()}catch(e){verifyErr=e.message;throw e}}
 async function reset(email){await idt("sendOobCode",{requestType:"PASSWORD_RESET",email})}
-async function recheck(){await token(true);await loadMe();return info&&info.verified}
+async function recheck(){await token(true);await loadMe();if(info&&info.verified){await sync();emit()}return info&&info.verified}
 function signOut(silent){if(sess&&!silent)sync();sess=null;info=null;try{origRemove.call(LS,AK)}catch(e){}emit()}
 async function del(){await server("/account/delete",{});await idt("delete",{idToken:await token(true)});
   meta={};write(MK,meta);signOut(true)}
 
 /* ---------- UI ---------- */
 const css=`.accbtn{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font:700 .85rem var(--display,inherit);padding:0}
-.accbtn svg{width:19px;height:19px}.accbtn.on{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+.accbtn svg{width:19px;height:19px}.accbtn{position:relative}.accbtn.unv::after{content:"!";position:absolute;top:-4px;right:-4px;width:15px;height:15px;border-radius:50%;background:#FFD84D;color:#16212E;font:700 11px/15px Arial;text-align:center}.accbtn.on{background:var(--accent);border-color:var(--accent);color:var(--surface)}
 .accsheet{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:rgba(10,15,22,.55);padding:16px}
 .accsheet[hidden]{display:none}.accbox{background:var(--surface);color:var(--ink);border-radius:20px;width:min(440px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:22px 20px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
 .accbox h2{margin:0 0 4px;font:700 1.35rem var(--display,inherit)}.accbox .sub{color:var(--muted);margin:0 0 16px;font-size:.93rem}
@@ -111,7 +111,20 @@ function open(why){if(!enabled)return;reason=why||"";if(!sheet){sheet=document.c
 function close(){if(sheet)sheet.hidden=true}
 function pwField(id,label,auto){return `<label for="${id}">${label}<div class="pwrow"><input class="pw" id="${id}" type="password" autocomplete="${auto}" minlength="8" required><button type="button" data-show="${id}">Show</button></div></label>`}
 function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accbox"><button class="accx" type="button" aria-label="Close" data-close>\u2715</button>`;
-  if(sess){const v=info?info.verified:null;
+  if(sess&&info&&!info.verified){
+    sheet.innerHTML=box+`<h2>Verify your email</h2><p class="sub">${esc(sess.email)}</p>
+      <div class="accwarn"><b>One more step.</b> We've sent a link to <b>${esc(sess.email)}</b>. Open it, tap the link, then come back and press <b>I've verified</b>.<br><br>Can't see it? Check junk or spam. School email accounts often block these, so a personal email (like Gmail) works best.</div>
+      ${verifyErr?`<p class="accmsg bad" style="margin:0 0 12px">The email didn't send: ${esc(verifyErr)}</p>`:verifyAt?`<p class="accmsg good" style="margin:0 0 12px">Email sent at ${new Date(verifyAt).toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit"})}.</p>`:""}
+      <div class="accf"><button class="accbtnp" type="button" id="accchk">I've verified</button><button class="accbtn2" type="button" id="accresend">Send the email again</button><p class="accmsg" id="accvmsg" role="status"></p></div>
+      <p class="accnote" style="margin-top:14px">Until you verify, your account can't save progress, join classes or use AI marking.</p>
+      <div class="accrow" style="margin-top:12px;justify-content:space-between"><button class="acclink" type="button" id="accout">Use a different email</button><a class="accnote" href="privacy.html">Privacy</a></div>
+      <details style="margin-top:14px"><summary class="accnote" style="cursor:pointer">Delete this account</summary><div class="accf" style="margin-top:10px"><p class="accnote">Type DELETE to confirm.</p><input type="text" id="accdel" autocomplete="off" aria-label="Type DELETE"><button class="accbtn2 accdanger" type="button" id="accdelgo">Delete account</button><p class="accmsg bad" id="accdmsg" role="status"></p></div></details></div>`;
+    const $=id=>sheet.querySelector("#"+id),say=(t,c)=>{const el=$("accvmsg");if(el){el.className="accmsg "+(c||"");el.textContent=t}};
+    $("accchk").onclick=async()=>{say("Checking\u2026");hold=true;try{const ok=await recheck();hold=false;if(ok){draw();toast("Email verified. Your progress is now saving to your account.")}else say("Not verified yet. Tap the link in the email first, then try again.","bad")}catch(e){hold=false;say(e.message,"bad")}};
+    $("accresend").onclick=async()=>{say("Sending\u2026");hold=true;try{await resend();hold=false;draw()}catch(e){hold=false;draw()}};
+    $("accout").onclick=()=>{signOut(true);mode="up";draw()};
+    $("accdelgo").onclick=async()=>{const m=$("accdmsg");if($("accdel").value.trim()!=="DELETE"){m.textContent="Type DELETE first.";return}m.textContent="Deleting\u2026";hold=true;try{await del();hold=false;close();toast("Your account has been deleted.")}catch(e){hold=false;m.textContent=e.message}};
+  }else if(sess){const v=info?info.verified:null;
     sheet.innerHTML=box+`<h2>Your account</h2><p class="sub">${esc(sess.email)}</p>
       ${reason&&REASON[reason]&&reason!=="signin"?`<div class="accwarn">${esc(REASON[reason])}</div>`:""}
       ${v===false?`<div class="accwarn"><b>Check your email.</b> We sent a link to verify ${esc(sess.email)}. Tap it, then press "I've verified". It may be in junk or spam.<div class="accrow" style="margin-top:10px"><button class="accbtn2" type="button" id="accchk">I've verified</button><button class="acclink" type="button" id="accresend">Send it again</button></div><p class="accmsg" id="accvmsg" role="status"></p></div>`:""}
@@ -146,7 +159,7 @@ function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accb
       if(mode!=="reset"&&!pw)return msg("Type your password.");if(mode==="up"&&pw.length<8)return msg("Use at least 8 characters for your password.");
       const btn=sheet.querySelector(".accbtnp");btn.disabled=true;msg(mode==="reset"?"Sending\u2026":"Just a sec\u2026","");
       try{if(mode==="in")await signIn(email,pw);else if(mode==="up")await signUp(email,pw);else{await reset(email);msg("If there's an account for that email, a reset link is on its way. Check your spam too.","good");btn.disabled=false;return}
-        mode="in";draw();toast(info&&!info.verified?"Account ready. Check your email to verify it.":"Signed in. Your progress is syncing.")}
+        mode="in";draw();if(!(info&&!info.verified))toast("Signed in. Your progress is syncing.")}
       catch(err){msg(err.message);btn.disabled=false}};
   }
   sheet.querySelectorAll("[data-close]").forEach(b=>b.onclick=close);
@@ -154,13 +167,13 @@ function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accb
 }
 function navButton(){const nav=document.querySelector(".sitenav");if(!nav||document.getElementById("accbtn"))return;const b=document.createElement("button");b.id="accbtn";b.type="button";b.className="accbtn";
   b.onclick=()=>open();const tb=nav.querySelector(".themebtn");nav.insertBefore(b,tb||null);paint()}
-function paint(){const b=document.getElementById("accbtn");if(b){b.classList.toggle("on",!!sess);b.innerHTML=sess?esc((sess.email||"?")[0].toUpperCase()):ICON;b.setAttribute("aria-label",sess?"Your account ("+sess.email+")":"Sign in or create an account");b.title=sess?sess.email:"Sign in"}
+function paint(){const b=document.getElementById("accbtn");if(b){b.classList.toggle("on",!!sess);b.classList.toggle("unv",!!(sess&&info&&!info.verified));b.innerHTML=sess?esc((sess.email||"?")[0].toUpperCase()):ICON;b.setAttribute("aria-label",sess?"Your account ("+sess.email+")":"Sign in or create an account");b.title=sess?sess.email:"Sign in"}
   document.querySelectorAll("[data-acc-cta]").forEach(el=>el.hidden=!!sess);if(sess||paint.was)draw();paint.was=!!sess}
 listeners.push(paint);
 function boot(){if(!enabled)return;const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);navButton();
   const mine=document.getElementById("mine");if(mine&&!document.querySelector("[data-acc-cta]")){const c=document.createElement("div");c.className="acccta";c.setAttribute("data-acc-cta","");
     c.innerHTML=`<p><b>Save your progress.</b> Make a free account to keep your XP, cards and classes on every device.</p><button type="button" class="accbtn2">Create account</button>`;c.querySelector("button").onclick=()=>{mode="up";open("sync")};mine.after(c)}
-  paint();if(sess){loadMe();sync({onLoad:true})}}
+  paint();if(sess)loadMe().then(()=>sync({onLoad:true}))}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.GCSEasyAuth={enabled,open:(why)=>{if(why==="signin"||why==="classes")mode="up";open(why)},close,headers:authHeaders,token,user:()=>sess,info:()=>info,onChange:f=>listeners.push(f),sync,server};
 })();

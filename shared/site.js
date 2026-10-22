@@ -181,7 +181,7 @@ const LBK="gcseasy-me";
 function me(){let m=null;try{m=JSON.parse(localStorage.getItem(LBK)||"null")}catch(e){}if(!m||!m.id){m={id:(crypto.randomUUID?crypto.randomUUID():String(Math.random()).slice(2)+Date.now()),name:"",groups:[]};try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}return m}
 function saveMe(m){try{localStorage.setItem(LBK,JSON.stringify(m))}catch(e){}}
 async function lbCall(path,body){if(!API)throw {code:"no_server"};const h=await authH();const r=await fetch(API+path,body?{method:"POST",headers:Object.assign({"Content-Type":"application/json"},h),body:JSON.stringify(body)}:{headers:h});const d=await r.json().catch(()=>({}));
-  if(!r.ok){if(d.code==="signin"&&window.GCSEasyAuth)GCSEasyAuth.open("classes");throw {code:d.code||"error",message:d.error}}return d}
+  if(!r.ok){if((d.code==="signin"||d.code==="verify")&&window.GCSEasyAuth)GCSEasyAuth.open(d.code==="verify"?"verify":"classes");throw {code:d.code||"error",message:d.error}}return d}
 function myStats(){const L=getLog(),t=dayStart();const days=new Set(L.map(x=>{const d=new Date(x.s);d.setHours(0,0,0,0);return d.getTime()}));
   let dc={};try{dc=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}
   Object.keys(dc.done||{}).forEach(k=>days.add(new Date(k+"T00:00:00").getTime()));

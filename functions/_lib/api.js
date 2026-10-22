@@ -192,6 +192,7 @@ export default {
       if (path === "/sync" && req.method === "POST") {
         if (!authOn(env)) return fail("off", "Accounts aren't switched on yet.", 404);
         const u = await who(req, env); if (!u) return fail("signin", "Please sign in again.", 401);
+        if (!u.verified) return fail("verify", "Verify your email first.", 403);
         const D = await db(env);
         const row = await D.prepare("SELECT data FROM progress WHERE uid = ?").bind(u.uid).first();
         let have = {}; try { have = row ? JSON.parse(row.data) : {}; } catch {}
@@ -257,8 +258,11 @@ export default {
       }
 
       // ---- leaderboards ----
-      if ((path === "/lb/create" || path === "/lb/join") && req.method === "POST" && authOn(env) && !(await who(req, env)))
-        return fail("signin", "Make a free account to create or join a class.", 401);
+      if ((path === "/lb/create" || path === "/lb/join") && req.method === "POST" && authOn(env)) {
+        const u = await who(req, env);
+        if (!u) return fail("signin", "Make a free account to create or join a class.", 401);
+        if (!u.verified) return fail("verify", "Verify your email first, then you can join classes.", 403);
+      }
       if (path === "/lb/create" && req.method === "POST") {
         const nick = cleanName(body.nick), gname = cleanName(body.name) || "My group", id = String(body.id || "").slice(0, 64);
         if (nick.length < 2 || BAD.test(nick) || BAD.test(gname)) return fail("bad_name", "Pick a different nickname.");
