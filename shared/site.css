@@ -103,3 +103,11 @@
 .xptoast.show{opacity:1;transform:translate(-50%,0)}
 @media (max-width:640px){.xptoast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}}
 @media (prefers-reduced-motion:reduce){.xptoast{transition:none}}
+/* "Get the app" in the header */
+.appbtnh{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;border:0;background:#FFD84D;color:#16212E;font:700 .88rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;cursor:pointer;white-space:nowrap}
+.appbtnh svg{width:17px;height:17px}.appbtnh .s{display:none}.appbtnh[hidden]{display:none}
+.appbtnh:hover{filter:brightness(.95)}.appbtnh:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+@media (max-width:560px){.appbtnh{padding:0 10px}.appbtnh .l{display:none}.appbtnh .s{display:inline}}
+.apppop{position:fixed;top:64px;right:max(12px,calc((100vw - 1120px)/2));z-index:80;width:min(320px,calc(100vw - 24px));background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:16px 16px 12px;box-shadow:0 14px 40px rgba(0,0,0,.22);font-size:.93rem}
+.apppop[hidden]{display:none}.apppop ol{margin:8px 0 6px;padding-left:20px;line-height:1.55}.apppop p{color:var(--muted);margin:6px 0 0;font-size:.86rem}
+.apppop .apx{float:right;border:0;background:none;font-size:1.1rem;cursor:pointer;color:var(--muted);padding:2px 4px;line-height:1}

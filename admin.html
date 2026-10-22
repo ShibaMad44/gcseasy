@@ -31,6 +31,8 @@
 .kpi .lab{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .kpi .val{font:700 2rem/1.1 var(--display);margin:6px 0 2px;font-variant-numeric:tabular-nums}
 .kpi .sm{color:var(--muted);font-size:.86rem}
+.kpi.live .dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good,#1e8e3e);margin-right:6px;vertical-align:1px;animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}@media (prefers-reduced-motion:reduce){.kpi.live .dot{animation:none}}
 .panel2{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:16px;min-width:0}
 .panel2 h2{font-size:1.1rem;margin:0 0 2px}.panel2 .pd{color:var(--muted);font-size:.88rem;margin:0 0 10px}
 .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
@@ -64,7 +66,7 @@ const nf=n=>Number(n||0).toLocaleString("en-GB");
 const days=n=>{const out=[];for(let i=n-1;i>=0;i--)out.push(new Date(Date.now()-i*864e5).toISOString().slice(0,10));return out};
 const short=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-GB",{day:"numeric",month:"short",timeZone:"UTC"});
 function gate(title,body,btn){$("dbody").innerHTML=`<div class="gate"><h2>${title}</h2>${body}${btn?`<button class="btn p" type="button" id="dgo">${btn}</button>`:""}</div>`;if(btn)$("dgo").onclick=()=>A.open()}
-function bars(id,data,label,fmt){ // one series, so no legend: the title names it
+function bars(id,data,label,fmt,o){o=o||{};const lab=o.lab||(d=>short(d.d)),every=o.every||7; // one series, so no legend: the title names it
   const el0=document.getElementById(id),W=Math.max(280,Math.round(el0.clientWidth||640)),H=Math.round(Math.min(220,Math.max(160,W*.42))),L=34,R=6,T=10,B=24,n=data.length,max=Math.max(1,...data.map(d=>d.v)),step=Math.pow(10,Math.floor(Math.log10(max))),nice=Math.ceil(max/step)*step||1;
   const bw=(W-L-R)/n,x=i=>L+i*bw,y=v=>T+(H-T-B)*(1-v/nice);
   let s=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(label)}">`;
@@ -72,12 +74,12 @@ function bars(id,data,label,fmt){ // one series, so no legend: the title names i
   data.forEach((d,i)=>{const h=Math.max(0,y(0)-y(d.v)),w=Math.max(2,bw-2),bx=x(i)+1,r=Math.min(4,w/2,h);
     const path=h<=0?"":`M${bx},${y(0)} V${y(0)-h+r} Q${bx},${y(0)-h} ${bx+r},${y(0)-h} H${bx+w-r} Q${bx+w},${y(0)-h} ${bx+w},${y(0)-h+r} V${y(0)} Z`;
     s+=`<g data-i="${i}"><rect class="hit" x="${x(i)}" y="${T}" width="${bw}" height="${H-T-B}"/><path class="bar" d="${path}"/></g>`;
-    if(i%7===(n-1)%7)s+=`<text class="ax" x="${i===n-1?x(i)+bw:x(i)+bw/2}" y="${H-6}" text-anchor="${i===n-1?"end":"middle"}">${short(d.d)}</text>`});
+    if(o.zero?i%every===0:(i%every===(n-1)%every||o.all)){const end=i===n-1&&!o.all&&!o.zero;s+=`<text class="ax" x="${end?x(i)+bw:x(i)+bw/2}" y="${H-6}" text-anchor="${end?"end":"middle"}">${esc(lab(d))}</text>`}});
   s+=`<line class="gl" x1="${L}" x2="${W-R}" y1="${y(0)}" y2="${y(0)}" style="stroke:var(--muted)"/></svg><div class="tip" hidden></div>`;
   const el=$(id);el.innerHTML=s;const tip=el.querySelector(".tip"),svg=el.querySelector("svg");
   el.querySelectorAll("g[data-i]").forEach(g=>{const d=data[+g.dataset.i];
     const show=()=>{el.querySelectorAll("g.on").forEach(o=>o.classList.remove("on"));g.classList.add("on");const r=svg.getBoundingClientRect(),k=r.width/W;
-      tip.innerHTML=`<b>${short(d.d)}</b> · ${fmt(d)}`;tip.style.left=Math.min(r.width-60,Math.max(60,(x(+g.dataset.i)+bw/2)*k))+"px";tip.style.top=(y(d.v)*k)+"px";tip.hidden=false};
+      tip.innerHTML=`<b>${esc(o.tlab?o.tlab(d):lab(d))}</b> · ${fmt(d)}`;tip.style.left=Math.min(r.width-60,Math.max(60,(x(+g.dataset.i)+bw/2)*k))+"px";tip.style.top=(y(d.v)*k)+"px";tip.hidden=false};
     g.addEventListener("pointerenter",show);g.addEventListener("click",show)});
   el.addEventListener("pointerleave",()=>{tip.hidden=true;el.querySelectorAll("g.on").forEach(o=>o.classList.remove("on"))})}
 function blist(rows,key,lab){if(!rows.length)return `<p class="empty">Nothing yet.</p>`;const max=Math.max(...rows.map(r=>r.n));
@@ -95,8 +97,21 @@ async function load(){
   const T=d.totals,U=d.users,vb=Object.fromEntries(d.byDay.map(r=>[r.day,r])),nb=Object.fromEntries(d.newByDay.map(r=>[r.day,r.n]));
   const vis=days(30).map(k=>({d:k,v:(vb[k]||{}).visitors||0,views:(vb[k]||{}).views||0})),sig=days(30).map(k=>({d:k,v:nb[k]||0}));
   const dev=Object.fromEntries(d.devs.map(r=>[r.dev,r.n])),devTot=d.devs.reduce((a,r)=>a+r.n,0)||1;
+  const off=-new Date().getTimezoneOffset()/60,hm=Object.fromEntries((d.hours||[]).map(r=>[(r.h+off+24)%24,r.n]));
+  const hrs=[...Array(24)].map((_,h)=>({h,v:hm[h]||0})),hl=h=>(h%12||12)+(h<12?"am":"pm");
+  const WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],wm=Object.fromEntries((d.weekdays||[]).map(r=>[+r.wd,r.n]));
+  const wds=[1,2,3,4,5,6,0].map(i=>({w:WD[i],v:wm[i]||0}));
+  const ACT={cards:"Flashcards reviewed",quiz:"Quiz questions right",exam:"Exam answers marked",drill:"Skills drill answers",maths:"Maths questions right",daily:"Daily challenges done",timer:"Focused study (5-min blocks)",
+    vocab:"French vocab right",quotes:"Quote tests passed",writing:"Writing tasks AI-marked",installclick:"\u201cGet the app\u201d taps",other:"Other"};
+  let cn=null;try{cn=new Intl.DisplayNames(["en-GB"],{type:"region"})}catch(e){}
+  const flag=c=>String.fromCodePoint(...[...c].map(x=>127397+x.charCodeAt(0)));
+  const I=d.installs||{},AP=d.app||{},ret=AP.all7?Math.round(Math.max(0,AP.all7-AP.new7)/AP.all7*100):0;
   $("dbody").innerHTML=`
   <div class="kpis">
+    <div class="kpi live"><div class="lab"><i class="dot"></i>Live now</div><div class="val">${nf(d.live)}</div><div class="sm">on the site in the last 5 min</div></div>
+    <div class="kpi"><div class="lab">App installs</div><div class="val">${nf(I.total)}</div><div class="sm">+${nf(I.today)} today · +${nf(I.week)} this week</div></div>
+    <div class="kpi"><div class="lab">Using the app · 7 days</div><div class="val">${nf(AP.app7)}</div><div class="sm">${AP.all7?Math.round((AP.app7||0)/AP.all7*100):0}% of visitors open it as an app</div></div>
+    <div class="kpi"><div class="lab">Returning visitors · 7 days</div><div class="val">${ret}%</div><div class="sm">${nf(AP.new7)} first-time visitors</div></div>
     <div class="kpi"><div class="lab">Visitors today</div><div class="val">${nf(T.u1)}</div><div class="sm">${nf(T.v1)} page views</div></div>
     <div class="kpi"><div class="lab">Visitors · 7 days</div><div class="val">${nf(T.u7)}</div><div class="sm">${nf(T.v7)} page views</div></div>
     <div class="kpi"><div class="lab">Visitors · 30 days</div><div class="val">${nf(T.u30)}</div><div class="sm">${nf(T.v30)} views · ${nf(T.s30)} signed in</div></div>
@@ -110,14 +125,23 @@ async function load(){
   <div class="panel2"><h2>New accounts per day</h2><p class="pd">Last 30 days.</p><div class="chart" id="csig"></div>
     <details class="tv"><summary>Show as a table</summary><table class="dtbl"><tr><th>Day</th><th class="r">New accounts</th></tr>${sig.slice().reverse().map(r=>`<tr><td>${short(r.d)}</td><td class="r">${nf(r.v)}</td></tr>`).join("")}</table></details></div>
   <div class="grid2">
+    <div class="panel2"><h2>Busiest times of day</h2><p class="pd">Page views by hour (your time), last 7 days.</p><div class="chart" id="chrs"></div></div>
+    <div class="panel2"><h2>Busiest days of the week</h2><p class="pd">Visitors per weekday, last 4 weeks.</p><div class="chart" id="cwds"></div></div>
+  </div>
+  <div class="grid2">
     <div class="panel2"><h2>Top pages</h2><p class="pd">Page views, last 7 days.</p>${blist(d.pages,"path",pname)}</div>
     <div class="panel2"><h2>Where visitors come from</h2><p class="pd">Other websites, last 30 days. Most visits are direct or from search.</p>${blist(d.refs,"ref")}</div>
     <div class="panel2"><h2>Devices</h2><p class="pd">Visitors, last 7 days.</p>${blist(["mobile","desktop","tablet"].filter(k=>dev[k]).map(k=>({k:k[0].toUpperCase()+k.slice(1)+" · "+Math.round(dev[k]/devTot*100)+"%",n:dev[k]})),"k")}</div>
+    <div class="panel2"><h2>What people do</h2><p class="pd">Last 7 days, across everyone.</p>${(d.acts||[]).length?`<table class="dtbl"><tr><th>Activity</th><th class="r">Total</th><th class="r">People</th></tr>${d.acts.map(r=>`<tr><td>${esc(ACT[r.name]||r.name)}</td><td class="r">${nf(r.n)}</td><td class="r">${nf(r.people)}</td></tr>`).join("")}</table>`:`<p class="empty">Nothing yet. This fills up as people revise.</p>`}</div>
+    <div class="panel2"><h2>Countries</h2><p class="pd">Visitors, last 30 days.</p>${blist((d.countries||[]).map(r=>({k:flag(r.cc)+" "+(cn?cn.of(r.cc):r.cc),n:r.n})),"k")}</div>
     <div class="panel2"><h2>Latest sign-ups</h2><p class="pd">Emails are partly hidden.</p>${d.recent.length?`<table class="dtbl"><tr><th>Account</th><th>Joined</th><th>Verified</th></tr>${d.recent.map(r=>`<tr><td>${esc(r.email)}</td><td>${new Date(r.created).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</td><td>${r.verified?"Yes":"Not yet"}</td></tr>`).join("")}</table>`:`<p class="empty">No accounts yet.</p>`}</div>
   </div>`;
-  window.onresize=()=>{clearTimeout(window._rz);window._rz=setTimeout(()=>{bars("cvis",vis,"Visitors per day, last 30 days",r=>`${nf(r.v)} visitors · ${nf(r.views)} views`);bars("csig",sig,"New accounts per day, last 30 days",r=>`${nf(r.v)} new account${r.v===1?"":"s"}`)},150)};
+  const drawAll=()=>{
+  bars("chrs",hrs,"Page views by hour",r=>`${nf(r.v)} views`,{lab:r=>hl(r.h),every:6,zero:true,tlab:r=>hl(r.h)+"\u2013"+hl((r.h+1)%24)});
+  bars("cwds",wds,"Visitors per weekday",r=>`${nf(r.v)} visitors`,{lab:r=>r.w,all:true});
   bars("cvis",vis,"Visitors per day, last 30 days",r=>`${nf(r.v)} visitors · ${nf(r.views)} views`);
-  bars("csig",sig,"New accounts per day, last 30 days",r=>`${nf(r.v)} new account${r.v===1?"":"s"}`);
+  bars("csig",sig,"New accounts per day, last 30 days",r=>`${nf(r.v)} new account${r.v===1?"":"s"}`);};
+  drawAll();window.onresize=()=>{clearTimeout(window._rz);window._rz=setTimeout(drawAll,150)};
 }
 $("dref").onclick=load;
 document.addEventListener("DOMContentLoaded",()=>{load();if(A&&A.onChange){let was=!!(A.user());A.onChange(u=>{if(!!u!==was){was=!!u;load()}})}});

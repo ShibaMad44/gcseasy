@@ -67,7 +67,10 @@ async function db(env) {
       env.DB.prepare("CREATE TABLE IF NOT EXISTS progress (uid TEXT PRIMARY KEY, data TEXT, updated INTEGER)"),
       env.DB.prepare("CREATE TABLE IF NOT EXISTS hits (ts INTEGER, day TEXT, path TEXT, vid TEXT, ref TEXT, dev TEXT, signed INTEGER)"),
       env.DB.prepare("CREATE INDEX IF NOT EXISTS hits_day ON hits(day)"),
+      env.DB.prepare("CREATE TABLE IF NOT EXISTS events (ts INTEGER, day TEXT, name TEXT, n INTEGER, vid TEXT, signed INTEGER)"),
+      env.DB.prepare("CREATE INDEX IF NOT EXISTS events_day ON events(day)"),
     ]);
+    for (const col of ["app INTEGER", "nv INTEGER", "cc TEXT"]) { try { await env.DB.prepare("ALTER TABLE hits ADD COLUMN " + col).run(); } catch {} }
     SCHEMA = true;
   }
   return env.DB;
@@ -165,7 +168,19 @@ export default {
         let ref = ""; try { const h = new URL(String(body.r || "")).hostname; if (h && !/gcseasy\.pages\.dev$/.test(h)) ref = h.replace(/^www\./, "").slice(0, 60); } catch {}
         const dev = /iPad|Tablet/i.test(ua) ? "tablet" : /Mobi|Android|iPhone/i.test(ua) ? "mobile" : "desktop";
         const vid = await sha(ip + "|" + ua + "|" + today() + "|" + (env.ADMIN_EMAIL || "gcseasy"));
-        await (await db(env)).prepare("INSERT INTO hits (ts, day, path, vid, ref, dev, signed) VALUES (?, ?, ?, ?, ?, ?, ?)").bind(Date.now(), today(), p, vid, ref, dev, body.s ? 1 : 0).run();
+        const cc = String(req.headers.get("X-Country") || (req.cf && req.cf.country) || "").replace(/[^A-Z]/g, "").slice(0, 2);
+        await (await db(env)).prepare("INSERT INTO hits (ts, day, path, vid, ref, dev, signed, app, nv, cc) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+          .bind(Date.now(), today(), p, vid, ref, dev, body.s ? 1 : 0, body.a ? 1 : 0, body.n ? 1 : 0, cc).run();
+        return json({ ok: true });
+      }
+      if (path === "/ev" && req.method === "POST") { // what people do: {c: {quiz: 3, cards: 12, install: 1}}
+        if (!env.DB) return json({ ok: false });
+        const ua = req.headers.get("User-Agent") || "";
+        if (/bot|crawl|spider|headless/i.test(ua)) return json({ ok: true });
+        const vid = await sha(ip + "|" + ua + "|" + today() + "|" + (env.ADMIN_EMAIL || "gcseasy"));
+        const items = Object.entries(body.c || {}).filter(([k, n]) => /^[a-z]{2,14}$/.test(k) && +n > 0).slice(0, 15);
+        if (items.length) { const D = await db(env), now = Date.now();
+          await D.batch(items.map(([k, n]) => D.prepare("INSERT INTO events (ts, day, name, n, vid, signed) VALUES (?, ?, ?, ?, ?, ?)").bind(now, today(), k, Math.min(500, Math.round(+n)), vid, body.s ? 1 : 0))); }
         return json({ ok: true });
       }
       if (path === "/me" && req.method === "GET") {
@@ -198,7 +213,7 @@ export default {
         const u = await who(req, env); if (!isAdmin(u, env)) return fail("forbidden", "This page is only for the site owner.", 403);
         const D = await db(env), day = (n) => new Date(Date.now() - n * 864e5).toISOString().slice(0, 10), t0 = today();
         const q = (sql, ...a) => D.prepare(sql).bind(...a);
-        const [byDay, tot, pages, refs, devs, users, newByDay, recent] = (await D.batch([
+        const [byDay, tot, pages, refs, devs, users, newByDay, recent, ...extra] = (await D.batch([
           q("SELECT day, COUNT(*) AS views, COUNT(DISTINCT vid) AS visitors FROM hits WHERE day >= ? GROUP BY day ORDER BY day", day(29)),
           q("SELECT SUM(day = ?) AS v1, COUNT(DISTINCT CASE WHEN day = ? THEN vid END) AS u1, SUM(day >= ?) AS v7, COUNT(DISTINCT CASE WHEN day >= ? THEN vid END) AS u7, COUNT(*) AS v30, COUNT(DISTINCT vid) AS u30, SUM(signed) AS s30 FROM hits WHERE day >= ?", t0, t0, day(6), day(6), day(29)),
           q("SELECT path, COUNT(*) AS n FROM hits WHERE day >= ? GROUP BY path ORDER BY n DESC LIMIT 12", day(6)),
@@ -207,13 +222,22 @@ export default {
           q("SELECT COUNT(*) AS total, SUM(verified) AS verified, SUM(last_seen >= ?) AS active7, SUM(created >= ?) AS new7, SUM(created >= ?) AS new1 FROM users", Date.now() - 7 * 864e5, Date.now() - 7 * 864e5, new Date(t0 + "T00:00:00Z").getTime()),
           q("SELECT date(created / 1000, 'unixepoch') AS day, COUNT(*) AS n FROM users WHERE created >= ? GROUP BY day ORDER BY day", Date.now() - 30 * 864e5),
           q("SELECT email, created, last_seen, verified FROM users ORDER BY created DESC LIMIT 10"),
+          q("SELECT COUNT(DISTINCT vid) AS live FROM hits WHERE ts >= ?", Date.now() - 5 * 60e3),
+          q("SELECT COALESCE(SUM(n), 0) AS total, COALESCE(SUM(CASE WHEN day >= ? THEN n END), 0) AS week, COALESCE(SUM(CASE WHEN day = ? THEN n END), 0) AS today FROM events WHERE name = 'install'", day(6), t0),
+          q("SELECT COUNT(DISTINCT CASE WHEN app = 1 THEN vid END) AS app7, COUNT(DISTINCT CASE WHEN nv = 1 THEN vid END) AS new7, COUNT(DISTINCT vid) AS all7 FROM hits WHERE day >= ?", day(6)),
+          q("SELECT CAST(strftime('%H', ts / 1000, 'unixepoch') AS INTEGER) AS h, COUNT(*) AS n FROM hits WHERE day >= ? GROUP BY h", day(6)),
+          q("SELECT name, SUM(n) AS n, COUNT(DISTINCT vid) AS people FROM events WHERE day >= ? AND name != 'install' GROUP BY name ORDER BY n DESC", day(6)),
+          q("SELECT cc, COUNT(DISTINCT vid) AS n FROM hits WHERE day >= ? AND cc != '' AND cc IS NOT NULL GROUP BY cc ORDER BY n DESC LIMIT 8", day(29)),
+          q("SELECT strftime('%w', ts / 1000, 'unixepoch') AS wd, COUNT(DISTINCT vid || day) AS n FROM hits WHERE day >= ? GROUP BY wd", day(27)),
         ])).map((r) => r.results || []);
+        const [live, inst, appRow, hours, acts, countries, weekdays] = extra;
         const aiToday = parseInt((await env.LB.get(`ai:${t0}`)) || "0", 10), aiYest = parseInt((await env.LB.get(`ai:${day(1)}`)) || "0", 10);
         let classes = null; try { classes = (await env.LB.list({ prefix: "g:", limit: 1000 })).keys.length; } catch {}
         if (Math.random() < 0.2) await q("DELETE FROM hits WHERE day < ?", day(120)).run();
         return json({ today: t0, byDay, totals: tot[0] || {}, pages, refs, devs, users: users[0] || {}, newByDay,
           recent: recent.map((r) => ({ email: mask(r.email), created: r.created, last_seen: r.last_seen, verified: !!r.verified })),
-          ai: { today: aiToday, yesterday: aiYest, siteLimit: SITE_DAILY, perUser: PER_IP_DAILY }, classes });
+          ai: { today: aiToday, yesterday: aiYest, siteLimit: SITE_DAILY, perUser: PER_IP_DAILY }, classes,
+          live: (live[0] || {}).live || 0, installs: inst[0] || {}, app: appRow[0] || {}, hours, acts, countries, weekdays, now: Date.now() });
       }
       if (path === "/ai" && req.method === "POST") {
         const prompt = String(body.prompt || "");

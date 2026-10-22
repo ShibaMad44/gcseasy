@@ -16,7 +16,7 @@ const ERR={EMAIL_EXISTS:"There's already an account with that email. Sign in ins
   EMAIL_NOT_FOUND:"No account with that email.",INVALID_PASSWORD:"Wrong password.",INVALID_EMAIL:"That doesn't look like an email address.",
   MISSING_PASSWORD:"Type a password.",USER_DISABLED:"This account has been turned off.",TOO_MANY_ATTEMPTS_TRY_LATER:"Too many tries. Wait a few minutes, then try again.",
   WEAK_PASSWORD:"Use a longer password (at least 8 characters).",TOKEN_EXPIRED:"Please sign in again.",USER_NOT_FOUND:"Please sign in again.",INVALID_ID_TOKEN:"Please sign in again.",
-  CREDENTIAL_TOO_OLD_LOGIN_AGAIN:"For safety, sign out and back in, then try again."};
+  OPERATION_NOT_ALLOWED:"Sign-up with email isn't switched on yet. Try again later.",CONFIGURATION_NOT_FOUND:"Sign-in isn't set up yet. Try again later.",CREDENTIAL_TOO_OLD_LOGIN_AGAIN:"For safety, sign out and back in, then try again."};
 async function idt(method,body){
   let r;try{r=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:${method}?key=${FB.apiKey}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)})}
   catch(e){throw new Error("Can't reach the sign-in service. Check your connection.")}

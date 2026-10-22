@@ -116,7 +116,7 @@ function setupPapers(){const nav=document.querySelector(".sitenav");
   if(nav&&!nav.querySelector(".navpp")){
     nav.querySelectorAll("a").forEach(a=>{if(/tools\.html/.test(a.getAttribute("href")||"")&&!a.querySelector("span"))a.innerHTML='Study<span class="nl"> tools</span>'});
     const a=document.createElement("a");a.className="navpp";a.href="#papers";a.innerHTML='<span class="nl">Past p</span><span class="ns">P</span>apers';
-    const tb=nav.querySelector(".themebtn");nav.insertBefore(a,tb)}
+    const links=nav.querySelectorAll("a:not(.navpp)"),last=links[links.length-1];nav.insertBefore(a,last?last.nextSibling:nav.querySelector(".themebtn"))}
   if(!document.getElementById("papers")){const foot=document.querySelector(".sitefoot");if(!foot)return;
     const s=pageSubject();
     const links=s?[[s.exam+" past papers",s.papers,`Official ${s.name} papers and mark schemes${s.spec?" · spec "+s.spec:""}`],...EXTRA]
@@ -159,7 +159,7 @@ function xpToast(n){try{let t=document.getElementById("xptoast");if(!t){t=docume
 function addXP(n,cat,cap,key){n=Math.max(0,Math.round(n||0));if(!n)return 0;const x=xpLedger(),td=dkeyL();const d=x.days[td]=x.days[td]||{pts:0,cat:{}};
   if(key){const prev=x.aw[key]||0;if(n<=prev)return 0;const add=n-prev;x.aw[key]=n;n=add}
   if(cap){const used=d.cat[cat]||0;n=Math.min(n,Math.max(0,cap-used))}if(!n){try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}return 0}
-  d.pts+=n;d.cat[cat]=(d.cat[cat]||0)+n;x.total+=n;
+  d.pts+=n;d.cat[cat]=(d.cat[cat]||0)+n;x.total+=n;ev(String(cat||"other").replace(/[^a-z]/g,"").slice(0,14)||"other");
   const keep=Object.keys(x.days).sort().slice(-60);x.days=Object.fromEntries(keep.map(k=>[k,x.days[k]]));
   try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}xpToast(n);clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),4000);return n}
 function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td=dkeyL();
@@ -196,7 +196,14 @@ async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)ret
   try{localStorage.setItem("gcseasy-lbsent",JSON.stringify({sig,t:Date.now()}))}catch(e){}}
 /* ---- anonymous page-view count for the owner dashboard (no cookies; the visitor ID changes every day) ---- */
 function hit(){if(!API||!/^https?:$/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname))return;
-  try{fetch(API+"/hit",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer,s:!!(window.GCSEasyAuth&&GCSEasyAuth.user())})}).catch(()=>{})}catch(e){}}
+  let nv=0;try{if(!localStorage.getItem("gcseasy-seen")){nv=1;localStorage.setItem("gcseasy-seen","1")}}catch(e){}
+  try{fetch(API+"/hit",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({p:location.pathname,r:document.referrer,s:!!(window.GCSEasyAuth&&GCSEasyAuth.user()),a:standalone(),n:nv})}).catch(()=>{})}catch(e){}}
+/* ---- activity counts for the owner dashboard: just "3 quizzes, 12 cards" per visit, nothing personal ---- */
+let EV={},evT=null;
+function ev(name,n){if(!API)return;EV[name]=(EV[name]||0)+(n||1);clearTimeout(evT);evT=setTimeout(flushEv,15000)}
+function flushEv(){if(!Object.keys(EV).length||!/^https?:$/.test(location.protocol)||/^(localhost|127\.)/.test(location.hostname)){EV={};return}const c=EV;EV={};clearTimeout(evT);
+  try{fetch(API+"/ev",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({c,s:!!(window.GCSEasyAuth&&GCSEasyAuth.user())})}).catch(()=>{})}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")flushEv()});
 /* ---- installable app: offline copy + home-screen icon ---- */
 let installEvt=null;
 const standalone=()=>matchMedia("(display-mode: standalone)").matches||navigator.standalone===true;
@@ -204,10 +211,21 @@ const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platfo
 function paintInstall(){document.querySelectorAll("[data-install]").forEach(el=>{const mode=standalone()?"done":installEvt?"prompt":isIOS()?"ios":"manual";el.dataset.mode=mode;el.hidden=mode==="done"})}
 async function install(){if(installEvt){installEvt.prompt();try{await installEvt.userChoice}catch(e){}installEvt=null;paintInstall();return "prompted"}return isIOS()?"ios":"manual"}
 addEventListener("beforeinstallprompt",e=>{e.preventDefault();installEvt=e;paintInstall()});
-addEventListener("appinstalled",()=>{installEvt=null;paintInstall()});
+addEventListener("appinstalled",()=>{installEvt=null;paintInstall();ev("install");flushEv()});
+/* "Get the app" button in the header */
+const DL='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></svg>';
+function installHelp(kind){let p=document.getElementById("apppop");if(!p){p=document.createElement("div");p.id="apppop";p.className="apppop";p.setAttribute("role","dialog");p.setAttribute("aria-label","Install the app");document.body.appendChild(p);
+    document.addEventListener("click",e=>{if(!p.hidden&&!p.contains(e.target)&&!e.target.closest("#appbtnh,#appbtn"))p.hidden=true});document.addEventListener("keydown",e=>{if(e.key==="Escape")p.hidden=true})}
+  p.innerHTML=`<button type="button" class="apx" aria-label="Close">\u2715</button><b>Install GCSEasy</b>`+(kind==="ios"?`<ol><li>Open this page in <b>Safari</b>.</li><li>Tap <b>Share</b> (the square with an arrow).</li><li>Tap <b>Add to Home Screen</b>.</li></ol>`
+    :`<ol><li>Open the browser menu (<b>\u22ee</b> in Chrome or Edge).</li><li>Choose <b>Install app</b>, <b>Install GCSEasy</b> or <b>Add to Home screen</b>.</li></ol><p>On some school computers installing is switched off. You can still use the website.</p>`);
+  p.querySelector(".apx").onclick=()=>p.hidden=true;p.hidden=false}
+function setupInstallBtn(){const nav=document.querySelector(".sitenav");if(!nav||document.getElementById("appbtnh"))return;
+  const b=document.createElement("button");b.type="button";b.id="appbtnh";b.className="appbtnh";b.setAttribute("data-install","");b.innerHTML=DL+'<span class="l">Get the app</span><span class="s">App</span>';
+  b.onclick=async()=>{ev("installclick");const r=await install();if(r!=="prompted")installHelp(r)};
+  nav.insertBefore(b,nav.querySelector("#accbtn, #tbtn, .themebtn"));paintInstall()}
 function setupSW(){if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/sw.js").catch(()=>{})}
-function boot(){setupToggle();setupPapers();setupTimer();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+function boot(){setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+window.GCSEasy={ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();
