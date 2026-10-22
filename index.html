@@ -93,9 +93,7 @@ body{font-size:16.5px}
 .sec h2{font-size:1.5rem;letter-spacing:-.015em}
 .sec .sdesc{color:var(--muted);margin:6px 0 18px;max-width:60ch;font-size:.98rem}
 .appcard{display:flex;gap:18px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px}
-.appicon{flex:0 0 64px;height:64px;border-radius:16px;background:#16212E;display:grid;place-items:center;position:relative;overflow:hidden}
-.appicon::before{content:"";position:absolute;left:16%;right:16%;top:53%;height:19%;background:#FFD84D;border-radius:4px}
-.appicon span{position:relative;color:#fff;font:700 1.55rem Arial,sans-serif;margin-top:14%}
+.appicon{flex:0 0 64px;width:64px;height:64px;border-radius:16px}
 .appcard .sdesc{margin-bottom:14px}.apphelp{margin-top:12px!important;color:var(--ink)!important}
 @media (max-width:480px){.appcard{flex-direction:column}}
 .mine{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;background:var(--ink);color:var(--bg);border-radius:22px;padding:18px 20px;margin:0}
@@ -206,7 +204,7 @@ body{font-size:16.5px}
 </section>
 
 <section class="sec appsec" id="app" data-install hidden>
-<div class="appcard"><div class="appicon" aria-hidden="true"><span>GE</span></div><div>
+<div class="appcard"><img class="appicon" src="icon.svg" alt="" width="64" height="64"><div>
 <h2>Get the GCSEasy app</h2>
 <p class="sdesc">Install it on your phone, tablet or laptop. It opens full-screen from your home screen, and pages you've opened work offline.</p>
 <button class="cta main" type="button" id="appbtn">Install the app</button>

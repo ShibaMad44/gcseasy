@@ -16,7 +16,14 @@
 .sitebar{border-bottom:1px solid var(--line);background:var(--surface)}
 .sitebar .in{max-width:var(--site-w,720px);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 .brand{font:700 1.3rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;color:var(--ink);text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
-.brand mark,.hl{background:linear-gradient(transparent 40%,var(--hl) 40%,var(--hl) 90%,transparent 90%);color:inherit;padding:0 1px}
+.hl{background:linear-gradient(transparent 40%,var(--hl) 40%,var(--hl) 90%,transparent 90%);color:inherit;padding:0 1px}
+/* logo: flashcard icon + wordmark with a yellow underline under "Easy" */
+.brand{display:inline-flex;align-items:center}
+.brand::before{content:"";flex:0 0 auto;margin-right:.42em;width:1.38em;height:1.38em;border-radius:.34em;background:url(../icon.svg) center/contain no-repeat}
+.brand mark{background:none;color:inherit;padding:0;position:relative}
+.brand mark::after{content:"";position:absolute;left:.04em;right:.04em;bottom:-.2em;height:.16em;border-radius:.1em;background:#FFD84D}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .brand::before{box-shadow:0 0 0 1px rgba(255,255,255,.16)}}
+:root[data-theme="dark"] .brand::before{box-shadow:0 0 0 1px rgba(255,255,255,.16)}
 .sitenav{display:flex;align-items:center;gap:14px}
 .sitenav a{font:700 .9rem "Familjen Grotesk","Helvetica Neue",Arial,sans-serif;color:var(--muted);text-decoration:none;white-space:nowrap}
 .sitenav a:hover,.sitenav a[aria-current="page"]{color:var(--ink)}
