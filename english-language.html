@@ -45,6 +45,12 @@
 .kit div{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
 .kit h3{margin:0 0 6px;font-size:1rem}
 .kit p{margin:0;font-size:.93rem;color:var(--muted)}
+.sdesc2{color:var(--muted);margin:4px 0 12px}
+.elcard{display:grid;gap:8px;align-content:center;text-align:center;width:100%;min-height:180px;margin:12px 0;padding:22px;border-radius:20px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;font:inherit;box-shadow:var(--shadow)}
+.elcard small{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.elcard b{font:700 1.3rem/1.3 var(--display)}.elcard span{color:var(--muted)}
+.elcard.flip{background:var(--accent-soft)}.elleft{color:var(--muted);font-size:.9rem;align-self:center}
+.elq{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:12px}.elq small{color:var(--muted)}.elq .q{font:700 1.15rem var(--display);margin:6px 0 12px}
+.elq .opts{display:grid;gap:8px}.elq .ok{color:var(--good);font-weight:700}.elq .no{color:var(--bad);font-weight:700}
 </style>
 </head>
 <body>
@@ -71,6 +77,15 @@
   <div class="wfb" id="wfb"></div>
 </div>
 
+
+<h2 style="margin-top:30px" id="cards">Flashcards and quiz</h2>
+<p class="sdesc2">Every key term and the marks for every question. Cards you get wrong come back sooner.</p>
+<div class="chips" id="elf"></div>
+<div class="chips" id="elm"></div>
+<button class="elcard" id="elcard" type="button" aria-live="polite"></button>
+<div class="row" id="elbtns"><button class="btn" id="elagain" type="button">Again</button><button class="btn p" id="elgot" type="button">Got it</button></div>
+<div class="row"><button class="btn" id="elquiz" type="button">Quiz me on these</button><span class="elleft" id="elleft"></span></div>
+<div id="elqz"></div>
 <h2 style="margin-top:30px">Your toolkit</h2>
 <div class="kit">
 <div><h3>Language methods (P1 Q2, P2 Q3)</h3><p>Metaphor · simile · personification · verbs and adjectives · semantic field · sensory language · repetition · lists · alliteration · tone · sentence types</p></div>
@@ -80,6 +95,99 @@
 </div>
 </div>
 <footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
+<script>
+window.EL_TOPICS={P1:"Paper 1",P2:"Paper 2",LT:"Language techniques",ST:"Structure techniques",WR:"Writing (Q5)"};
+window.EL_CARDS=[
+["P1","Paper 1's full title","Explorations in Creative Reading and Writing"],
+["P1","Paper 1, Section A source","One fiction extract (20th or 21st century)"],
+["P1","Paper 1 Q1: marks and task","4 marks: list four things from the given lines"],
+["P1","Paper 1 Q2: marks and focus","8 marks: language analysis of a short section"],
+["P1","Paper 1 Q3: marks and focus","8 marks: how the whole extract is structured"],
+["P1","Paper 1 Q4: marks and task","20 marks: evaluate a statement about the extract"],
+["P1","Paper 1 Q5: marks and task","40 marks: descriptive or narrative writing"],
+["P1","How long is each paper?","1 hour 45 minutes"],
+["P1","Total marks for each paper","80"],
+["P1","Time to spend on Paper 1 Q4","About 20–25 minutes"],
+["P1","What is Paper 1 Q4 really asking?","How far you agree, backed by evidence and the writer's methods"],
+["P2","Paper 2's full title","Writers' Viewpoints and Perspectives"],
+["P2","Paper 2, Section A sources","Two non-fiction sources: one 19th century, one modern"],
+["P2","Paper 2 Q1: marks and task","4 marks: shade four true statements"],
+["P2","Paper 2 Q2: marks and task","8 marks: summarise differences or similarities in both sources"],
+["P2","Paper 2 Q3: marks and focus","12 marks: language analysis of one source"],
+["P2","Paper 2 Q4: marks and task","16 marks: compare the writers' perspectives and methods"],
+["P2","Paper 2 Q5: marks and task","40 marks: write your own viewpoint (article, letter, speech…)"],
+["P2","How are Q5's 40 marks split?","24 for content and organisation, 16 for technical accuracy"],
+["P2","Is Paper 2 Q2 about language?","No: it's what the sources say (inference), not how"],
+["P2","Connectives for comparing in Q4","Whereas, similarly, in contrast, likewise"],
+["P2","Time to spend on Paper 2 Q4","About 20 minutes"],
+["LT","Simile","A comparison using 'like' or 'as'"],
+["LT","Metaphor","Saying something is something else"],
+["LT","Personification","Giving human qualities to something non-human"],
+["LT","Semantic field","A group of words linked to the same topic"],
+["LT","Sibilance","Repeated 's' sounds"],
+["LT","Alliteration","The same sound at the start of nearby words"],
+["LT","Onomatopoeia","A word that sounds like the noise it describes"],
+["LT","Pathetic fallacy","Weather or setting that reflects a mood"],
+["LT","Juxtaposition","Placing contrasting ideas side by side"],
+["LT","Hyperbole","Deliberate exaggeration"],
+["LT","Imperative","A command (e.g. 'Act now')"],
+["LT","Rhetorical question","A question asked for effect, not for an answer"],
+["LT","Emotive language","Words chosen to make the reader feel strongly"],
+["LT","Direct address","Speaking to the reader as 'you'"],
+["LT","Anecdote","A short personal story used as evidence"],
+["LT","Rule of three","A list of three for emphasis"],
+["LT","Connotation","The ideas or feelings a word suggests"],
+["LT","Oxymoron","Two contradictory words together"],
+["LT","Sensory language","Language that appeals to the five senses"],
+["ST","Cyclical structure","The ending returns to the opening"],
+["ST","Flashback","A scene from an earlier time"],
+["ST","Foreshadowing","Hints at what will happen later"],
+["ST","Shift in focus","The text moves to a new person, place or time"],
+["ST","Zooming in","Moving from a wide view to a close detail"],
+["ST","Climax","The point of highest tension"],
+["ST","One-line paragraph","Creates emphasis, shock or a pause"],
+["ST","In medias res","Starting in the middle of the action"],
+["ST","Exposition","The opening that sets up characters and setting"],
+["ST","Withholding information","Keeps the reader guessing and builds suspense"],
+["WR","Planning time for Q5","About 5 minutes"],
+["WR","Paper 1 Q5 choices","Describe (often from a picture) or write a story"],
+["WR","Forms that come up in Paper 2 Q5","Article, letter, speech, leaflet, essay"],
+["WR","Counter-argument","Admitting the other side, then rebutting it"],
+["WR","Discourse markers","Words that link paragraphs: firstly, however, furthermore"],
+["WR","Show, don't tell","Reveal feelings through detail instead of naming them"],
+["WR","Punctuation that impresses examiners","Semicolons, colons, dashes and ellipses used accurately"]];
+/* English Language flashcards (same spaced-repetition gaps as every other subject) and a quiz */
+(function(){const $=id=>document.getElementById(id),KEY="englang-v1",G=window.GCSEasy,T=window.EL_TOPICS,CARDS=window.EL_CARDS;
+  let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){}st.srs=st.srs||{};const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
+  const GAPS=[0,1,3,7,16,35],ck=c=>c[0]+"|"+c[1].slice(0,60),now=()=>Date.now(),due=c=>{const r=st.srs[ck(c)];return !r||r.due<=now()};
+  let topic="All",mode=st.mode||"due",deck=[],flipped=false;const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const pool=()=>CARDS.filter(c=>topic==="All"||c[0]===topic);
+  const chips=(el,items,cur,cb)=>{el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})};
+  function build(){deck=pool().filter(c=>mode==="all"||due(c)).sort(()=>Math.random()-.5);flipped=false;draw()}
+  function draw(){chips($("elf"),[["All","All"],...Object.entries(T)],topic,k=>{topic=k;build()});
+    chips($("elm"),[["due",`Due now (${pool().filter(due).length})`],["all","All cards"]],mode,k=>{mode=k;st.mode=k;save();build()});
+    const c=deck[0],card=$("elcard");$("elleft").textContent=deck.length+" left";
+    $("elbtns").hidden=!c;
+    if(!c){card.className="elcard";card.innerHTML=`<small>All caught up</small><b>Nothing due right now.</b><span>Switch to "All cards" to keep going.</span>`;return}
+    card.className="elcard"+(flipped?" flip":"");card.innerHTML=flipped?`<small>${esc(T[c[0]])} · answer</small><b>${esc(c[2])}</b>`:`<small>${esc(T[c[0]])} · tap to flip</small><b>${esc(c[1])}</b>`}
+  $("elcard").onclick=()=>{if(deck.length){flipped=!flipped;draw()}};
+  const mark=ok=>{const c=deck.shift();if(!c)return;const r=st.srs[ck(c)]||{b:0,due:0},wasDue=r.due<=now();
+    if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;if(wasDue&&G)G.addXP(1,"cards",150)}else{r.b=0;r.due=now();deck.push(c)}
+    st.srs[ck(c)]=r;save();if(G&&G.topicResult)G.topicResult("english-language",c[0],ok,"card");flipped=false;draw()};
+  $("elgot").onclick=()=>mark(true);$("elagain").onclick=()=>mark(false);
+  /* quiz: smart wrong answers from the shared engine */
+  $("elquiz").onclick=()=>{const all=CARDS.map(c=>({t:c[0],q:c[1],a:c[2]})),src=all.filter(c=>topic==="All"||c.t===topic).sort(()=>Math.random()-.5).slice(0,10);
+    let i=0,got=0;const box=$("elqz");
+    const step=()=>{if(i>=src.length){box.innerHTML=`<div class="elq"><b>${got} / ${src.length}</b><p>${got===src.length?"Perfect.":"Flip through the cards you missed, then try again."}</p><button class="btn" type="button" id="elqagain">Another quiz</button></div>`;$("elqagain").onclick=()=>$("elquiz").click();return}
+      const c=src[i],m=G.QG.mcq(c,all);box.innerHTML=`<div class="elq"><small>Question ${i+1} of ${src.length} · ${esc(T[c.t])}</small><p class="q">${esc(c.q)}</p><div class="opts">${m.o.map((o,k)=>`<button class="opt" type="button" data-k="${k}">${esc(o)}</button>`).join("")}</div><div id="elfb"></div></div>`;
+      box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k,ok=k===m.a;box.querySelectorAll(".opt").forEach((x,j)=>{x.disabled=true;if(j===m.a)x.classList.add("right");else if(j===k)x.classList.add("wrong")});
+        if(ok){got++;G.addXP(1,"quiz",60)}G.topicResult("english-language",c.t,ok);
+        $("elfb").innerHTML=`<p class="${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</p><button class="btn p" type="button" id="elqn">${i+1<src.length?"Next":"See my score"}</button>`;$("elqn").onclick=()=>{i++;step()}})};
+    step();box.scrollIntoView({behavior:"smooth",block:"nearest"})};
+  build();
+  if(location.hash==="#fc"||location.hash==="#cards")setTimeout(()=>$("cards").scrollIntoView(),100);
+})();
+</script>
 <script src="shared/guide.js"></script>
 <script>
 const P1={title:"Paper 1: Explorations in Creative Reading and Writing",sub:"One fiction extract (Section A), then your own creative writing (Section B). 80 marks.",total:"1 hr 45",split:[["Section A","1 hr"],["Section B","45 min"]],

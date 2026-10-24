@@ -166,6 +166,96 @@ function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td
   for(let i=0;i<7;i++){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");week+=(x.days[k]||{}).pts||0}
   today=(x.days[td]||{}).pts||0;const level=Math.floor(Math.sqrt(x.total/40))+1,lo=40*(level-1)**2,hi=40*level**2;
   return {total:x.total,week,today,level,into:x.total-lo,need:hi-lo}}
+/* ---- Smart quiz questions, shared by Quiz me and the daily challenge.
+   Wrong answers come from questions of the same TYPE (an adaptation for an adaptation, a date for a date),
+   with the same answer shape and similar length. rnd lets the daily challenge stay the same for everyone. ---- */
+const QG=(()=>{
+const STOP=new Set("the a an of to in and or is are what which why how does do for on with by its it as at be from that this name give state define meaning vs".split(" "));
+const norm=s=>String(s).toLowerCase().replace(/<[^>]+>/g,"").replace(/[‘’']/g,"").replace(/[^a-z0-9%.À-ɏ ]+/g," ").replace(/\s+/g," ").trim();
+const words=s=>norm(s).split(" ").filter(w=>w&&!STOP.has(w)).map(w=>w.replace(/(ing|ed|es|s)$/,""));
+const jac=(a,b)=>{const A=new Set(a),B=new Set(b);if(!A.size||!B.size)return 0;let n=0;A.forEach(x=>{if(B.has(x))n++});return n/(A.size+B.size-n)};
+const parts=a=>String(a).split(/\s*[;,]\s*|\s+and\s+/).filter(Boolean).length;
+const numIn=a=>{const m=String(a).replace(/,(?=\d{3})/g,"").match(/-?\d+(\.\d+)?/);return m?+m[0]:null};
+const WORDNUM=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve"];
+const UNITS=["Joule (J)","Watt (W)","Newton (N)","Coulomb (C)","Volt (V)","Ohm (\u03a9)","Hertz (Hz)","Pascal (Pa)","Becquerel (Bq)","Kilogram (kg)","Metre per second (m/s)","Ampere (A)"];
+const SCIENTISTS=["Rutherford","Thomson","Bohr","Dalton","Chadwick","Mendeleev","Becquerel","Marie Curie","Faraday","Newton","Darwin","Fleming","Jenner","Mendel","Watson and Crick","Avogadro"];
+// what the question is asking for
+function qtype(q){const s=String(q).toLowerCase();
+  if(/stage direction/.test(s))return "stagedir";
+  if(/^(act|ch|chapter) \d+ ·/.test(s))return "quote";
+  const T=[["diff",/\bvs\b|difference between|compare|versus/],["list",/^\d+\b|^name (the )?\d|^(two|three|four|five|six|seven|eight)\b|^list|^give \d|\d+ (ways|types|factors|examples|causes|effects|methods)|^factors|factors affecting/],["adapt",/adapt/],["func",/\b(function|job|role|purpose)\b|what does .{1,30} do\b/],["eq",/equation|formula|\bcalculat|symbol equation|word equation/],
+    ["unit",/\bunits?\b/],["who",/^who\b|who (discovered|proposed|developed|wrote|invented)/],["when",/^when\b|what year|which year|\bdate\b|\bset\b\?|published/],
+    ["where",/^where\b|location|found in|which part/],["howmany",/how many|how much|^%|\bnumber of\b|percentage|\brate\b|\bcost\b|\bdeaths?\b|\bfigures?\b/],
+    ["why",/^why\b|reason|why is|why are/],["steps",/steps|stages|process|sequence|order of|how .{1,40} forms?\b/],
+    ["list",/^\d+\b|^name (the )?\d|^(two|three|four|five|six|seven|eight)\b|^list|^give \d|\d+ (ways|types|factors|examples|causes|effects|methods)/],
+    ["example",/example|e\.g\./],["cause",/caus|effects?\b|impacts?|consequence|risk factor/],["test",/\btest for\b|test\b|indicator|observation/],
+    ["type",/what type|which type|kind of|classif/],
+    ["def",/^(define|what is|what are|meaning|definition)|meaning$|what does .{1,40} mean/]];
+  for(const [k,re] of T)if(re.test(s))return k;
+  return s.split(/\s+/).length<=5&&!/\?$/.test(s)?"term":"other"}
+function kind(a){const s=String(a).trim(),w=s.split(/\s+/).length;
+  if(/^(about |around |~|over |under |almost )?[-−£$]?\d[\d,.]*\s*(%|[a-zA-Z°²³/]{0,8})?(\s|$)/i.test(s)&&w<=4)return "num";
+  if(/[=→÷×^√]/.test(s)&&w<=10)return "formula";
+  const p=parts(s);if(p>=3)return "list"+Math.min(p,5);if(p===2)return "pair";
+  return w<=2?"word":w<=6?"short":"long"}
+function wordNumFakes(a,rnd){const i=WORDNUM.indexOf(norm(a));if(i<0)return [];const c=String(a)[0]===String(a)[0].toUpperCase();
+  return [i-2,i-1,i+1,i+2,i+3].filter(x=>x>=0&&x<WORDNUM.length).map(x=>[rnd(),WORDNUM[x]]).sort((p,q)=>p[0]-q[0]).map(x=>c?x[1][0].toUpperCase()+x[1].slice(1):x[1])}
+// change every number in a longer answer ("650; 326" -> "600; 301", "Spring 1912" -> "Spring 1909")
+function allNumberFakes(a,rnd){if(!/\d/.test(a))return [];const out=new Set();const ks=[[.8,-3],[1.25,2],[.6,-8],[1.5,5]];
+  for(const [k,yd] of ks){const f=String(a).replace(/\d{1,3}(?:,\d{3})+|\d+(?:\.\d+)?/g,m=>{const n=+m.replace(/,/g,"");if(n>=1700&&n<=2100&&Number.isInteger(n))return String(n+yd);const v=Math.round(n*k*100)/100;return (Number.isInteger(n)?Math.round(v):v).toLocaleString("en-GB")});if(f!==a)out.add(f)}
+  return [...out].map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1])}
+function numberFakes(a,rnd){const n=numIn(a);if(n==null)return [];const s=String(a);const dec=(String(n).split(".")[1]||"").length;
+  const yr=n>=1700&&n<=2100&&Number.isInteger(n);
+  const vals=yr?[n-3,n-1,n+2,n+5,n-10]:[...new Set([.5,.75,1.5,2,1.25,.8,3].map(k=>+(n*k).toFixed(dec)).concat(Number.isInteger(n)&&n<30?[n-2,n-1,n+1,n+2]:[]).filter(x=>x!==n&&x>=0))];
+  return vals.map(v=>[rnd(),s.replace(/-?\d[\d,.]*/,(yr?v:v.toLocaleString("en-GB")))]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
+const who=q=>{const m=String(q).match(/·\s*([^:]+):/);return m?m[1].trim().toLowerCase():""};
+function distractors(card,pool,k,rnd){rnd=rnd||Math.random;const qt=qtype(card.q),ka=kind(card.a),qa=words(card.q),aa=words(card.a),na=norm(card.a),la=String(card.a).length,wc=who(card.q);
+  const seen=new Set([na]);const scored=[];
+  pool.forEach(x=>{if(x===card||(x.q===card.q&&x.a===card.a))return;const nx=norm(x.a);if(!nx||seen.has(nx))return;
+    if(nx.length>4&&(na.includes(nx)||nx.includes(na)))return; // so close it could also be right
+    const xt=qtype(x.q);let s=0;
+    if(xt===qt||((xt==="def"||xt==="term")&&(qt==="def"||qt==="term")))s+=6;else if((qt==="quote"&&xt==="stagedir")||(qt==="stagedir"&&xt==="quote"))s-=6;
+    if(x.t===card.t)s+=2.5;const kx=kind(x.a);if(kx===ka)s+=3;else if(kx.slice(0,4)===ka.slice(0,4))s+=1.5;
+    s+=3*jac(qa,words(x.q))+1.5*jac(aa,words(x.a));
+    if(wc&&who(x.q)===wc)s+=1.5;
+    s-=Math.abs(Math.log((String(x.a).length+4)/(la+4)))*2.2;
+    s+=rnd()*1.2;scored.push([s,x.a,nx,xt===qt])});
+  scored.sort((a,b)=>b[0]-a[0]);
+  const out=[];
+  const add=(arr,max)=>{for(const f of arr){if(out.length>=max)break;const nf=norm(f);if(nf&&!seen.has(nf)){seen.add(nf);out.push(f)}}};
+  if(ka==="num")add(numberFakes(card.a,rnd),2);
+  else if(WORDNUM.includes(norm(card.a)))add(wordNumFakes(card.a,rnd),3);
+  else if((qt==="howmany"||qt==="when")&&/\d/.test(card.a))add(allNumberFakes(card.a,rnd),2);
+  // not enough questions of the same type in this subject: use realistic fakes
+  const sameType=scored.filter(x=>x[3]).length;
+  if(qt==="unit"&&sameType<k&&/\(.{1,4}\)|^[a-z]{1,4}$/i.test(card.a))add(UNITS.map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),k);
+  if(qt==="who"&&sameType<k&&/^[A-Z][\w\u00c0-\u024f]+( (and )?[A-Z][\w\u00c0-\u024f]+){0,2}$/.test(String(card.a).trim()))add(SCIENTISTS.map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),k);
+  if(ka==="num"){ // numbers only: real figures from similar questions first, then made-up nearby figures
+    for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx)||kind(a)!=="num")continue;seen.add(nx);out.push(a)}
+    add(numberFakes(card.a,rnd),k);}
+  for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx))continue;seen.add(nx);out.push(a)}
+  return out}
+// French words that are the same (or nearly) in English are free marks: leave them out of quizzes
+function cognate(q,a){const deacc=w=>w.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const fr=deacc(norm(String(q).replace(/\((m|f|mpl|fpl|pl|e)\)/gi,"")).replace(/^(le|la|les|l|un|une|des|du|de)\s+/,"").split(/\s*\/\s*/)[0].replace(/^(le|la|les|l|un|une)\s+/,""));
+  if(!fr)return false;const stem=w=>w.replace(/(que|ie|ite|e|s|x)$/,"");
+  return String(a).split(/\s*[,;\/]\s*/).some(alt=>{const en=deacc(norm(alt)).replace(/^(the|a|an|to)\s+/,"");if(!en)return false;
+    if(fr===en||(fr.length>=4&&stem(fr)===stem(en)))return true;
+    return fr.length>=5&&lev(fr,en)<=(en.length>=7?2:1)})}
+const typable=a=>{const s=String(a).replace(/\(.*?\)/g,"").trim();return s.length<=28&&s.split(/\s+/).length<=4&&!/[;,=→]/.test(s)};
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function check(input,answer){const strip=s=>norm(s).replace(/\b(the|a|an|to)\b/g,"").replace(/\s+/g," ").trim();
+  const alts=String(answer).replace(/\(.*?\)/g,"").split(/\s+\/\s+|\s+or\s+/).map(strip).filter(Boolean);const u=strip(input);if(!u)return {ok:false};
+  const ni=numIn(input),na=numIn(answer);
+  if(na!=null&&kind(answer)==="num")return {ok:ni!=null&&Math.abs(ni-na)<=Math.max(.011,Math.abs(na)*.005),exact:true};
+  if(alts.includes(u))return {ok:true,exact:true};
+  const raw=String(answer).replace(/\s+/g,"").toLowerCase();if(raw&&String(input).replace(/\s+/g,"").toLowerCase()===raw)return {ok:true,exact:true};
+  for(const a of alts){const d=lev(u,a);if(d<=Math.max(1,Math.floor(a.length/6)))return {ok:true,exact:false,want:a}}
+  return {ok:false}}
+// a ready-made multiple-choice question from a card
+function mcq(card,pool,rnd){rnd=rnd||Math.random;const o=[card.a,...distractors(card,pool,3,rnd)].map(x=>[rnd(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);return {q:card.q,o,a:o.indexOf(card.a)}}
+return {distractors,typable,check,kind,qtype,cognate,mcq}})();
 /* ---- How you're doing on each topic: last 20 results per topic, from quizzes, flashcards and exam questions ---- */
 const TPK="gcseasy-topics";
 function topicStats(){try{return JSON.parse(localStorage.getItem(TPK)||"{}")||{}}catch(e){return {}}}
@@ -290,5 +380,5 @@ function setupSW(){if("serviceWorker" in navigator&&location.protocol==="https:"
 function boot(){setTimeout(checkBadges,2500);setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+window.GCSEasy={QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();

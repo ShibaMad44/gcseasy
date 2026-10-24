@@ -192,7 +192,7 @@ body{font-size:16.5px}
 
 <section class="sec" id="groups">
   <h2>Class leaderboard</h2>
-  <p class="sdesc">Start a group, share the code with friends, and compare XP, streaks and daily challenge scores. No sign-up.</p>
+  <p class="sdesc">Start a group, share the code with friends, and compare XP, streaks and daily challenge scores. Free: you just need a GCSEasy account.</p>
   <div class="gbody"></div>
   <details class="xphow"><summary>How XP works</summary><ul>
     <li><b>Exam questions:</b> 1 XP per mark you get, once per question.</li>
@@ -265,7 +265,7 @@ const $=id=>document.getElementById(id);
 const live=SUBJECTS.filter(s=>s.live),prog=progress();
 
 /* stats: real counts from the live pages */
-$("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).length||670,"flashcards"],[955,"exam-style marks"],[SUBJECTS.length-live.length,"more on the way"]].map(([n,l])=>`<div><b>${n}</b><span>${l}</span></div>`).join("");
+$("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).length||670,"flashcards"],[(window.GCSE_STATS||{}).marks||0,"exam-style marks"],[SUBJECTS.length-live.length,"more on the way"]].map(([n,l])=>`<div><b>${n}</b><span>${l}</span></div>`).join("");
 
 /* your revision: only shown once something has been saved on this device */
 (function(){const L=GCSEasy.getLog(),now=Date.now(),day=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()},today=day(now);
@@ -281,10 +281,10 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
   const el=$("mine");el.hidden=false;
   const g=GCSEasy.getGoal(),tm=mins(x=>day(x.s)===today);
   const xs=GCSEasy.xpStats();
-  el.innerHTML=`<h2>Your revision</h2><div><b>Level ${xs.level}</b><span>${xs.total} XP · ${xs.need-xs.into} to level ${xs.level+1}</span></div><div><b>${xs.week} XP</b><span>this week</span></div><div><b>${tm} min</b><span>today · goal ${g} min${tm>=g?" ✓":""}</span></div><div><b>${mins(x=>x.s>=today-6*864e5)} min</b><span>last 7 days</span></div><div><b>${streak} day${streak===1?"":"s"}</b><span>streak</span></div>${next?`<div><b>${next.d===0?"Today":next.d===1?"Tomorrow":next.d+" days"}</b><span>until ${String(next.n).replace(/[<>&"]/g,"")}</span></div>`:""}${last&&last.href?`<a class="go" href="${last.href}">Carry on: ${last.name} →</a>`:""}<a href="tools.html#tracker" style="font-size:.88rem;color:var(--muted)">Full tracker</a>`})();
+  el.innerHTML=`<h2>Your revision</h2><div><b>Level ${xs.level}</b><span>${xs.total} XP · ${xs.need-xs.into} to level ${xs.level+1}</span></div><div><b>${xs.week} XP</b><span>this week</span></div><div><b>${tm} min</b><span>today · goal ${g} min${tm>=g?" ✓":""}</span></div><div><b>${mins(x=>x.s>=today-6*864e5)} min</b><span>last 7 days</span></div>${streak?`<div><b>${streak} day${streak===1?"":"s"}</b><span>streak</span></div>`:`<div><b>Start</b><span>your streak today</span></div>`}${next?`<div><b>${next.d===0?"Today":next.d===1?"Tomorrow":next.d+" days"}</b><span>until ${String(next.n).replace(/[<>&"]/g,"")}</span></div>`:""}${last&&last.href?`<a class="go" href="${last.href}">Carry on: ${last.name} →</a>`:""}<a href="tools.html#tracker" style="font-size:.88rem;color:var(--muted)">Full tracker</a>`})();
 
 /* ---- daily challenge: the same 5 questions for everyone each day ---- */
-(function(){const box=$("tryq");const BANK=(window.GCSE_BANK||[]).filter(q=>!q.tri),CARDS=window.GCSE_CARDS||[];if(!BANK.length&&!CARDS.length){box.hidden=true;return}
+(function(){const box=$("tryq");const BANK=(window.GCSE_BANK||[]).filter(q=>!q.tri),CARDS=(window.GCSE_CARDS||[]).filter(c=>!/\(Triple\)|Triple only/i.test(c.q+" "+c.a));if(!BANK.length&&!CARDS.length){box.hidden=true;return}
   const dkey=d=>{const x=new Date(d);return x.getFullYear()+"-"+String(x.getMonth()+1).padStart(2,"0")+"-"+String(x.getDate()).padStart(2,"0")};
   const TODAY=dkey(Date.now());
   const rng=seed=>{let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}return ()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);return ((h^=h>>>16)>>>0)/4294967296}};
@@ -292,21 +292,22 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
   const subs=shuf([...new Set([...BANK,...CARDS].map(x=>x.s))]);
   const Q=[];for(let k=0;k<5;k++){const s=subs[k%subs.length];const useBank=R()<.45&&BANK.some(b=>b.s===s);
     if(useBank){const b=pick(BANK.filter(x=>x.s===s&&!Q.some(q=>q.q===x.q)));const order=shuf(b.o.map((_,i)=>i));Q.push({s,q:b.q,o:order.map(i=>b.o[i]),a:order.indexOf(b.a),ex:b.ex})}
-    else{const pool=CARDS.filter(x=>x.s===s);const c=pick(pool.filter(x=>!Q.some(q=>q.q===x.q)));let wrong=shuf(pool.filter(x=>x.t===c.t&&x.a!==c.a).map(x=>x.a));if(wrong.length<3)wrong=wrong.concat(shuf(pool.filter(x=>x.a!==c.a&&!wrong.includes(x.a)).map(x=>x.a)));
-      const o=shuf([c.a,...[...new Set(wrong)].slice(0,3)]);Q.push({s,q:c.q,o,a:o.indexOf(c.a),ex:""})}}
+    else{const pool=CARDS.filter(x=>x.s===s);const c=pick(pool.filter(x=>!Q.some(q=>q.q===x.q)&&!(s==="french"&&GCSEasy.QG.cognate(x.q,x.a))));
+      const m=GCSEasy.QG.mcq(c,pool,R);Q.push({s,q:c.q,o:m.o,a:m.a,ex:""})}}
   let st={};try{st=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}st.done=st.done||{};
   const save=()=>{try{localStorage.setItem("gcseasy-daily",JSON.stringify(st))}catch(e){}};
   let cur=st.cur&&st.cur.date===TODAY?st.cur:{date:TODAY,i:0,ans:[]};
   const streak=()=>{let n=0,d=new Date();d.setHours(12);if(!st.done[dkey(d)])d.setDate(d.getDate()-1);while(st.done[dkey(d)]){n++;d.setDate(d.getDate()-1)}return n};
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const nm=id=>(SUBJECTS.find(x=>x.id===id)||{name:id}).name,col=id=>(SUBJECTS.find(x=>x.id===id)||{c:"--accent"}).c;
+  const COMB=(()=>{try{return localStorage.getItem("gcseasy-tier")==="combined"}catch(e){return false}})();
+  const nm=id=>{const n=(SUBJECTS.find(x=>x.id===id)||{name:id}).name;return COMB&&["biology","chemistry","physics"].includes(id)?"Combined Science · "+n:n},col=id=>(SUBJECTS.find(x=>x.id===id)||{c:"--accent"}).c;
   const dots=()=>`<div class="ddots">${Q.map((_,k)=>{const a=cur.ans[k];return `<i class="${a==null?(k===cur.i?"now":""):(a===Q[k].a?"ok":"no")}"></i>`}).join("")}</div>`;
-  const head=()=>`<div class="top"><span class="lab">Daily challenge · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span><span class="dstreak" title="Days in a row">${streak()} day streak${streak()===1?"":""}</span></div>`;
+  const head=()=>`<div class="top"><span class="lab">Daily challenge · ${new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span><span class="dstreak" title="Days in a row">${streak()?streak()+" day streak":"Start your streak today"}</span></div>`;
   function draw(){const done=st.done[TODAY];
     if(done){const sc=done.score,grid=done.ans.map((a,k)=>a===Q[k].a?"🟩":"🟥").join("");
       box.innerHTML=head()+dots().replace(/class="now"/,"")+`<p class="q">${sc} / 5 today${sc===5?". Perfect.":sc>=3?". Nice.":". Come back tomorrow."}</p><p class="why">New questions every day at midnight. Keep your streak going and compare with friends in a group below.</p>
       <div class="next"><button class="dbtn" id="dshare" type="button">Copy my result</button><a href="#groups">Leaderboard →</a></div><div id="dmsg" class="why"></div>`;
-      $("dshare").onclick=async()=>{const t=`GCSEasy daily challenge ${TODAY}: ${sc}/5 ${grid} · ${streak()} day streak`;try{await navigator.clipboard.writeText(t);$("dmsg").textContent="Copied. Paste it in your group chat."}catch(e){$("dmsg").textContent=t}};return}
+      $("dshare").onclick=async()=>{const t=`GCSEasy daily challenge ${TODAY}: ${sc}/5 ${grid}${streak()>1?` · ${streak()} day streak`:""}`;try{await navigator.clipboard.writeText(t);$("dmsg").textContent="Copied. Paste it in your group chat."}catch(e){$("dmsg").textContent=t}};return}
     const q=Q[cur.i],c=col(q.s);
     box.style.setProperty("--c",`var(${c})`);
     box.innerHTML=head()+dots()+`<span class="sub" style="--c:var(${c})">${esc(nm(q.s))}</span><p class="q">${esc(q.q)}</p><div class="opts">${q.o.map((o,k)=>`<button class="opt" data-k="${k}">${esc(o)}</button>`).join("")}</div><div id="dfb"></div>`;
@@ -373,15 +374,19 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
   G.lbSync(true).finally(drawGroups)})();
 
 /* ---- today: what to do next ---- */
-(function(){const el=$("today");const KEYS={biology:"bio-mock-v1",chemistry:"chem-mock-v2",physics:"phys-v1",geography:"geo-v1","english-literature":"englit-v1",citizenship:"cit-v1",french:"fr-v1",maths:"maths-cards-v1"};
+(function(){const el=$("today");const KEYS={biology:"bio-mock-v1",chemistry:"chem-mock-v2",physics:"phys-v1",geography:"geo-v1","english-literature":"englit-v1",citizenship:"cit-v1",french:"fr-v1",maths:"maths-cards-v1","english-language":"englang-v1"};
   const CARDS=window.GCSE_CARDS||[],now=Date.now(),rows=[];const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
   let dc={};try{dc=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}
   const td=new Date(),tk=td.getFullYear()+"-"+String(td.getMonth()+1).padStart(2,"0")+"-"+String(td.getDate()).padStart(2,"0");
   rows.push(dc.done&&dc.done[tk]?["done","Daily challenge done",`${dc.done[tk].score}/5 today`,"#tryq"]:["go","Do today's daily challenge","5 questions, about 2 minutes","#tryq"]);
+  const comb={n:0,parts:[]};
   Object.entries(KEYS).forEach(([id,k])=>{let st=null;try{st=JSON.parse(localStorage.getItem(k)||"null")}catch(e){}if(!st||!st.srs)return;
     const tier=(()=>{try{return localStorage.getItem("gcseasy-tier")}catch(e){return null}})();
     const due=CARDS.filter(c=>c.s===id&&!(tier==="combined"&&/\(Triple\)/.test(c.q))).filter(c=>{const r=st.srs[c.t+"|"+c.q.slice(0,60)];return !r||r.due<=now}).length;
-    const s=SUBJECTS.find(x=>x.id===id);if(due&&s)rows.push(["go",`${due} ${s.name} flashcard${due===1?"":"s"} due`,"Spaced repetition: review them before you forget",s.href+"#fc"])});
+    const s=SUBJECTS.find(x=>x.id===id);if(!due||!s)return;
+    if(tier==="combined"&&["biology","chemistry","physics"].includes(id)){comb.n+=due;comb.parts.push(`${s.name} ${due}`);return}
+    rows.push(["go",`${due} ${s.name} flashcard${due===1?"":"s"} due`,"Spaced repetition: review them before you forget",s.href+"#fc"])});
+  if(comb.n)rows.push(["go",`${comb.n} Combined Science flashcard${comb.n===1?"":"s"} due`,comb.parts.join(" · "),"combined-science.html"]);
   let ex=[];try{ex=JSON.parse(localStorage.getItem("gcseasy-exams")||"[]")||[]}catch(e){}
   const day0=new Date();day0.setHours(0,0,0,0);
   const nx=ex.map(x=>({n:x.name,d:Math.round((new Date(x.date+"T00:00:00")-day0)/864e5)})).filter(x=>x.d>=0).sort((a,b)=>a.d-b.d)[0];
@@ -433,8 +438,9 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
 /* ---- search any fact across every subject ---- */
 function drawFacts(){const term=$("q").value.trim().toLowerCase(),box=$("facts");if(term.length<3){box.innerHTML="";return}
   const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const hits=(window.GCSE_CARDS||[]).filter(c=>(c.q+" "+c.a).toLowerCase().includes(term)).slice(0,8);
-  box.innerHTML=hits.length?`<div class="group"><h3>Facts matching “${esc(term)}”</h3><div class="facts">${hits.map(c=>{const s=SUBJECTS.find(x=>x.id===c.s)||{};return `<a class="fact" href="${s.href||"#"}" style="--c:var(${s.c||"--accent"})"><span class="fs">${esc(s.name||c.s)} · ${esc(c.t)}</span><b>${esc(c.q)}</b><span>${esc(c.a)}</span></a>`}).join("")}</div></div>`:""}
+  const comb=(()=>{try{return localStorage.getItem("gcseasy-tier")==="combined"}catch(e){return false}})();
+  const hits=(window.GCSE_CARDS||[]).filter(c=>(c.q+" "+c.a).toLowerCase().includes(term)&&!(comb&&/\(Triple\)/.test(c.q))).slice(0,8);
+  box.innerHTML=hits.length?`<div class="group"><h3>Facts matching “${esc(term)}”</h3><div class="facts">${hits.map(c=>{const s=SUBJECTS.find(x=>x.id===c.s)||{};return `<a class="fact" href="${s.href||"#"}" style="--c:var(${s.c||"--accent"})"><span class="fs">${esc((comb&&["biology","chemistry","physics"].includes(c.s)?"Combined Science · ":"")+(s.name||c.s))} · ${esc(c.t)}</span><b>${esc(c.q)}</b><span>${esc(c.a)}</span></a>`}).join("")}</div></div>`:""}
 $("q").addEventListener("input",drawFacts);
 
 /* all subjects: search + category */

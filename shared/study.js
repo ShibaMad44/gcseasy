@@ -37,55 +37,10 @@ function setupAccordion(){const rev=$("p-rev");if(!rev)return;const secs=[...rev
   $("revall").onclick=()=>{const all=!secs.every(x=>x.classList.contains("open"));secs.forEach(x=>{x.classList.toggle("open",all);x.querySelector(".th")?.setAttribute("aria-expanded",all)});keep();lab()};
   rev.addEventListener("click",e=>{if(e.target.closest(".th"))lab()})}
 /* ---- Topic quizzes: read a topic, then quiz yourself on it (or on several at once) ---- */
-/* ---- Smarter quiz questions: believable wrong answers + type-the-answer ---- */
-const QG=(()=>{
-const STOP=new Set("the a an of to in and or is are what which why how does do for on with by its it as at be from that this name give state define meaning vs".split(" "));
-const norm=s=>String(s).toLowerCase().replace(/<[^>]+>/g,"").replace(/[‘’']/g,"").replace(/[^a-z0-9%.À-ɏ ]+/g," ").replace(/\s+/g," ").trim();
-const words=s=>norm(s).split(" ").filter(w=>w&&!STOP.has(w)).map(w=>w.replace(/(ing|ed|es|s)$/,""));
-const jac=(a,b)=>{const A=new Set(a),B=new Set(b);if(!A.size||!B.size)return 0;let n=0;A.forEach(x=>{if(B.has(x))n++});return n/(A.size+B.size-n)};
-const parts=a=>String(a).split(/\s*[;,]\s*|\s+and\s+/).filter(Boolean).length;
-const numIn=a=>{const m=String(a).replace(/,(?=\d{3})/g,"").match(/-?\d+(\.\d+)?/);return m?+m[0]:null};
-function kind(a){const s=String(a).trim(),w=s.split(/\s+/).length;
-  if(/^(about |around |~|over |under |almost )?[-−£$]?\d[\d,.]*\s*(%|[a-zA-Z°²³/]{0,8})?(\s|$)/i.test(s)&&w<=4)return "num";
-  if(/[=→÷×^√]/.test(s)&&w<=8)return "formula";
-  const p=parts(s);if(p>=3)return "list"+Math.min(p,5);if(p===2)return "pair";
-  return w<=2?"word":w<=6?"short":"long"}
-// nearby numbers for number answers, keeping the same words around them
-function numberFakes(a){const n=numIn(a);if(n==null)return [];const s=String(a);const dec=(String(n).split(".")[1]||"").length;
-  const f=[...new Set([.5,.75,1.5,2,1.25,.8,3].map(k=>+(n*k).toFixed(dec)).concat(Number.isInteger(n)&&n<30?[n-2,n-1,n+1,n+2]:[]).filter(x=>x!==n&&x>=0))];
-  const yr=n>=1700&&n<=2100&&Number.isInteger(n);
-  const vals=yr?[n-3,n-1,n+2,n+5,n-10]:f;
-  return vals.map(v=>s.replace(/-?\d[\d,.]*/,(yr?v:v.toLocaleString("en-GB"))))}
-function distractors(card,pool,k){const ka=kind(card.a),qa=words(card.q),aa=words(card.a),na=norm(card.a),la=String(card.a).length;
-  const seen=new Set([na]);const scored=[];
-  pool.forEach(x=>{if(x===card)return;const nx=norm(x.a);if(!nx||seen.has(nx))return;
-    if(nx.length>4&&(na.includes(nx)||nx.includes(na)))return; // too close to the right answer: could also be right
-    let s=0;if(x.t===card.t)s+=3.5;const kx=kind(x.a);if(kx===ka)s+=4;else if(kx.slice(0,4)===ka.slice(0,4))s+=2;
-    s+=4*jac(qa,words(x.q))+2*jac(aa,words(x.a));
-    const lx=String(x.a).length;s-=Math.abs(Math.log((lx+4)/(la+4)))*2.2;
-    const fq=norm(card.q).split(" ")[0],fx=norm(x.q).split(" ")[0];if(fq&&fq===fx)s+=.8;
-    s+=Math.random()*1.2;scored.push([s,x.a,nx])});
-  scored.sort((a,b)=>b[0]-a[0]);
-  const out=[];
-  if(ka==="num"){for(const f of shuffle(numberFakes(card.a))){const nf=norm(f);if(!seen.has(nf)){seen.add(nf);out.push(f)}if(out.length>=2)break}}
-  for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx))continue;seen.add(nx);out.push(a)}
-  return out}
-// type-the-answer: short answers only, with spelling tolerance
-const typable=a=>{const s=String(a).replace(/\(.*?\)/g,"").trim();return s.length<=28&&s.split(/\s+/).length<=4&&!/[;,=→]/.test(s)};
-function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];
-  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
-function check(input,answer){const strip=s=>norm(s).replace(/\b(the|a|an|to)\b/g,"").replace(/\s+/g," ").trim();
-  const alts=String(answer).replace(/\(.*?\)/g,"").split(/\s+\/\s+|\s+or\s+/).map(strip).filter(Boolean);const u=strip(input);if(!u)return {ok:false};
-  const ni=numIn(input),na=numIn(answer);
-  if(na!=null&&kind(answer)==="num")return {ok:ni!=null&&Math.abs(ni-na)<=Math.max(.011,Math.abs(na)*.005),exact:true};
-  if(alts.includes(u))return {ok:true,exact:true};
-  const raw=String(answer).replace(/\s+/g,"").toLowerCase();if(raw&&String(input).replace(/\s+/g,"").toLowerCase()===raw)return {ok:true,exact:true};
-  for(const a of alts){const d=lev(u,a);if(d<=Math.max(1,Math.floor(a.length/6)))return {ok:true,exact:false,want:a}}
-  return {ok:false}}
-return {distractors,typable,check,kind}})();
+const QG=window.GCSEasy.QG;
 function quizPool(tops,mode){const out=[];const strip=h=>{const d=document.createElement("div");d.innerHTML=h;return d.textContent.trim()};
-  mode=mode||"mix";const pool=C.cards.map(c=>({t:c[0],q:c[1],a:c[2]}));
-  pool.filter(c=>tops.includes(c.t)).forEach(c=>{
+  mode=mode||"mix";const pool=C.cards.map(c=>({t:c[0],q:strip(c[1]),a:strip(c[2])}));
+  pool.filter(c=>tops.includes(c.t)&&!(C.id==="french"&&QG.cognate(c.q,c.a))).forEach(c=>{
     const canType=QG.typable(c.a);
     if(mode==="type"||(mode==="mix"&&canType&&Math.random()<.35)){if(canType){out.push({t:c.t,q:c.q,typed:true,ans:c.a,ex:""});return}if(mode==="type")return}
     const o=shuffle([c.a,...QG.distractors(c,pool,3)]);out.push({t:c.t,q:c.q,o,a:o.indexOf(c.a),ex:""})});
