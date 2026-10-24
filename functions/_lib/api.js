@@ -188,7 +188,7 @@ export default {
     const ip = req.headers.get("CF-Connecting-IP") || req.headers.get("X-Forwarded-For") || "x";
     let body = {};
     if (req.method === "POST") {
-      try { body = await req.json(); } catch { return fail("bad_request", "Send JSON."); }
+      try { const t = await req.text(); body = t ? JSON.parse(t) : {}; } catch { return fail("bad_request", "Send JSON."); }
     }
 
     try {
