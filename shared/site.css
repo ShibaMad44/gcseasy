@@ -124,3 +124,71 @@
 .bgtoast small{display:block;font:700 .7rem "Familjen Grotesk",Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
 .bgtoast b{font:700 1.05rem "Familjen Grotesk",Arial,sans-serif}
 @media (prefers-reduced-motion:reduce){.bgtoast{transition:none}}
+
+/* ===== Polish layer: smoother motion and a more premium finish ===== */
+:root{
+  --ease:cubic-bezier(.22,.8,.24,1); --ease-spring:cubic-bezier(.2,.9,.3,1.15);
+  --shadow:0 1px 1px rgba(22,33,46,.04),0 2px 6px rgba(22,33,46,.05),0 10px 28px -8px rgba(22,33,46,.10);
+  --shadow-hover:0 2px 4px rgba(22,33,46,.05),0 14px 34px -10px rgba(22,33,46,.20);
+  --glow:color-mix(in srgb,var(--accent) 14%,transparent);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --shadow:0 0 0 1px rgba(255,255,255,.045),0 2px 6px rgba(0,0,0,.35),0 12px 30px -10px rgba(0,0,0,.55);
+  --shadow-hover:0 0 0 1px rgba(255,255,255,.08),0 16px 36px -10px rgba(0,0,0,.7);
+  --glow:color-mix(in srgb,var(--accent) 18%,transparent)}}
+:root[data-theme="dark"]{
+  --shadow:0 0 0 1px rgba(255,255,255,.045),0 2px 6px rgba(0,0,0,.35),0 12px 30px -10px rgba(0,0,0,.55);
+  --shadow-hover:0 0 0 1px rgba(255,255,255,.08),0 16px 36px -10px rgba(0,0,0,.7);
+  --glow:color-mix(in srgb,var(--accent) 18%,transparent)}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
+body{background:radial-gradient(1100px 520px at 50% -260px,var(--glow),transparent 72%) no-repeat,var(--bg)}
+::selection{background:var(--hl);color:var(--hl-ink)}
+h1,h2,h3,.brand{letter-spacing:-.018em}
+h1{font-weight:700}
+b,strong{font-weight:700}
+.stats b,.qcount,.score b{font-variant-numeric:tabular-nums}
+.sitebar{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:saturate(1.4) blur(14px);backdrop-filter:saturate(1.4) blur(14px)}
+.sitenav a{position:relative;transition:color .25s var(--ease)}
+.sitenav a::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:2px;border-radius:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+.sitenav a:hover::after,.sitenav a[aria-current="page"]::after{transform:scaleX(1)}
+/* interactive feel */
+.btn,.chip,.dbtn,.gchip,.cta,.linkbtn,.themebtn,.qzopenbtn,.qzbtn,nav.tabs button,.papersw a,.elcard,.card,details.rc,section.topic,.scard,.gcard,.stats div,.qc,.bq,.sq{
+  transition:background-color .25s var(--ease),border-color .25s var(--ease),color .25s var(--ease),box-shadow .3s var(--ease),transform .25s var(--ease),opacity .25s var(--ease)}
+@media (hover:hover){
+  .btn:hover,.dbtn:hover,.cta:hover,.qzopenbtn:hover,.scard:hover,.papersw a:hover{transform:translateY(-2px);box-shadow:var(--shadow-hover)}
+  .chip:hover,.gchip:hover{transform:translateY(-1px)}
+  .card:hover,.elcard:hover{box-shadow:var(--shadow-hover)}}
+.btn:active,.chip:active,.dbtn:active,.gchip:active,.cta:active,.scard:active,.papersw a:active,.card:active{transform:scale(.97);transition-duration:.08s}
+.chip.on,.gchip.on{box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+.themebtn i{transition:transform .5s var(--ease-spring)}
+:root[data-theme="dark"] .themebtn i{transform:rotate(180deg)}
+:focus-visible{outline-offset:3px;transition:outline-offset .15s var(--ease)}
+/* entrances */
+@keyframes gz-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes gz-fade{from{opacity:0}to{opacity:1}}
+@media (prefers-reduced-motion:no-preference){
+  .wrap{animation:gz-in .55s var(--ease) both}
+  .wrap>div[id^="p-"]:not([hidden]){animation:gz-in .38s var(--ease) both}
+  .sgrid>*{animation:gz-in .5s var(--ease) both}
+  .sgrid>*:nth-child(2){animation-delay:.03s}.sgrid>*:nth-child(3){animation-delay:.06s}.sgrid>*:nth-child(4){animation-delay:.09s}
+  .sgrid>*:nth-child(5){animation-delay:.12s}.sgrid>*:nth-child(6){animation-delay:.15s}.sgrid>*:nth-child(n+7){animation-delay:.18s}
+  .stats div{animation:gz-in .5s var(--ease) both}.stats div:nth-child(2){animation-delay:.06s}.stats div:nth-child(3){animation-delay:.12s}
+  details.rc[open]>*:not(summary),details[open]>.in{animation:gz-fade .3s var(--ease)}
+  #paper>*,#elqz>*,#zbox>*,#qlist>*{animation:gz-in .35s var(--ease) both}
+  .bgtoast{transition:transform .5s var(--ease-spring),opacity .3s var(--ease)}
+}
+/* page-to-page and theme crossfades (supported browsers) */
+@view-transition{navigation:auto}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.32s;animation-timing-function:var(--ease)}
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root){animation-name:gz-vt-out}
+  ::view-transition-new(root){animation-name:gz-vt-in}}
+@keyframes gz-vt-out{to{opacity:0;transform:translateY(-6px)}}
+@keyframes gz-vt-in{from{opacity:0;transform:translateY(8px)}}
+.theming,.theming *,.theming *::before,.theming *::after{transition:background-color .4s var(--ease),color .4s var(--ease),border-color .4s var(--ease),box-shadow .4s var(--ease)!important}
+/* refined surfaces */
+section.topic,details.rc,.card,.gcard,.scard,.stats div{box-shadow:var(--shadow)}
+.tile{border-radius:12px;box-shadow:var(--shadow)}
+hr{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
+::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--muted) 35%,transparent);border-radius:10px;border:3px solid transparent;background-clip:content-box}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}

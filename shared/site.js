@@ -45,7 +45,7 @@ function report(id,data){try{const all=progress();all[id]=Object.assign({},data,
 function isDark(){const a=document.documentElement.getAttribute("data-theme");if(a)return a==="dark";return window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches}
 function setupToggle(){document.querySelectorAll("[data-theme-toggle]").forEach(b=>{
   const upd=()=>{const d=isDark();b.setAttribute("aria-label",d?"Switch to light mode":"Switch to dark mode");b.title=b.getAttribute("aria-label")};upd();
-  b.onclick=()=>{const next=isDark()?"light":"dark";document.documentElement.setAttribute("data-theme",next);try{localStorage.setItem(TKEY,next)}catch(e){}upd()}})}
+  b.onclick=()=>{const next=isDark()?"light":"dark";const go=()=>{document.documentElement.setAttribute("data-theme",next);try{localStorage.setItem(TKEY,next)}catch(e){}upd()};const calm=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;if(document.startViewTransition&&!calm)document.startViewTransition(go);else{const r=document.documentElement;r.classList.add("theming");go();setTimeout(()=>r.classList.remove("theming"),450)}}})}
 const PAPERS={"AQA":AQA,"Edexcel":"https://qualifications.pearson.com/en/support/support-topics/exams/past-papers.html","Pearson BTEC":"https://qualifications.pearson.com/en/support/support-topics/exams/past-papers.html","OCR":"https://www.ocr.org.uk/qualifications/past-paper-finder/","Eduqas":"https://www.eduqas.co.uk/"};
 SUBJECTS.forEach(s=>{s.papers=PAPERS[s.exam]||"https://www.physicsandmathstutor.com/"});
 
