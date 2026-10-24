@@ -119,6 +119,7 @@ async function load(){
     <div class="kpi"><div class="lab">Accounts</div><div class="val">${nf(U.total)}</div><div class="sm">+${nf(U.new1)} today · +${nf(U.new7)} this week</div></div>
     <div class="kpi"><div class="lab">Active accounts · 7 days</div><div class="val">${nf(U.active7)}</div><div class="sm">${nf(U.verified)} verified</div></div>
     <div class="kpi"><div class="lab">AI marks today</div><div class="val">${nf(d.ai.today)}</div><div class="sm">of ${nf(d.ai.siteLimit)} site limit · ${nf(d.ai.yesterday)} yesterday</div></div>
+    <div class="kpi"><div class="lab">Daily reminders</div><div class="val">${nf(d.reminders)}</div><div class="sm">devices with reminders on</div></div>
     <div class="kpi"><div class="lab">Classes</div><div class="val">${d.classes==null?"–":nf(d.classes)}</div><div class="sm">groups created</div></div>
   </div>
   <div class="panel2"><h2>Visitors per day</h2><p class="pd">Last 30 days. Hover or tap a bar for details.</p><div class="chart" id="cvis"></div>

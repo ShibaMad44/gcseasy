@@ -3,7 +3,7 @@
 (function(){
 const FB=window.GCSEASY_FIREBASE,API=(window.GCSEASY_API||"").replace(/\/$/,"");
 const AK="gcseasy-auth",MK="gcseasy-sync-meta";
-const NOSYNC=new Set([AK,MK,"gcseasy-lbsent","gcseasy-sync-at"]);
+const NOSYNC=new Set([AK,MK,"gcseasy-lbsent","gcseasy-sync-at","gcseasy-reminder","gcseasy-seen"]);
 const LS=window.localStorage,origSet=Storage.prototype.setItem,origRemove=Storage.prototype.removeItem;
 const enabled=!!(FB&&FB.apiKey&&API);
 const read=k=>{try{return JSON.parse(LS.getItem(k)||"null")}catch(e){return null}};

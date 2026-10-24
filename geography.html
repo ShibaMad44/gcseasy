@@ -1428,7 +1428,7 @@ function pool(){const cs=sel.includes("all")?CASES:CASES.filter(c=>sel.includes(
   else{const r=out.filter(x=>x.q[0]!=="w"),w=out.filter(x=>x.q[0]==="w");for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]]}out=[...r,...w]}
   return out}
 function startQuiz(){const p=pool();if(!p.length){drawSetup();return}run={items:p,i:0,got:0,max:0,missed:[],per:{}};step()}
-function rec(c,g,m){run.got+=g;run.max+=m;const r=run.per[c.id]=run.per[c.id]||{g:0,m:0};r.g+=g;r.m+=m}
+function rec(c,g,m){run.got+=g;run.max+=m;if(m&&window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult("geography",c.t,g/m);const r=run.per[c.id]=run.per[c.id]||{g:0,m:0};r.g+=g;r.m+=m}
 function step(){const box=$("quizbox");if(run.i>=run.items.length)return finish();
   const {c,q}=run.items[run.i];const head=`<div class="meta"><span>${run.i+1} of ${run.items.length} · ${c.name}</span><span>${run.got} / ${run.max}</span></div>`;
   if(q[0]==="m"){box.innerHTML=head+`<p class="dq">${q[1]}</p><div class="opts">${q[2].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div><div id="qfb"></div>`;

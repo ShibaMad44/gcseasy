@@ -351,3 +351,9 @@ body.qzopen{overflow:hidden}
 .pgroup .chips,.cgroups .chips{flex-wrap:wrap!important;overflow:visible!important;padding:0!important;margin:0!important;mask-image:none!important;-webkit-mask-image:none!important}
 .cgroup .cglab{padding-left:2px}
 @media (max-width:560px){header.top{flex-wrap:wrap}header.top>.tier{order:3;flex:1 1 100%;justify-content:flex-start}}
+/* type-the-answer */
+.qztype{display:flex;gap:8px;margin:0 0 8px}
+.qztype input{flex:1 1 auto;min-width:0;font:500 1.05rem var(--body);padding:12px 14px;border-radius:var(--r-md,12px);border:1.5px solid var(--line);background:var(--surface);color:var(--ink)}
+.qztype input:focus{outline:none;border-color:var(--accent)}
+.qztype input:disabled{opacity:.8}
+.qzspell{color:var(--muted);font-size:.9rem}

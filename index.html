@@ -74,12 +74,40 @@ body{font-size:16.5px}
 .gcode{border:0;background:var(--hl);color:var(--hl-ink);font:700 .85rem var(--mono);padding:8px 12px;border-radius:10px;cursor:pointer;white-space:nowrap}
 .gtbl{overflow-x:auto}.gtbl table{width:100%;border-collapse:collapse;font-size:.92rem;background:transparent}.gtbl th,.gtbl td{padding:8px 6px;border:0;border-bottom:1px solid var(--line);text-align:left}.gtbl th{background:transparent;font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .gtbl .rn{text-align:right;font-variant-numeric:tabular-nums}.gtbl tr.you td{font-weight:700}.gtbl tr:last-child td{border-bottom:0}
-.gfoot{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:6px 16px;margin-top:8px}.gdel{color:var(--bad,#c0392b)!important}
+.gfoot{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:6px 16px;margin-top:8px}
+.ggoal{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--accent-soft,#e8f0fe);border-radius:14px;padding:12px 14px;margin:10px 0}
+.ggoal.over{opacity:.75}.ggoal.empty{background:var(--bg);border:1px dashed var(--line)}
+.gg1{display:grid;gap:2px;flex:1 1 200px;min-width:0}.gg1 b{font:700 1rem var(--display)}.gg1 small{color:var(--muted);font-size:.84rem}
+.gglab{font:700 .7rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--accent)}
+.ggbar{flex:1 1 120px;height:8px;border-radius:4px;background:var(--surface);overflow:hidden}.ggbar i{display:block;height:100%;background:var(--good,#1e8e3e);border-radius:4px}
+.gset{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:10px 0}
+.gslab{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:8px 0 6px}.gslab:first-child{margin-top:0}
+.gchips{display:flex;flex-wrap:wrap;gap:6px}.gchip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 12px;font:700 .86rem var(--display);cursor:pointer}
+.gchip.on{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.gsrow{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin-top:12px}
+.gdone{color:var(--good,#1e8e3e);font-weight:700}.gbadge{font-size:.78rem;color:var(--muted);white-space:nowrap}.gdel{color:var(--bad,#c0392b)!important}
 .today h2{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 10px}
 .trows2{display:grid;gap:8px}
 .trow{display:flex;gap:12px;align-items:center;background:var(--surface);border-radius:16px;padding:12px 14px;box-shadow:var(--shadow);text-decoration:none;color:var(--ink)}
 .trow i{flex:none;width:12px;height:12px;border-radius:50%;background:var(--accent)}
 .trow.done i{background:var(--good)} .trow.info i{background:var(--hl)}
+.trow.done b{text-decoration:line-through;text-decoration-color:var(--muted)}
+.trow .tv{margin-left:auto;flex:none;font:700 .8rem var(--mono);color:var(--muted);text-align:right}
+.trow.weak i{background:var(--bad,#d64545)}
+.wbar{display:block;width:64px;height:6px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:4px;margin-left:auto}.wbar i{display:block;height:100%;width:0;background:var(--bad,#d64545);border-radius:3px}
+.today .hint{color:var(--muted);font-size:.9rem;margin:2px 0 0}
+.today .hint a{color:var(--accent)}
+.bgsec{background:var(--surface);border-radius:22px;padding:16px 18px;box-shadow:var(--shadow)}
+.bgsec summary{cursor:pointer;display:flex;align-items:center;gap:12px;list-style:none}.bgsec summary::-webkit-details-marker{display:none}
+.bgsec summary h2{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0}
+.bgsec .strip{display:flex;gap:4px;flex-wrap:wrap}.bgsec .strip span{font-size:1.25rem}
+.bgsec .more{margin-left:auto;font-weight:700;font-size:.88rem;color:var(--accent);white-space:nowrap}
+.bggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px}
+.bg{display:grid;justify-items:center;text-align:center;gap:4px;padding:12px 8px;border-radius:14px;background:var(--bg);border:1px solid var(--line)}
+.bg .bi{display:grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#FFD84D;font-size:1.45rem}
+.bg.locked .bi{background:var(--line);filter:grayscale(1);opacity:.55}
+.bg b{font:700 .92rem var(--display)}.bg small{color:var(--muted);font-size:.78rem;line-height:1.3}
+.bg .bp{width:80%;height:5px;border-radius:3px;background:var(--line);overflow:hidden}.bg .bp i{display:block;height:100%;background:var(--accent)}
 .trow span{display:grid;min-width:0}.trow b{font:700 1rem var(--display)}.trow small{color:var(--muted);font-size:.84rem}
 .trow::after{content:"→";margin-left:auto;font:700 1.1rem var(--display);color:var(--muted)}
 .facts{display:grid;gap:8px}
@@ -154,7 +182,13 @@ body{font-size:16.5px}
 
 <section class="today" id="today" aria-label="Today"></section>
 
+<section class="today plan" id="plan" hidden aria-label="Your plan for today"></section>
+
+<section class="today" id="weak" hidden aria-label="Fix these next"></section>
+
 <section class="mine" id="mine" hidden aria-label="Your revision"></section>
+
+<section class="bgsec" id="badges" hidden aria-label="Your badges"></section>
 
 <section class="sec" id="groups">
   <h2>Class leaderboard</h2>
@@ -310,11 +344,28 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
       if(!parts.length){msg="That class no longer exists. Join or create another.";adding=true;drawGroups();return}}
     body.innerHTML=parts.map(g=>{if(g.err)return `<div class="gcard"><p>Group ${esc(g.code)} couldn't be loaded.</p></div>`;
       const you=m.id.slice(0,8);
-      return `<div class="gcard"><div class="ghead"><div><b>${esc(g.name)}</b><span>${g.members.length} member${g.members.length===1?"":"s"}</span></div><button class="gcode" data-code="${g.code}" type="button" title="Copy the join code">Code ${g.code}</button></div>
-      <div class="gtbl"><table><tr><th>#</th><th>Name</th><th class="rn">XP (7d)</th><th class="rn">Streak</th><th class="rn">Today</th></tr>${g.members.slice().sort((a,b)=>b.mins-a.mins||b.streak-a.streak).map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}</td><td class="rn"><b>${x.mins}</b></td><td class="rn">${x.streak}</td><td class="rn">${x.daily?x.daily.score+"/"+x.daily.of:"–"}</td></tr>`).join("")}</table></div>
-      <div class="gfoot"><button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button>${g.owner&&g.owner===you?`<button class="linkbtn gdel" data-del="${g.code}" type="button">Delete class for everyone</button>`:""}</div></div>`}).join("")+
+      const own=g.owner&&g.owner===you,GL=g.goal,cols=GL?["XP (7d)","Streak","Goal"]:["XP (7d)","Streak","Today"];
+      const dateL=d=>new Date(d+"T00:00:00Z").toLocaleDateString("en-GB",{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"});
+      return `<div class="gcard"><div class="ghead"><div><b>${esc(g.name)}</b><span>${g.members.length} member${g.members.length===1?"":"s"}${own?" · you made this class":""}</span></div><button class="gcode" data-code="${g.code}" type="button" title="Copy the join code">Code ${g.code}</button></div>
+      ${GL?`<div class="ggoal${GL.over?" over":""}"><div class="gg1"><span class="gglab">${GL.over?"Last goal":"Class goal"}</span><b>${esc(GL.label)}</b><small>${GL.over?"Ended":"Until"} ${dateL(GL.end)} · ${GL.done} of ${g.members.length} done</small></div><span class="ggbar"><i style="width:${g.members.length?GL.done/g.members.length*100:0}%"></i></span></div>`:own?`<div class="ggoal empty"><div class="gg1"><b>Set your class a goal</b><small>Pick a target for the week and see who's done it.</small></div></div>`:""}
+      ${own?`<div class="gset" data-gset="${g.code}" hidden></div>`:""}
+      <div class="gtbl"><table><tr><th>#</th><th>Name</th>${cols.map(c=>`<th class="rn">${c}</th>`).join("")}</tr>${g.members.slice().sort((a,b)=>GL?(b.goal-a.goal||b.mins-a.mins):(b.mins-a.mins||b.streak-a.streak)).map((x,k)=>`<tr class="${x.id===you?"you":""}"><td>${k+1}</td><td>${esc(x.name)}${x.id===you?" (you)":""}${x.badges?` <span class="gbadge" title="${x.badges} badge${x.badges===1?"":"s"}">\ud83c\udfc5${x.badges}</span>`:""}</td><td class="rn"><b>${x.mins}</b></td><td class="rn">${x.streak}</td><td class="rn">${GL?(x.goal>=GL.target?`<span class="gdone">\u2713 Done</span>`:`${x.goal}/${GL.target}`):(x.daily?x.daily.score+"/"+x.daily.of:"\u2013")}</td></tr>`).join("")}</table></div>
+      <div class="gfoot">${own?`<button class="linkbtn" data-goalbtn="${g.code}" type="button">${GL?"Change goal":"Set a goal"}</button>`:""}<button class="linkbtn" data-leave="${g.code}" type="button">Leave group</button>${g.owner&&g.owner===you?`<button class="linkbtn gdel" data-del="${g.code}" type="button">Delete class for everyone</button>`:""}</div></div>`}).join("")+
       `<div class="gfoot"><button class="dbtn alt" id="gadd" type="button">Join or create another group</button></div>`;
     body.querySelectorAll(".gcode").forEach(b=>b.onclick=async()=>{const t=`Join my GCSEasy revision group: code ${b.dataset.code}`;try{await navigator.clipboard.writeText(t);b.textContent="Copied"}catch(e){b.textContent=b.dataset.code}setTimeout(()=>b.textContent="Code "+b.dataset.code,2000)});
+    const GOALS=[["xp","Earn XP",[100,250,500],"XP each"],["cards","Review flashcards",[50,150,300],"cards each"],["quiz","Quiz questions right",[25,50,100],"right each"],["exam","Earn exam marks",[20,50,100],"marks each"],["daily","Daily challenge",[3,5,7],"days"],["streak","Reach a streak",[3,5,7],"day streak"]];
+    body.querySelectorAll("[data-goalbtn]").forEach(b=>b.onclick=()=>{const box=body.querySelector(`[data-gset="${b.dataset.goalbtn}"]`);box.hidden=!box.hidden;if(box.hidden)return;
+      let pick={type:"cards",target:150,days:7};
+      const draw=()=>{const G0=GOALS.find(x=>x[0]===pick.type);box.innerHTML=`<p class="gslab">Goal</p><div class="gchips">${GOALS.map(x=>`<button type="button" class="gchip${x[0]===pick.type?" on":""}" data-gt="${x[0]}">${x[1]}</button>`).join("")}</div>
+        <p class="gslab">Target</p><div class="gchips">${G0[2].map(n=>`<button type="button" class="gchip${n===pick.target?" on":""}" data-gn="${n}">${n} ${G0[3]}</button>`).join("")}</div>
+        <p class="gslab">How long</p><div class="gchips">${[[7,"1 week"],[14,"2 weeks"]].map(([n,l])=>`<button type="button" class="gchip${n===pick.days?" on":""}" data-gd="${n}">${l}</button>`).join("")}</div>
+        <div class="gsrow"><button type="button" class="dbtn" data-gsave>Set goal</button>${body.querySelector(`[data-goalbtn="${b.dataset.goalbtn}"]`).textContent==="Change goal"?`<button type="button" class="linkbtn" data-gclear>Remove goal</button>`:""}<span class="gmsg" data-gmsg></span></div>`;
+        box.querySelectorAll("[data-gt]").forEach(x=>x.onclick=()=>{pick.type=x.dataset.gt;pick.target=GOALS.find(y=>y[0]===pick.type)[2][1];draw()});
+        box.querySelectorAll("[data-gn]").forEach(x=>x.onclick=()=>{pick.target=+x.dataset.gn;draw()});
+        box.querySelectorAll("[data-gd]").forEach(x=>x.onclick=()=>{pick.days=+x.dataset.gd;draw()});
+        const send=async body2=>{box.querySelector("[data-gmsg]").textContent="Saving\u2026";try{await G.lbCall("/lb/goal",Object.assign({code:b.dataset.goalbtn,id:m.id},body2));await G.lbSync(true);drawGroups()}catch(e){box.querySelector("[data-gmsg]").textContent=e.message||"Couldn't save that."}};
+        box.querySelector("[data-gsave]").onclick=()=>send(pick);const cl=box.querySelector("[data-gclear]");if(cl)cl.onclick=()=>send({type:"none"})};
+      draw()});
     body.querySelectorAll("[data-del]").forEach(b=>b.onclick=async()=>{if(!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again: this removes it for everyone";return}
       b.textContent="Deleting\u2026";try{await G.lbCall("/lb/delete",{code:b.dataset.del,id:m.id});m.groups=m.groups.filter(c=>c!==b.dataset.del);G.saveMe(m);drawGroups()}catch(e){b.textContent=e.message||"Couldn't delete it"}});
     body.querySelectorAll("[data-leave]").forEach(b=>b.onclick=async()=>{if(b.dataset.sure){await G.lbCall("/lb/leave",{code:b.dataset.leave,id:m.id}).catch(()=>{});m.groups=m.groups.filter(c=>c!==b.dataset.leave);G.saveMe(m);drawGroups()}else{b.dataset.sure=1;b.textContent="Tap again to leave"}});
@@ -335,8 +386,49 @@ $("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).le
   const day0=new Date();day0.setHours(0,0,0,0);
   const nx=ex.map(x=>({n:x.name,d:Math.round((new Date(x.date+"T00:00:00")-day0)/864e5)})).filter(x=>x.d>=0).sort((a,b)=>a.d-b.d)[0];
   rows.push(nx?["info",`${esc(nx.n)} ${nx.d===0?"is today":nx.d===1?"is tomorrow":"in "+nx.d+" days"}`,"From your exam countdown","tools.html#exams"]:["info","Add your exam dates","See a countdown here every day","tools.html#exams"]);
+  try{const R=GCSEasy.reminders;if(!R.get()&&(R.supported()||R.needsInstall())&&GCSEasy.xpStats().total)rows.push(["info","Turn on a daily reminder","A nudge on days you haven't revised yet","tools.html#reminder"])}catch(e){}
   if(rows.filter(r=>r[0]==="go").length<2)rows.splice(1,0,["go","Pick a subject and open Cards","Each card you learn comes back at the right time","#subjects"]);
   el.innerHTML=`<h2>Today</h2><div class="trows2">${rows.map(([k,a,b,h])=>`<a class="trow ${k}" href="${h}"><i aria-hidden="true"></i><span><b>${a}</b><small>${b}</small></span></a>`).join("")}</div>`})();
+
+/* ---- Fix these next: your weakest topics, worked out from quizzes, flashcards and exam questions ---- */
+(function(){const el=$("weak");if(!el)return;const G=GCSEasy,esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  const w=G.weakTopics(5);const any=Object.keys(G.topicStats()).length;if(!any)return;el.hidden=false;
+  el.innerHTML=`<h2>Fix these next</h2>`+(w.length?`<div class="trows2">${w.map(x=>{const s=SUBJECTS.find(y=>y.id===x.sid)||{};const pc=Math.round(x.m*100);
+    return `<a class="trow weak" href="${s.href||"#"}#quiz=${encodeURIComponent(x.t)}"><i aria-hidden="true"></i><span><b>${esc(G.topicName(x.sid,x.t))}</b><small>${esc(s.name||x.sid)} · tap to drill it</small></span><span class="tv">${pc}%<span class="wbar"><i style="width:${pc}%"></i></span></span></a>`}).join("")}</div>`
+    :`<p class="hint">No weak spots yet. Keep doing topic quizzes and your weakest topics will show up here.</p>`)})();
+
+/* ---- Today's plan: built from your exam dates and weakest topics; the same plan all day ---- */
+(function(){const el=$("plan");if(!el)return;const G=GCSEasy,T=window.GCSE_TOPICS||{},esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  let ex=[];try{ex=JSON.parse(localStorage.getItem("gcseasy-exams")||"[]")||[]}catch(e){}
+  const d0=new Date();d0.setHours(0,0,0,0);const tk=d0.getFullYear()+"-"+(d0.getMonth()+1)+"-"+d0.getDate();
+  const guess=x=>x.s||(SUBJECTS.find(s=>T[s.id]&&new RegExp("\\b"+s.name.split(" ")[0],"i").test(x.name))||{}).id;
+  const up=ex.map(x=>({s:guess(x),d:Math.round((new Date(x.date+"T00:00:00")-d0)/864e5),n:x.name})).filter(x=>x.s&&T[x.s]&&x.d>=0&&x.d<=120).sort((a,b)=>a.d-b.d);
+  const ts=G.topicStats();
+  const subs=[...new Set(up.map(x=>x.s))];
+  if(!subs.length){if(ex.length||Object.keys(ts).length){el.hidden=false;el.innerHTML=`<h2>Today's plan</h2><p class="hint">Add your exams with their subject in <a href="tools.html#exams">Study tools</a> and you'll get a revision plan here every day.</p>`}return}
+  let seed=[...tk].reduce((a,c)=>a*31+c.charCodeAt(0)>>>0,7);const rnd=()=>{seed=(seed*1103515245+12345)>>>0;return seed/4294967296};
+  const topicsOf=sid=>Object.keys(T[sid]||{}).filter(k=>(window.GCSE_CARDS||[]).some(c=>c.s===sid&&c.t===k));
+  const pickWeak=(sid,skip)=>{const ks=topicsOf(sid).filter(k=>k!==skip),st=ts[sid]||{};
+    const scored=ks.map(k=>{const r=st[k];const m=r&&r.h.length>=2?G.mastery(r):.72;const age=r?(Date.now()-r.at)/864e5:0;return [m-Math.min(age,30)/300+rnd()*.05,k]}).sort((a,b)=>a[0]-b[0]);return scored.length?scored[0][1]:null};
+  const pickStale=(sid,skip)=>{const ks=topicsOf(sid).filter(k=>k!==skip),st=ts[sid]||{};const never=ks.filter(k=>!st[k]);if(never.length)return never[Math.floor(rnd()*never.length)];
+    return ks.sort((a,b)=>st[a].at-st[b].at)[0]||null};
+  const s1=subs[0],s2=subs[1]||subs[0],S=id=>SUBJECTS.find(x=>x.id===id)||{name:id,href:"#"};
+  const t1=pickWeak(s1),t2=pickStale(s2,s2===s1?t1:null);const c1=G.todayCounts(s1),c2=G.todayCounts(s2);
+  const tasks=[];
+  if(t1)tasks.push([(c1.t[t1]||0)>=5,`Quiz: ${G.topicName(s1,t1)}`,`${S(s1).name} · your weakest area · 10 questions`,`${S(s1).href}#quiz=${t1}`]);
+  if(t2)tasks.push([(c2.t[t2]||0)>=3,`Read and quiz: ${G.topicName(s2,t2)}`,`${S(s2).name} · ${ts[s2]&&ts[s2][t2]?"not practised for a while":"not started yet"}`,`${S(s2).href}#topic=${t2}`]);
+  tasks.push([c1.cards>=15,`Review 15 ${S(s1).name} flashcards`,`Spaced repetition keeps it in your head`,`${S(s1).href}#fc`]);
+  const nx=up[0],done=tasks.filter(t=>t[0]).length;el.hidden=false;
+  el.innerHTML=`<h2>Today's plan <span style="text-transform:none;letter-spacing:0;font-weight:500">· ${done}/${tasks.length} done · ${esc(nx.n)} ${nx.d===0?"is today":nx.d===1?"is tomorrow":"in "+nx.d+" days"}</span></h2>
+    <div class="trows2">${tasks.map(([ok,a,b,h])=>`<a class="trow ${ok?"done":"go"}" href="${h}"><i aria-hidden="true"></i><span><b>${esc(a)}</b><small>${esc(b)}</small></span>${ok?`<span class="tv">Done</span>`:""}</a>`).join("")}</div>
+    ${done===tasks.length?`<p class="hint">Plan done for today. Anything extra is a bonus.</p>`:""}`})();
+
+/* ---- Badges ---- */
+(function(){const el=$("badges");if(!el)return;const G=GCSEasy;const list=G.badgeList(),got=list.filter(b=>b.at).sort((a,b)=>b.at-a.at);
+  if(!got.length&&!G.xpStats().total)return;el.hidden=false;
+  el.innerHTML=`<details><summary><h2>Badges ${got.length}/${list.length}</h2><span class="strip">${got.slice(0,8).map(b=>`<span title="${b.name}">${b.icon}</span>`).join("")}</span><span class="more">See all</span></summary>
+    <div class="bggrid">${list.slice().sort((a,b)=>(b.at?1:0)-(a.at?1:0)||b.v/b.need-a.v/a.need).map(b=>`<div class="bg${b.at?"":" locked"}"><span class="bi" aria-hidden="true">${b.icon}</span><b>${b.name}</b><small>${b.how}</small>${b.at?`<small>Earned ${new Date(b.at).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</small>`:`<span class="bp" aria-label="${b.v} of ${b.need}"><i style="width:${b.v/b.need*100}%"></i></span><small>${b.v.toLocaleString("en-GB")} / ${b.need.toLocaleString("en-GB")}</small>`}</div>`).join("")}</div></details>`;
+  el.querySelector("details").addEventListener("toggle",e=>{el.querySelector(".more").textContent=e.target.open?"Hide":"See all"})})();
 
 /* ---- search any fact across every subject ---- */
 function drawFacts(){const term=$("q").value.trim().toLowerCase(),box=$("facts");if(term.length<3){box.innerHTML="";return}

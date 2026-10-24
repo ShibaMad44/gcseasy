@@ -161,11 +161,69 @@ function addXP(n,cat,cap,key){n=Math.max(0,Math.round(n||0));if(!n)return 0;cons
   if(cap){const used=d.cat[cat]||0;n=Math.min(n,Math.max(0,cap-used))}if(!n){try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}return 0}
   d.pts+=n;d.cat[cat]=(d.cat[cat]||0)+n;x.total+=n;ev(String(cat||"other").replace(/[^a-z]/g,"").slice(0,14)||"other");
   const keep=Object.keys(x.days).sort().slice(-60);x.days=Object.fromEntries(keep.map(k=>[k,x.days[k]]));
-  try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}xpToast(n);clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),4000);return n}
+  try{localStorage.setItem(XPK,JSON.stringify(x))}catch(e){}xpToast(n);checkBadges();reminders.seen();clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),4000);return n}
 function xpStats(){const x=xpLedger(),now=new Date();let week=0,today=0;const td=dkeyL();
   for(let i=0;i<7;i++){const d=new Date(now);d.setDate(d.getDate()-i);const k=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");week+=(x.days[k]||{}).pts||0}
   today=(x.days[td]||{}).pts||0;const level=Math.floor(Math.sqrt(x.total/40))+1,lo=40*(level-1)**2,hi=40*level**2;
   return {total:x.total,week,today,level,into:x.total-lo,need:hi-lo}}
+/* ---- How you're doing on each topic: last 20 results per topic, from quizzes, flashcards and exam questions ---- */
+const TPK="gcseasy-topics";
+function topicStats(){try{return JSON.parse(localStorage.getItem(TPK)||"{}")||{}}catch(e){return {}}}
+function topicResult(sid,t,score,src){if(!sid||!t)return;const v=typeof score==="boolean"?(score?1:0):Math.max(0,Math.min(1,+score||0));
+  const all=topicStats(),s=all[sid]=all[sid]||{},r=s[t]=s[t]||{h:[],at:0};r.h.push(Math.round(v*100)/100);if(r.h.length>20)r.h=r.h.slice(-20);r.at=Date.now();
+  const d=dkeyL();if(!s.__day||s.__day.d!==d)s.__day={d,cards:0,qs:0,t:{}};if(src==="card")s.__day.cards++;else s.__day.qs++;s.__day.t[t]=(s.__day.t[t]||0)+1;
+  try{localStorage.setItem(TPK,JSON.stringify(all))}catch(e){}checkBadges()}
+const mastery=r=>{const h=(r&&r.h)||[];return (h.reduce((a,b)=>a+b,0)+1)/(h.length+2)};
+const topicName=(sid,t)=>((window.GCSE_TOPICS||{})[sid]||{})[t]||t;
+function weakTopics(limit){const all=topicStats(),out=[];for(const sid in all)for(const t in all[sid]){if(t.startsWith("__"))continue;const r=all[sid][t];if((r.h||[]).length<3)continue;
+    const m=mastery(r);if(m<.8)out.push({sid,t,m,n:r.h.length,at:r.at})}return out.sort((a,b)=>a.m-b.m||a.at-b.at).slice(0,limit||5)}
+function todayCounts(sid){const s=topicStats()[sid];return s&&s.__day&&s.__day.d===dkeyL()?s.__day:{cards:0,qs:0,t:{}}}
+/* ---- Badges: milestones worked out from what you've done; earned ones are kept with the date ---- */
+const BGK="gcseasy-badges";
+const BADGES=[
+ ["streak3","On a roll","3-day streak","\ud83d\udd25",d=>[d.streak,3]],["streak7","One week strong","7-day streak","\ud83d\udd25",d=>[d.streak,7]],
+ ["streak14","Fortnight focus","14-day streak","\u26a1",d=>[d.streak,14]],["streak30","Unstoppable","30-day streak","\ud83c\udfc6",d=>[d.streak,30]],
+ ["xp100","Getting started","Earn 100 XP","\u2b50",d=>[d.xp,100]],["xp500","Rising star","Earn 500 XP","\ud83c\udf1f",d=>[d.xp,500]],
+ ["xp1000","Revision pro","Earn 1,000 XP","\ud83d\udcab",d=>[d.xp,1000]],["xp5000","Legend","Earn 5,000 XP","\ud83d\udc51",d=>[d.xp,5000]],
+ ["cards100","Card shark","Review 100 flashcards","\ud83c\udccf",d=>[d.cards,100]],["cards1000","Memory machine","Review 1,000 flashcards","\ud83e\udde0",d=>[d.cards,1000]],
+ ["quiz50","Quiz whizz","50 quiz questions right","\u2705",d=>[d.quiz,50]],["exam50","Mark collector","Earn 50 exam marks","\ud83d\udcdd",d=>[d.exam,50]],
+ ["daily5","Perfect day","Score 5/5 in a daily challenge","\ud83c\udfaf",d=>[d.perfect,1]],["daily10","Daily habit","Finish 10 daily challenges","\ud83d\udcc5",d=>[d.dailies,10]],
+ ["master","Topic master","Get 90%+ on a topic (10+ answers)","\ud83c\udf93",d=>[d.master,1]],["subjects3","All-rounder","Practise 3 different subjects","\ud83c\udf0d",d=>[d.subjects,3]],
+ ["classy","Team player","Join a class","\ud83e\udd1d",d=>[d.inClass,1]],["app","Pocket revision","Install the app","\ud83d\udcf1",d=>[d.app,1]]];
+function badgeData(){const x=xpLedger(),cat=k=>Object.values(x.days).reduce((a,d)=>a+((d.cat||{})[k]||0),0);
+  let dc={};try{dc=JSON.parse(localStorage.getItem("gcseasy-daily")||"{}")||{}}catch(e){}const done=Object.values(dc.done||{});
+  const ts=topicStats();let master=0;const subs=new Set();for(const sid in ts)for(const t in ts[sid]){if(t.startsWith("__"))continue;subs.add(sid);const r=ts[sid][t];if((r.h||[]).length>=10&&mastery(r)>=.9)master=1}
+  let st=0;try{st=myStats().streak}catch(e){}
+  return {streak:st,xp:x.total,cards:cat("cards"),quiz:cat("quiz"),exam:cat("exam"),perfect:done.some(d=>d.score>=5)?1:0,dailies:done.length,master,subjects:subs.size,
+    inClass:(me().groups||[]).length?1:0,app:standalone()?1:0}}
+function earnedBadges(){try{return JSON.parse(localStorage.getItem(BGK)||"{}")||{}}catch(e){return {}}}
+function badgeList(){const d=badgeData(),got=earnedBadges();return BADGES.map(([id,name,how,icon,f])=>{const [v,need]=f(d);return {id,name,how,icon,at:got[id]||null,v:Math.min(v,need),need}})}
+let bgBusy=false;
+function checkBadges(){if(bgBusy)return;bgBusy=true;setTimeout(()=>{bgBusy=false;try{const got=earnedBadges(),fresh=badgeList().filter(b=>!b.at&&b.v>=b.need);if(!fresh.length)return;
+  fresh.forEach(b=>got[b.id]=Date.now());try{localStorage.setItem(BGK,JSON.stringify(got))}catch(e){}
+  fresh.forEach((b,i)=>setTimeout(()=>badgeToast(b),i*2200));ev("badge",fresh.length);clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),3000)}catch(e){}},400)}
+function badgeToast(b){const t=document.createElement("div");t.className="bgtoast";t.setAttribute("role","status");t.innerHTML=`<span class="bi">${b.icon}</span><span><small>Badge unlocked</small><b>${b.name}</b></span>`;
+  document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),400)},3400)}
+/* ---- Daily reminders (push notifications). Only sent if you haven't revised yet that day. ---- */
+const RMK="gcseasy-reminder";
+const TZ=(()=>{try{return Intl.DateTimeFormat().resolvedOptions().timeZone||"Europe/London"}catch(e){return "Europe/London"}})();
+const reminders={
+  supported:()=>"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window&&!!window.GCSEASY_VAPID&&!!API,
+  needsInstall:()=>isIOS()&&!standalone(),
+  get(){try{return JSON.parse(localStorage.getItem(RMK)||"null")}catch(e){return null}},
+  async enable(hour){if(!reminders.supported())throw new Error(reminders.needsInstall()?"On iPhone, install the app first (Share \u2192 Add to Home Screen), then turn reminders on from the app.":"This browser can't show reminders.");
+    const perm=await Notification.requestPermission();if(perm!=="granted")throw new Error("Notifications are blocked. Allow them for this site in your browser settings, then try again.");
+    const reg=await navigator.serviceWorker.register("/sw.js");await navigator.serviceWorker.ready;
+    const key=Uint8Array.from(atob(GCSEASY_VAPID.replace(/-/g,"+").replace(/_/g,"/")+"=".repeat((4-GCSEASY_VAPID.length%4)%4)),c=>c.charCodeAt(0));
+    let sub=await reg.pushManager.getSubscription();if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:key});
+    const r=await fetch(API+"/push/sub",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({sub:sub.toJSON(),hour,tz:TZ})});const d=await r.json().catch(()=>({}));
+    if(!r.ok)throw new Error(d.error||"Couldn't turn reminders on. Try again later.");
+    try{origSetRM(JSON.stringify({id:d.id,hour}))}catch(e){}ev("reminderon");return d},
+  async disable(){const cur=reminders.get();try{const reg=await navigator.serviceWorker.getRegistration();const sub=reg&&await reg.pushManager.getSubscription();if(sub)await sub.unsubscribe()}catch(e){}
+    if(cur&&cur.id&&API)await fetch(API+"/push/off",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:cur.id})}).catch(()=>{});try{localStorage.removeItem(RMK)}catch(e){}},
+  seen(){const cur=reminders.get();if(!cur||!cur.id||!API)return;const d=dkeyL();if(cur.seen===d)return;cur.seen=d;try{origSetRM(JSON.stringify(cur))}catch(e){}
+    fetch(API+"/push/seen",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({id:cur.id,tz:TZ})}).catch(()=>{})}};
+const origSetRM=v=>localStorage.setItem(RMK,v);
 /* ---- AI quota: "3 of 40 used today · resets at 1:00am" on any element with class aiquota ---- */
 let QUOTA=null;
 const resetTime=()=>{const t=QUOTA&&QUOTA.resetsAt?new Date(QUOTA.resetsAt):(()=>{const d=new Date();d.setUTCHours(24,0,0,0);return d})();return t.toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit",hour12:true}).replace(" ","").replace(":00","")};
@@ -188,7 +246,10 @@ function myStats(){const L=getLog(),t=dayStart();const days=new Set(L.map(x=>{co
   let streak=0,d=t;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
   const mins=Math.round(L.filter(x=>x.s>=t-6*864e5).reduce((a,x)=>a+(x.d!=null?x.d:x.e-x.s),0)/60000);
   const td=new Date().toISOString().slice(0,10);const today=dc.done&&dc.done[td];
-  const xs=xpStats();return {streak,mins:xs.week,daily:today?{date:td,score:today.score,of:today.of}:null,cards:xs.total}}
+  const xs=xpStats(),xl=xpLedger(),dys={};
+  for(let i=13;i>=0;i--){const dt=new Date(Date.now()-i*864e5),k=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");const v=xl.days[k];const dd=dc.done&&(dc.done[k]||dc.done[dt.toISOString().slice(0,10)]);
+    if(v||dd)dys[k]=[(v&&v.pts)||0,(v&&v.cat.cards)||0,(v&&v.cat.quiz)||0,(v&&v.cat.exam)||0,dd?1:0]}
+  return {streak,mins:xs.week,daily:today?{date:td,score:today.score,of:today.of}:null,cards:xs.total,badges:Object.keys(earnedBadges()).length,days:dys}}
 async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)return;const st=myStats();const sig=JSON.stringify([m.name,m.groups,st]);
   let last={};try{last=JSON.parse(localStorage.getItem("gcseasy-lbsent")||"{}")}catch(e){}
   if(!force&&last.sig===sig&&Date.now()-(last.t||0)<6*3600e3)return;
@@ -224,8 +285,8 @@ function setupInstallBtn(){const nav=document.querySelector(".sitenav");if(!nav|
   b.onclick=async()=>{ev("installclick");const r=await install();if(r!=="prompted")installHelp(r)};
   nav.insertBefore(b,nav.querySelector("#accbtn, #tbtn, .themebtn"));paintInstall()}
 function setupSW(){if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/sw.js").catch(()=>{})}
-function boot(){setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+function boot(){setTimeout(checkBadges,2500);setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+window.GCSEasy={reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();

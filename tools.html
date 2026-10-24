@@ -38,10 +38,12 @@
 .track i{display:block;height:100%;width:0;background:var(--ink)}
 .done{text-align:center;color:var(--muted);font-size:.9rem;margin-top:8px}
 /* exams */
-form.add{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) auto;gap:8px;align-items:end;margin-bottom:14px}
+form.add{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr) auto;gap:8px;align-items:end;margin-bottom:14px}
 form.add label{display:grid;gap:4px;font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);min-width:0}
 form.add input{font:500 1rem var(--body);padding:10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
-@media (max-width:520px){form.add{grid-template-columns:1fr 1fr}form.add .btn{grid-column:1/-1}}
+@media (max-width:620px){form.add{grid-template-columns:1fr 1fr}form.add .btn{grid-column:1/-1}}
+form.add select{font:500 1rem var(--body);padding:10px;border-radius:9px;border:1px solid var(--line);background:var(--bg);color:var(--ink);width:100%;min-width:0}
+.exams .sj{font:700 .74rem var(--mono);color:var(--accent);text-transform:uppercase;letter-spacing:.04em}
 .exams{display:grid;gap:8px;list-style:none;padding:0;margin:0}
 .exams li{margin:0;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
 .days{min-width:58px;text-align:center;font:700 1.3rem var(--display);font-variant-numeric:tabular-nums;line-height:1}
@@ -49,6 +51,7 @@ form.add input{font:500 1rem var(--body);padding:10px;border-radius:9px;border:1
 .exams .nm{font-weight:700}
 .exams .dt{font:500 .8rem var(--mono);color:var(--muted)}
 .exams li.past{opacity:.6}
+.rmlab{font:700 .78rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin:0 0 8px}.rmrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.rmnote{color:var(--muted);font-size:.92rem;margin:10px 0 0}.rmnote.bad{color:var(--bad)}
 .exams li.soon .days{color:var(--bad)}
 .del{border:1px solid var(--line);background:var(--surface);color:var(--muted);border-radius:8px;padding:6px 10px;font:700 .8rem var(--display);cursor:pointer}
 .del:hover{color:var(--bad);border-color:var(--bad)}
@@ -119,10 +122,17 @@ form.add input{font:500 1rem var(--body);padding:10px;border-radius:9px;border:1
   <p class="lead">Add your own exams. They're saved only in this browser, so nobody else sees them.</p>
   <form class="add" id="addexam">
     <label for="exname">Exam<input id="exname" placeholder="e.g. Biology Paper 1" required maxlength="60"></label>
+    <label for="exsubj">Subject<select id="exsubj"><option value="">Choose…</option></select></label>
     <label for="exdate">Date<input id="exdate" type="date" required></label>
     <button class="btn p" type="submit">Add exam</button>
   </form>
   <ul class="exams" id="exlist"></ul>
+</section>
+
+<section class="tool" id="reminder">
+  <h2>Daily reminder</h2>
+  <p class="lead">Get a notification each day at a time you choose, only on days you haven't revised yet. Works best in the installed app.</p>
+  <div id="rmbox"></div>
 </section>
 
 <section class="tool" id="methods">
@@ -215,10 +225,26 @@ function drawEx(){const ul=$("exlist");ul.innerHTML="";
   exams.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{const d=new Date(e.date+"T00:00:00"),days=Math.round((d-today)/864e5);
     const li=document.createElement("li");li.className=days<0?"past":days<=3?"soon":"";
     li.innerHTML=`<div class="days">${days<0?"✓":days}<small>${days<0?"done":days===1?"day":"days"}</small></div><div><div class="nm"></div><div class="dt">${d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div></div><button class="del" type="button">Remove</button>`;
-    li.querySelector(".nm").textContent=e.name;
+    li.querySelector(".nm").textContent=e.name;const sj=e.s&&SUBJ.find(x=>x.id===e.s);if(sj){const t=document.createElement("div");t.className="sj";t.textContent=sj.name+" · in your daily plan";li.querySelector(".nm").after(t)}
     li.querySelector(".del").onclick=()=>{exams=exams.filter(x=>x!==e);saveEx();drawEx()};ul.appendChild(li)})}
-$("addexam").addEventListener("submit",ev=>{ev.preventDefault();const n=$("exname").value.trim(),d=$("exdate").value;if(!n||!d)return;exams.push({name:n,date:d});saveEx();$("exname").value="";drawEx();$("exname").focus()});
+const SUBJ=GCSEasy.SUBJECTS.filter(x=>x.live&&x.id!=="combined-science");
+$("exsubj").innerHTML+=SUBJ.map(x=>`<option value="${x.id}">${x.name}</option>`).join("")+'<option value="other">Other</option>';
+$("exname").addEventListener("input",()=>{if($("exsubj").value)return;const v=$("exname").value.toLowerCase();const m=SUBJ.find(x=>v.includes(x.name.toLowerCase().split(" ")[0]));if(m)$("exsubj").value=m.id});
+$("addexam").addEventListener("submit",ev=>{ev.preventDefault();const n=$("exname").value.trim(),d=$("exdate").value,sj=$("exsubj").value;if(!n||!d)return;exams.push(Object.assign({name:n,date:d},sj&&sj!=="other"?{s:sj}:{}));saveEx();$("exname").value="";$("exsubj").value="";drawEx();$("exname").focus()});
 drawEx();
+/* daily reminder */
+(function(){const box=$("rmbox"),R=GCSEasy.reminders;
+  const hours=[7,8,16,17,18,19,20,21],lab=h=>(h%12||12)+(h<12?"am":"pm");
+  function draw(msg,bad){const cur=R.get();
+    if(!R.supported()&&!R.needsInstall()){box.innerHTML=`<p class="rmnote">This browser can't show reminders. Try Chrome or Edge, or the installed app.</p>`;return}
+    if(R.needsInstall()){box.innerHTML=`<p class="rmnote">On iPhone and iPad, reminders only work in the installed app: open this site in <b>Safari</b>, tap <b>Share</b>, then <b>Add to Home Screen</b>. Open the app and turn reminders on here.</p>`;return}
+    box.innerHTML=`<p class="rmlab">${cur?"Reminding you at":"Remind me at"}</p><div class="modes" id="rmhours">${hours.map(h=>`<button type="button" class="chip${(cur?cur.hour:18)===h?" on":""}" data-h="${h}">${lab(h)}</button>`).join("")}</div>
+      <div class="rmrow"><button type="button" class="btn p" id="rmon">${cur?"Update reminder":"Turn on reminders"}</button>${cur?`<button type="button" class="btn" id="rmoff">Turn off</button>`:""}</div>
+      <p class="rmnote${bad?" bad":""}" role="status">${msg||(cur?`On: every day at ${lab(cur.hour)}, unless you've already revised.`:"")}</p>`;
+    let pick=cur?cur.hour:18;box.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{pick=+b.dataset.h;box.querySelectorAll("[data-h]").forEach(x=>x.classList.toggle("on",x===b))});
+    $("rmon").onclick=async()=>{$("rmon").disabled=true;try{await R.enable(pick);draw(`Done. You'll get a reminder at ${lab(pick)} on days you haven't revised.`)}catch(e){draw(e.message,true)}};
+    if($("rmoff"))$("rmoff").onclick=async()=>{await R.disable();draw("Reminders are off.")}}
+  draw()})();
 </script>
 </body>
 </html>

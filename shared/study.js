@@ -37,46 +37,104 @@ function setupAccordion(){const rev=$("p-rev");if(!rev)return;const secs=[...rev
   $("revall").onclick=()=>{const all=!secs.every(x=>x.classList.contains("open"));secs.forEach(x=>{x.classList.toggle("open",all);x.querySelector(".th")?.setAttribute("aria-expanded",all)});keep();lab()};
   rev.addEventListener("click",e=>{if(e.target.closest(".th"))lab()})}
 /* ---- Topic quizzes: read a topic, then quiz yourself on it (or on several at once) ---- */
-function quizPool(tops){const out=[];const strip=h=>{const d=document.createElement("div");d.innerHTML=h;return d.textContent.trim()};
-  const cards=C.cards.filter(c=>tops.includes(c[0]));
-  cards.forEach(c=>{let wrong=shuffle(C.cards.filter(x=>x[0]===c[0]&&x[2]!==c[2]).map(x=>x[2]));
-    if(wrong.length<3)wrong=wrong.concat(shuffle(C.cards.filter(x=>x[2]!==c[2]&&!wrong.includes(x[2])).map(x=>x[2])));
-    const o=shuffle([c[2],...[...new Set(wrong)].slice(0,3)]);out.push({t:c[0],q:c[1],o,a:o.indexOf(c[2]),ex:""})});
-  C.sets.forEach(set=>set.qs.forEach(Q=>Q.parts.forEach(p=>{const t=p.t||Q.t;if(p.k!=="m"||!tops.includes(t)||p.fig||p.data)return;if(/figure|graph|table|diagram|shown|extract|source/i.test(strip(p.q)))return;
+/* ---- Smarter quiz questions: believable wrong answers + type-the-answer ---- */
+const QG=(()=>{
+const STOP=new Set("the a an of to in and or is are what which why how does do for on with by its it as at be from that this name give state define meaning vs".split(" "));
+const norm=s=>String(s).toLowerCase().replace(/<[^>]+>/g,"").replace(/[‘’']/g,"").replace(/[^a-z0-9%.À-ɏ ]+/g," ").replace(/\s+/g," ").trim();
+const words=s=>norm(s).split(" ").filter(w=>w&&!STOP.has(w)).map(w=>w.replace(/(ing|ed|es|s)$/,""));
+const jac=(a,b)=>{const A=new Set(a),B=new Set(b);if(!A.size||!B.size)return 0;let n=0;A.forEach(x=>{if(B.has(x))n++});return n/(A.size+B.size-n)};
+const parts=a=>String(a).split(/\s*[;,]\s*|\s+and\s+/).filter(Boolean).length;
+const numIn=a=>{const m=String(a).replace(/,(?=\d{3})/g,"").match(/-?\d+(\.\d+)?/);return m?+m[0]:null};
+function kind(a){const s=String(a).trim(),w=s.split(/\s+/).length;
+  if(/^(about |around |~|over |under |almost )?[-−£$]?\d[\d,.]*\s*(%|[a-zA-Z°²³/]{0,8})?(\s|$)/i.test(s)&&w<=4)return "num";
+  if(/[=→÷×^√]/.test(s)&&w<=8)return "formula";
+  const p=parts(s);if(p>=3)return "list"+Math.min(p,5);if(p===2)return "pair";
+  return w<=2?"word":w<=6?"short":"long"}
+// nearby numbers for number answers, keeping the same words around them
+function numberFakes(a){const n=numIn(a);if(n==null)return [];const s=String(a);const dec=(String(n).split(".")[1]||"").length;
+  const f=[...new Set([.5,.75,1.5,2,1.25,.8,3].map(k=>+(n*k).toFixed(dec)).concat(Number.isInteger(n)&&n<30?[n-2,n-1,n+1,n+2]:[]).filter(x=>x!==n&&x>=0))];
+  const yr=n>=1700&&n<=2100&&Number.isInteger(n);
+  const vals=yr?[n-3,n-1,n+2,n+5,n-10]:f;
+  return vals.map(v=>s.replace(/-?\d[\d,.]*/,(yr?v:v.toLocaleString("en-GB"))))}
+function distractors(card,pool,k){const ka=kind(card.a),qa=words(card.q),aa=words(card.a),na=norm(card.a),la=String(card.a).length;
+  const seen=new Set([na]);const scored=[];
+  pool.forEach(x=>{if(x===card)return;const nx=norm(x.a);if(!nx||seen.has(nx))return;
+    if(nx.length>4&&(na.includes(nx)||nx.includes(na)))return; // too close to the right answer: could also be right
+    let s=0;if(x.t===card.t)s+=3.5;const kx=kind(x.a);if(kx===ka)s+=4;else if(kx.slice(0,4)===ka.slice(0,4))s+=2;
+    s+=4*jac(qa,words(x.q))+2*jac(aa,words(x.a));
+    const lx=String(x.a).length;s-=Math.abs(Math.log((lx+4)/(la+4)))*2.2;
+    const fq=norm(card.q).split(" ")[0],fx=norm(x.q).split(" ")[0];if(fq&&fq===fx)s+=.8;
+    s+=Math.random()*1.2;scored.push([s,x.a,nx])});
+  scored.sort((a,b)=>b[0]-a[0]);
+  const out=[];
+  if(ka==="num"){for(const f of shuffle(numberFakes(card.a))){const nf=norm(f);if(!seen.has(nf)){seen.add(nf);out.push(f)}if(out.length>=2)break}}
+  for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx))continue;seen.add(nx);out.push(a)}
+  return out}
+// type-the-answer: short answers only, with spelling tolerance
+const typable=a=>{const s=String(a).replace(/\(.*?\)/g,"").trim();return s.length<=28&&s.split(/\s+/).length<=4&&!/[;,=→]/.test(s)};
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=[...Array(n+1).keys()];
+  for(let i=1;i<=m;i++){const c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function check(input,answer){const strip=s=>norm(s).replace(/\b(the|a|an|to)\b/g,"").replace(/\s+/g," ").trim();
+  const alts=String(answer).replace(/\(.*?\)/g,"").split(/\s+\/\s+|\s+or\s+/).map(strip).filter(Boolean);const u=strip(input);if(!u)return {ok:false};
+  const ni=numIn(input),na=numIn(answer);
+  if(na!=null&&kind(answer)==="num")return {ok:ni!=null&&Math.abs(ni-na)<=Math.max(.011,Math.abs(na)*.005),exact:true};
+  if(alts.includes(u))return {ok:true,exact:true};
+  const raw=String(answer).replace(/\s+/g,"").toLowerCase();if(raw&&String(input).replace(/\s+/g,"").toLowerCase()===raw)return {ok:true,exact:true};
+  for(const a of alts){const d=lev(u,a);if(d<=Math.max(1,Math.floor(a.length/6)))return {ok:true,exact:false,want:a}}
+  return {ok:false}}
+return {distractors,typable,check,kind}})();
+function quizPool(tops,mode){const out=[];const strip=h=>{const d=document.createElement("div");d.innerHTML=h;return d.textContent.trim()};
+  mode=mode||"mix";const pool=C.cards.map(c=>({t:c[0],q:c[1],a:c[2]}));
+  pool.filter(c=>tops.includes(c.t)).forEach(c=>{
+    const canType=QG.typable(c.a);
+    if(mode==="type"||(mode==="mix"&&canType&&Math.random()<.35)){if(canType){out.push({t:c.t,q:c.q,typed:true,ans:c.a,ex:""});return}if(mode==="type")return}
+    const o=shuffle([c.a,...QG.distractors(c,pool,3)]);out.push({t:c.t,q:c.q,o,a:o.indexOf(c.a),ex:""})});
+  if(mode!=="type")C.sets.forEach(set=>set.qs.forEach(Q=>Q.parts.forEach(p=>{const t=p.t||Q.t;if(p.k!=="m"||!tops.includes(t)||p.fig||p.data)return;if(/figure|graph|table|diagram|shown|extract|source/i.test(strip(p.q)))return;
     out.push({t,q:p.q,o:p.o,a:p.a,ex:p.ex||""})})));
   return out}
 let QZ=null;
 function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.createElement("div");sheet.id="qzsheet";sheet.className="qzsheet";sheet.setAttribute("role","dialog");sheet.setAttribute("aria-modal","true");sheet.setAttribute("aria-label","Topic quiz");document.body.appendChild(sheet)}
   sheet.hidden=false;document.body.classList.add("qzopen");
   const keys=Object.keys(C.topics).filter(k=>C.cards.some(c=>c[0]===k));
-  let sel=preset&&preset.length?preset.slice():keys.slice();let len=10;
+  let sel=preset&&preset.length?preset.slice():keys.slice();let len=10,mode=(state.qzmode||"mix");
   const close=()=>{sheet.hidden=true;document.body.classList.remove("qzopen");QZ=null};
   const top=(title)=>`<div class="qzbar"><b>${title}</b><button type="button" class="qzx" id="qzx" aria-label="Close quiz">✕</button></div>`;
-  function setup(){const n=quizPool(sel).length;
+  function setup(){const n=quizPool(sel,mode).length;
     sheet.innerHTML=top("Quiz me")+`<div class="qzin"><p class="qzlab">Choose topics</p>${(C.groups||[["",keys]]).map(([lab,gk],gi)=>{gk=gk.filter(k=>keys.includes(k));if(!gk.length)return"";const allOn=gk.every(k=>sel.includes(k));return `${lab?`<div class="qzgh"><span>${lab}</span><button type="button" class="linkbtn" data-g="${gi}">${allOn?"Clear":"Select all"} ${lab}</button></div>`:""}<div class="qzchips">${gk.map(k=>`<button type="button" class="chip${sel.includes(k)?" on":""}" data-k="${k}" aria-pressed="${sel.includes(k)}">${tlab(k)}</button>`).join("")}</div>`}).join("")}
       <div class="qzrow"><button type="button" class="linkbtn" id="qzall">${sel.length===keys.length?"Clear all":"Select all"}</button><span>${n} questions available</span></div>
+      <p class="qzlab">Question type</p><div class="qzchips">${[["mix","Mixed"],["mc","Multiple choice"],["type","Type the answer"]].map(([k,l])=>`<button type="button" class="chip${k===mode?" on":""}" data-mode="${k}">${l}</button>`).join("")}</div>
       <p class="qzlab">How many questions?</p><div class="qzchips">${[5,10,20].map(x=>`<button type="button" class="chip${x===len?" on":""}" data-len="${x}">${x}</button>`).join("")}</div>
       <button type="button" class="btn p qzgo" id="qzgo"${n?"":" disabled"}>Start quiz</button></div>`;
     $("qzx").onclick=close;
     sheet.querySelectorAll("[data-k]").forEach(b=>b.onclick=()=>{const k=b.dataset.k;sel=sel.includes(k)?sel.filter(x=>x!==k):[...sel,k];setup()});
     sheet.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const gk=C.groups[+b.dataset.g][1].filter(k=>keys.includes(k));const allOn=gk.every(k=>sel.includes(k));sel=allOn?sel.filter(k=>!gk.includes(k)):[...new Set([...sel,...gk])];setup()});
     sheet.querySelectorAll("[data-len]").forEach(b=>b.onclick=()=>{len=+b.dataset.len;setup()});
+    sheet.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;state.qzmode=mode;save();setup()});
     $("qzall").onclick=()=>{sel=sel.length===keys.length?[]:keys.slice();setup()};
-    $("qzgo").onclick=()=>start(shuffle(quizPool(sel)).slice(0,len))}
-  function start(items){QZ={items,i:0,ans:[]};step()}
+    $("qzgo").onclick=()=>start(shuffle(quizPool(sel,mode)).slice(0,len))}
+  function start(items){QZ={items,i:0,ans:[],res:[]};step()}
+  const okAt=k=>QZ.res[k]===true;
   function step(){const q=QZ.items[QZ.i];const label=sel.length===1?(sel[0]===C.topics[sel[0]]?sel[0]:sel[0]+" "+C.topics[sel[0]]):`${sel.length} topics`;
-    sheet.innerHTML=top(label)+`<div class="qzin"><div class="qzdots">${QZ.items.map((_,k)=>`<i class="${k<QZ.i?(QZ.ans[k]===QZ.items[k].a?"ok":"no"):k===QZ.i?"now":""}"></i>`).join("")}</div>
-      <p class="qzmeta">Question ${QZ.i+1} of ${QZ.items.length} · ${q.t}</p><p class="qzq">${q.q}</p><div class="opts">${q.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div><div id="qzfb"></div></div>`;
+    sheet.innerHTML=top(label)+`<div class="qzin"><div class="qzdots">${QZ.items.map((_,k)=>`<i class="${k<QZ.i?(okAt(k)?"ok":"no"):k===QZ.i?"now":""}"></i>`).join("")}</div>
+      <p class="qzmeta">Question ${QZ.i+1} of ${QZ.items.length} · ${q.t}</p><p class="qzq">${q.q}</p>${q.typed?`<form class="qztype" id="qzform" autocomplete="off"><input id="qzin" type="text" placeholder="Type your answer" aria-label="Your answer" autocapitalize="off" spellcheck="false"><button type="submit" class="btn p">Check</button></form><button type="button" class="linkbtn" id="qzidk">I don't know</button>`:`<div class="opts">${q.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div>`}<div id="qzfb"></div></div>`;
     $("qzx").onclick=close;
+    const finish=(ok,extra)=>{QZ.res[QZ.i]=ok;const last=QZ.i>=QZ.items.length-1;if(ok&&window.GCSEasy)GCSEasy.addXP(q.typed?2:1,"quiz",60);
+      if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,q.t,ok);
+      $("qzfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${extra||""}${q.ex?`<div class="panel ms">${q.ex}</div>`:""}<button type="button" class="btn p qzgo" id="qznext">${last?"See my score":"Next"}</button>`;
+      $("qznext").onclick=()=>{if(last)end();else{QZ.i++;step()}};$("qznext").focus({preventScroll:true})};
+    if(q.typed){const inp=$("qzin");setTimeout(()=>inp.focus({preventScroll:true}),50);
+      const done=(r,given)=>{inp.disabled=true;sheet.querySelector("#qzform button").disabled=true;$("qzidk").remove();QZ.ans[QZ.i]=given;
+        finish(r.ok,`<div class="panel ms"><b>Answer:</b> ${q.ans}${r.ok&&!r.exact?`<br><span class="qzspell">Close enough. Watch the spelling.</span>`:""}</div>`)};
+      $("qzform").onsubmit=e=>{e.preventDefault();if(!inp.value.trim()){inp.focus();return}done(QG.check(inp.value,q.ans),inp.value)};
+      $("qzidk").onclick=()=>done({ok:false},"")}
     sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;QZ.ans[QZ.i]=j;sheet.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});
-      const ok=j===q.a,last=QZ.i>=QZ.items.length-1;if(ok&&window.GCSEasy)GCSEasy.addXP(1,"quiz",60);$("qzfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${q.ex?`<div class="panel ms">${q.ex}</div>`:""}<button type="button" class="btn p qzgo" id="qznext">${last?"See my score":"Next"}</button>`;
-      $("qznext").onclick=()=>{if(last)end();else{QZ.i++;step()}};$("qznext").focus({preventScroll:true})});
+      finish(j===q.a)});
     sheet.scrollTop=0}
-  function end(){const it=QZ.items,got=it.filter((q,k)=>QZ.ans[k]===q.a).length,per={};it.forEach((q,k)=>{per[q.t]=per[q.t]||{g:0,n:0};per[q.t].n++;if(QZ.ans[k]===q.a)per[q.t].g++});
-    const wrong=it.filter((q,k)=>QZ.ans[k]!==q.a);
+  function end(){const it=QZ.items,got=it.filter((q,k)=>okAt(k)).length,per={};it.forEach((q,k)=>{per[q.t]=per[q.t]||{g:0,n:0};per[q.t].n++;if(okAt(k))per[q.t].g++});
+    const wrong=it.filter((q,k)=>!okAt(k));
     sheet.innerHTML=top("Your score")+`<div class="qzin"><p class="qzbig">${got} / ${it.length}</p><p class="qzmeta">${got===it.length?"Perfect. Try a different topic or more questions.":got/it.length>=.7?"Good work. Go over the ones you missed below.":"Reread the topic notes, then try again."}</p>
       <div class="bars">${Object.entries(per).map(([k,v])=>{const pc=Math.round(v.g/v.n*100);return `<div class="bar"><span>${k}</span><span class="tr"><i class="${pc<50?"lo":pc>=75?"hi":""}" style="width:${pc}%"></i></span><span>${v.g}/${v.n}</span></div>`}).join("")}</div>
-      ${wrong.length?`<p class="qzlab" style="margin-top:16px">Ones to learn</p><div class="qzwrong">${wrong.map(q=>`<div><b>${q.q}</b><span>${q.o[q.a]}</span></div>`).join("")}</div>`:""}
+      ${wrong.length?`<p class="qzlab" style="margin-top:16px">Ones to learn</p><div class="qzwrong">${wrong.map(q=>`<div><b>${q.q}</b><span>${q.typed?q.ans:q.o[q.a]}</span></div>`).join("")}</div>`:""}
       <div class="qzrow2">${wrong.length?`<button type="button" class="btn p" id="qzretry">Retry the ${wrong.length} I got wrong</button>`:""}<button type="button" class="btn" id="qznew">New quiz</button></div></div>`;
     $("qzx").onclick=close;if($("qzretry"))$("qzretry").onclick=()=>start(shuffle(wrong.map(q=>Object.assign({},q))));$("qznew").onclick=setup;sheet.scrollTop=0}
   sheet.onkeydown=e=>{if(e.key==="Escape")close()};
@@ -116,7 +174,7 @@ function setupCards(){
     card.innerHTML=flipped?`<div class="lab">Answer</div><div class="a">${c[2]}</div>`:`<div class="lab">Question · tap to flip</div><div class="q">${c[1]}</div>`};
   const mark=ok=>{if(!deck.length)return;const c=deck[idx],k=ckey(c),r=state.srs[k]||{b:0,due:0};
     const wasDue=r.due<=now();if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;deck.splice(idx,1);if(wasDue&&window.GCSEasy)GCSEasy.addXP(1,"cards",150)}else{r.b=0;r.due=now();deck.push(deck.splice(idx,1)[0])}
-    state.srs[k]=r;save();if(idx>=deck.length)idx=0;flipped=false;render()};
+    state.srs[k]=r;save();if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,c[0],ok,"card");if(idx>=deck.length)idx=0;flipped=false;render()};
   card.onclick=()=>{if(!deck.length)return;flipped=!flipped;render()};
   $("fcgot").onclick=()=>mark(true);$("fcagain").onclick=()=>mark(false);
   $("fcshuf").onclick=build;
@@ -161,7 +219,9 @@ function markButtons(p,host){
   for(let m=0;m<=p.mk;m++){const b=document.createElement("button");b.className="mk"+(state.m[p.id]===m?" on":"");b.textContent=m;b.setAttribute("aria-label",m+" marks");
     b.onclick=()=>{setMark(p.id,m);mr.querySelectorAll(".mk").forEach(x=>x.classList.toggle("on",x===b))};mr.appendChild(b)}
   host.appendChild(mr)}
-function setMark(id,m){state.m[id]=m;save();updScore();if(m>0&&window.GCSEasy&&GCSEasy.addXP)GCSEasy.addXP(m,"exam",/^AI/.test(id)?120:0,/^AI/.test(id)?null:"q:"+C.id+":"+id)}
+function partById(id){for(const set of C.sets)for(const Q of set.qs)for(const p of Q.parts)if(p.id===id)return [p,Q];return []}
+function setMark(id,m){const prev=state.m[id];state.m[id]=m;save();
+  if(prev==null&&window.GCSEasy&&GCSEasy.topicResult){const [p,Q]=partById(id);if(p&&(p.t||Q.t)&&p.mk)GCSEasy.topicResult(C.id,p.t||Q.t,m/p.mk)}updScore();if(m>0&&window.GCSEasy&&GCSEasy.addXP)GCSEasy.addXP(m,"exam",/^AI/.test(id)?120:0,/^AI/.test(id)?null:"q:"+C.id+":"+id)}
 function tagPills(p){return (p.tag||[]).map(t=>`<span class="pill ${t==="Triple"?"t":t==="HT"?"h":"u"}">${t}</span>`).join("")}
 
 function renderPart(p){
@@ -404,6 +464,12 @@ function init(cfg){
     $("reset").onclick=()=>{const keep={learn:state.learn,set:state.set,dr:{r:0,t:0}};state=Object.assign({m:{},a:{},txt:{}},keep);save();renderSets()};
     renderSets();
   }
+  // deep links: #quiz=U2 opens a quiz on that topic; #topic=U2 opens the notes
+  const deep=()=>{const m=location.hash.match(/^#(quiz|topic)=([\w-]+)/);if(!m||!C.topics[m[2]])return;
+    if(m[1]==="quiz")setTimeout(()=>openQuiz([m[2]]),150);
+    else{const sec=$(m[2]);if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),100)}}
+    history.replaceState(null,"",location.pathname+location.search)};
+  deep();addEventListener("hashchange",deep);
 }
 const r=(a,b,dp=0)=>+(a+Math.random()*(b-a)).toFixed(dp);
 const pick=a=>a[Math.floor(Math.random()*a.length)];

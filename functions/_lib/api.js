@@ -69,6 +69,7 @@ async function db(env) {
       env.DB.prepare("CREATE INDEX IF NOT EXISTS hits_day ON hits(day)"),
       env.DB.prepare("CREATE TABLE IF NOT EXISTS events (ts INTEGER, day TEXT, name TEXT, n INTEGER, vid TEXT, signed INTEGER)"),
       env.DB.prepare("CREATE INDEX IF NOT EXISTS events_day ON events(day)"),
+      env.DB.prepare("CREATE TABLE IF NOT EXISTS push (id TEXT PRIMARY KEY, endpoint TEXT, hour INTEGER, tz TEXT, seen TEXT, sent TEXT, created INTEGER)"),
     ]);
     for (const col of ["app INTEGER", "nv INTEGER", "cc TEXT"]) { try { await env.DB.prepare("ALTER TABLE hits ADD COLUMN " + col).run(); } catch {} }
     SCHEMA = true;
@@ -88,6 +89,31 @@ function mergeKeys(a, b) { // newest change per key wins
   const out = Object.assign({}, a);
   for (const [k, v] of Object.entries(b || {})) if (v && typeof v.t === "number" && (!out[k] || v.t > out[k].t)) out[k] = { v: v.v == null ? null : String(v.v), t: v.t };
   return out;
+}
+/* ---------- daily reminders: Web Push with no message body (the app shows the text), signed with VAPID ---------- */
+let VKEY = null;
+async function vapidHeaders(env, endpoint) {
+  if (!VKEY) VKEY = await crypto.subtle.importKey("jwk", JSON.parse(env.VAPID_PRIVATE), { name: "ECDSA", namedCurve: "P-256" }, false, ["sign"]);
+  const enc = (o) => btoa(String.fromCharCode(...new TextEncoder().encode(JSON.stringify(o)))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  const head = enc({ typ: "JWT", alg: "ES256" }), body = enc({ aud: new URL(endpoint).origin, exp: Math.floor(Date.now() / 1000) + 12 * 3600, sub: "mailto:gcseasy.app@gmail.com" });
+  const sig = new Uint8Array(await crypto.subtle.sign({ name: "ECDSA", hash: "SHA-256" }, VKEY, new TextEncoder().encode(head + "." + body)));
+  const s64 = btoa(String.fromCharCode(...sig)).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  return { Authorization: `vapid t=${head}.${body}.${s64}, k=${env.VAPID_PUBLIC}`, TTL: "43200", Urgency: "normal", "Content-Length": "0" };
+}
+const localNow = (tz) => { try { const p = Object.fromEntries(new Intl.DateTimeFormat("en-GB", { timeZone: tz || "Europe/London", hour: "2-digit", hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date()).map((x) => [x.type, x.value])); return { hour: +p.hour, day: `${p.year}-${p.month}-${p.day}` }; } catch { return { hour: new Date().getUTCHours(), day: today() }; } };
+async function runReminders(env) {
+  const D = await db(env); const rows = (await D.prepare("SELECT id, endpoint, hour, tz, seen, sent FROM push").all()).results || [];
+  let sent = 0, gone = 0, skipped = 0;
+  for (const r of rows) {
+    const n = localNow(r.tz);
+    if (n.hour !== r.hour || r.sent === n.day || r.seen === n.day) { skipped++; continue; } // not their time, already reminded, or already revised today
+    try {
+      const res = await fetch(r.endpoint, { method: "POST", headers: await vapidHeaders(env, r.endpoint) });
+      if (res.status === 404 || res.status === 410) { await D.prepare("DELETE FROM push WHERE id = ?").bind(r.id).run(); gone++; }
+      else { await D.prepare("UPDATE push SET sent = ? WHERE id = ?").bind(n.day, r.id).run(); if (res.ok) sent++; }
+    } catch { /* try again next hour */ }
+  }
+  return { sent, gone, skipped, total: rows.length };
 }
 const mask = (e) => { const [a, d] = String(e).split("@"); return (a || "").slice(0, 2) + "•••@" + (d || ""); };
 
@@ -120,13 +146,31 @@ async function runAI(env, prompt, wantJson) {
   return typeof r === "string" ? r : JSON.stringify(r ?? "");
 }
 
+/* class goals: the class creator picks one; progress comes from each member's last 14 days of activity */
+const GOALS = {
+  xp: { label: (n) => `Earn ${n} XP each`, idx: 0, targets: [100, 250, 500] },
+  cards: { label: (n) => `Review ${n} flashcards each`, idx: 1, targets: [50, 150, 300] },
+  quiz: { label: (n) => `Get ${n} quiz questions right each`, idx: 2, targets: [25, 50, 100] },
+  exam: { label: (n) => `Earn ${n} exam marks each`, idx: 3, targets: [20, 50, 100] },
+  daily: { label: (n) => `Do the daily challenge on ${n} days`, idx: 4, targets: [3, 5, 7] },
+  streak: { label: (n) => `Reach a ${n}-day streak`, idx: -1, targets: [3, 5, 7] },
+};
+function goalProgress(goal, m) {
+  if (!goal || !GOALS[goal.type]) return 0;
+  if (goal.type === "streak") return Math.min(goal.target, m.st || 0);
+  const i = GOALS[goal.type].idx; let n = 0;
+  for (const [d, v] of Object.entries(m.dy || {})) if (d >= goal.start && d <= goal.end && Array.isArray(v)) n += +v[i] || 0;
+  return Math.min(goal.target, n);
+}
 function pub(g) {
   const members = Object.entries(g.members || {}).map(([id, m]) => ({
     id: id.slice(0, 8), name: m.n, streak: m.st || 0, mins: m.mi || 0,
-    daily: m.dl && m.dl.date === today() ? m.dl : null, answered: m.ca || 0, seen: m.t || 0,
+    daily: m.dl && m.dl.date === today() ? m.dl : null, answered: m.ca || 0, seen: m.t || 0, badges: m.bg || 0,
+    goal: g.goal ? goalProgress(g.goal, m) : null,
   }));
   members.sort((a, b) => b.streak - a.streak || (b.daily?.score ?? -1) - (a.daily?.score ?? -1) || b.mins - a.mins);
-  return { code: g.code, name: g.name, owner: g.owner ? g.owner.slice(0, 8) : null, members };
+  const goal = g.goal && GOALS[g.goal.type] ? Object.assign({}, g.goal, { label: GOALS[g.goal.type].label(g.goal.target), done: members.filter((x) => x.goal >= g.goal.target).length, over: today() > g.goal.end }) : null;
+  return { code: g.code, name: g.name, owner: g.owner ? g.owner.slice(0, 8) : null, goal, members };
 }
 
 async function getGroup(env, code) {
@@ -182,6 +226,27 @@ export default {
         if (items.length) { const D = await db(env), now = Date.now();
           await D.batch(items.map(([k, n]) => D.prepare("INSERT INTO events (ts, day, name, n, vid, signed) VALUES (?, ?, ?, ?, ?, ?)").bind(now, today(), k, Math.min(500, Math.round(+n)), vid, body.s ? 1 : 0))); }
         return json({ ok: true });
+      }
+      if (path === "/push/sub" && req.method === "POST") { // save or update a device's reminder
+        if (!env.DB || !env.VAPID_PRIVATE) return fail("off", "Reminders aren't switched on yet.", 404);
+        const ep = String((body.sub && body.sub.endpoint) || "");
+        if (!(/^https:\/\/[^/]+\//.test(ep) || (env.ALLOW_LOCAL_PUSH && /^http:\/\/localhost:/.test(ep))) || ep.length > 1000) return fail("bad_request", "That subscription isn't valid.");
+        const hour = Math.max(0, Math.min(23, parseInt(body.hour, 10) || 18)), tz = String(body.tz || "Europe/London").slice(0, 40);
+        const id = await sha("push|" + ep);
+        await (await db(env)).prepare("INSERT INTO push (id, endpoint, hour, tz, created) VALUES (?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET hour = excluded.hour, tz = excluded.tz").bind(id, ep, hour, tz, Date.now()).run();
+        return json({ id, hour });
+      }
+      if (path === "/push/off" && req.method === "POST") {
+        if (env.DB) await (await db(env)).prepare("DELETE FROM push WHERE id = ?").bind(String(body.id || "").slice(0, 32)).run();
+        return json({ ok: true });
+      }
+      if (path === "/push/seen" && req.method === "POST") { // revised today: no reminder needed
+        if (env.DB) { const tz = String(body.tz || "Europe/London").slice(0, 40); await (await db(env)).prepare("UPDATE push SET seen = ? WHERE id = ?").bind(localNow(tz).day, String(body.id || "").slice(0, 32)).run(); }
+        return json({ ok: true });
+      }
+      if (path === "/push/run" && (req.method === "POST" || req.method === "GET")) { // called every hour by a schedule; safe to call more often
+        if (!env.DB || !env.VAPID_PRIVATE) return fail("off", "Reminders aren't switched on yet.", 404);
+        return json(await runReminders(env));
       }
       if (path === "/me" && req.method === "GET") {
         if (!authOn(env)) return fail("off", "Accounts aren't switched on yet.", 404);
@@ -251,6 +316,7 @@ export default {
         if (Math.random() < 0.2) await q("DELETE FROM hits WHERE day < ?", day(120)).run();
         return json({ today: t0, byDay, totals: tot[0] || {}, pages, refs, devs, users: users[0] || {}, newByDay,
           recent: recent.map((r) => ({ email: mask(r.email), created: r.created, last_seen: r.last_seen, verified: !!r.verified })),
+          reminders: await (async () => { try { return (await D.prepare("SELECT COUNT(*) AS n FROM push").first()).n; } catch { return 0; } })(),
           ai: { today: aiToday, yesterday: aiYest, siteLimit: SITE_DAILY, perUser: PER_IP_DAILY }, classes, classList,
           live: (live[0] || {}).live || 0, installs: inst[0] || {}, app: appRow[0] || {}, hours, acts, countries, weekdays, now: Date.now() });
       }
@@ -312,11 +378,13 @@ export default {
           st: Math.max(0, Math.min(3650, parseInt(s.streak, 10) || 0)),
           mi: Math.max(0, Math.min(10080, parseInt(s.mins, 10) || 0)),
           ca: Math.max(0, Math.min(100000, parseInt(s.cards, 10) || 0)),
+          bg: Math.max(0, Math.min(100, parseInt(s.badges, 10) || 0)),
+          dy: (() => { const out = {}; for (const [d, v] of Object.entries(s.days || {}).slice(-14)) if (/^\d{4}-\d{2}-\d{2}$/.test(d) && Array.isArray(v)) out[d] = v.slice(0, 5).map((x) => Math.max(0, Math.min(5000, parseInt(x, 10) || 0))); return out; })(),
           dl: s.daily && /^\d{4}-\d{2}-\d{2}$/.test(s.daily.date)
             ? { date: s.daily.date, score: Math.max(0, Math.min(10, +s.daily.score || 0)), of: Math.max(1, Math.min(10, +s.daily.of || 5)) }
             : m.dl || null,
         };
-        const changed = JSON.stringify([m.n, m.st, m.mi, m.ca, m.dl]) !== JSON.stringify([next.n, next.st, next.mi, next.ca, next.dl]);
+        const changed = JSON.stringify([m.n, m.st, m.mi, m.ca, m.dl, m.bg, m.dy]) !== JSON.stringify([next.n, next.st, next.mi, next.ca, next.dl, next.bg, next.dy]);
         if (changed) {
           g.members[id] = Object.assign(m, next, { t: Date.now() });
           await env.LB.put("g:" + g.code, JSON.stringify(g));
@@ -334,6 +402,20 @@ export default {
           }
         }
         return json({ ok: true });
+      }
+      if (path === "/lb/goal" && req.method === "POST") { // creator sets or clears the class goal
+        const g = await getGroup(env, body.code);
+        if (!g) return fail("not_found", "No group with that code.", 404);
+        if (!g.owner || g.owner !== String(body.id || "")) return fail("forbidden", "Only the person who made this class can set goals.", 403);
+        if (body.type === "none") delete g.goal;
+        else {
+          const G = GOALS[body.type]; const target = parseInt(body.target, 10), days = Math.max(1, Math.min(28, parseInt(body.days, 10) || 7));
+          if (!G || !G.targets.includes(target)) return fail("bad_request", "Pick one of the goals.");
+          const end = new Date(Date.now() + (days - 1) * 864e5).toISOString().slice(0, 10);
+          g.goal = { type: body.type, target, start: today(), end, set: Date.now() };
+        }
+        await env.LB.put("g:" + g.code, JSON.stringify(g));
+        return json(pub(g));
       }
       if (path === "/lb/delete" && req.method === "POST") { // the class creator can delete it for everyone
         const g = await getGroup(env, body.code);

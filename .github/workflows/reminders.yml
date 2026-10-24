@@ -1,0 +1,11 @@
+name: Daily reminders
+# Every hour, ask the site to send any reminders that are due. Each person gets at most one a day.
+on:
+  schedule:
+    - cron: "2 * * * *"
+  workflow_dispatch: {}
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -fsS -X POST "https://gcseasy.pages.dev/api/push/run" || true
