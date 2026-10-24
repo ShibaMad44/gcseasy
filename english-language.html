@@ -51,6 +51,11 @@
 .elcard.flip{background:var(--accent-soft)}.elleft{color:var(--muted);font-size:.9rem;align-self:center}
 .elq{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px;margin-top:12px}.elq small{color:var(--muted)}.elq .q{font:700 1.15rem var(--display);margin:6px 0 12px}
 .elq .opts{display:grid;gap:8px}.elq .ok{color:var(--good);font-weight:700}.elq .no{color:var(--bad);font-weight:700}
+.papersw{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 14px}
+.papersw a{display:flex;flex-direction:column;gap:2px;padding:12px 14px;border:1px solid var(--line);border-radius:16px;background:var(--surface);color:inherit;text-decoration:none;transition:border-color .25s,box-shadow .25s,transform .25s}
+.papersw a b{font:700 1.05rem var(--display)}.papersw a span{font-size:.82rem;color:var(--muted);line-height:1.3}
+.papersw a:hover{transform:translateY(-1px)}
+.papersw a.on{border-color:var(--accent,#2563eb);box-shadow:0 0 0 2px var(--accent,#2563eb) inset;background:var(--accent-soft,rgba(37,99,235,.08))}
 </style>
 </head>
 <body>
@@ -62,12 +67,18 @@
   <div><h1>English Language</h1><p class="sub">AQA · 8700 · Paper 1 and Paper 2</p></div>
 </header>
 <p class="lede">How each paper works, question by question: the marks, how long to spend, how many paragraphs, and the structure to follow. Learn these so nothing in the exam surprises you.</p>
-<div class="chips" id="pick"></div>
+<div class="papersw" role="group" aria-label="Choose a paper">
+  <a href="?paper=1" data-paper="1"><b>Paper 1</b><span>Explorations in creative reading and writing</span></a>
+  <a href="?paper=2" data-paper="2"><b>Paper 2</b><span>Writers' viewpoints and perspectives</span></a>
+</div>
+<script>window.LPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-langpaper")||"1"}catch(e){p="1"}}p=p==="2"?"2":"1";try{localStorage.setItem("gcseasy-langpaper",p)}catch(e){}return p})();
+document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===LPAPER));</script>
+<div class="chips" id="pick" hidden></div>
 <div id="guide"></div>
 
 <h2 style="margin-top:30px" id="practice">Question 5 writing practice</h2>
 <p class="lede">Get a task, write your answer here (or on paper and type it up), then mark it. Aim for 450–650 words in 45 minutes.</p>
-<div class="chips" id="wpick"></div>
+<div class="chips" id="wpick" hidden></div>
 <div class="wp">
   <div><div class="form" id="wform"></div><p class="task" id="wtask"></p></div>
   <textarea id="wtext" placeholder="Plan for 5 minutes, then start writing…" aria-label="Your answer"></textarea>
@@ -161,10 +172,10 @@ window.EL_CARDS=[
   let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}")||{}}catch(e){}st.srs=st.srs||{};const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
   const GAPS=[0,1,3,7,16,35],ck=c=>c[0]+"|"+c[1].slice(0,60),now=()=>Date.now(),due=c=>{const r=st.srs[ck(c)];return !r||r.due<=now()};
   let topic="All",mode=st.mode||"due",deck=[],flipped=false;const esc=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-  const pool=()=>CARDS.filter(c=>topic==="All"||c[0]===topic);
+  const OTHER=LPAPER==="2"?"P1":"P2";const pool=()=>CARDS.filter(c=>c[0]!==OTHER&&(topic==="All"||c[0]===topic));
   const chips=(el,items,cur,cb)=>{el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.type="button";b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})};
   function build(){deck=pool().filter(c=>mode==="all"||due(c)).sort(()=>Math.random()-.5);flipped=false;draw()}
-  function draw(){chips($("elf"),[["All","All"],...Object.entries(T)],topic,k=>{topic=k;build()});
+  function draw(){chips($("elf"),[["All","All"],...Object.entries(T).filter(([k])=>k!==OTHER)],topic,k=>{topic=k;build()});
     chips($("elm"),[["due",`Due now (${pool().filter(due).length})`],["all","All cards"]],mode,k=>{mode=k;st.mode=k;save();build()});
     const c=deck[0],card=$("elcard");$("elleft").textContent=deck.length+" left";
     $("elbtns").hidden=!c;
@@ -212,7 +223,7 @@ qs:[
 notes:["Q2 is not language analysis: it's about what the sources say, not how.","Q3 goes deeper than Paper 1 Q2: show the writer's viewpoint.","For Q4 use comparative connectives (whereas, similarly, in contrast) and compare ideas and methods.","Q5 must sound like the form: use anecdotes, statistics and rhetorical questions to build your argument.","500–650 words."]};
 (function(){
 const box=document.getElementById("guide"),pick=document.getElementById("pick");
-let cur="both";try{cur=localStorage.getItem("englang-guide")||"both"}catch(e){}
+let cur=LPAPER==="2"?"p2":"p1";
 function draw(){pick.innerHTML="";[["both","Both papers"],["p1","Paper 1"],["p2","Paper 2"]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;
   b.onclick=()=>{cur=k;try{localStorage.setItem("englang-guide",k)}catch(e){}draw()};pick.appendChild(b)});
   Guide.render(box,cur==="p1"?[P1]:cur==="p2"?[P2]:[P1,P2]);
@@ -246,7 +257,7 @@ const K="englang-q5";let st={};try{st=JSON.parse(localStorage.getItem(K)||"{}")|
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(st))}catch(e){}};
 const $=id=>document.getElementById(id);
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-st.p=st.p||"p1";if(st.i==null)st.i=0;
+{const want=LPAPER==="2"?"p2":"p1";if(st.p!==want){st.p=want;st.i=0;st.txt="";st.t0=0;st.fb=null}}if(st.i==null)st.i=0;
 let tick=null;
 function words(){return ($("wtext").value.trim().match(/\S+/g)||[]).length}
 function upd(){const n=words();$("wcount").textContent=n;const [lo,hi]=st.p==="p1"?[450,600]:[500,650];

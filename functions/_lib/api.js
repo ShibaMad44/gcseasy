@@ -146,7 +146,7 @@ async function runAI(env, prompt, wantJson) {
   return typeof r === "string" ? r : JSON.stringify(r ?? "");
 }
 
-/* class goals: the class creator picks one; progress comes from each member's last 14 days of activity */
+/* class goals: the class creator picks one; progress comes from each member's last 60 days of activity */
 const GOALS = {
   xp: { label: (n) => `Earn ${n} XP each`, idx: 0, targets: [100, 250, 500] },
   cards: { label: (n) => `Review ${n} flashcards each`, idx: 1, targets: [50, 150, 300] },
@@ -391,7 +391,7 @@ export default {
           mi: Math.max(0, Math.min(10080, parseInt(s.mins, 10) || 0)),
           ca: Math.max(0, Math.min(100000, parseInt(s.cards, 10) || 0)),
           bg: Math.max(0, Math.min(100, parseInt(s.badges, 10) || 0)),
-          dy: (() => { const out = {}; for (const [d, v] of Object.entries(s.days || {}).slice(-14)) if (/^\d{4}-\d{2}-\d{2}$/.test(d) && Array.isArray(v)) out[d] = v.slice(0, 5).map((x) => Math.max(0, Math.min(5000, parseInt(x, 10) || 0))); return out; })(),
+          dy: (() => { const out = Object.assign({}, m.dy || {}); for (const [d, v] of Object.entries(s.days || {}).slice(-60)) if (/^\d{4}-\d{2}-\d{2}$/.test(d) && Array.isArray(v)) out[d] = v.slice(0, 5).map((x) => Math.max(0, Math.min(5000, parseInt(x, 10) || 0))); const keep = {}; for (const d of Object.keys(out).sort().slice(-60)) keep[d] = out[d]; return keep; })(),
           dl: s.daily && /^\d{4}-\d{2}-\d{2}$/.test(s.daily.date)
             ? { date: s.daily.date, score: Math.max(0, Math.min(10, +s.daily.score || 0)), of: Math.max(1, Math.min(10, +s.daily.of || 5)) }
             : m.dl || null,
@@ -421,7 +421,7 @@ export default {
         if (!g.owner || g.owner !== String(body.id || "")) return fail("forbidden", "Only the person who made this class can set goals.", 403);
         if (body.type === "none") delete g.goal;
         else {
-          const G = GOALS[body.type]; const target = parseInt(body.target, 10), days = Math.max(1, Math.min(28, parseInt(body.days, 10) || 7));
+          const G = GOALS[body.type]; const target = parseInt(body.target, 10), days = Math.max(1, Math.min(60, parseInt(body.days, 10) || 7));
           if (!G || !G.targets.includes(target)) return fail("bad_request", "Pick one of the goals.");
           const end = new Date(Date.now() + (days - 1) * 864e5).toISOString().slice(0, 10);
           g.goal = { type: body.type, target, start: today(), end, set: Date.now() };

@@ -339,7 +339,7 @@ function myStats(){const L=getLog(),t=dayStart();const days=new Set(L.map(x=>{co
   const mins=Math.round(L.filter(x=>x.s>=t-6*864e5).reduce((a,x)=>a+(x.d!=null?x.d:x.e-x.s),0)/60000);
   const td=new Date().toISOString().slice(0,10);const today=dc.done&&dc.done[td];
   const xs=xpStats(),xl=xpLedger(),dys={};
-  for(let i=13;i>=0;i--){const dt=new Date(Date.now()-i*864e5),k=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");const v=xl.days[k];const dd=dc.done&&(dc.done[k]||dc.done[dt.toISOString().slice(0,10)]);
+  for(let i=59;i>=0;i--){const dt=new Date(Date.now()-i*864e5),k=dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+String(dt.getDate()).padStart(2,"0");const v=xl.days[k];const dd=dc.done&&(dc.done[k]||dc.done[dt.toISOString().slice(0,10)]);
     if(v||dd)dys[k]=[(v&&v.pts)||0,(v&&v.cat.cards)||0,(v&&v.cat.quiz)||0,(v&&v.cat.exam)||0,dd?1:0]}
   return {streak,mins:xs.week,daily:today?{date:td,score:today.score,of:today.of}:null,cards:xs.total,badges:Object.keys(earnedBadges()).length,days:dys}}
 async function lbSync(force){const m=me();if(!API||!m.name||!m.groups.length)return;const st=myStats();const sig=JSON.stringify([m.name,m.groups,st]);
