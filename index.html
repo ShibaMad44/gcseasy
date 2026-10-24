@@ -270,7 +270,7 @@ const $=id=>document.getElementById(id);
 const live=SUBJECTS.filter(s=>s.live),prog=progress();
 
 /* stats: real counts from the live pages */
-$("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).length||670,"flashcards"],[(window.GCSE_STATS||{}).marks||0,"exam-style marks"],[SUBJECTS.length-live.length,"more on the way"]].map(([n,l])=>`<div><b>${n}</b><span>${l}</span></div>`).join("");
+$("stats").innerHTML=[[live.length,"subjects ready"],[(window.GCSE_CARDS||[]).length||670,"flashcards"],[(window.GCSE_STATS||{}).marks||0,"exam-style marks"],[SUBJECTS.length-live.length,"more on the way"]].map(([n,l])=>`<div><b>${Number(n).toLocaleString("en-GB")}</b><span>${l}</span></div>`).join("");
 
 /* your revision: only shown once something has been saved on this device */
 (function(){const L=GCSEasy.getLog(),now=Date.now(),day=t=>{const d=new Date(t);d.setHours(0,0,0,0);return d.getTime()},today=day(now);
