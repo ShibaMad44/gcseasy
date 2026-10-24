@@ -8,4 +8,6 @@ jobs:
   send:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -sS -X POST -H "Content-Type: application/json" -d "{}" "https://gcseasy.pages.dev/api/push/run"
+      - name: Send due reminders
+        run: |
+          curl -sS -X POST -H "Content-Type: application/json" -d "{}" "https://gcseasy.pages.dev/api/push/run"
