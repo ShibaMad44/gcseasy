@@ -239,11 +239,12 @@ drawEx();
     if(!R.supported()&&!R.needsInstall()){box.innerHTML=`<p class="rmnote">This browser can't show reminders. Try Chrome or Edge, or the installed app.</p>`;return}
     if(R.needsInstall()){box.innerHTML=`<p class="rmnote">On iPhone and iPad, reminders only work in the installed app: open this site in <b>Safari</b>, tap <b>Share</b>, then <b>Add to Home Screen</b>. Open the app and turn reminders on here.</p>`;return}
     box.innerHTML=`<p class="rmlab">${cur?"Reminding you at":"Remind me at"}</p><div class="modes" id="rmhours">${hours.map(h=>`<button type="button" class="chip${(cur?cur.hour:18)===h?" on":""}" data-h="${h}">${lab(h)}</button>`).join("")}</div>
-      <div class="rmrow"><button type="button" class="btn p" id="rmon">${cur?"Update reminder":"Turn on reminders"}</button>${cur?`<button type="button" class="btn" id="rmoff">Turn off</button>`:""}</div>
+      <div class="rmrow"><button type="button" class="btn p" id="rmon">${cur?"Update reminder":"Turn on reminders"}</button>${cur?`<button type="button" class="btn" id="rmtest">Send a test</button><button type="button" class="btn" id="rmoff">Turn off</button>`:""}</div>
       <p class="rmnote${bad?" bad":""}" role="status">${msg||(cur?`On: every day at ${lab(cur.hour)}, unless you've already revised.`:"")}</p>`;
     let pick=cur?cur.hour:18;box.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{pick=+b.dataset.h;box.querySelectorAll("[data-h]").forEach(x=>x.classList.toggle("on",x===b))});
     $("rmon").onclick=async()=>{$("rmon").disabled=true;try{await R.enable(pick);draw(`Done. You'll get a reminder at ${lab(pick)} on days you haven't revised.`)}catch(e){draw(e.message,true)}};
-    if($("rmoff"))$("rmoff").onclick=async()=>{await R.disable();draw("Reminders are off.")}}
+    if($("rmoff"))$("rmoff").onclick=async()=>{await R.disable();draw("Reminders are off.")};
+    if($("rmtest"))$("rmtest").onclick=async()=>{$("rmtest").disabled=true;try{await R.test();draw("Test sent. It should pop up in a few seconds (check your notifications).")}catch(e){draw(e.message,true)}}}
   draw()})();
 </script>
 </body>

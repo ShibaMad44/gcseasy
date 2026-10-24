@@ -244,6 +244,16 @@ export default {
         if (env.DB) { const tz = String(body.tz || "Europe/London").slice(0, 40); await (await db(env)).prepare("UPDATE push SET seen = ? WHERE id = ?").bind(localNow(tz).day, String(body.id || "").slice(0, 32)).run(); }
         return json({ ok: true });
       }
+      if (path === "/push/test" && req.method === "POST") { // send one reminder now to this device (3 a day)
+        if (!env.DB || !env.VAPID_PRIVATE) return fail("off", "Reminders aren't switched on yet.", 404);
+        const id = String(body.id || "").slice(0, 32);
+        const row = await (await db(env)).prepare("SELECT endpoint FROM push WHERE id = ?").bind(id).first();
+        if (!row) return fail("not_found", "Turn reminders on first.", 404);
+        if (!(await bump(env, `pt:${id}:${today()}`, 3))) return fail("rate_limited", "That's enough tests for today.", 429);
+        const res = await fetch(row.endpoint, { method: "POST", headers: await vapidHeaders(env, row.endpoint) });
+        if (res.status === 404 || res.status === 410) { await (await db(env)).prepare("DELETE FROM push WHERE id = ?").bind(id).run(); return fail("gone", "This device's reminder has expired. Turn reminders off and on again.", 410); }
+        return res.ok ? json({ ok: true }) : fail("push_failed", "The notification service said no (" + res.status + "). Try again later.", 502);
+      }
       if (path === "/push/run" && (req.method === "POST" || req.method === "GET")) { // called every hour by a schedule; safe to call more often
         if (!env.DB || !env.VAPID_PRIVATE) return fail("off", "Reminders aren't switched on yet.", 404);
         return json(await runReminders(env));

@@ -221,6 +221,8 @@ const reminders={
     try{origSetRM(JSON.stringify({id:d.id,hour}))}catch(e){}ev("reminderon");return d},
   async disable(){const cur=reminders.get();try{const reg=await navigator.serviceWorker.getRegistration();const sub=reg&&await reg.pushManager.getSubscription();if(sub)await sub.unsubscribe()}catch(e){}
     if(cur&&cur.id&&API)await fetch(API+"/push/off",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:cur.id})}).catch(()=>{});try{localStorage.removeItem(RMK)}catch(e){}},
+  async test(){const cur=reminders.get();if(!cur||!cur.id)throw new Error("Turn reminders on first.");const r=await fetch(API+"/push/test",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({id:cur.id})});
+    const d=await r.json().catch(()=>({}));if(!r.ok){if(d.code==="gone"){try{localStorage.removeItem(RMK)}catch(e){}}throw new Error(d.error||"Couldn't send a test.")}return true},
   seen(){const cur=reminders.get();if(!cur||!cur.id||!API)return;const d=dkeyL();if(cur.seen===d)return;cur.seen=d;try{origSetRM(JSON.stringify(cur))}catch(e){}
     fetch(API+"/push/seen",{method:"POST",keepalive:true,headers:{"Content-Type":"application/json"},body:JSON.stringify({id:cur.id,tz:TZ})}).catch(()=>{})}};
 const origSetRM=v=>localStorage.setItem(RMK,v);
