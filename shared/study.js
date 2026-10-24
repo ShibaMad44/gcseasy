@@ -47,6 +47,50 @@ function quizPool(tops,mode){const out=[];const strip=h=>{const d=document.creat
   if(mode!=="type")C.sets.forEach(set=>set.qs.forEach(Q=>Q.parts.forEach(p=>{const t=p.t||Q.t;if(p.k!=="m"||!tops.includes(t)||p.fig||p.data)return;if(/figure|graph|table|diagram|shown|extract|source/i.test(strip(p.q)))return;
     out.push({t,q:p.q,o:p.o,a:p.a,ex:p.ex||""})})));
   return out}
+/* ---- Blurting: write everything you remember about a topic, then see which key ideas you missed ---- */
+function topicTerms(k){const sec=$(k);if(!sec)return [];const seen=new Set(),out=[];
+  sec.querySelectorAll(".tbody b, .tbody strong").forEach(b=>{if(b.closest(".plan>b:first-child,.th,.qzbtn,button,.revtools"))return;if(b.parentElement&&b.parentElement.classList.contains("plan")&&b===b.parentElement.firstElementChild)return;
+    const t=b.textContent.replace(/\s+/g," ").replace(/[:.,;]+$/,"").trim();const n=t.toLowerCase();if(t.length<3||t.length>40||seen.has(n)||/^\d+$/.test(t)||/marks?\b|^paper\b|\?$/.test(t))return;
+    const after=(b.nextSibling&&b.nextSibling.textContent||"").trimStart();if(/^[:\u2013\u2014-]/.test(after)&&t.split(" ").length===1&&t.length<14)return; // a label like "Social:", not an idea
+    if(/^(regional|national|international|social|economic|environmental|political|causes?|effects?|impacts?|opportunities|challenges|why|what|how|where|when|who|pros?|cons?|benefits|problems|examples?|features?|successful)$/i.test(t))return;
+    seen.add(n);out.push(t)});
+  return out.slice(0,45)}
+function topicText(k){const sec=$(k);if(!sec)return "";const c=sec.cloneNode(true);c.querySelectorAll("button,.revtools").forEach(x=>x.remove());return c.textContent.replace(/\s+/g," ").trim().slice(0,7000)}
+function termHit(term,txt){const nt=s=>s.toLowerCase().replace(/[^a-z0-9%\u00c0-\u024f ]+/g," ").replace(/\s+/g," ").trim();const t=nt(term),x=" "+nt(txt)+" ";if(!t)return false;if(x.includes(" "+t))return true;
+  const nums=t.match(/\d[\d.,]*/g);if(nums&&!nums.every(n=>x.includes(n)))return false; // figures must be right
+  const STOPW=new Set(["and","the","for","with","from","into","than","that","this","are","was","per","its"]);
+  const ws=t.split(" ").filter(w=>w.length>2&&!STOPW.has(w)&&!/^\d/.test(w));if(!ws.length)return !!nums;const stem=w=>w.replace(/(ing|ed|es|s|ion|ation)$/,"");
+  const hit=ws.filter(w=>x.includes(" "+stem(w))).length;return hit>=Math.ceil(ws.length*.6)}
+function openBlurt(k){let sheet=$("qzsheet");if(!sheet){sheet=document.createElement("div");sheet.id="qzsheet";sheet.className="qzsheet";sheet.setAttribute("role","dialog");sheet.setAttribute("aria-modal","true");document.body.appendChild(sheet)}
+  sheet.setAttribute("aria-label","Blurt");sheet.hidden=false;document.body.classList.add("qzopen");
+  const name=C.topics[k],terms=topicTerms(k),KEYB="blurt:"+k;let t0=Date.now(),iv=null;
+  const close=()=>{clearInterval(iv);sheet.hidden=true;document.body.classList.remove("qzopen")};
+  const top=t=>`<div class="qzbar"><b>${t}</b><button type="button" class="qzx" id="qzx" aria-label="Close">\u2715</button></div>`;
+  sheet.innerHTML=top("Blurt: "+name)+`<div class="qzin"><p class="qzmeta">Close your notes. Write down <b>everything</b> you remember about ${name}: key words, processes, examples, numbers. Bullet points are fine. Aim for 5 minutes.</p>
+    <textarea class="bltext" id="bltext" placeholder="Start typing everything you know\u2026" aria-label="Everything you remember"></textarea>
+    <div class="blbar"><span id="blwc">0 words</span><span id="bltime">0:00</span></div>
+    <button type="button" class="btn p qzgo" id="blgo">Check what I missed</button></div>`;
+  $("qzx").onclick=close;sheet.onkeydown=e=>{if(e.key==="Escape")close()};
+  const ta=$("bltext");try{ta.value=sessionStorage.getItem(KEYB)||""}catch(e){}setTimeout(()=>ta.focus(),60);
+  const wc=()=>{$("blwc").textContent=(ta.value.trim()?ta.value.trim().split(/\s+/).length:0)+" words";try{sessionStorage.setItem(KEYB,ta.value)}catch(e){}};ta.oninput=wc;wc();
+  iv=setInterval(()=>{const t=Math.round((Date.now()-t0)/1000);const el=$("bltime");if(el)el.textContent=Math.floor(t/60)+":"+String(t%60).padStart(2,"0")},1000);
+  $("blgo").onclick=()=>{const txt=ta.value.trim();if(txt.split(/\s+/).length<5){ta.focus();ta.placeholder="Write a bit more first: at least a few key words.";return}clearInterval(iv);result(txt)};
+  function result(txt){const got=terms.filter(t=>termHit(t,txt)),miss=terms.filter(t=>!termHit(t,txt));const pc=terms.length?Math.round(got.length/terms.length*100):0;
+    if(window.GCSEasy){GCSEasy.addXP(Math.min(10,Math.round(got.length/2)+2),"blurt",30);GCSEasy.topicResult(C.id,k,pc/100);GCSEasy.ev("blurt")}
+    sheet.innerHTML=top("Blurt: "+name)+`<div class="qzin"><p class="qzbig">${got.length} / ${terms.length}</p><p class="qzmeta">key ideas from the notes you remembered${pc>=80?". Brilliant.":pc>=50?". Good start.":". Reread the notes, then blurt again tomorrow."}</p>
+      ${miss.length?`<p class="qzlab">You missed</p><div class="blterms miss">${miss.map(t=>`<span>${escH(t)}</span>`).join("")}</div>`:""}
+      ${got.length?`<p class="qzlab">You remembered</p><div class="blterms got">${got.map(t=>`<span>${escH(t)}</span>`).join("")}</div>`:""}
+      <div id="blai"></div>
+      <div class="qzrow2"><button type="button" class="btn ai" id="blaigo">\u2726 Detailed feedback from AI</button><button type="button" class="btn" id="blread">Read the notes</button><button type="button" class="btn p" id="blagain">Blurt again</button></div></div>`;
+    $("qzx").onclick=close;$("blagain").onclick=()=>{try{sessionStorage.removeItem(KEYB)}catch(e){}openBlurt(k)};
+    $("blread").onclick=()=>{close();const sec=$(k);if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();sec.scrollIntoView({behavior:"smooth"})}};
+    getSample().then(f=>{if(!f)$("blaigo").hidden=true});
+    $("blaigo").onclick=async()=>{const f=await getSample();if(!f)return;const btn=$("blaigo");btn.disabled=true;btn.textContent="Reading your blurt\u2026";
+      const prompt=`You are a supportive GCSE ${(document.title||"").split("\u00b7")[0].trim()} teacher. A student closed their notes and wrote down everything they remember about "${name}". Compare it with the class notes below.\n\nCLASS NOTES:\n${topicText(k)}\n\nSTUDENT'S BLURT:\n"""${txt.slice(0,6000)}"""\n\nReply with only a JSON object: {"summary":"one or two sentences to the student as 'you'","strong":["things they explained well, at most 4"],"missing":["the most important ideas they left out, most important first, at most 6"],"mistakes":["anything they got wrong, with the correct version; empty if none"],"next":"one specific thing to learn before blurting again"}. UK spelling, one sentence per item.`;
+      try{const r=await f.json(prompt,{modelTier:"default",cache:false});const L=a=>Array.isArray(a)&&a.length?"<ul>"+a.map(x=>"<li>"+escH(x)+"</li>").join("")+"</ul>":"";
+        $("blai").innerHTML=`<div class="panel ai"><div class="t">AI teacher</div><p class="aisum">${escH(r.summary)}</p>${L(r.strong)?`<p class="aih">What you explained well</p>${L(r.strong)}`:""}${L(r.missing)?`<p class="aih">Most important things you missed</p>${L(r.missing)}`:""}${L(r.mistakes)?`<p class="aih">Mistakes to fix</p>${L(r.mistakes)}`:""}${r.next?`<p class="aih">Before you blurt again</p><p>${escH(r.next)}</p>`:""}</div>`;btn.remove()}
+      catch(e){$("blai").innerHTML=`<div class="fb no">${escH((e&&e.message)||({rate_limited:"You've used today's AI marks.",signin:"Make a free account to get AI feedback.",verify:"Verify your email to use AI feedback."}[e&&e.code])||"The AI couldn't read it just now. The key-word check above still works.")}</div>`;btn.disabled=false;btn.textContent="\u2726 Try AI feedback again"}}}
+}
 let QZ=null;
 function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.createElement("div");sheet.id="qzsheet";sheet.className="qzsheet";sheet.setAttribute("role","dialog");sheet.setAttribute("aria-modal","true");sheet.setAttribute("aria-label","Topic quiz");document.body.appendChild(sheet)}
   sheet.hidden=false;document.body.classList.add("qzopen");
@@ -96,7 +140,8 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
   if(preset&&preset.length)start(shuffle(quizPool(sel)).slice(0,len));else setup();$("qzx").focus({preventScroll:true})}
 function setupTopicQuiz(){const rev=$("p-rev");if(!rev||!C.cards.length)return;
   rev.querySelectorAll("section.topic").forEach(sec=>{const k=sec.id;if(!C.topics[k]||!C.cards.some(c=>c[0]===k))return;const host=sec.querySelector(".tbody")||sec;
-    const b=document.createElement("button");b.type="button";b.className="btn p qzbtn";b.textContent="Quiz me on "+(k===C.topics[k]?k:C.topics[k]);b.onclick=()=>openQuiz([k]);host.appendChild(b)});
+    const b=document.createElement("button");b.type="button";b.className="btn p qzbtn";b.textContent="Quiz me on "+(k===C.topics[k]?k:C.topics[k]);b.onclick=()=>openQuiz([k]);host.appendChild(b);
+    const bl=document.createElement("button");bl.type="button";bl.className="btn qzbtn blbtn";bl.textContent="Blurt it";bl.title="Write everything you remember, then see what you missed";bl.onclick=()=>openBlurt(k);host.appendChild(bl)});
   const bar=rev.querySelector(".revtools");const b=document.createElement("button");b.type="button";b.className="qzopenbtn";b.textContent="Quiz me";b.onclick=()=>openQuiz();
   if(bar)bar.prepend(b);else{const d=document.createElement("div");d.className="revtools";d.appendChild(b);rev.prepend(d)}}
 function setupJump(){const el=$("jump");if(!el)return;
@@ -286,9 +331,50 @@ function showAI(box,p,r){const L=a=>Array.isArray(a)&&a.length?"<ul>"+a.map(x=>"
   ${r.better?`<details class="aibetter"><summary>Your answer, improved</summary><p>${escH(r.better).replace(/\n+/g,"</p><p>")}</p></details>`:""}
   <p class="ainote">AI marking is a guide, not an official mark. Check it against the mark scheme below.</p></div>`}
 
+/* ---- Timed paper: about a minute a mark, no hints, then a score and a rough predicted grade ---- */
+const BOUNDS=[[9,78],[8,70],[7,62],[6,54],[5,46],[4,38],[3,28],[2,18],[1,8]];
+const gradeFor=pc=>{for(const [g,b] of BOUNDS)if(pc>=b)return g;return "U"};
+const setParts=set=>set.qs.flatMap(Q=>Q.parts);
+const setMarks=set=>setParts(set).reduce((a,p)=>a+p.mk,0);
+const fmtT=ms=>{const t=Math.max(0,Math.round(ms/1000)),h=Math.floor(t/3600),m=Math.floor(t%3600/60),sec=t%60;return (h?h+":"+String(m).padStart(2,"0"):m)+":"+String(sec).padStart(2,"0")};
+let TT=null;
+function timedBar(host,set){state.timed=state.timed||{};const T=state.timed[set.id],mk=setMarks(set),mins=Math.round(mk*(set.mpm||C.mpm||1.05));
+  const bar=document.createElement("div");bar.className="timedbar";host.appendChild(bar);
+  const hist=(state.timedHist||{})[set.id]||[];
+  if(T&&!T.done){bar.innerHTML=`<div><b>Timed paper in progress</b><span>Hints are off. Answer what you can, then press Finish.</span></div><button type="button" class="btn p" data-tfin>Finish now</button>`;bar.querySelector("[data-tfin]").onclick=()=>finishTimed(set);startTicker(set);return}
+  if(T&&T.done){bar.classList.add("res");drawTimedResult(bar,set);return}
+  bar.innerHTML=`<div><b>\u23f1 Sit this as a timed paper</b><span>${mk} marks · ${mins} minutes · no hints, then a score and a predicted grade${hist.length?` · last time: grade ${hist[hist.length-1].g}`:""}</span></div><button type="button" class="btn p" data-tgo>Start</button>`;
+  bar.querySelector("[data-tgo]").onclick=e=>{const b=e.currentTarget;const has=setParts(set).some(p=>state.m[p.id]!=null||state.a[p.id]!=null||state.txt[p.id]);
+    if(has&&!b.dataset.sure){b.dataset.sure=1;b.textContent="Tap again: this clears your answers on this set";return}
+    setParts(set).forEach(p=>{delete state.m[p.id];delete state.a[p.id];delete state.txt[p.id];if(state.ai)delete state.ai[p.id]});
+    state.timed[set.id]={start:Date.now(),end:Date.now()+mins*60000,mins,learn:state.learn};state.learn=false;save();renderSets();
+    const top=$("paper");if(top)top.scrollIntoView({behavior:"smooth"})}}
+function startTicker(set){stopTicker();let pill=$("tpill");if(!pill){pill=document.createElement("div");pill.id="tpill";pill.className="tpill";document.body.appendChild(pill)}
+  const tick=()=>{const T=(state.timed||{})[set.id];if(!T||T.done){stopTicker();return}const left=T.end-Date.now();
+    pill.innerHTML=`<span>\u23f1 ${fmtT(left)} left</span><button type="button">Finish</button>`;pill.classList.toggle("low",left<5*60000);pill.querySelector("button").onclick=()=>finishTimed(set);
+    if(left<=0)finishTimed(set,true)};tick();TT=setInterval(tick,1000)}
+function stopTicker(){clearInterval(TT);TT=null;const p=$("tpill");if(p)p.remove()}
+function finishTimed(set,auto){const T=state.timed[set.id];if(!T||T.done)return;T.done=Date.now();T.taken=Math.min(T.done,T.end)-T.start;T.auto=!!auto;state.learn=T.learn!=null?T.learn:state.learn;save();stopTicker();renderSets();
+  const bar=document.querySelector(".timedbar");if(bar)bar.scrollIntoView({behavior:"smooth",block:"start"})}
+function drawTimedResult(bar,set){const T=state.timed[set.id],parts=setParts(set),mk=setMarks(set);
+  const got=parts.reduce((a,p)=>a+(state.m[p.id]||0),0),unmarked=parts.filter(p=>state.m[p.id]==null&&(state.txt[p.id]||"").trim().length>2);
+  const pc=Math.round(got/mk*100),g=gradeFor(pc);
+  bar.innerHTML=`<div class="tres"><div class="tg"><small>Predicted grade</small><b>${unmarked.length?"\u2026":g}</b></div><div class="tinfo"><b>${got} / ${mk} marks (${pc}%)</b><span>${T.auto?"Time ran out":"Finished"} in ${fmtT(T.taken)} of ${T.mins} min${unmarked.length?` · ${unmarked.length} written answer${unmarked.length===1?"":"s"} still to mark`:""}</span></div></div>
+    ${unmarked.length?`<div class="trow2"><button type="button" class="btn p" data-tai>\u2726 Mark them with AI (uses ${unmarked.length})</button><button type="button" class="btn" data-tself>Mark them myself</button></div>`:`<p class="tnote">Rough guide using typical grade boundaries; real boundaries change every year.</p>`}
+    <div class="trow2"><button type="button" class="linkbtn" data-tagain>Try it again</button></div>`;
+  const ai=bar.querySelector("[data-tai]"),self=bar.querySelector("[data-tself]");
+  if(self)self.onclick=()=>{document.querySelectorAll("#paper .part .tools .btn.p").forEach(b=>{if(b.textContent==="Mark it")b.click()});const f=document.querySelector("#paper .mk");if(f)f.closest(".part").scrollIntoView({behavior:"smooth"})};
+  if(ai)ai.onclick=async()=>{ai.disabled=true;const btns=[...document.querySelectorAll("#paper .part .btn.ai")].filter(b=>!b.hidden);
+    for(const b of btns){const part=b.closest(".part"),ta=part&&part.querySelector("textarea");if(!ta||ta.value.trim().length<3)continue;ai.textContent="Marking\u2026";b.click();
+      await new Promise(r=>{const iv=setInterval(()=>{if(!b.disabled){clearInterval(iv);r()}},400)});if(part.querySelector(".fb.no")&&!part.querySelector(".panel.ai .t"))break}
+    renderSets()};
+  bar.querySelector("[data-tagain]").onclick=()=>{delete state.timed[set.id];save();renderSets()};
+  if(!unmarked.length&&!T.saved){state.timedHist=state.timedHist||{};(state.timedHist[set.id]=state.timedHist[set.id]||[]).push({at:T.done,got,mk,g,taken:T.taken});T.saved=1;save();if(window.GCSEasy)GCSEasy.ev("timedpaper")}}
+
 /* score across every set */
 let ALL=[],TOTAL=0;
 function updScore(){
+  const set=C.sets.find(s=>s.id===state.set),T=set&&(state.timed||{})[set.id],tb=document.querySelector(".timedbar.res");if(T&&T.done&&tb)drawTimedResult(tb,set);
   const sc=$("sc");if(!sc)return;
   let got=0,tot=0;const by={};
   ALL.forEach(([t,p])=>{by[t]=by[t]||{g:0,t:0};if(state.m[p.id]!=null){got+=state.m[p.id];tot+=p.mk;by[t].g+=state.m[p.id];by[t].t+=p.mk}});
@@ -315,6 +401,7 @@ function renderSets(){
   if(state.set==="ai"){renderAI(host);return}
   const set=C.sets.find(s=>s.id===state.set);
   if(set.blurb)host.innerHTML=`<p class="setblurb">${set.blurb}</p>`;
+  timedBar(host,set);
   set.qs.forEach(Q=>{const b=document.createElement("div");b.className="qblock";
     const qm=Q.parts.reduce((s,p)=>s+p.mk,0);
     b.innerHTML=`<div class="qtitle"><span class="n">${Q.n}</span><span class="t">${Q.title}</span><span class="tp">${Q.t} · ${qm} marks</span></div>${Q.intro?`<div class="intro">${Q.intro}</div>`:""}`;

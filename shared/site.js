@@ -291,7 +291,7 @@ function badgeList(){const d=badgeData(),got=earnedBadges();return BADGES.map(([
 let bgBusy=false;
 function checkBadges(){if(bgBusy)return;bgBusy=true;setTimeout(()=>{bgBusy=false;try{const got=earnedBadges(),fresh=badgeList().filter(b=>!b.at&&b.v>=b.need);if(!fresh.length)return;
   fresh.forEach(b=>got[b.id]=Date.now());try{localStorage.setItem(BGK,JSON.stringify(got))}catch(e){}
-  fresh.forEach((b,i)=>setTimeout(()=>badgeToast(b),i*2200));ev("badge",fresh.length);clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),3000)}catch(e){}},400)}
+  fresh.forEach((b,i)=>setTimeout(()=>badgeToast(b),i*2200));ev("badge",fresh.length);try{dispatchEvent(new CustomEvent("gcseasy:badges",{detail:fresh}))}catch(e){}clearTimeout(addXP._s);addXP._s=setTimeout(()=>lbSync(),3000)}catch(e){}},400)}
 function badgeToast(b){const t=document.createElement("div");t.className="bgtoast";t.setAttribute("role","status");t.innerHTML=`<span class="bi">${b.icon}</span><span><small>Badge unlocked</small><b>${b.name}</b></span>`;
   document.body.appendChild(t);requestAnimationFrame(()=>t.classList.add("show"));setTimeout(()=>{t.classList.remove("show");setTimeout(()=>t.remove(),400)},3400)}
 /* ---- Daily reminders (push notifications). Only sent if you haven't revised yet that day. ---- */
@@ -377,7 +377,16 @@ function setupInstallBtn(){const nav=document.querySelector(".sitenav");if(!nav|
   b.onclick=async()=>{ev("installclick");const r=await install();if(r!=="prompted")installHelp(r)};
   nav.insertBefore(b,nav.querySelector("#accbtn, #tbtn, .themebtn"));paintInstall()}
 function setupSW(){if("serviceWorker" in navigator&&location.protocol==="https:")navigator.serviceWorker.register("/sw.js").catch(()=>{})}
-function boot(){setTimeout(checkBadges,2500);setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+/* subject tab rows: arrows + fade when tabs are hidden off the edge, and keep the chosen tab in view */
+function setupTabScroll(){document.querySelectorAll("nav.tabs").forEach(nav=>{if(nav.parentElement.classList.contains("tabwrap"))return;
+  const w=document.createElement("div");w.className="tabwrap";nav.before(w);w.appendChild(nav);
+  const mk=(side,ch)=>{const b=document.createElement("button");b.type="button";b.className="tabmore "+side;b.setAttribute("aria-label",side==="r"?"More tabs":"Previous tabs");b.innerHTML=`<span aria-hidden="true">${ch}</span>`;
+    b.onclick=()=>nav.scrollBy({left:(side==="r"?1:-1)*nav.clientWidth*.7,behavior:"smooth"});w.appendChild(b)};mk("r","\u203a");mk("l","\u2039");
+  const upd=()=>{w.classList.toggle("canr",nav.scrollLeft+nav.clientWidth<nav.scrollWidth-4);w.classList.toggle("canl",nav.scrollLeft>4)};
+  nav.addEventListener("scroll",upd,{passive:true});addEventListener("resize",upd);
+  nav.addEventListener("click",e=>{const b=e.target.closest("button");if(b)b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});
+  setTimeout(upd,50);upd()})}
+function boot(){setTimeout(checkBadges,2500);setupTabScroll();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.GCSEasy={QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};

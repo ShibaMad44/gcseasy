@@ -177,7 +177,9 @@ async function getGroup(env, code) {
   code = String(code || "").toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 8);
   if (code.length < 4) return null;
   const raw = await env.LB.get("g:" + code);
-  return raw ? JSON.parse(raw) : null;
+  const g = raw ? JSON.parse(raw) : null;
+  if (g && !g.owner && g.members) g.owner = Object.keys(g.members)[0] || null; // older classes: the first member made it
+  return g;
 }
 
 export default {
@@ -424,6 +426,16 @@ export default {
           const end = new Date(Date.now() + (days - 1) * 864e5).toISOString().slice(0, 10);
           g.goal = { type: body.type, target, start: today(), end, set: Date.now() };
         }
+        await env.LB.put("g:" + g.code, JSON.stringify(g));
+        return json(pub(g));
+      }
+      if (path === "/lb/kick" && req.method === "POST") { // class leader removes a member
+        const g = await getGroup(env, body.code);
+        if (!g) return fail("not_found", "No group with that code.", 404);
+        if (!g.owner || g.owner !== String(body.id || "")) return fail("forbidden", "Only the class leader can remove people.", 403);
+        const target = Object.keys(g.members).find((k) => k.slice(0, 8) === String(body.target || "") && k !== g.owner);
+        if (!target) return fail("not_found", "That person isn't in the class.", 404);
+        delete g.members[target];
         await env.LB.put("g:" + g.code, JSON.stringify(g));
         return json(pub(g));
       }
