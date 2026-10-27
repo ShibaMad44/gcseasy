@@ -386,7 +386,27 @@ function setupTabScroll(){document.querySelectorAll("nav.tabs").forEach(nav=>{if
   nav.addEventListener("scroll",upd,{passive:true});addEventListener("resize",upd);
   nav.addEventListener("click",e=>{const b=e.target.closest("button");if(b)b.scrollIntoView({inline:"center",block:"nearest",behavior:"smooth"})});
   setTimeout(upd,50);upd()})}
-function boot(){setTimeout(checkBadges,2500);setupTabScroll();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+
+/* desktop layout: tabs + "on this page" in a sticky sidebar, content on the right. On phones the wrappers use display:contents so nothing changes. */
+function setupLayout(){const tw=document.querySelector(".wrap > .tabwrap");if(!tw||document.querySelector(".sublayout"))return;
+  const wrap=tw.parentElement;wrap.classList.add("haslayout");document.body.classList.add("haslay");
+  const lay=document.createElement("div");lay.className="sublayout";const side=document.createElement("aside");side.className="subside";const main=document.createElement("div");main.className="submain";
+  tw.before(lay);lay.append(side,main);const psw=wrap.querySelector(":scope > .papersw");if(psw)side.appendChild(psw);side.appendChild(tw);
+  let n=lay.nextSibling;while(n){const nx=n.nextSibling;if(!(n.nodeType===1&&/^(SCRIPT|FOOTER)$/.test(n.tagName)))main.appendChild(n);n=nx}
+  const toc=document.createElement("nav");toc.className="subtoc";toc.setAttribute("aria-label","On this page");side.appendChild(toc);
+  let io=null;
+  const lab=s=>{const sm=s.querySelector(".th .tile small"),h=s.querySelector("h2");const code=sm?sm.textContent.trim():"";const t=h?h.textContent.trim():s.id;return (code&&code.length>1&&!t.startsWith(code)?`<i>${code}</i>`:"")+`<span>${t.replace(/</g,"&lt;")}</span>`};
+  const build=()=>{const pan=[...main.querySelectorAll(':scope > div[id^="p-"]')].find(x=>!x.hidden);if(io){io.disconnect();io=null}
+    const items=pan?[...pan.querySelectorAll("h2.ptitle, section.topic[id]")].filter(x=>!x.hidden&&x.offsetParent!==null):[];
+    const secs=items.filter(x=>x.matches("section"));if(secs.length<2){toc.innerHTML="";return}
+    let html=`<p class="tochd">On this page</p>`;if(items[0].matches("section")&&items.some(x=>x.matches("h2.ptitle")))html+=`<p class="tocgrp">Paper 1</p>`;
+    items.forEach(x=>{if(x.matches("h2.ptitle"))html+=`<p class="tocgrp">${x.textContent.split("·")[0].trim()}</p>`;else html+=`<a href="#${x.id}" data-id="${x.id}">${lab(x)}</a>`});
+    toc.innerHTML=html;
+    toc.querySelectorAll("a").forEach(a=>a.onclick=e=>{e.preventDefault();const s=document.getElementById(a.dataset.id);if(!s)return;if(s.classList.contains("acc")&&!s.classList.contains("open")){const th=s.querySelector(".th");if(th)th.click()}s.scrollIntoView({behavior:"smooth",block:"start"})});
+    if("IntersectionObserver" in window){io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){toc.querySelectorAll("a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-20% 0px -70% 0px"});secs.forEach(s=>io.observe(s))}};
+  const mo=new MutationObserver(()=>setTimeout(build,20));main.querySelectorAll(':scope > div[id^="p-"]').forEach(p=>mo.observe(p,{attributes:true,attributeFilter:["hidden"]}));
+  setTimeout(build,60);addEventListener("load",()=>setTimeout(build,100))}
+function boot(){setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.GCSEasy={QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};

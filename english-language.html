@@ -66,17 +66,27 @@
   <div class="tile"><small>E</small>El</div>
   <div><h1>English Language</h1><p class="sub">AQA · 8700 · Paper 1 and Paper 2</p></div>
 </header>
-<p class="lede">How each paper works, question by question: the marks, how long to spend, how many paragraphs, and the structure to follow. Learn these so nothing in the exam surprises you.</p>
+
 <div class="papersw" role="group" aria-label="Choose a paper">
   <a href="?paper=1" data-paper="1"><b>Paper 1</b><span>Explorations in creative reading and writing</span></a>
   <a href="?paper=2" data-paper="2"><b>Paper 2</b><span>Writers' viewpoints and perspectives</span></a>
 </div>
 <script>window.LPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-langpaper")||"1"}catch(e){p="1"}}p=p==="2"?"2":"1";try{localStorage.setItem("gcseasy-langpaper",p)}catch(e){}return p})();
 document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===LPAPER));</script>
+<nav class="tabs" role="tablist">
+  <button role="tab" id="tab-gd" aria-selected="true" data-p="gd">Paper guide</button>
+  <button role="tab" id="tab-wr" aria-selected="false" data-p="wr">Writing (Q5)</button>
+  <button role="tab" id="tab-ec" aria-selected="false" data-p="ec">Cards and quiz</button>
+  <button role="tab" id="tab-tk" aria-selected="false" data-p="tk">Toolkit</button>
+</nav>
+<div id="p-gd">
+<p class="lede">How each paper works, question by question: the marks, how long to spend, how many paragraphs, and the structure to follow. Learn these so nothing in the exam surprises you.</p>
 <div class="chips" id="pick" hidden></div>
 <div id="guide"></div>
 
-<h2 style="margin-top:30px" id="practice">Question 5 writing practice</h2>
+</div>
+<div id="p-wr" hidden>
+<h2 style="margin-top:6px" id="practice">Question 5 writing practice</h2>
 <p class="lede">Get a task, write your answer here (or on paper and type it up), then mark it. Aim for 450–650 words in 45 minutes.</p>
 <div class="chips" id="wpick" hidden></div>
 <div class="wp">
@@ -89,7 +99,9 @@ document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dat
 </div>
 
 
-<h2 style="margin-top:30px" id="cards">Flashcards and quiz</h2>
+</div>
+<div id="p-ec" hidden>
+<h2 style="margin-top:6px" id="cards">Flashcards and quiz</h2>
 <p class="sdesc2">Every key term and the marks for every question. Cards you get wrong come back sooner.</p>
 <div class="chips" id="elf"></div>
 <div class="chips" id="elm"></div>
@@ -97,12 +109,15 @@ document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dat
 <div class="row" id="elbtns"><button class="btn" id="elagain" type="button">Again</button><button class="btn p" id="elgot" type="button">Got it</button></div>
 <div class="row"><button class="btn" id="elquiz" type="button">Quiz me on these</button><span class="elleft" id="elleft"></span></div>
 <div id="elqz"></div>
-<h2 style="margin-top:30px">Your toolkit</h2>
+</div>
+<div id="p-tk" hidden>
+<h2 style="margin-top:6px">Your toolkit</h2>
 <div class="kit">
 <div><h3>Language methods (P1 Q2, P2 Q3)</h3><p>Metaphor · simile · personification · verbs and adjectives · semantic field · sensory language · repetition · lists · alliteration · tone · sentence types</p></div>
 <div><h3>Structure methods (P1 Q3)</h3><p>Opening focus · shift in focus (zoom in/out) · flashback · change of setting or time · dialogue · short paragraph for effect · cyclical ending · build-up of tension · climax</p></div>
 <div><h3>Viewpoint methods (P2 Q4, Q5)</h3><p>Tone (angry, sarcastic, nostalgic) · direct address · rhetorical questions · statistics and facts · anecdotes · expert opinion · emotive language · rule of three</p></div>
 <div><h3>Phrases that score</h3><p>"The writer uses… to suggest…" · "This makes the reader feel…" · "Perhaps the writer wanted…" · "Whereas Source A…, Source B…" · "Both writers…"</p></div>
+</div>
 </div>
 </div>
 <footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
@@ -298,6 +313,12 @@ function showFB(r){const L=a=>Array.isArray(a)&&a.length?"<ul>"+a.map(x=>"<li>"+
   ${r.better?`<details><summary>One paragraph, improved</summary><p>${esc(r.better).replace(/\n+/g,"</p><p>")}</p></details>`:""}
   <p class="note">AI marking is a guide, not an official mark.</p></div>`}
 draw()})();
+</script>
+<script>
+(function(){const tabs=[...document.querySelectorAll("nav.tabs button")];const K="englang-tab";
+function show(p,sc){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.p===p));tabs.forEach(b=>{const el=document.getElementById("p-"+b.dataset.p);if(el)el.hidden=b.dataset.p!==p});if(sc)window.scrollTo({top:0});try{localStorage.setItem(K,p)}catch(e){}}
+tabs.forEach(b=>b.onclick=()=>show(b.dataset.p,true));
+const hm={"#practice":"wr","#cards":"ec"}[location.hash];let p=hm;if(!p){try{p=localStorage.getItem(K)}catch(e){}}if(!tabs.some(b=>b.dataset.p===p))p="gd";show(p,false)})();
 </script>
 </body>
 </html>

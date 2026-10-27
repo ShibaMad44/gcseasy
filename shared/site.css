@@ -192,3 +192,74 @@ section.topic,details.rc,.card,.gcard,.scard,.stats div{box-shadow:var(--shadow)
 hr{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent)}
 ::-webkit-scrollbar{width:10px;height:10px}::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--muted) 35%,transparent);border-radius:10px;border:3px solid transparent;background-clip:content-box}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* ===== Layout layer: phone stays one clean column, PC uses the whole screen ===== */
+.subtoc{display:none}
+@media (max-width:1079.98px){.sublayout,.subside,.submain{display:contents}}
+/* phone: tighter, calmer subject header */
+@media (max-width:640px){
+  header.top{padding:14px 14px 12px;gap:12px;border-radius:18px}
+  header.top .tile{width:44px;height:44px;font-size:17px}
+  header.top h1{font-size:1.45rem;line-height:1.15}
+  header.top .sub{font-size:.82rem}
+  header.top>.tier{margin-left:0}
+  .tier button{padding:6px 12px;font-size:.8rem}
+  .crumbs{margin-bottom:6px}
+  .card{min-height:200px;padding:22px 20px}
+  .chips{scrollbar-width:none}
+  .papersw{gap:8px}.papersw a{padding:10px 12px;border-radius:14px}.papersw a span{font-size:.76rem}
+}
+/* PC */
+@media (min-width:1080px){
+  :root{--site-w:1080px}
+  body.haslay{--site-w:1280px}
+  .wrap.haslayout{max-width:1280px;padding-inline:32px}
+  .wrap.haslayout>.crumbs,.wrap.haslayout>header.top,.wrap.haslayout>.papersw{max-width:none}
+  .wrap.haslayout>header.top{padding:22px 26px;margin-bottom:22px}
+  .wrap.haslayout>header.top h1{font-size:2.1rem}
+  .sublayout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:44px;align-items:start}
+  .subside{position:sticky;top:20px;max-height:calc(100vh - 40px);overflow:auto;scrollbar-width:thin;padding:2px 4px 24px 2px}
+  .subside .tabwrap{position:static}
+  .subside .tabmore{display:none!important}
+  .subside nav.tabs{display:flex;flex-direction:column;gap:4px;overflow:visible;margin:0 0 22px;padding:0;border:0;background:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .subside nav.tabs button,.subside nav.tabs button[aria-selected="true"]{display:block;width:100%;text-align:left;padding:11px 16px;border:0;border-radius:12px;font:700 1rem var(--display);color:var(--muted);background:transparent;box-shadow:none}
+  .subside nav.tabs button:hover{background:color-mix(in srgb,var(--surface) 70%,transparent);color:var(--ink)}
+  .subside nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow),inset 3px 0 0 var(--accent)}
+  .subtoc{display:block;border-top:1px solid var(--line);padding-top:16px}
+  .subtoc .tochd{font:700 .72rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin:0 0 8px 16px}
+  .subtoc .tocgrp{font:700 .7rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:14px 0 4px 16px;opacity:.8}
+  .subtoc a{display:flex;gap:8px;align-items:baseline;padding:7px 16px;border-radius:10px;color:var(--ink);text-decoration:none;font-size:.92rem;line-height:1.3;opacity:.78;transition:background-color .2s,opacity .2s,color .2s}
+  .subtoc a i{font:700 .72rem var(--mono);font-style:normal;color:var(--accent);min-width:2.4em}
+  .subtoc a:hover{opacity:1;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+  .subtoc a.on{opacity:1;color:var(--accent);background:var(--accent-soft)}
+  .submain{min-width:0;max-width:900px}
+  .submain>#p-rev>#jump{display:none}
+  .submain section.topic{padding:10px 30px 18px;scroll-margin-top:24px}
+  .submain .card{min-height:300px;font-size:1.1rem}
+  /* pages without tabs */
+  .wrap:not(.haslayout){max-width:1080px;padding-inline:32px}
+  .tools-page{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+  .tools-page>.intro{grid-column:1/-1}
+  .tools-page>.tool{margin:0}
+  .tools-page>#tracker{grid-column:1/-1}
+  .resgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
+}
+@media (min-width:1500px){.sublayout{grid-template-columns:260px minmax(0,1fr)}.submain{max-width:960px}}
+@media (min-width:1080px){.sitebar .in,.sitefoot .in{padding-inline:32px}}
+/* phone fixes */
+@media (max-width:640px){
+  #sets.chips,#ztext.chips,#zsrc.chips,#btext.chips,#qtext.chips,#elm.chips,#fcm.chips{flex-wrap:wrap!important;overflow:visible!important;margin-inline:0!important;padding:0!important;-webkit-mask-image:none!important;mask-image:none!important}
+  .score{display:grid;grid-template-columns:auto 1fr;align-items:center;gap:4px 12px}
+  .score>span{grid-column:1/-1;grid-row:2;min-width:0}
+  .score>.btn{grid-column:2;grid-row:1;justify-self:end;flex:none;min-width:0;min-height:38px;padding:8px 14px}
+  .score>div{grid-column:1/-1}
+  .nb{padding:18px 14px 18px 44px}
+  .nbhead h2{font-size:1.2rem}
+  .mode{flex-wrap:wrap}
+}
+@media (min-width:1080px){
+  .subside .papersw{grid-template-columns:1fr;gap:8px;margin:0 0 18px}
+  .subside .papersw a{padding:10px 14px;border-radius:14px}
+  .subside .papersw a span{font-size:.78rem}
+}
+@media (min-width:1080px){#ctxjump{display:none}}
