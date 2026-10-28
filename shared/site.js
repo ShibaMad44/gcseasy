@@ -67,48 +67,57 @@ function setGoal(m){try{localStorage.setItem(GKEY,String(m))}catch(e){}}
 const elapsed=r=>r?(r.acc||0)+(r.paused?0:Date.now()-r.start):0;
 const dayStart=()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime()};
 function todayMs(){const t=dayStart();return getLog().filter(x=>x.s>=t).reduce((a,x)=>a+((x.d!=null?x.d:x.e-x.s)),0)+elapsed(getRun())}
-/* Header timer: a stopwatch button in the nav. Tap it to start, pause or stop. Nothing floats over the page. */
+/* Automatic revision tracking: time counts while this tab is open, in front, and being used.
+   No activity (tap, scroll, typing, mouse) for 75 seconds = paused, and only 20 seconds of that quiet gap is kept. */
+const IDLE=75e3,GRACE=20e3;
 function setupTimer(){const nav=document.querySelector(".sitenav");if(!nav||document.getElementById("tbtn"))return;
-  const b=document.createElement("button");b.type="button";b.id="tbtn";b.className="tbtn";b.setAttribute("aria-haspopup","dialog");b.setAttribute("aria-expanded","false");
+  // an old manual timer from before: save it and switch to automatic
+  {const r=getRun();if(r){const ms=Math.min(elapsed(r),4*3600e3);if(ms>=60000){const l=getLog();l.push({s:Date.now()-ms,e:Date.now(),d:ms,subj:r.subj});setLog(l)}setRun(null)}}
+  const b=document.createElement("button");b.type="button";b.id="tbtn";b.className="tbtn on";b.setAttribute("aria-haspopup","dialog");b.setAttribute("aria-expanded","false");
   nav.insertBefore(b,nav.querySelector(".themebtn"));
-  const pop=document.createElement("div");pop.className="tpop";pop.id="tpop";pop.hidden=true;pop.setAttribute("role","dialog");pop.setAttribute("aria-label","Revision timer");document.body.appendChild(pop);
-  let iv=null;
-  function toast(msg){document.querySelectorAll(".stoast").forEach(x=>x.remove());const t=document.createElement("div");t.className="stoast";t.setAttribute("role","status");t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),4500)}
-  function btn(){const r=getRun();
-    if(r){b.classList.add("on");b.classList.toggle("paused",!!r.paused);b.innerHTML=`<span class="tdot" aria-hidden="true"></span><span class="tt">${fmt(elapsed(r)/1000)}</span>`;b.setAttribute("aria-label",`Revision timer: ${r.paused?"paused":"running"}, ${nameOf(r.subj)}`)}
-    else{b.classList.remove("on","paused");b.innerHTML=`<svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg>`;b.setAttribute("aria-label","Start a revision timer")}
-    b.title=b.getAttribute("aria-label")}
+  const pop=document.createElement("div");pop.className="tpop";pop.id="tpop";pop.hidden=true;pop.setAttribute("role","dialog");pop.setAttribute("aria-label","Revision tracker");document.body.appendChild(pop);
+  const subj=(pageSubject()||{id:"other"}).id;
+  let lastAct=Date.now(),lastTick=Date.now(),acc=0,idle=false,entry=null,xpMin=0,lastFlush=0;
+  const counting=()=>document.visibilityState==="visible"&&(document.hasFocus?document.hasFocus():true);
+  const poke=()=>{const n=Date.now();if(idle||!counting()){lastTick=n}lastAct=n;if(idle){idle=false;paint()}};
+  ["pointerdown","keydown","wheel","touchstart","input","scroll"].forEach(ev=>addEventListener(ev,poke,{passive:true,capture:true}));
+  let mv=0;addEventListener("pointermove",()=>{const n=Date.now();if(n-mv>4000){mv=n;poke()}},{passive:true});
+  addEventListener("focus",()=>{lastTick=Date.now();poke()});
+  function flush(final){const n=Date.now();if(acc<1000&&!entry)return;
+    const l=getLog();let x=entry?l.find(y=>y.id===entry):null;
+    if(!x){const p=l[l.length-1];if(p&&p.auto&&p.subj===subj&&n-(p.w||p.e)<10*60e3){x=p;x.base=x.d||0;entry=x.id=x.id||("a"+n)}else{x={id:"a"+n,s:n-acc,auto:1,subj,base:0};l.push(x);entry=x.id}}
+    x.d=(x.base||0)+acc;x.e=x.s+x.d;x.w=n;
+    if(final&&x.d<30000){const i=l.indexOf(x);if(i>=0)l.splice(i,1)}
+    setLog(l.map(y=>{const z=Object.assign({},y);return z}));lastFlush=n;
+    const mins=Math.floor(acc/300000);if(mins>xpMin){addXP(mins-xpMin,"timer",96);xpMin=mins}
+    document.dispatchEvent(new CustomEvent("gcseasy-timer"))}
+  function tick(){const n=Date.now();
+    if(counting()&&!idle){const gap=n-lastAct;
+      if(gap<=IDLE)acc+=Math.min(n-lastTick,15e3);
+      else{acc+=Math.max(0,Math.min(n,lastAct+IDLE)-lastTick);acc=Math.max(0,acc-(IDLE-GRACE));idle=true;flush();paint()}}
+    lastTick=n;if(n-lastFlush>15e3)flush();btn()}
+  addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){tick();flush()}else{lastTick=Date.now();poke()}});
+  addEventListener("blur",()=>{tick();flush()});
+  addEventListener("pagehide",()=>{tick();flush(true)});
+  function fmtM(ms){const m=Math.floor(ms/60000);return m<60?m+"m":Math.floor(m/60)+"h "+String(m%60).padStart(2,"0")+"m"}
+  function btn(){const t=todayMs(),act=counting()&&!idle;b.classList.toggle("paused",!act);
+    b.innerHTML=`<span class="tdot" aria-hidden="true"></span><span class="tt">${fmtM(t)}</span>`;b.setAttribute("aria-label",`Revision today: ${Math.round(t/60000)} minutes, ${act?"counting now":"paused"}`);b.title=b.getAttribute("aria-label")}
   function ring(){const g=getGoal(),m=todayMs()/60000,pc=Math.min(100,m/g*100);
     return `<div class="tgoal"><div class="tring" style="--p:${pc}"><span>${Math.round(pc)}%</span></div><div><b>${Math.round(m)} of ${g} min</b><span>today's goal · <button type="button" class="tlink" id="tgoalset">change</button></span></div></div>`}
-  function panel(){const r=getRun();
-    if(r){pop.innerHTML=`<p class="th">Revising ${nameOf(r.subj)}</p><p class="tbig" id="tbig">${fmt(elapsed(r)/1000)}</p>${r.paused?`<p class="tsub">Paused</p>`:""}
-      <div class="tbtns"><button type="button" class="tb1" id="tpause">${r.paused?"Resume":"Pause"}</button><button type="button" class="tb2" id="tstop">Stop and save</button></div>
-      ${ring()}<button type="button" class="tlink" id="tdiscard">Discard this session</button>`;
-      $p("tpause").onclick=()=>{const x=getRun();if(!x)return;if(x.paused){x.start=Date.now();x.paused=false}else{x.acc=elapsed(x);x.paused=true}setRun(x);sync()};
-      $p("tstop").onclick=stop;
-      $p("tdiscard").onclick=e=>{const t=e.target;if(!t.dataset.sure){t.dataset.sure=1;t.textContent="Tap again to throw it away";return}setRun(null);close();sync();toast("Session discarded.")}}
-    else{const cur=pageSubject();
-      pop.innerHTML=`<p class="th">Start revising</p><label class="tl" for="tsel">Subject</label><select id="tsel">${[...live(),...SUBJECTS.filter(s=>!s.live)].map(s=>`<option value="${s.id}"${cur&&cur.id===s.id?" selected":""}>${s.name}</option>`).join("")}<option value="other">Something else</option></select>
-      <div class="tbtns"><button type="button" class="tb1" id="tstart">Start timer</button></div>${ring()}<a class="tlink" href="tools.html#tracker">See your revision tracker</a>`;
-      $p("tstart").onclick=()=>{setRun({start:Date.now(),subj:$p("tsel").value,acc:0,paused:false});close();sync();toast(`Timer started for ${nameOf(getRun().subj)}. Tap the clock at the top to pause or stop.`)}}
-    const gs=$p("tgoalset");if(gs)gs.onclick=()=>{const opts=[15,30,45,60,90,120,180];const g=getGoal();const i=opts.indexOf(g);setGoal(opts[(i+1)%opts.length]);panel()}}
-  const $p=id=>pop.querySelector("#"+id);
-  function stop(){const r=getRun();setRun(null);close();if(!r){sync();return}
-    let ms=elapsed(r);const cap=4*3600e3;let note="";if(ms>cap){ms=cap;note=" (capped at 4 hours: did you forget to stop it?)"}
-    if(ms<60000)toast("Under a minute, so it wasn't saved.");
-    else{const l=getLog();l.push({s:Date.now()-ms,e:Date.now(),d:ms,subj:r.subj});setLog(l);
-      addXP(Math.floor(ms/300000),"timer",96);const g=getGoal(),t=Math.round(todayMs()/60000);toast(`Saved <b>${Math.round(ms/60000)} min</b> of ${nameOf(r.subj)}${note}. ${t>=g?"Daily goal hit!":`${g-t} min to go today.`} <a href="tools.html#tracker">Tracker</a>`)}
-    sync()}
-  function open(){panel();pop.hidden=false;b.setAttribute("aria-expanded","true");const f=pop.querySelector("button,select");if(f)f.focus()}
+  function paint(){btn();if(!pop.hidden)panel()}
+  function panel(){const act=counting()&&!idle;
+    pop.innerHTML=`<p class="th">Revision is tracked for you</p><p class="tsub">${act?`<span class="tlive"></span>Counting now · ${nameOf(subj)}`:`Paused: no activity for over a minute`}</p>
+      <p class="tsub" style="margin-top:6px">Time counts while you're using GCSEasy. If you stop tapping, scrolling or typing for about a minute, it pauses until you carry on. Leaving the tab open doesn't count.</p>
+      ${ring()}<a class="tlink" href="tools.html#tracker">See your revision tracker</a>`;
+    const gs=pop.querySelector("#tgoalset");if(gs)gs.onclick=()=>{const opts=[15,30,45,60,90,120,180];const g=getGoal();const i=opts.indexOf(g);setGoal(opts[(i+1)%opts.length]);panel()}}
+  function open(){panel();pop.hidden=false;b.setAttribute("aria-expanded","true")}
   function close(){pop.hidden=true;b.setAttribute("aria-expanded","false")}
   b.onclick=e=>{e.stopPropagation();pop.hidden?open():close()};
   document.addEventListener("click",e=>{if(!pop.hidden&&e.target.isConnected&&!pop.contains(e.target)&&!b.contains(e.target))close()});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!pop.hidden){close();b.focus()}});
-  function sync(){btn();clearInterval(iv);iv=null;const r=getRun();
-    if(r&&!r.paused)iv=setInterval(()=>{btn();const t=$p("tbig");if(t&&!pop.hidden)t.textContent=fmt(elapsed(getRun())/1000)},1000);
-    if(!pop.hidden)panel();document.dispatchEvent(new CustomEvent("gcseasy-timer"))}
-  window.addEventListener("storage",e=>{if(e.key===TMKEY||e.key===LKEY)sync()});
-  sync()}
+  window.addEventListener("storage",e=>{if(e.key===LKEY)btn()});
+  setInterval(tick,5000);btn();
+  window.__gzTrack={tick,flush,state:()=>({acc,idle,lastAct,entry})}}
 
 /* ---- past papers: nav button + a section at the bottom of every page ---- */
 const EXTRA=[["Physics & Maths Tutor","https://www.physicsandmathstutor.com/","Past papers and questions sorted by topic"],["Save My Exams","https://www.savemyexams.com/","Revision notes and past papers"]];

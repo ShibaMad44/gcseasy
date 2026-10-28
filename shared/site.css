@@ -352,3 +352,7 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
 .tclose:hover{color:var(--ink);border-color:var(--muted)}
 .rfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.rfoot .rclose{width:auto;margin:0 0 0 auto;padding:8px 14px}
 @media print{.tclose{display:none!important}}
+.tlive{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--good,#1C8A52);margin-right:6px;vertical-align:1px;animation:gz-pulse 1.6s ease-in-out infinite}
+@keyframes gz-pulse{50%{opacity:.35}}
+.tbtn.on{background:var(--surface);color:var(--ink);border-color:var(--line)}
+.tbtn.on .tdot{background:var(--good,#1C8A52)}
