@@ -313,3 +313,14 @@ hr{border:0;height:1px;background:linear-gradient(90deg,transparent,var(--line),
 /* notes: key words stand out like a revision video */
 section.topic li>b,section.topic p>b,section.topic td>b{color:color-mix(in srgb,var(--accent) 72%,var(--ink))}
 .rfx{display:flex;flex-wrap:wrap;gap:0 8px;align-items:center}.rfx .rlab{flex-basis:100%}.rfx .formula.fxhost{background:none;padding:0;margin:0 0 10px;display:contents}.rfx .fx{background:var(--accent-soft);box-shadow:none;margin:0 0 10px}
+/* recap cards open and close */
+.rcard header{cursor:pointer;user-select:none}
+.rcard header:focus-visible{outline:3px solid var(--accent);outline-offset:-3px}
+.rn{font:600 .78rem var(--body);color:var(--muted)}
+.rchev{width:10px;height:10px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg) translate(-2px,-2px);transition:transform .25s var(--ease,ease);margin:0 4px}
+.rcard.open .rchev{transform:rotate(-135deg) translate(-2px,-2px)}
+.rcard:not(.open) .rbody{display:none}
+.rcard:not(.open){margin-bottom:12px}
+.rfoot{padding:8px 16px 14px;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
+@media (prefers-reduced-motion:no-preference){.rcard.open .rbody{animation:gz-in .3s var(--ease) both}}
+.recap{columns:auto!important;display:block}.rcard{display:block}@media (min-width:1080px){.rcard.open .rlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.rcard.open .rlist>div:nth-child(2){border-top:0}}

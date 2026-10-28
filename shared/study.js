@@ -505,13 +505,16 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   const card=k=>{const cs=C.cards.filter(c=>c[0]===k);const sec=document.getElementById(k);
     const fx=sec?[...sec.querySelectorAll(".formula")].filter(f=>/[=÷×→]/.test(f.textContent)&&f.textContent.length<140&&!f.closest(".tri")).slice(0,6).map(f=>`<div class="formula">${f.innerHTML}</div>`).join(""):"";
     const name=C.topics[k]===k?k:C.topics[k];
-    return `<article class="rcard" id="sum-${k}"><header><span class="rk">${esc(k)}</span><h3>${esc(name)}</h3><button type="button" class="linkbtn rgo" data-k="${esc(k)}">Notes</button></header>
-      ${fx?`<div class="rfx"><p class="rlab">Key equations</p>${fx}</div>`:""}
-      <dl class="rlist">${cs.map(c=>`<div><dt>${esc(clean(c[1]))}${tags(c[1])}</dt><dd tabindex="0">${esc(c[2])}</dd></div>`).join("")}</dl></article>`};
+    return `<article class="rcard" id="sum-${k}"><header role="button" tabindex="0" aria-expanded="false"><span class="rk">${esc(k)}</span><h3>${esc(name)}</h3><span class="rn">${cs.length} facts</span><span class="rchev" aria-hidden="true"></span></header>
+      <div class="rbody">${fx?`<div class="rfx"><p class="rlab">Key equations</p>${fx}</div>`:""}
+      <dl class="rlist">${cs.map(c=>`<div><dt>${esc(clean(c[1]))}${tags(c[1])}</dt><dd tabindex="0">${esc(c[2])}</dd></div>`).join("")}</dl><div class="rfoot"><button type="button" class="linkbtn rgo" data-k="${esc(k)}">Open the full notes</button></div></div></article>`};
   pan.innerHTML=`<div class="rhead"><p>Everything for each topic on one screen. Read it through in a few minutes, then hide the answers and test yourself.</p>
-    <div class="chips" id="rmode"><button type="button" class="chip on" data-m="show">Show answers</button><button type="button" class="chip" data-m="hide">Hide answers</button></div></div>
+    <div class="chips" id="rmode"><button type="button" class="chip" id="rall">Open all</button><button type="button" class="chip on" data-m="show">Show answers</button><button type="button" class="chip" data-m="hide">Hide answers</button></div></div>
     ${groups.map(([l,ks])=>`${l?`<h2 class="rgrp">${esc(l)}</h2>`:""}<div class="recap">${ks.map(card).join("")}</div>`).join("")}`;
-  pan.querySelectorAll("#rmode .chip").forEach(x=>x.onclick=()=>{const hide=x.dataset.m==="hide";pan.classList.toggle("rhide",hide);pan.querySelectorAll("#rmode .chip").forEach(y=>y.classList.toggle("on",y===x));pan.querySelectorAll("dd.show").forEach(d=>d.classList.remove("show"))});
+  const cards=[...pan.querySelectorAll(".rcard")];const setC=(c,o)=>{c.classList.toggle("open",o);c.querySelector("header").setAttribute("aria-expanded",o)};const lab=()=>{$("rall").textContent=cards.every(c=>c.classList.contains("open"))?"Close all":"Open all"};
+  pan.querySelectorAll(".rcard header").forEach(hd=>{const c=hd.parentElement;const t=()=>{setC(c,!c.classList.contains("open"));lab()};hd.onclick=t;hd.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t()}}});
+  $("rall").onclick=()=>{const o=!cards.every(c=>c.classList.contains("open"));cards.forEach(c=>setC(c,o));lab()};
+  pan.querySelectorAll("#rmode .chip[data-m]").forEach(x=>x.onclick=()=>{const hide=x.dataset.m==="hide";pan.classList.toggle("rhide",hide);pan.querySelectorAll("#rmode .chip[data-m]").forEach(y=>y.classList.toggle("on",y===x));pan.querySelectorAll("dd.show").forEach(d=>d.classList.remove("show"))});
   pan.addEventListener("click",e=>{const d=e.target.closest("dd");if(d&&pan.classList.contains("rhide"))d.classList.toggle("show");
     const g=e.target.closest(".rgo");if(g){const t=document.getElementById("tab-"+firstPan.id.slice(2));if(t)t.click();const s=document.getElementById(g.dataset.k);if(s){if(s.classList.contains("acc")&&!s.classList.contains("open"))s.querySelector(".th").click();setTimeout(()=>s.scrollIntoView({behavior:"smooth"}),60)}}});
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
