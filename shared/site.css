@@ -347,3 +347,8 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
   details.rc>*{display:block!important}
   .rhide .rlist dd{color:inherit!important;background:none!important}
 }
+/* close button at the bottom of an open topic */
+.tclose{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin:14px 0 2px;padding:11px;border:1px dashed var(--line);border-radius:12px;background:transparent;color:var(--muted);font:700 .9rem var(--display);cursor:pointer}
+.tclose:hover{color:var(--ink);border-color:var(--muted)}
+.rfoot{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.rfoot .rclose{width:auto;margin:0 0 0 auto;padding:8px 14px}
+@media print{.tclose{display:none!important}}

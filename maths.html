@@ -79,6 +79,8 @@
 .ftbl table.center td:first-child{width:auto}
 .pnote{background:var(--accent-soft);border-radius:14px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
 tr.mpon td{background:var(--accent-soft);font-weight:700}
+.mwtip{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;max-width:min(92vw,460px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
+@media (min-width:641px){.mwtip{bottom:28px}}
 </style>
 </head>
 <body>
@@ -573,6 +575,9 @@ function done(ok,ans){st.tally.t++;if(ok){st.tally.r++;if(window.GCSEasy)GCSEasy
   $("pnext").onclick=()=>{if(mini)mini.i++;nextQ()};$("pnext").focus()}
 function endMini(){const box=$("pbox");st.best=st.best||{};const prev=st.best[MPAPER]||0;if(mini.r>prev){st.best[MPAPER]=mini.r;save()}box.innerHTML=`<div class="meta"><span>Paper ${MPAPER} mini mock</span><span>${mini.r} / 10 · best ${Math.max(prev,mini.r)} / 10</span></div><p class="dq">${mini.r*10}% ${mini.r>=8?"– excellent.":mini.r>=6?"– good. Practise the topics you dropped.":"– keep going: pick the topics you got wrong in One topic mode."}</p><div class="row"><button class="btn p" id="again">Another mini mock</button></div>`;$("again").onclick=startP}
 document.querySelectorAll("tr[data-mp]").forEach(tr=>tr.classList.toggle("mpon",tr.dataset.mp===MPAPER));
+document.addEventListener("click",e=>{const a=e.target.closest("a.mw");if(!a)return;const m=a.textContent.match(/(\d+[a-z]?)\s*$/i);if(!m)return;const c=m[1];
+  try{navigator.clipboard&&navigator.clipboard.writeText(c)}catch(x){}
+  document.querySelectorAll(".mwtip").forEach(x=>x.remove());const t=document.createElement("div");t.className="mwtip";t.setAttribute("role","status");t.innerHTML=`Clip <b>${c}</b> copied. If MathsWatch opens on your dashboard, paste <b>${c}</b> into its search box.`;document.body.appendChild(t);setTimeout(()=>t.remove(),5000)});
 drawTopics();drawPSetup();startP();
 })();
 

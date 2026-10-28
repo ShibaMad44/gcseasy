@@ -39,8 +39,15 @@
 <p class="crumbs"><a href="index.html#subjects">Subjects</a> / Humanities</p>
 <header class="top">
   <div class="tile"><small>C</small>Ci</div>
-  <div><h1>Citizenship Studies</h1><p class="sub">OCR · J270 · also taught as "Politics"</p></div>
+  <div><h1>Citizenship Studies</h1><p class="sub">OCR · J270 · also taught as "Politics" · Papers 1, 2 and 3</p></div>
 </header>
+<div class="papersw p3" role="group" aria-label="Choose a paper">
+  <a href="?paper=1" data-paper="1"><b>Paper 1</b><span>Citizenship in perspective</span></a>
+  <a href="?paper=2" data-paper="2"><b>Paper 2</b><span>Citizenship in action</span></a>
+  <a href="?paper=3" data-paper="3"><b>Paper 3</b><span>Our rights, our society, our world</span></a>
+</div>
+<script>window.CPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-citpaper")||"1"}catch(e){p="1"}}p=["1","2","3"].includes(p)?p:"1";try{localStorage.setItem("gcseasy-citpaper",p)}catch(e){}return p})();
+document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===CPAPER));</script>
 <nav class="tabs" role="tablist">
   <button role="tab" id="tab-rev" aria-selected="true" data-p="rev">Revise</button>
   <button role="tab" id="tab-fc" aria-selected="false" data-p="fc">Cards</button>
@@ -232,6 +239,77 @@
 <h3>Crime</h3>
 <p>Causes debated: personal choice (→ tougher punishments) vs social conditions like poverty and poor housing (→ tackle the causes). Victims are supported by organisations like Victim Support.</p>
 </section>
+
+<section class="topic" id="WW">
+<div class="th"><div class="tile"><small>8</small>Wo</div><h2>The UK and the wider world</h2></div>
+<h3>Identity and diversity in the UK</h3>
+<ul>
+<li>The UK is a <b>multicultural</b> society: people of many ethnicities, religions and backgrounds. Identity can be <b>national</b> (English, Scottish, Welsh, Northern Irish), <b>British</b>, religious, local or a mix.</li>
+<li><b>Migration</b>: <b>immigration</b> is moving into a country; <b>emigration</b> is leaving it. People move because of <b>push factors</b> (war, persecution, poverty) and <b>pull factors</b> (jobs, family, safety, education).</li>
+<li>A <b>refugee</b> has fled their country because of a well-founded fear of persecution. An <b>asylum seeker</b> has asked for refugee protection and is waiting for a decision.</li>
+<li><b>Shared values</b> often taught as "British values": democracy, the rule of law, individual liberty, and mutual respect and tolerance.</li>
+<li><b>Community cohesion</b>: people from different backgrounds getting on well together. It is helped by shared spaces, equal opportunities and challenging discrimination.</li>
+</ul>
+<h3>The UK's role in international organisations</h3>
+<div class="tbl"><table>
+<tr><th>Organisation</th><th>What it does</th><th>UK's role</th></tr>
+<tr><td><b>United Nations (UN)</b></td><td>193 member states; aims to keep international peace and security, protect human rights and help development</td><td>One of five <b>permanent members of the Security Council</b>, with a veto</td></tr>
+<tr><td><b>NATO</b></td><td>A military alliance; an attack on one member is treated as an attack on all (Article 5)</td><td>Founding member (1949); major contributor of troops and money</td></tr>
+<tr><td><b>Commonwealth</b></td><td>56 countries, most once part of the British Empire; promotes democracy, trade and development</td><td>Founding member; the monarch is its head</td></tr>
+<tr><td><b>Council of Europe</b></td><td>46 countries; created the <b>European Convention on Human Rights</b> and the <b>European Court of Human Rights</b> in Strasbourg</td><td>Founding member (not part of the EU)</td></tr>
+<tr><td><b>European Union (EU)</b></td><td>27 countries sharing a single market, trade rules and some laws</td><td>Left in January 2020 after the <b>2016 referendum</b> (52% Leave)</td></tr>
+<tr><td><b>World Trade Organization (WTO)</b></td><td>Sets the rules for trade between countries and settles disputes</td><td>Member; trades on WTO rules where it has no trade deal</td></tr>
+</table></div>
+<h3>Conflict, aid and global citizenship</h3>
+<ul>
+<li>The UK can respond to international conflict through <b>diplomacy</b>, <b>sanctions</b> (trade or financial penalties), <b>peacekeeping</b> with the UN, or <b>military action</b>.</li>
+<li><b>International humanitarian law</b> (e.g. the <b>Geneva Conventions</b>) protects civilians and prisoners in war. The <b>International Criminal Court</b> tries people for genocide and war crimes.</li>
+<li><b>Aid</b>: <b>humanitarian aid</b> is emergency help after disasters; <b>development aid</b> is long-term (schools, clean water). It can be government aid or from <b>NGOs</b> (non-governmental organisations) such as Oxfam, Amnesty International and the Red Cross.</li>
+<li><b>Global citizenship</b>: seeing yourself as part of a world community, with responsibilities on issues such as climate change, fair trade and human rights.</li>
+</ul>
+<div class="deep">
+<h3>In depth: likely extended questions</h3>
+<div class="plan"><b>"Evaluate the view that the UK benefits from membership of international organisations."</b> For: security through NATO's Article 5; influence through the UN Security Council veto; human rights protection through the Council of Europe; trade and development through the Commonwealth and WTO. Against: cost (NATO spending targets, contributions); loss of some <b>sovereignty</b> (European Court of Human Rights rulings); being drawn into other countries' conflicts. Conclude with a judgement.</div>
+<div class="plan"><b>"Explain why people migrate to the UK."</b> Push factors (war, persecution, poverty, natural disasters) and pull factors (jobs, family links, education, safety, the English language). Give an example for each and link to the difference between refugees, asylum seekers and economic migrants.</div>
+</div>
+</section>
+
+<section class="topic" id="CA">
+<div class="th"><div class="tile"><small>9</small>Ac</div><h2>Citizenship action</h2></div>
+<p>For Paper 2 you must have taken part in a <b>citizenship action</b>: a planned project with others to make a difference on a citizenship issue. Section B asks about <b>your own</b> action, so learn its details.</p>
+<h3>The stages of an action</h3>
+<div class="tbl"><table>
+<tr><th>Stage</th><th>What you do</th></tr>
+<tr><td><b>1. Choose an issue</b></td><td>Pick a citizenship issue (local, national or global) and write a clear question or aim</td></tr>
+<tr><td><b>2. Research</b></td><td>Primary research (surveys, interviews, questionnaires) and secondary research (news, government data, charity reports)</td></tr>
+<tr><td><b>3. Plan</b></td><td>Decide on the action, target audience, roles in the group, a timeline, resources and how you'll measure success</td></tr>
+<tr><td><b>4. Take action</b></td><td>Carry out your plan: e.g. a campaign, petition, event, assembly, letter to an MP or councillor, survey of opinion</td></tr>
+<tr><td><b>5. Evaluate</b></td><td>Did you meet your aim? What worked, what didn't, what would you change, and what impact did it have?</td></tr>
+</table></div>
+<h3>Ways to take action</h3>
+<ul>
+<li><b>Campaigning</b>: raising awareness with posters, social media, leaflets, a school assembly or a video.</li>
+<li><b>Petitions</b>: an online UK Parliament petition is considered for a debate at <b>100,000 signatures</b>; the government responds at 10,000.</li>
+<li><b>Lobbying</b>: contacting decision-makers such as your <b>MP</b>, a <b>councillor</b> or your headteacher.</li>
+<li><b>Events and fundraising</b>: a debate, a public meeting, a sponsored event for a charity.</li>
+<li><b>Working with others</b>: <b>pressure groups</b>, charities and community groups already working on the issue.</li>
+</ul>
+<h3>Key skills and words</h3>
+<ul>
+<li><b>Primary research</b>: data you collect yourself. <b>Secondary research</b>: data someone else collected.</li>
+<li><b>Qualitative</b> data is opinions and descriptions; <b>quantitative</b> data is numbers.</li>
+<li><b>Bias</b>: a one-sided source. Check who made a source and why.</li>
+<li><b>Target audience</b>: the people you want to reach or persuade. <b>Stakeholders</b>: anyone affected by or interested in the issue.</li>
+<li><b>Success criteria</b>: how you'll know if the action worked (e.g. 200 signatures, a reply from the council).</li>
+</ul>
+<div class="deep">
+<h3>In depth: likely Paper 2 questions</h3>
+<div class="plan"><b>"Explain how your group researched your citizenship issue."</b> Name your issue and question. Describe <b>primary</b> research (e.g. a survey of 80 students, an interview with a councillor) and <b>secondary</b> research (e.g. a news report, council data). Say what each showed and how it shaped your action.</div>
+<div class="plan"><b>"Evaluate the success of your citizenship action."</b> Restate your aim and success criteria. Give evidence of what you achieved (numbers, responses, changes). Explain one thing that worked well and one that didn't, and why. Say what you'd do differently and the wider impact on the community. Finish with a judgement on how successful it was.</div>
+<div class="plan"><b>Unseen action (Section A):</b> you'll read about someone else's action. Judge it: was the aim clear? Was the research reliable and unbiased? Did they target the right people? How could they measure success? Suggest improvements.</div>
+</div>
+</section>
+
 </div>
 
 <!-- CARDS -->
@@ -273,7 +351,9 @@
 <script src="shared/study.js"></script>
 <script src="shared/guide.js"></script>
 <script>
-const TOPICS={DE:"Democracy",RR:"Rights",BC:"Constitution",LG:"Government",ME:"Media",LW:"Law",LS:"Legal system"};
+const TOPICS_ALL={DE:"Democracy",RR:"Rights",BC:"Constitution",LG:"Government",ME:"Media",LW:"Law",LS:"Legal system",WW:"Wider world",CA:"Action"};
+const PT=CPAPER==="2"?["CA"]:["RR","LW","LS","DE","BC","LG","ME","WW"];
+const TOPICS=Object.fromEntries(Object.entries(TOPICS_ALL).filter(([k])=>PT.includes(k)));
 const CARDS=[
 ["DE","What does democracy mean?","Rule by the people"],
 ["DE","Direct democracy?","Citizens vote on issues themselves"],
@@ -349,7 +429,35 @@ const CARDS=[
 ["LS","Solicitor vs barrister?","Solicitor: advice and preparing cases. Barrister: argues in court"],
 ["LS","Define rehabilitation.","Helping an offender change and fit back into society"],
 ["LS","Define retribution.","Punishment that fits the crime"],
-["LS","What is restorative justice?","Offender makes amends to the victim"]
+["LS","What is restorative justice?","Offender makes amends to the victim"],
+["WW","Define immigration","Moving into a country to live"],
+["WW","Define emigration","Leaving a country to live elsewhere"],
+["WW","Refugee vs asylum seeker","A refugee has protection; an asylum seeker is waiting for a decision"],
+["WW","2 push factors for migration","War or persecution, poverty"],
+["WW","2 pull factors for migration","Jobs, family, safety, education"],
+["WW","Define community cohesion","People from different backgrounds getting on well together"],
+["WW","The four 'British values'","Democracy, rule of law, individual liberty, mutual respect and tolerance"],
+["WW","UK's special role in the UN","Permanent member of the Security Council, with a veto"],
+["WW","What is NATO?","A military alliance: an attack on one is an attack on all"],
+["WW","What did the Council of Europe create?","The European Convention on Human Rights and its court"],
+["WW","When did the UK leave the EU?","January 2020, after the 2016 referendum"],
+["WW","What is the Commonwealth?","56 countries, mostly former British Empire, promoting democracy and trade"],
+["WW","Humanitarian vs development aid","Emergency help vs long-term projects"],
+["WW","What is an NGO?","A non-governmental organisation, e.g. Oxfam, Amnesty International"],
+["WW","What do sanctions do?","Put trade or financial penalties on a country"],
+["WW","What does the International Criminal Court try?","Genocide, war crimes and crimes against humanity"],
+["CA","5 stages of a citizenship action","Choose an issue, research, plan, take action, evaluate"],
+["CA","Primary research","Data you collect yourself, e.g. a survey or interview"],
+["CA","Secondary research","Data someone else collected, e.g. news or government reports"],
+["CA","Qualitative vs quantitative data","Opinions and descriptions vs numbers"],
+["CA","Define target audience","The people you want to reach or persuade"],
+["CA","Define stakeholders","Anyone affected by or interested in the issue"],
+["CA","Define success criteria","How you'll measure whether the action worked"],
+["CA","Signatures for a Parliament debate on a petition","100,000"],
+["CA","Signatures for a government response to a petition","10,000"],
+["CA","Define lobbying","Contacting decision-makers to persuade them"],
+["CA","Define bias","A one-sided view or source"],
+["CA","3 ways to take action","Campaign, petition, lobby your MP or councillor"]
 ];
 const FIGS={};
 const MC=(id,t,q,o,a,ex)=>({id,t,k:"m",mk:1,q,o,a,ex});
@@ -373,7 +481,12 @@ const MCQ=[{n:"A",t:"DE",title:"Multiple choice: one mark each.",intro:"Quick-fi
  MC("A17","LW","Which is an example of a civil law case?",["Burglary","Divorce","Murder","Fraud"],1,"Divorce is a dispute between individuals."),
  MC("A18","LW","How many protected characteristics are in the Equality Act 2010?",["5","7","9","12"],2,"Nine, including age, disability, race and sex."),
  MC("A19","LS","In a Crown court, who decides whether the defendant is guilty?",["The judge","The jury","Magistrates","The police"],1,"The jury decides guilt; the judge decides the sentence."),
- MC("A20","LS","Which role is elected to oversee a local police force?",["Chief constable","Special constable","Police and crime commissioner","Home Secretary"],2,"PCCs are elected.")
+ MC("A20","LS","Which role is elected to oversee a local police force?",["Chief constable","Special constable","Police and crime commissioner","Home Secretary"],2,"PCCs are elected."),
+MC("A21","WW","Which organisation is a military alliance where an attack on one member is treated as an attack on all?",["The Commonwealth","NATO","The WTO","The Council of Europe"],1,"NATO's Article 5 is collective defence."),
+ MC("A22","WW","The UK is a permanent member of which body?",["The UN Security Council","The European Council","The G20 Secretariat","The European Commission"],0,"Five permanent members, each with a veto."),
+ MC("A23","WW","Which body created the European Convention on Human Rights?",["The European Union","The United Nations","The Council of Europe","NATO"],2,"The Council of Europe (46 members) is separate from the EU."),
+ MC("A24","WW","What is an asylum seeker?",["Someone who has been given refugee status","Someone moving for a better-paid job","Someone who has asked for refugee protection and is waiting for a decision","A tourist staying longer than six months"],2,"Once protection is granted, they become a refugee."),
+ MC("A25","WW","Emergency help after an earthquake is called:",["Development aid","Humanitarian aid","Fair trade","A sanction"],1,"Development aid is long-term.")
 ]}];
 const LV8=["Level 3 (6–8): a well-argued case that clearly supports/opposes the view, using several pieces of evidence from the figures and own knowledge, explained and linked to the view","Level 2 (3–5): some argument with evidence, partly explained","Level 1 (1–2): simple points with little evidence or explanation"];
 const LV12=["Level 4 (10–12): balanced, well-structured evaluation of several bullet points, with precise evidence and a justified conclusion","Level 3 (7–9): considers both sides with relevant evidence; conclusion present but less developed","Level 2 (4–6): some relevant points, mostly one-sided or descriptive","Level 1 (1–3): simple, limited points"];
@@ -403,12 +516,38 @@ const CQ=[{title:"Citizenship: how to answer each question type",sub:"OCR J270 s
  {n:"8",type:"Reasoned case (support / oppose / evaluate)",marks:8,time:"10–12 min",paras:"4 short paragraphs",pts:["Circle the command word: supporting, opposing or evaluating.","Quote statistics from every figure you're given.","End with a two-sentence mini conclusion."],flow:["Address a bullet point","Retrieve a quote from the figure","Explain with own knowledge","Address the view"]},
  {n:"12",type:"Evaluate the viewpoint",marks:12,time:"15–18 min",paras:"3 paragraphs + conclusion",pts:["Must be balanced: at least one paragraph disagreeing.","Covers several topics, so use evidence from across the course.","Finish with a full paragraph conclusion that gives your judgement."],flow:["Address a bullet point","Retrieve own-knowledge evidence","Explain what it shows","Address the view"]}],
  notes:["The 'ARE' paragraph: Address the point, Retrieve evidence, Explain it, Address the viewpoint.","For data questions, summarise each graph first: what it shows, the highest and lowest groups.","Use key terms precisely: legislature, executive, judiciary, devolution, first past the post.","Keep 4-mark answers short: points and evidence, no long explanations."]}];
-Guide.render(document.getElementById("cguide"),CQ);
+const CPG={"1":{title:"Paper 1: Citizenship in perspective",sub:"1 hour · 50 marks · 25% of the GCSE. Short questions on all three themes: rights and the law, democracy and government, the UK and the wider world.",total:"1 hr",split:[],qs:[],notes:["Expect multiple choice, short 'state' and 'explain' questions and some data or source questions.","Spend about 1 minute per mark.","Learn key terms precisely: they're often worth a mark on their own."]},
+ "2":{title:"Paper 2: Citizenship in action",sub:"1 hour · 50 marks · 25% of the GCSE. Section A is about someone else's citizenship action; Section B is about the action you took part in.",total:"1 hr",split:[["Section A","about 25 min"],["Section B","about 35 min"]],qs:[],notes:["Before the exam, write down your own action: the issue, your question, your research (numbers!), what you did, who you contacted and what happened.","For Section A, judge the action: aim, research quality and bias, who they targeted, how they measured success.","Use the five stages: issue, research, plan, action, evaluate."]},
+ "3":{title:"Paper 3: Our rights, our society, our world",sub:"1 hour 45 minutes · 80 marks · 50% of the GCSE. Deeper, longer answers across all three themes, using sources and your own knowledge.",total:"1 hr 45",split:[],qs:[],notes:["This paper has the big 8 and 12-mark answers: plan each one for 2 minutes.","12-markers must be balanced and end with a full judgement.","Bring in evidence from across the course: laws, cases, statistics, organisations."]}}[CPAPER];
+Guide.render(document.getElementById("cguide"),[CPG,...CQ]);
 document.querySelectorAll("#cguide .nbmeta .mk").forEach(m=>{if(m.textContent.startsWith("1 marks"))m.textContent="1 mark"});
-Study.init({id:"citizenship",key:"cit-v1",topics:TOPICS,cards:CARDS,figs:FIGS,sets:[
- {id:"mcq",name:"Multiple choice",blurb:"20 one-mark questions across every topic.",qs:MCQ},
- {id:"written",name:"Written paper",blurb:"Written questions including a fictional country, data figures, an 8-mark reasoned case and a 12-mark evaluation. Use AI marking or the mark scheme.",qs:WRITTEN}
-]});
+const ACTION=[{n:"01",t:"CA",title:"Section A: someone else's citizenship action.",intro:"<b>Source: A group of Year 10 students noticed that the park near their school had lots of litter. Their aim was \"to make the park cleaner and get the council to put in more bins\". They surveyed 30 friends on the school field: 27 said the park was too messy. They made posters for the school corridors, collected 140 signatures on a paper petition and organised a litter pick with 12 volunteers. They sent the petition to the headteacher.</b>",parts:[
+ MC("2.1","CA","Which of these is primary research the group carried out?",["Reading a council report","Their survey of 30 friends","A news article about litter","Government data on recycling"],1,"Primary research is data they collected themselves."),
+ {id:"2.2",t:"CA",k:"w",mk:2,q:"Identify two weaknesses in the group's research.",ms:["Small sample (only 30 people)","Biased sample: only their friends / only students","No secondary research / no council data","Leading question / didn't ask park users"],model:"Their sample of 30 was small, and they only asked their friends on the school field, so the results are likely to be biased.",hint:"Who did they ask, and how many?"},
+ {id:"2.3",t:"CA",k:"w",mk:4,q:"Explain two ways the group could have made their action more likely to achieve its aim.",ms:["Send the petition to the council / local councillor, not the headteacher","…because the council decides on bins in the park","Use an online petition or ask park users to reach more people","…to show wider support to decision-makers","Set success criteria / measure litter before and after","Contact the local newspaper or social media to raise awareness"],model:"They should have sent the petition to their local councillor, because the council, not the school, decides where bins go. They could also have run an online petition and asked park users to sign, which would show much wider community support.",hint:"Who actually has the power to add bins?"},
+ {id:"2.4",t:"CA",k:"L",mk:8,q:"Evaluate how successful this citizenship action was likely to be.",levels:["Level 3 (6–8): balanced evaluation of strengths and weaknesses with clear reference to the source and a justified judgement","Level 2 (3–5): some strengths or weaknesses explained","Level 1 (1–2): simple points"],ms:["Strength: clear issue that affects the community","Strength: practical action (litter pick, 12 volunteers) made an immediate difference","Strength: 140 signatures shows some support","Weakness: aim needs the council, but petition went to the headteacher","Weakness: small, biased survey","Weakness: no success criteria or follow-up","Judgement on overall success"],model:"The litter pick made the park cleaner straight away, and 140 signatures showed real support, so part of the aim was achieved. However, the main aim of more bins needed the council, and sending the petition to the headteacher meant the decision-makers never saw it. Their survey of 30 friends was small and biased. Overall the action was only partly successful: it improved the park briefly but was unlikely to get new bins.",hint:"What did they achieve, and what did they miss?"}
+]},
+{n:"02",t:"CA",title:"Section B: your own citizenship action.",intro:"Answer these about the action you took part in. Use specific details: names of people you contacted, numbers, dates and results.",parts:[
+ {id:"2.5",t:"CA",k:"w",mk:4,q:"State the issue your group chose and explain why it was a citizenship issue.",ms:["Clear statement of the issue and question","Linked to rights, democracy, the law or a community","Explains who it affects","Explains why action was needed"],model:"Our issue was whether our town should have a safe cycle route to school. It is a citizenship issue because it involves the local council's decisions, people's safety and the right to be heard, and it affects hundreds of students and parents.",hint:"Issue + link to citizenship + who it affects."},
+ {id:"2.6",t:"CA",k:"L",mk:8,q:"Evaluate how well your group worked together to plan and carry out your action.",levels:["Level 3 (6–8): detailed, balanced evaluation of teamwork with specific examples and a justified judgement","Level 2 (3–5): some evaluation with examples","Level 1 (1–2): describes what happened"],ms:["Roles and how they were decided","Planning: timeline, resources, success criteria","What went well, with an example","What went less well, with an example and why","What you would change","Overall judgement"],model:"Plan: describe roles, then one strength (e.g. a clear timeline meant the survey was done on time), then one weakness (e.g. two members did most of the work), then what you'd change, then a judgement.",hint:"Strengths, weaknesses, changes, judgement."}
+]}];
+const EXT=[{n:"01",t:"WW",title:"Our world.",parts:[
+ {id:"3.1",t:"WW",k:"w",mk:4,q:"Explain two reasons why people migrate to the UK.",ms:["A push factor, e.g. escaping war or persecution","…with explanation or example","A pull factor, e.g. jobs, family, education","…with explanation or example"],model:"Some people are pushed out of their home country by war or persecution, for example refugees from Syria. Others are pulled to the UK by jobs or family links, such as workers coming to fill shortages in the NHS.",hint:"One push, one pull."},
+ {id:"3.2",t:"WW",k:"L",mk:12,q:"Evaluate the view that the UK benefits from being a member of international organisations. In your answer consider: security; influence and trade; human rights; sovereignty and cost.",levels:LV12,ms:["Security: NATO Article 5","Influence: permanent seat and veto on the UN Security Council","Trade: WTO rules, Commonwealth links","Human rights: Council of Europe and the European Court of Human Rights","Against: loss of sovereignty (court rulings), cost of contributions, drawn into conflicts","Brexit as an example of the sovereignty debate","Justified conclusion"],model:"Plan: ¶1 security through NATO; ¶2 influence through the UN Security Council veto; ¶3 against: sovereignty (European Court of Human Rights rulings, Brexit debate) and cost; ¶4 conclusion: the UK gains more than it gives up because…",hint:"At least one full paragraph against the view."}
+]},
+{n:"02",t:"LS",title:"Our rights and our society.",parts:[
+ {id:"3.3",t:"RR",k:"L",mk:12,q:"Evaluate the view that the Human Rights Act 1998 gives UK citizens enough protection. In your answer consider: what the Act does; the role of the courts; limits on rights; other ways rights are protected.",levels:LV12,ms:["Incorporates the European Convention on Human Rights into UK law","Courts can issue a declaration of incompatibility, but Parliament is sovereign","Rights can be limited (national security, others' rights)","Other protections: Equality Act 2010, free press, pressure groups, ombudsmen","Against: Parliament can ignore or repeal it; some groups still face discrimination","Justified conclusion"],model:"Plan: ¶1 what the Act does and a case example; ¶2 limits: parliamentary sovereignty and qualified rights; ¶3 other protections (Equality Act, free press, pressure groups); ¶4 conclusion.",hint:"Balance: strengths and gaps."},
+ {id:"3.4",t:"DE",k:"L",mk:8,q:"\"Pressure groups are good for democracy.\" Write a reasoned case supporting this view.",levels:LV8,ms:["Give a voice to minorities and people between elections","Raise awareness and inform the public","Hold government to account","Examples: Greenpeace, Liberty, Shelter, Marcus Rashford's free school meals campaign","Encourage participation, especially of young people"],model:"Plan: ¶1 voice between elections, with an example; ¶2 scrutiny of government; ¶3 participation and awareness; ¶4 mini conclusion.",hint:"Only support the view: this is a reasoned case, not an evaluation."}
+]}];
+{const secs=[...document.querySelectorAll("#p-rev section.topic")];const mk=document.createComment("topics");secs[0].before(mk);["RR","LW","LS","DE","BC","LG","ME","WW","CA"].forEach(k=>{const s=document.getElementById(k);if(s)mk.before(s)});mk.remove()}
+const SETS_ALL={
+ mcq:{id:"mcq",name:"Multiple choice",blurb:"25 one-mark questions across every theme, like the start of Paper 1.",qs:MCQ},
+ written:{id:"written",name:"Written paper",blurb:"Written questions including a fictional country, data figures, an 8-mark reasoned case and a 12-mark evaluation. Use AI marking or the mark scheme.",qs:WRITTEN},
+ action:{id:"action",name:"Citizenship in action",blurb:"Section A: judge someone else's action. Section B: questions about your own action.",qs:ACTION},
+ ext:{id:"ext",name:"Extended answers",blurb:"Longer 8 and 12-mark answers across rights, society and the wider world, like Paper 3.",qs:EXT}};
+const PSETS={"1":["mcq","written"],"2":["action"],"3":["ext","written"]}[CPAPER];
+Study.init({id:"citizenship",key:"cit-v1",topics:TOPICS,groups:CPAPER==="2"?null:[["Theme A · Rights and the law",["RR","LW","LS"]],["Theme B · Democracy",["DE","BC","LG","ME"]],["Theme C · Wider world",["WW"]]],cards:CARDS.filter(c=>PT.includes(c[0])),figs:FIGS,sets:PSETS.map(k=>SETS_ALL[k])});
+document.querySelectorAll("#p-rev section.topic").forEach(s=>{s.hidden=!PT.includes(s.id)});
 </script>
 </body>
 </html>
