@@ -145,6 +145,9 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
   if(preset&&preset.length)start(pickFresh(quizPool(sel),len));else setup();$("qzx").focus({preventScroll:true})}
 function setupTopicQuiz(){const rev=$("p-rev");if(!rev||!C.cards.length)return;
   rev.querySelectorAll("section.topic").forEach(sec=>{const k=sec.id;if(!C.topics[k]||!C.cards.some(c=>c[0]===k))return;const host=sec.querySelector(".tbody")||sec;
+    {const cs=C.cards.filter(c=>c[0]===k);if(cs.length>=3){const qc=document.createElement("div");qc.className="qcheck";
+      const fill=()=>{const pick=shuffle(cs.slice()).slice(0,3);qc.innerHTML=`<p class="qch"><b>Check yourself</b><span>Answer in your head, then tap to see if you were right.</span></p>${pick.map(c=>`<button type="button" class="qci"><span class="qcq">${c[1]}</span><span class="qca">${c[2]}</span></button>`).join("")}<button type="button" class="linkbtn qcnew">Three different ones</button>`;
+        qc.querySelectorAll(".qci").forEach(x=>x.onclick=()=>x.classList.toggle("show"));qc.querySelector(".qcnew").onclick=fill};fill();host.appendChild(qc)}}
     const b=document.createElement("button");b.type="button";b.className="btn p qzbtn";b.textContent="Quiz me on "+(k===C.topics[k]?k:C.topics[k]);b.onclick=()=>openQuiz([k]);host.appendChild(b);
     const bl=document.createElement("button");bl.type="button";bl.className="btn qzbtn blbtn";bl.textContent="Blurt it";bl.title="Write everything you remember, then see what you missed";bl.onclick=()=>openBlurt(k);host.appendChild(bl)});
   const bar=rev.querySelector(".revtools");const b=document.createElement("button");b.type="button";b.className="qzopenbtn";b.textContent="Quiz me";b.onclick=()=>openQuiz();
@@ -365,7 +368,7 @@ function drawTimedResult(bar,set){const T=state.timed[set.id],parts=setParts(set
   const got=parts.reduce((a,p)=>a+(state.m[p.id]||0),0),unmarked=parts.filter(p=>state.m[p.id]==null&&(state.txt[p.id]||"").trim().length>2);
   const pc=Math.round(got/mk*100),g=gradeFor(pc);
   bar.innerHTML=`<div class="tres"><div class="tg"><small>Predicted grade</small><b>${unmarked.length?"\u2026":g}</b></div><div class="tinfo"><b>${got} / ${mk} marks (${pc}%)</b><span>${T.auto?"Time ran out":"Finished"} in ${fmtT(T.taken)} of ${T.mins} min${unmarked.length?` · ${unmarked.length} written answer${unmarked.length===1?"":"s"} still to mark`:""}</span></div></div>
-    ${unmarked.length?`<div class="trow2"><button type="button" class="btn p" data-tai>\u2726 Mark them with AI (uses ${unmarked.length})</button><button type="button" class="btn" data-tself>Mark them myself</button></div>`:`<p class="tnote">Rough guide using typical grade boundaries; real boundaries change every year.</p>`}
+    ${unmarked.length?`<div class="trow2"><button type="button" class="btn p" data-tai>\u2726 Mark them with AI (uses ${unmarked.length})</button><button type="button" class="btn" data-tself>Mark them myself</button></div>`:`<p class="tnote">How this is worked out: your percentage is compared with typical grade boundaries from recent years. These questions are original, not a real paper, and boundaries change every year, so treat it as a rough guide to progress.</p>`}
     <div class="trow2"><button type="button" class="linkbtn" data-tagain>Try it again</button></div>`;
   const ai=bar.querySelector("[data-tai]"),self=bar.querySelector("[data-tself]");
   if(self)self.onclick=()=>{document.querySelectorAll("#paper .part .tools .btn.p").forEach(b=>{if(b.textContent==="Mark it")b.click()});const f=document.querySelector("#paper .mk");if(f)f.closest(".part").scrollIntoView({behavior:"smooth"})};
@@ -383,15 +386,15 @@ function updScore(){
   const sc=$("sc");if(!sc)return;
   let got=0,tot=0;const by={};
   ALL.forEach(([t,p])=>{by[t]=by[t]||{g:0,t:0};if(state.m[p.id]!=null){got+=state.m[p.id];tot+=p.mk;by[t].g+=state.m[p.id];by[t].t+=p.mk}});
-  sc.textContent=got+" / "+tot;
+  sc.textContent=got+" / "+tot;const box=sc.closest(".score");if(box)box.classList.toggle("fresh",!tot);
   if(window.GCSEasy&&C.id)GCSEasy.report(C.id,{got,tot,answered:ALL.filter(([,p])=>state.m[p.id]!=null).length,parts:ALL.length,marks:TOTAL});
   $("scsub").textContent=`marks on parts you've answered · ${TOTAL} available across all sets`;
   const bars=$("bars");bars.innerHTML="";let weak=null;
-  Object.keys(C.topics).forEach(k=>{const b=by[k]||{g:0,t:0};const pc=b.t?Math.round(b.g/b.t*100):0;
+  Object.keys(C.topics).forEach(k=>{const b=by[k]||{g:0,t:0};if(!b.t)return;const pc=b.t?Math.round(b.g/b.t*100):0;
     const r=document.createElement("div");r.className="bar";
     r.innerHTML=`<span>${k}</span><span class="tr"><i class="${b.t?(pc<50?"lo":pc>=75?"hi":""):""}" style="width:${b.t?pc:0}%"></i></span><span>${b.t?pc+"%":"–"}</span>`;bars.appendChild(r);
     if(b.t>=4&&(!weak||pc<weak.pc))weak={k,pc}});
-  $("weak").innerHTML=weak?(weak.pc<75?`Weakest so far: <b>${weak.k} ${C.topics[weak.k]}</b> (${weak.pc}%). Reread that section in Revise, then redo the parts you dropped marks on.`:"Strong across the board so far. Try the other sets or switch to Exam mode."):"Answer a few parts to see which topic needs work.";
+  $("weak").innerHTML=weak?(weak.pc<75?`Weakest so far: <b>${weak.k} ${C.topics[weak.k]}</b> (${weak.pc}%). Reread that section in Revise, then redo the parts you dropped marks on.`:"Strong across the board so far. Try the other sets or switch to Exam mode."):"Answer a few parts and your marks per topic will show here.";
 }
 
 /* sets: papers and the drill */
@@ -530,6 +533,7 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
 function init(cfg){
   C=cfg;KEY=cfg.key;load();applyTier();window.__STUDY=C;
+  {const scb=document.querySelector("#p-ex .score"),pp=$("paper");if(scb&&pp&&pp.parentNode===scb.parentNode)pp.after(scb)}
   const cov=document.querySelector("#p-ex .cover");if(cov&&!cov.querySelector(".aiquota")){const q=document.createElement("p");q.className="aiquota";q.hidden=true;cov.appendChild(q)}
   ALL=[];C.sets.forEach(s=>s.qs.forEach(Q=>Q.parts.forEach(p=>ALL.push([p.t||Q.t,p]))));TOTAL=ALL.reduce((s,[,p])=>s+p.mk,0);
   setupRecap();setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();

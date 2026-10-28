@@ -356,3 +356,24 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
 @keyframes gz-pulse{50%{opacity:.35}}
 .tbtn.on{background:var(--surface);color:var(--ink);border-color:var(--line)}
 .tbtn.on .tdot{background:var(--good,#1C8A52)}
+/* exam screen: progress is secondary until you've answered something */
+.score.fresh{padding:10px 16px!important}
+.score.fresh #bars{display:none}
+.score.fresh #sc{font-size:1.1rem}
+.score.fresh #weak{font-size:.85rem;color:var(--muted)}
+#p-ex .score{margin-top:18px}
+#p-ex .cover p{margin-bottom:6px}
+#p-ex .mode{margin-top:8px}
+#p-ex .mode .chip{font-size:.78rem;padding:6px 11px}
+/* quick checks at the end of each topic */
+.qcheck{margin:22px 0 14px;padding:14px;border-radius:16px;background:var(--accent-soft);display:grid;gap:8px}
+.qch{margin:0 0 2px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}.qch b{font:700 1rem var(--display)}.qch span{font-size:.85rem;color:var(--muted)}
+.qci{display:grid;gap:4px;text-align:left;width:100%;padding:12px 14px;border:0;border-radius:12px;background:var(--surface);color:var(--ink);font:inherit;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.qcq{font-weight:700}
+.qca{color:transparent;background:color-mix(in srgb,var(--muted) 14%,transparent);border-radius:6px;padding:2px 6px;transition:color .2s,background-color .2s}
+.qca::before{content:"Tap to reveal";color:var(--muted);font-size:.8rem}
+.qci.show .qca{color:var(--good,#1C8A52);background:transparent;padding:2px 0}
+.qci.show .qca::before{content:""}
+.qcnew{justify-self:start;font-size:.85rem}
+@media print{.qcheck{display:none}}
+.qci:not(.show) .qca{display:block;height:1.9em;overflow:hidden;font-size:0}.qci:not(.show) .qca::before{font-size:.8rem;line-height:1.9em}
