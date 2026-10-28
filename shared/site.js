@@ -406,7 +406,25 @@ function setupLayout(){const tw=document.querySelector(".wrap > .tabwrap");if(!t
     if("IntersectionObserver" in window){io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){toc.querySelectorAll("a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-20% 0px -70% 0px"});secs.forEach(s=>io.observe(s))}};
   const mo=new MutationObserver(()=>setTimeout(build,20));main.querySelectorAll(':scope > div[id^="p-"]').forEach(p=>mo.observe(p,{attributes:true,attributeFilter:["hidden"]}));
   setTimeout(build,60);addEventListener("load",()=>setTimeout(build,100))}
-function boot(){setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+
+/* formulas: one clear pill per formula, real fractions for "a ÷ b", notes in small grey text */
+const FX=(()=>{const SEP=/(?:\s|&nbsp;)*[·|](?:\s|&nbsp;)+|(?:&nbsp;){2,}(?!\s*\()/
+function top(s){let d=0,o="";for(const ch of s.replace(/<[^>]+>/g,"")){if(ch==="(")d++;else if(ch===")")d--;else if(!d)o+=ch}return o}
+function frac(side){const t0=side.trim();{const m=t0.match(/^\(([^()]*÷[^()]*)\)\s*×\s*(.+)$/);if(m){const f=frac(m[1]);if(f)return f+" × "+m[2]}}const t=t0;const parts=[];let d=0,cur="";const segs=t.split(/(<[^>]+>)/);
+  // split on top-level ÷ ignoring tags
+  let depth=0,idx=[];for(let i=0;i<t.length;i++){const c=t[i];if(c==="<"){i=t.indexOf(">",i);continue}if(c==="(")depth++;else if(c===")")depth--;else if(c==="÷"&&!depth)idx.push(i)}
+  if(idx.length!==1)return null;const N=t.slice(0,idx[0]).trim(),D=t.slice(idx[0]+1).trim();if(!N||!D)return null;
+  let D0=D,rest="";{let dp=0;for(let i=0;i<D.length;i++){const c=D[i];if(c==="<"){i=D.indexOf(">",i);continue}if(c==="(")dp++;else if(c===")")dp--;else if(c==="×"&&!dp){D0=D.slice(0,i).trim();rest=D.slice(i).trim();break}}}
+  const tn=top(N),td=top(D0);if(/[÷=,;]|\s[+−-]\s/.test(tn)||/\b(max|min) of\b/i.test(N))return null;if(!D0||/[×÷=+−,;]|\s-\s/.test(td))return null;
+  const un=x=>/^\((.*)\)$/.test(x)&&top(x)===""?x.slice(1,-1):x;
+  return `<span class="fr" role="math" aria-label="${(N+" divided by "+D0).replace(/<[^>]+>/g,"").replace(/"/g,"")}"><span>${un(N)}</span><span>${un(D0)}</span></span>${rest?" "+rest:""}`}
+function piece(p){const isF=/[=÷×→]|<su[bp]>|²|³/.test(p);if(!isF)return `<span class="fxt">${p}</span>`;let note="";const m=p.match(/^(.*?)(?:&nbsp;|\s)+(\((?:[^()]|\([^()]*\))*\))\s*$/);if(m&&(/&nbsp;\s*\($/.test(p.slice(0,p.length-m[2].length).trimEnd()+"(")||/[a-z]{3,}/i.test(m[2].replace(/<[^>]+>/g,"")))){p=m[1];note=m[2]}
+  const sides=p.split(/\s=\s/);const out=sides.map(s=>frac(s)||s.trim());
+  return `<span class="fx">${out.join(' <span class="eq">=</span> ')}${note?` <span class="fxn">${note}</span>`:""}</span>`}
+function fmt(html){if(/<(table|div|ul|ol|p)\b/i.test(html))return null;const ps=html.split(SEP).map(x=>x.trim()).filter(Boolean);return ps.map(piece).join("")}
+return fmt})();
+function setupFormulas(){document.querySelectorAll(".formula,.eqs b,.ftbl td:nth-child(2)").forEach(el=>{if(el.dataset.fx)return;el.dataset.fx=1;const out=FX(el.innerHTML);if(out)el.innerHTML=out;el.classList.add("fxhost")})}
+function boot(){setupFormulas();setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.GCSEasy={QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};

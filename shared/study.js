@@ -23,19 +23,16 @@ function setupTabs(){
   const h=location.hash.slice(1);if(ids.includes(h))t=h;
   if(t&&ids.includes(t))show(t,false);
 }
-/* Revise topics become cards you open and close. Open ones are remembered. */
-function setupAccordion(){const rev=$("p-rev");if(!rev)return;const secs=[...rev.querySelectorAll("section.topic")];if(!secs.length)return;
-  let open=null;try{open=JSON.parse(localStorage.getItem(KEY+"-open")||"null")}catch(e){}
-  if(!Array.isArray(open))open=[secs[0].id];
-  const keep=()=>{try{localStorage.setItem(KEY+"-open",JSON.stringify(secs.filter(x=>x.classList.contains("open")).map(x=>x.id)))}catch(e){}};
-  secs.forEach(sec=>{const th=sec.querySelector(".th");if(!th)return;sec.classList.add("acc");
+/* Topics become cards you open and close. Every page starts with them all shut. */
+function setupAccordion(){document.querySelectorAll('div[id^="p-"]').forEach(pan=>{const secs=[...pan.querySelectorAll("section.topic")].filter(s=>s.querySelector(":scope > .th"));if(secs.length<2)return;
+  secs.forEach(sec=>{const th=sec.querySelector(".th");sec.classList.add("acc");
     const body=document.createElement("div");body.className="tbody";[...sec.children].filter(n=>n!==th).forEach(n=>body.appendChild(n));sec.appendChild(body);
-    th.setAttribute("role","button");th.tabIndex=0;const set=o=>{sec.classList.toggle("open",o);th.setAttribute("aria-expanded",o)};set(open.includes(sec.id));
-    const tog=()=>{set(!sec.classList.contains("open"));keep()};th.onclick=tog;th.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tog()}}});
-  const bar=document.createElement("div");bar.className="revtools";bar.innerHTML=`<span>Tap a topic to open it</span><button class="linkbtn" type="button" id="revall"></button>`;
-  secs[0].before(bar);const lab=()=>{$("revall").textContent=secs.every(x=>x.classList.contains("open"))?"Close all":"Open all"};lab();
-  $("revall").onclick=()=>{const all=!secs.every(x=>x.classList.contains("open"));secs.forEach(x=>{x.classList.toggle("open",all);x.querySelector(".th")?.setAttribute("aria-expanded",all)});keep();lab()};
-  rev.addEventListener("click",e=>{if(e.target.closest(".th"))lab()})}
+    th.setAttribute("role","button");th.tabIndex=0;const set=o=>{sec.classList.toggle("open",o);th.setAttribute("aria-expanded",o)};set(false);
+    const tog=()=>set(!sec.classList.contains("open"));th.onclick=tog;th.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tog()}}});
+  const bar=document.createElement("div");bar.className="revtools";bar.innerHTML=`<span>Tap a topic to open it</span><button class="linkbtn" type="button"></button>`;
+  secs[0].before(bar);const btn=bar.querySelector("button");const lab=()=>{btn.textContent=secs.every(x=>x.classList.contains("open"))?"Close all":"Open all"};lab();
+  btn.onclick=()=>{const all=!secs.every(x=>x.classList.contains("open"));secs.forEach(x=>{x.classList.toggle("open",all);x.querySelector(".th")?.setAttribute("aria-expanded",all)});lab()};
+  pan.addEventListener("click",e=>{if(e.target.closest(".th"))setTimeout(lab,0)})})}
 /* ---- Topic quizzes: read a topic, then quiz yourself on it (or on several at once) ---- */
 const QG=window.GCSEasy.QG;
 function quizPool(tops,mode){const out=[];const strip=h=>{const d=document.createElement("div");d.innerHTML=h;return d.textContent.trim()};
@@ -494,11 +491,35 @@ function applyTier(){if(!SCI.includes(C.id))return;const comb=tier()==="combined
   const top=document.querySelector("header.top");if(top&&!document.getElementById("tier")){const t=document.createElement("div");t.className="tier";t.id="tier";t.setAttribute("role","group");t.setAttribute("aria-label","Course");
     t.innerHTML=`<button type="button" data-t="triple" aria-pressed="${!comb}">Triple</button><button type="button" data-t="combined" aria-pressed="${comb}">Combined</button>`;top.appendChild(t);
     t.querySelectorAll("button").forEach(b=>b.onclick=()=>{try{localStorage.setItem("gcseasy-tier",b.dataset.t)}catch(e){}location.reload()})}}
+
+/* Recap: every topic on one screen, like a 5-minute revision video. Built from the flashcards and the formulas in the notes. */
+function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["english-literature","french"].includes(C.id)||C.cards.length<10)return;
+  const first=nav.querySelector("button");if(!first)return;const firstPan=$("p-"+first.dataset.p);if(!firstPan)return;
+  const b=document.createElement("button");b.setAttribute("role","tab");b.id="tab-sum";b.setAttribute("aria-selected","false");b.dataset.p="sum";b.textContent="Recap";first.after(b);
+  const pan=document.createElement("div");pan.id="p-sum";pan.hidden=true;firstPan.after(pan);
+  const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const clean=q=>{let t=String(q).replace(/\s*\((HT|Triple)\)\s*/g," ").trim();t=t.replace(/^(Define|What is|What are|What's)\s+/i,"").replace(/[?.:]$/,"");return t.charAt(0).toUpperCase()+t.slice(1)};
+  const tags=q=>(/\(HT\)/.test(q)?`<span class="pill h">HT</span>`:"")+(/\(Triple\)/.test(q)?`<span class="pill t">Triple</span>`:"");
+  const keys=Object.keys(C.topics).filter(k=>C.cards.some(c=>c[0]===k));
+  const groups=C.groups?C.groups.map(([l,ks])=>[l,ks.filter(k=>keys.includes(k))]).filter(g=>g[1].length):[["",keys]];
+  const card=k=>{const cs=C.cards.filter(c=>c[0]===k);const sec=document.getElementById(k);
+    const fx=sec?[...sec.querySelectorAll(".formula")].filter(f=>/[=÷×→]/.test(f.textContent)&&f.textContent.length<140&&!f.closest(".tri")).slice(0,6).map(f=>`<div class="formula">${f.innerHTML}</div>`).join(""):"";
+    const name=C.topics[k]===k?k:C.topics[k];
+    return `<article class="rcard" id="sum-${k}"><header><span class="rk">${esc(k)}</span><h3>${esc(name)}</h3><button type="button" class="linkbtn rgo" data-k="${esc(k)}">Notes</button></header>
+      ${fx?`<div class="rfx"><p class="rlab">Key equations</p>${fx}</div>`:""}
+      <dl class="rlist">${cs.map(c=>`<div><dt>${esc(clean(c[1]))}${tags(c[1])}</dt><dd tabindex="0">${esc(c[2])}</dd></div>`).join("")}</dl></article>`};
+  pan.innerHTML=`<div class="rhead"><p>Everything for each topic on one screen. Read it through in a few minutes, then hide the answers and test yourself.</p>
+    <div class="chips" id="rmode"><button type="button" class="chip on" data-m="show">Show answers</button><button type="button" class="chip" data-m="hide">Hide answers</button></div></div>
+    ${groups.map(([l,ks])=>`${l?`<h2 class="rgrp">${esc(l)}</h2>`:""}<div class="recap">${ks.map(card).join("")}</div>`).join("")}`;
+  pan.querySelectorAll("#rmode .chip").forEach(x=>x.onclick=()=>{const hide=x.dataset.m==="hide";pan.classList.toggle("rhide",hide);pan.querySelectorAll("#rmode .chip").forEach(y=>y.classList.toggle("on",y===x));pan.querySelectorAll("dd.show").forEach(d=>d.classList.remove("show"))});
+  pan.addEventListener("click",e=>{const d=e.target.closest("dd");if(d&&pan.classList.contains("rhide"))d.classList.toggle("show");
+    const g=e.target.closest(".rgo");if(g){const t=document.getElementById("tab-"+firstPan.id.slice(2));if(t)t.click();const s=document.getElementById(g.dataset.k);if(s){if(s.classList.contains("acc")&&!s.classList.contains("open"))s.querySelector(".th").click();setTimeout(()=>s.scrollIntoView({behavior:"smooth"}),60)}}});
+  pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
 function init(cfg){
   C=cfg;KEY=cfg.key;load();applyTier();window.__STUDY=C;
   const cov=document.querySelector("#p-ex .cover");if(cov&&!cov.querySelector(".aiquota")){const q=document.createElement("p");q.className="aiquota";q.hidden=true;cov.appendChild(q)}
   ALL=[];C.sets.forEach(s=>s.qs.forEach(Q=>Q.parts.forEach(p=>ALL.push([p.t||Q.t,p]))));TOTAL=ALL.reduce((s,[,p])=>s+p.mk,0);
-  setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();
+  setupRecap();setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();
   document.querySelectorAll("[data-fig]").forEach(el=>{if(C.figs[el.dataset.fig])el.innerHTML=C.figs[el.dataset.fig]()});
   if($("m-learn")){
     $("m-learn").onclick=()=>{state.learn=true;save();renderSets()};
