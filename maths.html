@@ -77,6 +77,8 @@
 .ftbl table td:first-child{font-weight:700;width:34%}
 .ftbl table.center td,.ftbl table.center th{text-align:center}
 .ftbl table.center td:first-child{width:auto}
+.pnote{background:var(--accent-soft);border-radius:14px;padding:10px 14px;margin:0 0 12px;font-size:.92rem}
+tr.mpon td{background:var(--accent-soft);font-weight:700}
 </style>
 </head>
 <body>
@@ -85,8 +87,15 @@
 <p class="crumbs"><a href="index.html#subjects">Subjects</a> / Maths</p>
 <header class="top">
   <div class="tile"><small>M</small>Ma</div>
-  <div><h1>Maths</h1><p class="sub">Edexcel · 1MA1 · Higher tier · every topic</p></div>
+  <div><h1>Maths</h1><p class="sub">Edexcel · 1MA1 · Higher · Papers 1, 2 and 3</p></div>
 </header>
+<div class="papersw p3" role="group" aria-label="Choose a paper">
+  <a href="?paper=1" data-paper="1"><b>Paper 1</b><span>No calculator</span></a>
+  <a href="?paper=2" data-paper="2"><b>Paper 2</b><span>Calculator</span></a>
+  <a href="?paper=3" data-paper="3"><b>Paper 3</b><span>Calculator</span></a>
+</div>
+<script>window.MPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-mathspaper")||"1"}catch(e){p="1"}}p=["1","2","3"].includes(p)?p:"1";try{localStorage.setItem("gcseasy-mathspaper",p)}catch(e){}return p})();
+document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===MPAPER));</script>
 <nav class="tabs" role="tablist">
   <button role="tab" id="tab-tp" aria-selected="true" data-p="tp">Topics</button>
   <button role="tab" id="tab-pr" aria-selected="false" data-p="pr">Practice</button>
@@ -97,6 +106,7 @@
 <div id="p-tp">
 <p style="margin-bottom:10px">Every topic on the Higher GCSE. Rate each one <b>red</b> (don't get it), <b>orange</b> (getting there) or <b>green</b> (confident). Tap a <b>MW</b> clip to watch that MathsWatch video (you'll need your school login), or <b>Practise</b> for questions that change every time.</p>
 <div class="key"><span><span class="b nc">✱ Non-calc</span> likely on the non-calculator paper</span><span><span class="b gc">GCSE only</span> may not be in your school mock, but can be in the real exam</span></div>
+<div class="pnote" id="mpnote"></div>
 <div class="msum" id="msum"></div>
 <div class="chips" id="mfilt"></div>
 <div id="mlist"></div>
@@ -201,9 +211,9 @@
 <div id="p-tt" hidden>
 <details class="rc" open><summary>Edexcel Higher: the papers</summary><div class="in">
 <div class="tbl"><table><tr><th>Paper</th><th>Calculator?</th><th>Time</th><th class="num">Marks</th></tr>
-<tr><td>Paper 1</td><td><b>No</b></td><td>1 h 30</td><td class="num">80</td></tr>
-<tr><td>Paper 2</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr>
-<tr><td>Paper 3</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr></table></div>
+<tr data-mp="1"><td>Paper 1</td><td><b>No</b></td><td>1 h 30</td><td class="num">80</td></tr>
+<tr data-mp="2"><td>Paper 2</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr>
+<tr data-mp="3"><td>Paper 3</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr></table></div>
 <p>About <b>1 minute per mark</b>, with 10 minutes spare to check. Topics marked ✱ are likely to come up on the non-calculator paper: practise them by hand.</p></div></details>
 <details class="rc"><summary>Get the method marks</summary><div class="in"><ol class="steps">
 <li><b>Show every step.</b> A wrong answer with the right method can still score most of the marks.</li>
@@ -506,7 +516,8 @@ const KEY="maths-v1";let st={};try{st=JSON.parse(localStorage.getItem(KEY)||"{}"
 st.rag=st.rag||{};if(st.ok){Object.keys(st.ok).forEach(k=>{if(st.ok[k]&&!st.rag[k])st.rag[k]="g"});delete st.ok}st.tally=st.tally||{r:0,t:0};const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}};
 const TOP=T.map(([s,n,f,c,g],i)=>({i,s,n,nc:f.includes("n"),gcse:f.includes("g"),clips:c,gens:g}));
 const strands=[...new Set(TOP.map(t=>t.s))];
-let filt="all";
+let filt=MPAPER==="1"?"nc":"all";const PCALC=MPAPER!=="1";
+$("mpnote").innerHTML=PCALC?`<b>Paper ${MPAPER}: calculator allowed.</b> Any topic can come up on Papers 2 and 3, so revise them all. Use your calculator for the working, but still write every step down for method marks.`:`<b>Paper 1: no calculator.</b> Any topic can come up, but the ✱ ones are the most likely. Practise them by hand: fractions, surds, indices, standard form and exact answers.`;
 function chip(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
 function summary(){const c=k=>TOP.filter(t=>(st.rag[t.i]||"")===k).length,N=TOP.length,g=c("g"),o=c("o"),r=c("r"),u=c("");
   $("msum").innerHTML=`<div class="ragsum"><div class="ragbar"><i class="g" style="width:${g/N*100}%"></i><i class="o" style="width:${o/N*100}%"></i><i class="r" style="width:${r/N*100}%"></i></div>
@@ -526,18 +537,19 @@ function drawTopics(){
   $("mlist").querySelectorAll("[data-pr]").forEach(b=>b.onclick=()=>{pmode="topic";ptopic=+b.dataset.pr;document.getElementById("tab-pr").click();startP()});
 }
 /* practice */
-let pmode=st.pmode||"mock",ptopic=st.ptopic??0,cur=null,mini=null;
+let pmode=st["pmode"+MPAPER]||(PCALC?"calc":"nc"),ptopic=st.ptopic??0,cur=null,mini=null;
 const withGen=TOP.filter(t=>t.gens.length);
-function pool(){if(pmode==="topic")return [TOP[ptopic]];if(pmode==="nc")return withGen.filter(t=>t.nc&&!t.gcse);if(pmode==="gcse")return withGen.filter(t=>t.gcse);return withGen.filter(t=>!t.gcse)}
+function pool(){if(pmode==="topic")return [TOP[ptopic]];if(pmode==="nc")return withGen.filter(t=>t.nc&&!t.gcse);if(pmode==="gcse")return withGen.filter(t=>t.gcse);if(pmode==="calc"){const c=withGen.filter(t=>!t.gcse&&!t.nc);return c.length?c:withGen.filter(t=>!t.gcse)}return withGen.filter(t=>!t.gcse)}
+const MODES=PCALC?[["calc","Calculator topics"],["mock","Mixed: core topics"],["topic","One topic"],["gcse","GCSE-only topics"],["mini",`Paper ${MPAPER} mini mock (10 Qs)`]]:[["nc","✱ Non-calc mix"],["mock","Mixed: core topics"],["topic","One topic"],["gcse","GCSE-only topics"],["mini","Paper 1 mini mock (10 Qs)"]];
 function drawPSetup(){
-  chip($("pmode"),[["mock","Mixed: core topics"],["nc","✱ Non-calc mix"],["topic","One topic"],["gcse","GCSE-only topics"],["mini","Mini mock (10 Qs)"]],pmode,k=>{pmode=k;st.pmode=k;save();mini=null;drawPSetup();startP()});
+  if(!MODES.some(m=>m[0]===pmode))pmode=MODES[0][0];chip($("pmode"),MODES,pmode,k=>{pmode=k;st["pmode"+MPAPER]=k;save();mini=null;drawPSetup();startP()});
   const sel=$("ptopic");sel.hidden=pmode!=="topic";
   if(!sel.options.length){strands.forEach(s=>{const og=document.createElement("optgroup");og.label=s;withGen.filter(t=>t.s===s).forEach(t=>{const o=document.createElement("option");o.value=t.i;o.textContent=t.n+(t.gcse?" (GCSE only)":"")+(t.nc?" ✱":"");og.appendChild(o)});sel.appendChild(og)});sel.onchange=()=>{ptopic=+sel.value;st.ptopic=ptopic;save();startP()}}
   if(!TOP[ptopic]||!TOP[ptopic].gens.length)ptopic=withGen[0].i;sel.value=ptopic;
   $("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
-  $("pnote").innerHTML=pmode==="nc"||(mini&&mini.nc)?`<b>No calculator.</b> Work these out on paper.`:"";
+  $("pnote").innerHTML=PCALC?`<b>Calculator allowed</b> (Paper ${MPAPER}).`:`<b>No calculator.</b> Work these out on paper.`;
 }
-function startP(){drawPSetup();if(pmode==="mini"){mini={i:0,r:0,qs:Array.from({length:10},()=>{const p=withGen.filter(t=>!t.gcse);return p[Math.floor(Math.random()*p.length)]})}}else mini=null;nextQ()}
+function startP(){drawPSetup();if(pmode==="mini"){mini={i:0,r:0,nc:!PCALC,qs:Array.from({length:10},()=>{let p=withGen.filter(t=>!t.gcse&&(PCALC||t.nc));if(PCALC&&Math.random()<.6){const c=p.filter(t=>!t.nc);if(c.length)p=c}return p[Math.floor(Math.random()*p.length)]})}}else mini=null;nextQ()}
 function nextQ(){let t;if(mini){if(mini.i>=10)return endMini();t=mini.qs[mini.i]}else{const p=pool();t=p[Math.floor(Math.random()*p.length)]}
   const g=t.gens[Math.floor(Math.random()*t.gens.length)];cur=Object.assign({t},G[g]());drawQ()}
 function parse(s){s=String(s).trim().replace(/[£€$°%,]|cm³|cm²|cm|km\/h|km|mm|m\b|g\b/gi,"").replace(/−/g,"-").trim();if(!s)return NaN;
@@ -559,7 +571,8 @@ function toFrac(x){for(let d=1;d<=400;d++){const n=Math.round(x*d);if(Math.abs(n
 function done(ok,ans){st.tally.t++;if(ok){st.tally.r++;if(window.GCSEasy)GCSEasy.addXP(1,"maths",80)}save();if(mini&&ok)mini.r++;$("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
   const q=cur;$("pfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"+(ans?`. Answer: ${showAns(ans,q)}${q.unit?" "+q.unit:""}`:"")}</div><div class="panel ms"><div class="t">Working</div>${q.w}</div><div class="row"><button class="btn p" id="pnext">${mini&&mini.i>=9?"See score":"Next question"}</button>${q.t.clips.map(c=>`<a class="mw big" href="${mwUrl(c)}" target="_blank" rel="noopener">Stuck? Watch clip ${c}</a>`).join("")}</div>`;
   $("pnext").onclick=()=>{if(mini)mini.i++;nextQ()};$("pnext").focus()}
-function endMini(){const box=$("pbox");box.innerHTML=`<div class="meta"><span>Mini mock</span><span>${mini.r} / 10</span></div><p class="dq">${mini.r*10}% ${mini.r>=8?"– excellent.":mini.r>=6?"– good. Practise the topics you dropped.":"– keep going: pick the topics you got wrong in One topic mode."}</p><div class="row"><button class="btn p" id="again">Another mini mock</button></div>`;$("again").onclick=startP}
+function endMini(){const box=$("pbox");st.best=st.best||{};const prev=st.best[MPAPER]||0;if(mini.r>prev){st.best[MPAPER]=mini.r;save()}box.innerHTML=`<div class="meta"><span>Paper ${MPAPER} mini mock</span><span>${mini.r} / 10 · best ${Math.max(prev,mini.r)} / 10</span></div><p class="dq">${mini.r*10}% ${mini.r>=8?"– excellent.":mini.r>=6?"– good. Practise the topics you dropped.":"– keep going: pick the topics you got wrong in One topic mode."}</p><div class="row"><button class="btn p" id="again">Another mini mock</button></div>`;$("again").onclick=startP}
+document.querySelectorAll("tr[data-mp]").forEach(tr=>tr.classList.toggle("mpon",tr.dataset.mp===MPAPER));
 drawTopics();drawPSetup();startP();
 })();
 
