@@ -400,12 +400,12 @@ function setupLayout(){const tw=document.querySelector(".wrap > .tabwrap");if(!t
     const items=pan?[...pan.querySelectorAll("h2.ptitle, section.topic[id]")].filter(x=>!x.hidden&&x.offsetParent!==null):[];
     const secs=items.filter(x=>x.matches("section"));if(secs.length<2){toc.innerHTML="";return}
     let html=`<p class="tochd">On this page</p>`;if(items[0].matches("section")&&items.some(x=>x.matches("h2.ptitle")))html+=`<p class="tocgrp">Paper 1</p>`;
-    items.forEach(x=>{if(x.matches("h2.ptitle"))html+=`<p class="tocgrp">${x.textContent.split("·")[0].trim()}</p>`;else html+=`<a href="#${x.id}" data-id="${x.id}">${lab(x)}</a>`});
+    items.forEach(x=>{if(x.matches("h2.ptitle"))html+=`<p class="tocgrp">${x.textContent.split("·")[0].trim()}</p>`;else html+=`<a href="#${x.id}" data-id="${x.id}" class="${x.classList.contains("done")?"done":""}">${lab(x)}</a>`});
     toc.innerHTML=html;
     toc.querySelectorAll("a").forEach(a=>a.onclick=e=>{e.preventDefault();const s=document.getElementById(a.dataset.id);if(!s)return;if(s.classList.contains("acc")&&!s.classList.contains("open")){const th=s.querySelector(".th");if(th)th.click()}s.scrollIntoView({behavior:"smooth",block:"start"})});
     if("IntersectionObserver" in window){io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){toc.querySelectorAll("a").forEach(a=>a.classList.toggle("on",a.dataset.id===en.target.id))}})},{rootMargin:"-20% 0px -70% 0px"});secs.forEach(s=>io.observe(s))}};
   const mo=new MutationObserver(()=>setTimeout(build,20));main.querySelectorAll(':scope > div[id^="p-"]').forEach(p=>mo.observe(p,{attributes:true,attributeFilter:["hidden"]}));
-  setTimeout(build,60);addEventListener("load",()=>setTimeout(build,100))}
+  setTimeout(build,60);addEventListener("load",()=>setTimeout(build,100));document.addEventListener("gcseasy:done",()=>setTimeout(build,10))}
 
 /* formulas: one clear pill per formula, real fractions for "a ÷ b", notes in small grey text */
 const FX=(()=>{const SEP=/(?:\s|&nbsp;)*[·|](?:\s|&nbsp;)+|(?:&nbsp;){2,}(?!\s*\()/
@@ -424,7 +424,10 @@ function piece(p){const isF=/[=÷×→]|<su[bp]>|²|³/.test(p);if(!isF)return `
 function fmt(html){if(/<(table|div|ul|ol|p)\b/i.test(html))return null;const ps=html.split(SEP).map(x=>x.trim()).filter(Boolean);return ps.map(piece).join("")}
 return fmt})();
 function setupFormulas(){document.querySelectorAll(".formula,.eqs b,.ftbl td:nth-child(2)").forEach(el=>{if(el.dataset.fx)return;el.dataset.fx=1;const out=FX(el.innerHTML);if(out)el.innerHTML=out;el.classList.add("fxhost")})}
-function boot(){setupFormulas();setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
+
+function setupToTop(){const b=document.createElement("button");b.type="button";b.className="totop";b.setAttribute("aria-label","Back to top");b.textContent="↑";document.body.appendChild(b);
+  b.onclick=()=>window.scrollTo({top:0,behavior:"smooth"});let t=0;addEventListener("scroll",()=>{if(t)return;t=requestAnimationFrame(()=>{t=0;b.classList.toggle("show",scrollY>1400)})},{passive:true})}
+function boot(){setupToTop();setupFormulas();setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
 window.GCSEasy={QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};

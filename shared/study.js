@@ -17,7 +17,7 @@ function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random
 /* tabs */
 function setupTabs(){
   const tabs=[...document.querySelectorAll("nav.tabs button")],ids=tabs.map(b=>b.dataset.p);
-  function show(p,scroll){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.p===p));ids.forEach(x=>$("p-"+x).hidden=x!==p);if(scroll)window.scrollTo(0,0);try{localStorage.setItem(KEY+"-tab",p)}catch(e){}}
+  function show(p,scroll){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.p===p));try{const tb=tabs.find(b=>b.dataset.p===p);const nm=(document.querySelector("header.top h1")||{}).textContent||C.id;localStorage.setItem("gcseasy-last",JSON.stringify({name:nm,tab:tb?tb.textContent:p,href:location.pathname.split("/").pop()+location.search+"#"+p,at:Date.now()}))}catch(e){}ids.forEach(x=>$("p-"+x).hidden=x!==p);if(scroll)window.scrollTo(0,0);try{localStorage.setItem(KEY+"-tab",p)}catch(e){}}
   tabs.forEach(b=>b.onclick=()=>show(b.dataset.p,true));
   let t=null;try{t=localStorage.getItem(KEY+"-tab")}catch(e){}
   const h=location.hash.slice(1);if(ids.includes(h))t=h;
@@ -27,7 +27,9 @@ function setupTabs(){
 function setupAccordion(){document.querySelectorAll('div[id^="p-"]').forEach(pan=>{const secs=[...pan.querySelectorAll("section.topic")].filter(s=>s.querySelector(":scope > .th"));if(secs.length<2)return;
   secs.forEach(sec=>{const th=sec.querySelector(".th");sec.classList.add("acc");
     const body=document.createElement("div");body.className="tbody";[...sec.children].filter(n=>n!==th).forEach(n=>body.appendChild(n));sec.appendChild(body);
-    th.setAttribute("role","button");th.tabIndex=0;const set=o=>{sec.classList.toggle("open",o);th.setAttribute("aria-expanded",o)};set(false);
+    th.setAttribute("role","button");th.tabIndex=0;const set=o=>{sec.classList.toggle("open",o);th.setAttribute("aria-expanded",o);if(o)try{const L=JSON.parse(localStorage.getItem("gcseasy-last")||"null");if(L){L.topic=(th.querySelector("h2")||{}).textContent;L.at=Date.now();localStorage.setItem("gcseasy-last",JSON.stringify(L))}}catch(e){}};set(false);
+    if(pan.id==="p-rev"&&sec.id){const dk=KEY+"-done";let dn={};try{dn=JSON.parse(localStorage.getItem(dk)||"{}")||{}}catch(e){}const db=document.createElement("button");db.type="button";db.className="tdone";const upd=()=>{const on=!!dn[sec.id];db.classList.toggle("on",on);sec.classList.toggle("done",on);db.setAttribute("aria-pressed",on);db.title=on?"Marked as revised. Tap to undo":"Mark this topic as revised";db.innerHTML=on?"✓ Revised":"Mark revised"};upd();
+      db.onclick=e=>{e.stopPropagation();try{dn=JSON.parse(localStorage.getItem(dk)||"{}")||{}}catch(x){}if(dn[sec.id])delete dn[sec.id];else dn[sec.id]=Date.now();try{localStorage.setItem(dk,JSON.stringify(dn))}catch(x){}upd();document.dispatchEvent(new CustomEvent("gcseasy:done"))};db.onkeydown=e=>e.stopPropagation();th.appendChild(db)}
     const tog=()=>set(!sec.classList.contains("open"));th.onclick=tog;th.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tog()}}});
   const bar=document.createElement("div");bar.className="revtools";bar.innerHTML=`<span>Tap a topic to open it</span><button class="linkbtn" type="button"></button>`;
   secs[0].before(bar);const btn=bar.querySelector("button");const lab=()=>{btn.textContent=secs.every(x=>x.classList.contains("open"))?"Close all":"Open all"};lab();
@@ -509,10 +511,11 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
       <div class="rbody">${fx?`<div class="rfx"><p class="rlab">Key equations</p>${fx}</div>`:""}
       <dl class="rlist">${cs.map(c=>`<div><dt>${esc(clean(c[1]))}${tags(c[1])}</dt><dd tabindex="0">${esc(c[2])}</dd></div>`).join("")}</dl><div class="rfoot"><button type="button" class="linkbtn rgo" data-k="${esc(k)}">Open the full notes</button></div></div></article>`};
   pan.innerHTML=`<div class="rhead"><p>Everything for each topic on one screen. Read it through in a few minutes, then hide the answers and test yourself.</p>
-    <div class="chips" id="rmode"><button type="button" class="chip" id="rall">Open all</button><button type="button" class="chip on" data-m="show">Show answers</button><button type="button" class="chip" data-m="hide">Hide answers</button></div></div>
+    <div class="chips" id="rmode"><button type="button" class="chip" id="rall">Open all</button><button type="button" class="chip" id="rprint">Print</button><button type="button" class="chip on" data-m="show">Show answers</button><button type="button" class="chip" data-m="hide">Hide answers</button></div></div>
     ${groups.map(([l,ks])=>`${l?`<h2 class="rgrp">${esc(l)}</h2>`:""}<div class="recap">${ks.map(card).join("")}</div>`).join("")}`;
   const cards=[...pan.querySelectorAll(".rcard")];const setC=(c,o)=>{c.classList.toggle("open",o);c.querySelector("header").setAttribute("aria-expanded",o)};const lab=()=>{$("rall").textContent=cards.every(c=>c.classList.contains("open"))?"Close all":"Open all"};
   pan.querySelectorAll(".rcard header").forEach(hd=>{const c=hd.parentElement;const t=()=>{setC(c,!c.classList.contains("open"));lab()};hd.onclick=t;hd.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();t()}}});
+  $("rprint").onclick=()=>{const was=cards.map(c=>c.classList.contains("open"));cards.forEach(c=>setC(c,true));setTimeout(()=>{window.print();cards.forEach((c,i)=>setC(c,was[i]));lab()},50)};
   $("rall").onclick=()=>{const o=!cards.every(c=>c.classList.contains("open"));cards.forEach(c=>setC(c,o));lab()};
   pan.querySelectorAll("#rmode .chip[data-m]").forEach(x=>x.onclick=()=>{const hide=x.dataset.m==="hide";pan.classList.toggle("rhide",hide);pan.querySelectorAll("#rmode .chip[data-m]").forEach(y=>y.classList.toggle("on",y===x));pan.querySelectorAll("dd.show").forEach(d=>d.classList.remove("show"))});
   pan.addEventListener("click",e=>{const d=e.target.closest("dd");if(d&&pan.classList.contains("rhide"))d.classList.toggle("show");

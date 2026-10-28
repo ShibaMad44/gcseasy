@@ -324,3 +324,26 @@ section.topic li>b,section.topic p>b,section.topic td>b{color:color-mix(in srgb,
 .rfoot{padding:8px 16px 14px;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
 @media (prefers-reduced-motion:no-preference){.rcard.open .rbody{animation:gz-in .3s var(--ease) both}}
 .recap{columns:auto!important;display:block}.rcard{display:block}@media (min-width:1080px){.rcard.open .rlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.rcard.open .rlist>div:nth-child(2){border-top:0}}
+
+/* revised ticks */
+.tdone{flex:none;order:5;margin-left:auto;margin-right:6px;font:700 .74rem var(--display);padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;white-space:nowrap}
+.tdone.on{background:var(--good-soft);border-color:transparent;color:var(--good)}
+section.topic.acc>.th::after{order:6}
+section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
+.subtoc a.done span::after{content:" ✓";color:var(--good);font-weight:700}
+@media (max-width:420px){.tdone{font-size:0;padding:6px 9px}.tdone::before{content:"✓";font-size:.8rem}.tdone:not(.on){color:var(--line)}}
+/* back to top */
+.totop{position:fixed;right:16px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:60;width:44px;height:44px;border-radius:50%;border:0;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-hover,0 6px 20px rgba(0,0,0,.2));font:700 1.1rem var(--display);cursor:pointer;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s,transform .25s}
+.totop.show{opacity:1;transform:none;pointer-events:auto}
+@media (min-width:641px){.totop{bottom:24px;right:24px}}
+/* print: just the page content, everything open */
+@media print{
+  .sitebar,.botnav,.sitefoot,.subside,.tabwrap,.revtools,.totop,.qzbtn,.blbtn,.tdone,#rmode,.rgo,.rfoot,.papersw,.tier,.ppsec,.crumbs,.appbtnh,.stoast,.bgtoast{display:none!important}
+  body{background:#fff!important;color:#000}
+  .wrap{max-width:none!important;padding:0!important;animation:none!important}
+  .sublayout{display:block!important}
+  section.topic,.rcard,details.rc{box-shadow:none!important;border:1px solid #ccc;break-inside:avoid-page}
+  section.topic.acc>.tbody,.rcard .rbody{display:block!important}
+  details.rc>*{display:block!important}
+  .rhide .rlist dd{color:inherit!important;background:none!important}
+}
