@@ -182,7 +182,7 @@ const SCIENTISTS=["Rutherford","Thomson","Bohr","Dalton","Chadwick","Mendeleev",
 // what the question is asking for
 function qtype(q){const s=String(q).toLowerCase();
   if(/stage direction/.test(s))return "stagedir";
-  if(/^(act|ch|chapter) \d+ ·/.test(s))return "quote";
+  if(/^(act|ch|chapter|prologue)\b[^·]{0,24}·/.test(s))return "quote";
   const T=[["diff",/\bvs\b|difference between|compare|versus/],["list",/^\d+\b|^name (the )?\d|^(two|three|four|five|six|seven|eight)\b|^list|^give \d|\d+ (ways|types|factors|examples|causes|effects|methods)|^factors|factors affecting/],["adapt",/adapt/],["func",/\b(function|job|role|purpose)\b|what does .{1,30} do\b/],["eq",/equation|formula|\bcalculat|symbol equation|word equation/],
     ["unit",/\bunits?\b/],["who",/^who\b|who (discovered|proposed|developed|wrote|invented)/],["when",/^when\b|what year|which year|\bdate\b|\bset\b\?|published/],
     ["where",/^where\b|location|found in|which part/],["howmany",/how many|how much|^%|\bnumber of\b|percentage|\brate\b|\bcost\b|\bdeaths?\b|\bfigures?\b/],
@@ -209,20 +209,35 @@ function numberFakes(a,rnd){const n=numIn(a);if(n==null)return [];const s=String
   const vals=yr?[n-3,n-1,n+2,n+5,n-10]:[...new Set([.5,.75,1.5,2,1.25,.8,3].map(k=>+(n*k).toFixed(dec)).concat(Number.isInteger(n)&&n<30?[n-2,n-1,n+1,n+2]:[]).filter(x=>x!==n&&x>=0))];
   return vals.map(v=>[rnd(),s.replace(/-?\d[\d,.]*/,(yr?v:v.toLocaleString("en-GB")))]).sort((a,b)=>a[0]-b[0]).map(x=>x[1])}
 const who=q=>{const m=String(q).match(/·\s*([^:]+):/);return m?m[1].trim().toLowerCase():""};
+const SWAP=(()=>{const m=[];"increase|decrease;increases|decreases;increased|decreased;increasing|decreasing;more|less;higher|lower;high|low;larger|smaller;bigger|smaller;faster|slower;fast|slow;longer|shorter;thicker|thinner;stronger|weaker;positive|negative;gain|lose;gains|loses;gained|lost;before|after;left|right;top|bottom;inside|outside;north|south;east|west;hot|cold;warmer|cooler;endothermic|exothermic;anode|cathode;oxidised|reduced;oxidation|reduction;acid|alkali;acidic|alkaline;protons|electrons;proton|electron;neutrons|electrons;xylem|phloem;mitosis|meiosis;aerobic|anaerobic;dominant|recessive;series|parallel;arteries|veins;artery|vein;insulin|glucagon;glycogen|glucagon;oxygenated|deoxygenated;haploid|diploid;absorbs|emits;absorb|emit;transverse|longitudinal;parallel|perpendicular;vertical|horizontal;conductor|insulator;attract|repel;attracts|repels;solid|liquid;liquid|gas;melting|boiling;evaporation|condensation;condenses|evaporates;renewable|non-renewable;finite|infinite;saturated|unsaturated;alkanes|alkenes;alkane|alkene;metals|non-metals;metal|non-metal;cations|anions;cation|anion;ionic|covalent;elected|appointed;Commons|Lords;criminal|civil;magistrates'|Crown;jury|judge;prosecution|defence;guilty|innocent;rural|urban;deposition|erosion;constructive|destructive;swash|backwash;hard|soft;upstream|downstream;import|export;imports|exports;richer|poorer;HICs|LICs;HIC|LIC;always|never;first|last;start|end;rise|fall;rises|falls;expand|contract;expands|contracts;dilate|constrict;contract|relax;contracts|relaxes;sensory|motor;receptor|effector;Paper 1|Paper 2;Section A|Section B".split(";").forEach(p=>{const [a,b]=p.split("|");m.push([a,b])});return m})();
+// wrong versions of the right answer: swap one opposite pair ("increases" -> "decreases"); these are the hardest distractors
+function mutate(a,rnd){const s=String(a);if(s.length<3)return [];const out=[];
+  for(const [x,y] of SWAP){const re=new RegExp("\\b("+x.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"|"+y.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+")\\b","gi");if(!re.test(s))continue;re.lastIndex=0;
+    const f=s.replace(re,w=>{const lw=w.toLowerCase(),r=lw===x.toLowerCase()?y:x;return w[0]===w[0].toUpperCase()&&w[0]!==w[0].toLowerCase()?r[0].toUpperCase()+r.slice(1):r});
+    if(f!==s&&!out.includes(f))out.push(f)}
+  return out.map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1])}
+const CHARS={RJ:["Rosaline","Juliet","Tybalt","Mercutio","Benvolio","Paris","The Nurse","Friar Laurence","Lady Capulet","Lord Capulet"],AIC:["Eva Smith","Gerald Croft","Sheila","Eric","Mr Birling","Mrs Birling","Edna","Inspector Goole"],JH:["Utterson","Lanyon","Enfield","Poole","Sir Danvers Carew","Hyde","Jekyll","Guest"]};
+const AUTHORS=["Mary Lamb","Frances Harper","William Wordsworth","Emily Dickinson","Lord Byron","Ilya Kaminsky","John Agard","Keith Douglas","Denise Levertov","Gillian Clarke","Caleb Femi","Fred D'Aguiar","Louise Bennett","Sujata Bhatt","Imtiaz Dharker"];
+const isName=a=>/^[A-Z][\w\u00c0-\u024f'’.-]+( (and |de |van )?[A-Z][\w\u00c0-\u024f'’.-]+){0,3}$/.test(String(a).trim());
 function distractors(card,pool,k,rnd){rnd=rnd||Math.random;const qt=qtype(card.q),ka=kind(card.a),qa=words(card.q),aa=words(card.a),na=norm(card.a),la=String(card.a).length,wc=who(card.q);
   const seen=new Set([na]);const scored=[];
   pool.forEach(x=>{if(x===card||(x.q===card.q&&x.a===card.a))return;const nx=norm(x.a);if(!nx||seen.has(nx))return;
     if(nx.length>4&&(na.includes(nx)||nx.includes(na)))return; // so close it could also be right
     const xt=qtype(x.q);let s=0;
     if(xt===qt||((xt==="def"||xt==="term")&&(qt==="def"||qt==="term")))s+=6;else if((qt==="quote"&&xt==="stagedir")||(qt==="stagedir"&&xt==="quote"))s-=6;
-    if(x.t===card.t)s+=2.5;const kx=kind(x.a);if(kx===ka)s+=3;else if(kx.slice(0,4)===ka.slice(0,4))s+=1.5;
-    s+=3*jac(qa,words(x.q))+1.5*jac(aa,words(x.a));
+    if(x.t===card.t)s+=4;const kx=kind(x.a);if(kx===ka)s+=3;else if(kx.slice(0,4)===ka.slice(0,4))s+=1.5;
+    s+=5*jac(qa,words(x.q))+2.5*jac(aa,words(x.a))+2*jac(qa,words(x.a));
+    if(qt==="who"){const nm=isName(String(x.a).split(",")[0]);s+=nm?5:-6}
     if(wc&&who(x.q)===wc)s+=1.5;
     s-=Math.abs(Math.log((String(x.a).length+4)/(la+4)))*2.2;
     s+=rnd()*1.2;scored.push([s,x.a,nx,xt===qt])});
   scored.sort((a,b)=>b[0]-a[0]);
   const out=[];
   const add=(arr,max)=>{for(const f of arr){if(out.length>=max)break;const nf=norm(f);if(nf&&!seen.has(nf)){seen.add(nf);out.push(f)}}};
+  if(ka!=="num"&&qt!=="quote"&&qt!=="stagedir"&&card.s!=="english-literature")add(mutate(card.a,rnd),ka==="word"?1:2);
+  if(qt==="who"&&card.s==="english-literature"&&!/wrote|author|poet/i.test(card.q)&&CHARS[card.t])add(CHARS[card.t].filter(n=>!norm(card.a).includes(norm(n))).map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),k);
+  if(qt==="who"&&isName(card.a)&&/wrote|author|poet/i.test(card.q)&&card.s==="english-literature")add(AUTHORS.map(x=>[rnd(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]),k);
+  if(qt==="who"&&isName(card.a)){const au=/wrote|author|poet/i.test(card.q);const byq=new Map(pool.map(x=>[norm(x.a),x.q]));add(scored.filter(x=>isName(String(x[1]).split(",")[0])&&(!au||/wrote|author|poet/i.test(byq.get(x[2])||""))).map(x=>String(x[1]).split(",")[0].trim()),k)}
   if(ka==="num")add(numberFakes(card.a,rnd),2);
   else if(WORDNUM.includes(norm(card.a)))add(wordNumFakes(card.a,rnd),3);
   else if((qt==="howmany"||qt==="when")&&/\d/.test(card.a))add(allNumberFakes(card.a,rnd),2);
@@ -233,7 +248,7 @@ function distractors(card,pool,k,rnd){rnd=rnd||Math.random;const qt=qtype(card.q
   if(ka==="num"){ // numbers only: real figures from similar questions first, then made-up nearby figures
     for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx)||kind(a)!=="num")continue;seen.add(nx);out.push(a)}
     add(numberFakes(card.a,rnd),k);}
-  for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx))continue;seen.add(nx);out.push(a)}
+  for(const [,a,nx] of scored){if(out.length>=k)break;if(seen.has(nx))continue;if(qt==="who"&&out.some(o=>norm(String(a).split(",")[0])===norm(String(o).split(",")[0])))continue;seen.add(nx);out.push(a)}
   return out}
 // French words that are the same (or nearly) in English are free marks: leave them out of quizzes
 function cognate(q,a){const deacc=w=>w.normalize("NFD").replace(/[\u0300-\u036f]/g,"");

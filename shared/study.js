@@ -111,8 +111,12 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
     sheet.querySelectorAll("[data-len]").forEach(b=>b.onclick=()=>{len=+b.dataset.len;setup()});
     sheet.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>{mode=b.dataset.mode;state.qzmode=mode;save();setup()});
     $("qzall").onclick=()=>{sel=sel.length===keys.length?[]:keys.slice();setup()};
-    $("qzgo").onclick=()=>start(shuffle(quizPool(sel,mode)).slice(0,len))}
-  function start(items){QZ={items,i:0,ans:[],res:[]};step()}
+    $("qzgo").onclick=()=>start(pickFresh(quizPool(sel,mode),len))}
+  // fresh questions each time: ones you've seen least recently come first
+  const qk=q=>q.t+"|"+String(q.q).slice(0,80);
+  const pickFresh=(pool,n)=>{const seen=state.qzseen||{};return shuffle(pool.slice()).sort((a,b)=>(seen[qk(a)]||0)-(seen[qk(b)]||0)).slice(0,n)};
+  const markSeen=items=>{state.qzseen=state.qzseen||{};const t=Date.now();items.forEach(q=>state.qzseen[qk(q)]=t);const ks=Object.keys(state.qzseen);if(ks.length>1500)ks.sort((a,b)=>state.qzseen[a]-state.qzseen[b]).slice(0,ks.length-1500).forEach(k=>delete state.qzseen[k]);save()};
+  function start(items,retry){if(!retry)markSeen(items);QZ={items,i:0,ans:[],res:[],retry:!!retry};step()}
   const okAt=k=>QZ.res[k]===true;
   function step(){const q=QZ.items[QZ.i];const label=sel.length===1?(sel[0]===C.topics[sel[0]]?sel[0]:sel[0]+" "+C.topics[sel[0]]):`${sel.length} topics`;
     sheet.innerHTML=top(label)+`<div class="qzin"><div class="qzdots">${QZ.items.map((_,k)=>`<i class="${k<QZ.i?(okAt(k)?"ok":"no"):k===QZ.i?"now":""}"></i>`).join("")}</div>
@@ -135,10 +139,10 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
     sheet.innerHTML=top("Your score")+`<div class="qzin"><p class="qzbig">${got} / ${it.length}</p><p class="qzmeta">${got===it.length?"Perfect. Try a different topic or more questions.":got/it.length>=.7?"Good work. Go over the ones you missed below.":"Reread the topic notes, then try again."}</p>
       <div class="bars">${Object.entries(per).map(([k,v])=>{const pc=Math.round(v.g/v.n*100);return `<div class="bar"><span>${k}</span><span class="tr"><i class="${pc<50?"lo":pc>=75?"hi":""}" style="width:${pc}%"></i></span><span>${v.g}/${v.n}</span></div>`}).join("")}</div>
       ${wrong.length?`<p class="qzlab" style="margin-top:16px">Ones to learn</p><div class="qzwrong">${wrong.map(q=>`<div><b>${q.q}</b><span>${q.typed?q.ans:q.o[q.a]}</span></div>`).join("")}</div>`:""}
-      <div class="qzrow2">${wrong.length?`<button type="button" class="btn p" id="qzretry">Retry the ${wrong.length} I got wrong</button>`:""}<button type="button" class="btn" id="qznew">New quiz</button></div></div>`;
-    $("qzx").onclick=close;if($("qzretry"))$("qzretry").onclick=()=>start(shuffle(wrong.map(q=>Object.assign({},q))));$("qznew").onclick=setup;sheet.scrollTop=0}
+      <div class="qzrow2">${wrong.length?`<button type="button" class="btn p" id="qzretry">Retry incorrect answers (${wrong.length})</button>`:""}<button type="button" class="btn" id="qznew">New questions</button></div><p class="qzmeta" style="margin-top:10px">${QZ.retry?"Retry round done.":"Next time you'll get questions you haven't seen yet."} <button type="button" class="linkbtn" id="qzset">Change topics</button></p></div>`;
+    $("qzx").onclick=close;if($("qzretry"))$("qzretry").onclick=()=>start(shuffle(wrong.map(q=>Object.assign({},q))),true);$("qznew").onclick=()=>start(pickFresh(quizPool(sel,mode),len));if($("qzset"))$("qzset").onclick=setup;sheet.scrollTop=0}
   sheet.onkeydown=e=>{if(e.key==="Escape")close()};
-  if(preset&&preset.length)start(shuffle(quizPool(sel)).slice(0,len));else setup();$("qzx").focus({preventScroll:true})}
+  if(preset&&preset.length)start(pickFresh(quizPool(sel),len));else setup();$("qzx").focus({preventScroll:true})}
 function setupTopicQuiz(){const rev=$("p-rev");if(!rev||!C.cards.length)return;
   rev.querySelectorAll("section.topic").forEach(sec=>{const k=sec.id;if(!C.topics[k]||!C.cards.some(c=>c[0]===k))return;const host=sec.querySelector(".tbody")||sec;
     const b=document.createElement("button");b.type="button";b.className="btn p qzbtn";b.textContent="Quiz me on "+(k===C.topics[k]?k:C.topics[k]);b.onclick=()=>openQuiz([k]);host.appendChild(b);
