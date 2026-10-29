@@ -44,6 +44,17 @@
 .sq .in{padding:0 16px 14px}
 .sq .ans{background:var(--accent-soft);border-radius:var(--r-sm);padding:12px 14px;font-style:italic}
 .sq .tr{font-size:.9rem;color:var(--muted);margin-top:8px}
+.papersw.p4{grid-auto-columns:minmax(0,1fr)}
+@media (max-width:640px){.papersw.p4{grid-template-columns:1fr 1fr;grid-auto-flow:row}.papersw.p4 a{padding:9px 11px}}
+.lbox,.rpc{background:var(--surface);border-radius:var(--r-lg,20px);box-shadow:var(--shadow);padding:16px 18px;margin-bottom:14px}
+.lmeta{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 8px}
+.lplay{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:4px 0 12px}.lplay .btn{flex:none}
+.lfr{font:600 1.1rem/1.5 var(--body);background:var(--accent-soft);border-radius:12px;padding:10px 14px}
+.lq{font:700 1.1rem var(--display);margin:8px 0 10px}.lnote{color:var(--muted);font-size:.85rem}
+.dcin{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font:1.05rem var(--body);background:var(--surface);color:inherit;box-sizing:border-box}
+.dok{color:var(--good)}.dno{color:var(--bad);text-decoration:underline wavy}
+.rpc h3{margin:0 0 4px}.rpset{color:var(--muted);margin:0 0 10px}.rpl{margin:0;padding-left:20px;display:grid;gap:10px}.rpl li b{display:block}.rpa{display:block;margin-top:4px;color:var(--accent);font-weight:600}
+.ratip{font-size:.9rem;color:var(--muted);margin:8px 0 0}
 </style>
 </head>
 <body>
@@ -54,17 +65,50 @@
   <div class="tile">Fr</div>
   <div><h1>French</h1><p class="sub">AQA · 8652 · Higher · new specification</p></div>
 </header>
+<div class="papersw p4" role="group" aria-label="Choose an exam">
+  <a href="?paper=1" data-paper="1"><b>Listening</b><span>Paper 1 · 45 min</span></a>
+  <a href="?paper=2" data-paper="2"><b>Speaking</b><span>Paper 2 · 10–12 min</span></a>
+  <a href="?paper=3" data-paper="3"><b>Reading</b><span>Paper 3 · 1 h</span></a>
+  <a href="?paper=4" data-paper="4"><b>Writing</b><span>Paper 4 · 1 h 15</span></a>
+</div>
+<script>window.FPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-frpaper")||"1"}catch(e){p="1"}}p=["1","2","3","4"].includes(p)?p:"1";try{localStorage.setItem("gcseasy-frpaper",p)}catch(e){}return p})();
+document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===FPAPER));</script>
 <nav class="tabs" role="tablist">
-  <button role="tab" id="tab-rev" aria-selected="true" data-p="rev">Grammar</button>
+  <button role="tab" id="tab-gd" aria-selected="true" data-p="gd">Exam guide</button>
+  <button role="tab" id="tab-li" aria-selected="false" data-p="li">Listen</button>
+  <button role="tab" id="tab-dc" aria-selected="false" data-p="dc">Dictation</button>
+  <button role="tab" id="tab-rp" aria-selected="false" data-p="rp">Role play</button>
+  <button role="tab" id="tab-ra" aria-selected="false" data-p="ra">Read aloud</button>
+  <button role="tab" id="tab-rev" aria-selected="false" data-p="rev">Grammar</button>
   <button role="tab" id="tab-fc" aria-selected="false" data-p="fc">Vocab</button>
   <button role="tab" id="tab-vt" aria-selected="false" data-p="vt">Vocab test</button>
-  <button role="tab" id="tab-sp" aria-selected="false" data-p="sp">Speaking</button>
-  <button role="tab" id="tab-gd" aria-selected="false" data-p="gd">Exam guide</button>
+  <button role="tab" id="tab-sp" aria-selected="false" data-p="sp">Conversation</button>
   <button role="tab" id="tab-ex" aria-selected="false" data-p="ex">Exam Qs</button>
 </nav>
 
+<!-- LISTENING -->
+<div id="p-li" hidden>
+<p style="margin-bottom:10px">Press play to hear a sentence read by your device's French voice, then answer in English. Like the exam, try to get it after two listens before you show the text.</p>
+<div class="chips" id="lit"></div><div id="libox" class="lbox"></div>
+</div>
+<!-- DICTATION -->
+<div id="p-dc" hidden>
+<p style="margin-bottom:10px">Section B of the Listening paper is dictation: you hear short sentences and write them in French. Listen, type exactly what you hear, then check. Spelling and accents count.</p>
+<div class="chips" id="dct"></div><div id="dcbox" class="lbox"></div>
+</div>
+<!-- ROLE PLAY -->
+<div id="p-rp" hidden>
+<p style="margin-bottom:10px">The role play is worth 10 marks. Answer each prompt in one clear sentence with a verb. <b>!</b> means an unexpected question you'll only hear in the exam; <b>?</b> means you ask a question. Say your answer out loud before you reveal the model.</p>
+<div id="rpbox"></div>
+</div>
+<!-- READ ALOUD -->
+<div id="p-ra" hidden>
+<p style="margin-bottom:10px">You read a short text aloud, then answer questions on the same theme. Read it yourself first, then press play to compare with your device's French voice.</p>
+<div id="rabox"></div>
+</div>
+
 <!-- GRAMMAR -->
-<div id="p-rev">
+<div id="p-rev" hidden>
 
 <section class="topic" id="TN">
 <div class="th"><div class="tile">Tn</div><h2>The tenses you need</h2></div>
@@ -246,7 +290,7 @@ const FQ=[{title:"French: the four papers",sub:"AQA 8652 Higher. Each paper is 2
  {n:"P4",type:"Writing",marks:50,time:"75 min",pts:["Translation from English into French (10 marks).","90-word task (15 marks) and 150-word task (25 marks). Cover every bullet."],flow:["Present","Past","Future / conditional","Opinions + reasons"]}],
  notes:["Use past, present and future in every longer answer.","Give an opinion and a reason in as many sentences as you can.","Learn a few complex structures (si clauses, après avoir, depuis) and reuse them.","For translation, check tenses, agreements and accents last.","Revise vocab little and often: 10 words a day beats 100 the night before."]}];
 (function(){
-Guide.render(document.getElementById("fguide"),FQ);
+Guide.render(document.getElementById("fguide"),[Object.assign({},FQ[0],{title:["Paper 1: Listening","Paper 2: Speaking","Paper 3: Reading","Paper 4: Writing"][+FPAPER-1],sub:"AQA 8652 Higher · 25% of the GCSE.",total:{"1":"45 min","2":"10–12 min + 15 min prep","3":"1 hour","4":"1 h 15"}[FPAPER],split:[],qs:FQ[0].qs.filter(q=>q.n==="P"+FPAPER)})]);
 document.querySelectorAll("#fguide .nbmeta .mk").forEach(m=>m.textContent=m.textContent.replace(/^(\d+) marks$/,"$1 marks"));
 /* speaking */
 let spt="T1";const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -271,11 +315,102 @@ function drawV(){const el=document.getElementById("vtop");el.innerHTML="";[["T1"
   document.getElementById("vchk").onclick=check;inp.onkeydown=e=>{if(e.key==="Enter")check()};document.getElementById("vskip").onclick=()=>done(false,"Here it is")}
 nextV();
 })();
+/* Listening: hear a sentence (computer voice), answer in English. [theme, French, question, options, correct index] */
+const LIS=[
+["T1","Je m'entends bien avec mon frère, mais ma sœur m'énerve parce qu'elle prend toujours mes affaires.","Why does the speaker's sister annoy them?",["She is always on her phone","She always takes their things","She never helps at home","She is rude to their friends"],1],
+["T1","Le week-end dernier, je suis allée au cinéma avec ma meilleure amie, et après, nous avons mangé une pizza.","What did the speaker do after the cinema?",["Went shopping","Went home","Ate a pizza","Played football"],2],
+["T1","Pour garder la forme, je fais de la natation deux fois par semaine.","How often does the speaker swim?",["Once a week","Twice a week","Every day","At weekends only"],1],
+["T1","Mon père travaille dans un hôpital ; il est infirmier et il commence très tôt le matin.","What is the father's job?",["Doctor","Teacher","Nurse","Chef"],2],
+["T1","À l'avenir, je voudrais me marier, mais pas avant l'âge de trente ans.","What does the speaker say about getting married?",["They never want to marry","Not before thirty","As soon as possible","After university"],1],
+["T1","Je ne bois jamais de boissons sucrées, parce que c'est mauvais pour les dents.","Why does the speaker avoid sugary drinks?",["They are expensive","They are bad for your teeth","They make you tired","Their parents forbid them"],1],
+["T2","Je préfère regarder les films en version originale, même si c'est plus difficile.","How does the speaker prefer to watch films?",["Dubbed into French","With friends at the cinema","In the original language","On their phone"],2],
+["T2","Hier soir, j'ai écouté de la musique pendant deux heures au lieu de faire mes devoirs.","What should the speaker have been doing?",["Sleeping","Their homework","Tidying their room","Practising an instrument"],1],
+["T2","Pour mon anniversaire, mes parents m'ont offert des billets pour un concert.","What did the speaker get for their birthday?",["A phone","Concert tickets","Clothes","Money"],1],
+["T2","Je passe trop de temps sur les réseaux sociaux ; je devrais lire plus souvent.","What does the speaker think they should do more often?",["Read","Do sport","Go out with friends","Sleep"],0],
+["T2","Le 14 juillet, il y a un feu d'artifice dans ma ville et tout le monde danse dans la rue.","What happens in the speaker's town on 14 July?",["A football match","A market","Fireworks and dancing","A school concert"],2],
+["T2","Mon émission préférée, c'est une série policière ; je la regarde tous les vendredis.","What kind of programme is the speaker's favourite?",["A reality show","A crime series","A cartoon","The news"],1],
+["T3","J'habite dans un petit village à la campagne ; c'est calme mais il n'y a rien à faire pour les jeunes.","What is the problem with the village?",["It is too noisy","It is too expensive","There is nothing for young people to do","There is no school"],2],
+["T3","Pour protéger l'environnement, je recycle le papier et je prends le bus au lieu de la voiture.","How does the speaker travel to help the environment?",["By bike","On foot","By bus","By train"],2],
+["T3","L'année prochaine, nous allons passer nos vacances en Espagne, au bord de la mer.","Where is the speaker going next year?",["To the mountains in France","To the seaside in Spain","To a city in Italy","To the countryside in England"],1],
+["T3","Dans ma ville, il y a beaucoup de circulation et l'air est pollué.","What two problems does the speaker mention?",["Litter and noise","Traffic and air pollution","Crime and unemployment","No shops and no buses"],1],
+["T3","Il faut éteindre les lumières quand on quitte une pièce pour économiser l'énergie.","What should you do when you leave a room?",["Close the window","Turn off the lights","Unplug the TV","Turn down the heating"],1],
+["T3","Quand j'étais petit, j'habitais en ville, mais maintenant je préfère la campagne.","Where does the speaker prefer to live now?",["In the city","In the countryside","By the sea","Abroad"],1]
+];
+/* Dictation: hear it, write it exactly. [theme, sentence] */
+const DIC=[
+["T1","Ma mère est très gentille."],["T1","Je fais du sport le samedi."],["T1","Mon meilleur ami s'appelle Hugo."],["T1","Nous mangeons ensemble le soir."],["T1","Je me couche à dix heures."],
+["T2","J'aime regarder des films."],["T2","Elle joue de la guitare."],["T2","Hier, j'ai lu un livre."],["T2","Le concert était génial."],["T2","Je vais au cinéma ce soir."],
+["T3","Il fait beau aujourd'hui."],["T3","J'habite près de la mer."],["T3","On doit recycler les bouteilles."],["T3","La ville est trop bruyante."],["T3","Nous allons en France en été."]
+];
+/* Role plays: [theme, title, setting, prompts: [English prompt, model French answer]] (! = unexpected question) */
+const RP=[
+["T1","At a friend's house","You are staying with your French friend's family. Your teacher plays the parent and starts.",[["Say what you like to eat.","J'aime les pâtes et les légumes."],["Say one thing you did yesterday.","Hier, j'ai visité le musée avec mon ami."],["! Answer the question.","(Question: Tu aides à la maison ?) Oui, je fais la vaisselle tous les jours."],["Say what your family is like.","Ma famille est petite et très sympa."],["? Ask a question about bedtime.","À quelle heure est-ce qu'on se couche ?"]]],
+["T2","At the cinema","You are at a cinema in France. Your teacher plays the employee and starts.",[["Ask for two tickets.","Je voudrais deux billets, s'il vous plaît."],["Say which type of film you prefer.","Je préfère les comédies parce qu'elles sont drôles."],["! Answer the question.","(Question: Vous avez quel âge ?) J'ai seize ans."],["Say what you watched last weekend.","Le week-end dernier, j'ai regardé un film d'horreur."],["? Ask what time the film starts.","Le film commence à quelle heure ?"]]],
+["T3","At the tourist office","You are on holiday in a French town. Your teacher plays the assistant and starts.",[["Say where you are staying.","Je reste dans un hôtel près de la gare."],["Say one thing you visited yesterday.","Hier, j'ai visité le château."],["! Answer the question.","(Question: Vous aimez la ville ?) Oui, c'est très joli mais il y a trop de monde."],["Say what you want to do tomorrow.","Demain, je voudrais aller à la plage."],["? Ask if there is a market.","Est-ce qu'il y a un marché ici ?"]]],
+["T3","Talking about the environment","Your teacher plays a French student doing a survey and starts.",[["Say one thing you do to help the environment.","Je recycle le plastique et le papier."],["Say what the problem is in your area.","Dans ma ville, il y a trop de déchets."],["! Answer the question.","(Question: Tu prends souvent la voiture ?) Non, je vais au collège à vélo."],["Say what you did recently to help.","La semaine dernière, j'ai ramassé des déchets dans le parc."],["? Ask the student what they do.","Et toi, qu'est-ce que tu fais pour l'environnement ?"]]]
+];
+/* Reading aloud: short texts with tricky sounds marked [theme, text, sound tips] */
+const RA=[
+["T1","J'ai deux frères et une sœur. Le week-end, nous allons souvent chez nos grands-parents, qui habitent à la campagne. J'aime y aller parce que c'est tranquille.","Don't pronounce the final s in deux, frères, allons, nos. 'qui' sounds like 'key'. 'ch' in chez is soft, like 'sh'."],
+["T2","Je regarde rarement la télévision. Je préfère écouter de la musique ou jouer à des jeux vidéo avec mes amis. Hier soir, j'ai joué pendant une heure.","'-tion' sounds like 'see-on'. 'eu' in jeux and heure is a rounded 'uh'. Link 'mes amis' as 'may-za-mee'."],
+["T3","Ma ville est assez grande. Il y a beaucoup de magasins, mais il y a aussi trop de circulation. À l'avenir, j'aimerais habiter au bord de la mer.","'beaucoup' is 'bo-koo'. 'Il y a' runs together as 'eel-ya'. The h in habiter is silent, and 'au bord' sounds like 'oh bor'."]
+];
+
+const FTABS={"1":["gd","li","dc","fc"],"2":["gd","rp","ra","sp","rev"],"3":["gd","ex","fc"],"4":["gd","ex","rev","vt"]}[FPAPER];
+document.querySelectorAll("nav.tabs button").forEach(b=>{if(!FTABS.includes(b.dataset.p)){b.remove();const pn=document.getElementById("p-"+b.dataset.p);if(pn)pn.hidden=true}});
+{const nv=document.querySelector("nav.tabs");FTABS.forEach(k=>{const b=document.getElementById("tab-"+k);if(b)nv.appendChild(b)})}
+{const first=document.querySelector("nav.tabs button");if(first)first.setAttribute("aria-selected","true");["li","dc","rp","ra","rev","gd","fc","vt","sp","ex"].forEach(k=>{const pn=document.getElementById("p-"+k);if(pn)pn.hidden=!(first&&first.dataset.p===k)})}
+const FSETS={"1":[],"2":[],"3":["read","trans3"],"4":["trans4","write"]}[FPAPER];
 Study.init({id:"french",key:"fr-v1",topics:TOPICS,cards:CARDS,figs:{},sets:[
- {id:"read",name:"Reading",blurb:"Short French texts with questions in English, like Paper 3.",qs:SETS.filter(s=>s.n[0]==="R")},
- {id:"trans",name:"Translation",blurb:"French → English (Paper 3) and English → French (Paper 4). Use AI marking or the mark scheme.",qs:SETS.filter(s=>s.n[0]==="T")},
- {id:"write",name:"Writing",blurb:"The 90-word and 150-word tasks from Paper 4. Write in French, then mark it with AI.",qs:SETS.filter(s=>s.n[0]==="W")}
-]});
+ {id:"read",name:"Reading",blurb:"Short French texts with questions in English, like Paper 3 Section A.",qs:SETS.filter(s=>s.n[0]==="R")},
+ {id:"trans3",name:"Translation into English",blurb:"Paper 3 Section B: translate French sentences into English.",qs:SETS.filter(s=>s.n==="T")},
+ {id:"trans4",name:"Translation into French",blurb:"Paper 4: translate English sentences into French. Use AI marking or the marking guidance.",qs:SETS.filter(s=>s.n==="TF")},
+ {id:"write",name:"Writing tasks",blurb:"The 90-word and 150-word tasks from Paper 4. Write in French, then mark it with AI.",qs:SETS.filter(s=>s.n[0]==="W")}
+].filter(s=>FSETS.includes(s.id))});
+
+/* ---- listening, dictation, role play, read aloud ---- */
+(function(){const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const TTS="speechSynthesis" in window;let frv=null;const pickV=()=>{if(!TTS)return;const vs=speechSynthesis.getVoices();frv=vs.find(v=>/^fr(-|_)FR/i.test(v.lang))||vs.find(v=>/^fr/i.test(v.lang))||null};if(TTS){pickV();speechSynthesis.onvoiceschanged=pickV}
+const say=(t,slow)=>{if(!TTS||!speechSynthesis.getVoices().length){document.querySelectorAll(".lvwarn").forEach(x=>x.hidden=false);return false}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="fr-FR";if(frv)u.voice=frv;u.rate=slow?.7:.92;speechSynthesis.speak(u);return true};
+const noVoice=`<p class="lnote">Your device has no French voice, so the text is shown instead. On phones, add French in your text-to-speech settings.</p>`;
+const chips=(el,cur,cb)=>{el.innerHTML="";[["all","All themes"],["T1",TOPICS.T1],["T2",TOPICS.T2],["T3",TOPICS.T3]].forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})};
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const norm=s=>s.toLowerCase().replace(/[’']/g,"'").replace(/[.!?,;:]/g,"").replace(/\s+/g," ").trim(),bare=s=>norm(s).normalize("NFD").replace(/[̀-ͯ]/g,"");
+/* listening */
+if($("libox")){let th="all",q=[],i=0,plays=0,right=0;
+  const start=k=>{th=k;q=shuf(LIS.filter(x=>th==="all"||x[0]===th));i=0;right=0;chips($("lit"),th,start);draw()};
+  const draw=()=>{if(i>=q.length){$("libox").innerHTML=`<p class="lq"><b>${right} / ${q.length}</b> right.</p><button class="btn p" id="liagain">Go again</button>`;$("liagain").onclick=()=>start(th);return}
+    const x=q[i];plays=0;const ord=shuf(x[3].map((_,k)=>k));
+    $("libox").innerHTML=`<p class="lmeta">${i+1} of ${q.length} · ${TOPICS[x[0]]}</p><div class="lplay"><button class="btn p" id="lip">▶ Play</button><button class="btn" id="lis">Play slowly</button><button class="linkbtn" id="lit2">Show the French</button></div><p class="lfr" id="lifr" hidden lang="fr">${esc(x[1])}</p>${TTS?"":noVoice}<p class="lnote lvwarn" hidden>No French voice found on this device, so the text is shown instead.</p><p class="lq">${esc(x[2])}</p><div class="opts">${ord.map(k=>`<button class="opt" data-k="${k}">${esc(x[3][k])}</button>`).join("")}</div><div id="lifb"></div>`;
+    if(!TTS)$("lifr").hidden=false;
+    $("lip").onclick=()=>{plays++;if(!say(x[1]))$("lifr").hidden=false};$("lis").onclick=()=>{plays++;if(!say(x[1],true))$("lifr").hidden=false};$("lit2").onclick=()=>$("lifr").hidden=false;
+    $("libox").querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const k=+b.dataset.k,ok=k===x[4];if(ok){right++;if(window.GCSEasy)GCSEasy.addXP(1,"vocab",60)}
+      $("libox").querySelectorAll(".opt").forEach(o=>{o.disabled=true;if(+o.dataset.k===x[4])o.classList.add("right");else if(o===b)o.classList.add("wrong")});$("lifr").hidden=false;
+      $("lifb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div><button class="btn p" id="linx">Next</button>`;$("linx").onclick=()=>{i++;draw()}})};
+  start("all")}
+/* dictation */
+if($("dcbox")){let th="all",q=[],i=0;
+  const start=k=>{th=k;q=shuf(DIC.filter(x=>th==="all"||x[0]===th));i=0;chips($("dct"),th,start);draw()};
+  const draw=()=>{if(i>=q.length){$("dcbox").innerHTML=`<p class="lq">Done.</p><button class="btn p" id="dcagain">Go again</button>`;$("dcagain").onclick=()=>start(th);return}
+    const x=q[i];$("dcbox").innerHTML=`<p class="lmeta">${i+1} of ${q.length}</p><div class="lplay"><button class="btn p" id="dcp">▶ Play</button><button class="btn" id="dcs">Play slowly</button></div>${TTS?`<p class="lnote lvwarn" hidden>No French voice found on this device. Add French in your device's text-to-speech settings, or use Listen instead.</p>`:noVoice+`<p class="lfr" lang="fr">${esc(x[1])}</p>`}
+      <input id="dcin" class="dcin" lang="fr" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type what you hear" aria-label="Your dictation"><div class="acc">${["é","è","ê","à","ç","ô","î","ù","û","ë","œ"].map(a=>`<button type="button" data-a="${a}">${a}</button>`).join("")}</div>
+      <div class="row"><button class="btn p" id="dcchk">Check</button></div><div id="dcfb"></div>`;
+    const inp=$("dcin");$("dcp").onclick=()=>say(x[1]);$("dcs").onclick=()=>say(x[1],true);
+    $("dcbox").querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{const s=inp.selectionStart||inp.value.length;inp.value=inp.value.slice(0,s)+b.dataset.a+inp.value.slice(inp.selectionEnd||s);inp.focus();inp.setSelectionRange(s+1,s+1)});
+    const chk=()=>{const g=inp.value;if(!g.trim())return;const ok=norm(g)===norm(x[1]),near=!ok&&bare(g)===bare(x[1]);
+      const want=x[1].replace(/[.!?]$/,"").split(/\s+/),got=g.trim().replace(/[.!?]$/,"").split(/\s+/);
+      const marked=want.map((w,k)=>{const gw=got[k]||"";return norm(gw)===norm(w)?`<span class="dok">${esc(w)}</span>`:`<span class="dno">${esc(w)}</span>`}).join(" ");
+      if(ok&&window.GCSEasy)GCSEasy.addXP(2,"vocab",60);inp.disabled=true;$("dcchk").disabled=true;
+      $("dcfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Perfect":near?"Nearly: check the accents":"Not quite"}</div><p class="lfr" lang="fr">${marked}</p><button class="btn p" id="dcnx">Next</button>`;$("dcnx").onclick=()=>{i++;draw()}};
+    $("dcchk").onclick=chk;inp.onkeydown=e=>{if(e.key==="Enter")chk()};inp.focus({preventScroll:true})};
+  start("all")}
+/* role play */
+if($("rpbox")){$("rpbox").innerHTML=RP.map((r,ri)=>`<div class="rpc"><p class="lmeta">${esc(TOPICS[r[0]])}</p><h3>${esc(r[1])}</h3><p class="rpset">${esc(r[2])}</p><ol class="rpl">${r[3].map(([p,a],k)=>`<li><b>${esc(p)}</b><button type="button" class="linkbtn rpshow">Show a model answer</button><span class="rpa" hidden lang="fr">${esc(a)}${TTS?` <button type="button" class="linkbtn rpsay" data-t="${esc(a.replace(/^\([^)]*\)\s*/,""))}">▶</button>`:""}</span></li>`).join("")}</ol></div>`).join("");
+  $("rpbox").querySelectorAll(".rpshow").forEach(b=>b.onclick=()=>{b.nextElementSibling.hidden=false;b.remove()});$("rpbox").querySelectorAll(".rpsay").forEach(b=>b.onclick=()=>say(b.dataset.t))}
+/* read aloud */
+if($("rabox")){$("rabox").innerHTML=RA.map(r=>`<div class="rpc"><p class="lmeta">${esc(TOPICS[r[0]])}</p><p class="lfr ra" lang="fr">${esc(r[1])}</p>${TTS?`<div class="lplay"><button class="btn p" data-ra="${esc(r[1])}">▶ Hear it</button><button class="btn" data-ras="${esc(r[1])}">Slowly</button></div>`:noVoice}<p class="ratip"><b>Sounds to watch:</b> ${esc(r[2])}</p></div>`).join("");
+  $("rabox").querySelectorAll("[data-ra]").forEach(b=>b.onclick=()=>say(b.dataset.ra));$("rabox").querySelectorAll("[data-ras]").forEach(b=>b.onclick=()=>say(b.dataset.ras,true))}
+})();
 </script>
 </body>
 </html>

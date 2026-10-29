@@ -167,6 +167,7 @@ function setupCards(){
   const card=$("card");if(!card)return;state.srs=state.srs||{};if(!state.fcSize)state.fcSize=10;let note="",sessN=0;
   const mrow=document.createElement("div");mrow.className="chips";mrow.id="fcm";$("fcf").before(mrow);
   const prog=document.createElement("div");prog.className="fcprog";$("card").before(prog);
+  {const qb=document.createElement("button");qb.type="button";qb.className="qzopenbtn fcquiz";qb.textContent="Quiz me on these";qb.onclick=()=>openQuiz(fcTopic==="All"?null:(fcTopic[0]==="@"?C.groups[+fcTopic.slice(1)][1]:[fcTopic]));const row=$("fcshuf")&&$("fcshuf").parentNode;if(row)row.after(qb)}
   const now=()=>Date.now(),isNew=c=>!state.srs[ckey(c)],isDue=c=>{const r=state.srs[ckey(c)];return !!r&&r.due<=now()};
   const pool=()=>C.cards.filter(c=>inTopic(fcTopic,c[0]));
   if(!["new","due","all"].includes(state.fcMode))state.fcMode=pool().some(isDue)?"due":"new";
@@ -563,5 +564,5 @@ function init(cfg){
 }
 const r=(a,b,dp=0)=>+(a+Math.random()*(b-a)).toFixed(dp);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-return {init,chart,table,r,pick};
+return {init,chart,table,r,pick,quiz:k=>openQuiz(k)};
 })();
