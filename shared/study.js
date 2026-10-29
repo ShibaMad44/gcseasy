@@ -145,6 +145,7 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
   if(preset&&preset.length)start(pickFresh(quizPool(sel),len));else setup();$("qzx").focus({preventScroll:true})}
 function setupTopicQuiz(){const rev=$("p-rev");if(!rev||!C.cards.length)return;
   rev.querySelectorAll("section.topic").forEach(sec=>{const k=sec.id;if(!C.topics[k]||!C.cards.some(c=>c[0]===k))return;const host=sec.querySelector(".tbody")||sec;
+    lessonList().filter(l=>l.topic===k).forEach(l=>{const lb=document.createElement("button");lb.type="button";lb.className="btn lsbtn";lb.innerHTML=`<span aria-hidden="true">▶</span> Step-by-step lesson: ${l.title}`;lb.onclick=()=>openLesson(l.id);const tb=sec.querySelector(".tbody")||sec;tb.prepend(lb)});
     {const cs=C.cards.filter(c=>c[0]===k);if(cs.length>=3){const qc=document.createElement("div");qc.className="qcheck";
       const fill=()=>{const pick=shuffle(cs.slice()).slice(0,3);qc.innerHTML=`<p class="qch"><b>Check yourself</b><span>Answer in your head, then tap to see if you were right.</span></p>${pick.map(c=>`<button type="button" class="qci"><span class="qcq">${c[1]}</span><span class="qca">${c[2]}</span></button>`).join("")}<button type="button" class="linkbtn qcnew">Three different ones</button>`;
         qc.querySelectorAll(".qci").forEach(x=>x.onclick=()=>x.classList.toggle("show"));qc.querySelector(".qcnew").onclick=fill};fill();host.appendChild(qc)}}
@@ -538,12 +539,53 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   pan.addEventListener("click",e=>{const d=e.target.closest("dd");if(d&&pan.classList.contains("rhide"))d.classList.toggle("show");
     const g=e.target.closest(".rgo");if(g){const t=document.getElementById("tab-"+firstPan.id.slice(2));if(t)t.click();const s=document.getElementById(g.dataset.k);if(s){if(s.classList.contains("acc")&&!s.classList.contains("open"))s.querySelector(".th").click();setTimeout(()=>s.scrollIntoView({behavior:"smooth"}),60)}}});
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
+
+/* Lessons: short step-by-step lessons (learn, diagram, worked example, checks, common mistake, summary) */
+function lessonList(){return (window.LESSONS&&window.LESSONS[C.id])||[]}
+function setupLessons(){const LS=lessonList();if(!LS.length)return;const nav=document.querySelector("nav.tabs");if(!nav)return;
+  const after=$("tab-sum")||nav.querySelector("button");const b=document.createElement("button");b.setAttribute("role","tab");b.id="tab-ls";b.setAttribute("aria-selected","false");b.dataset.p="ls";b.textContent="Lessons";after.after(b);
+  const ref=$("p-sum")||$("p-"+nav.querySelector("button").dataset.p);const pan=document.createElement("div");pan.id="p-ls";pan.hidden=true;ref.after(pan);
+  const draw=()=>{state.lessons=state.lessons||{};pan.innerHTML=`<p class="lsintro">Short lessons that take you through a tricky topic step by step: a clear explanation, a labelled diagram, a worked example, then questions to check you've got it.</p><div class="lsgrid">${LS.map(l=>{const s=state.lessons[l.id]||{};const st=s.done?"Done ✓":s.step?`Step ${s.step+1} of ${l.steps.length}`:`${l.steps.length} steps`;
+    return `<button type="button" class="lscard${s.done?" done":""}" data-ls="${l.id}"><span class="lsk">${l.topic} · ${C.topics[l.topic]||""}</span><b>${l.title}</b><span class="lsm">About ${l.mins} min · ${st}</span><span class="lsgo">${s.done?"Do it again":s.step?"Carry on":"Start lesson"} →</span></button>`}).join("")}</div>`;
+    pan.querySelectorAll("[data-ls]").forEach(x=>x.onclick=()=>openLesson(x.dataset.ls,draw))};
+  draw();document.addEventListener("gcseasy:lesson",draw)}
+function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)return;state.lessons=state.lessons||{};const S=state.lessons[id]=state.lessons[id]||{};
+  let i=S.done?0:(S.step||0),answered={};
+  let sh=$("lsheet");if(!sh){sh=document.createElement("div");sh.id="lsheet";sh.className="qzsheet lsheet";sh.setAttribute("role","dialog");sh.setAttribute("aria-modal","true");document.body.appendChild(sh)}
+  sh.setAttribute("aria-label",l.title);sh.hidden=false;document.body.classList.add("qzopen");
+  const close=()=>{sh.hidden=true;document.body.classList.remove("qzopen");if(window.speechSynthesis)speechSynthesis.cancel();document.dispatchEvent(new CustomEvent("gcseasy:lesson"));if(onClose)onClose()};
+  const lab={learn:"Learn",diagram:"Diagram",example:"Worked example",q:"Check",num:"Check",mistake:"Watch out",sum:"Summary"};
+  function step(){const s=l.steps[i],last=i===l.steps.length-1;S.step=i;save();
+    const need=(s.t==="q"||s.t==="num")&&!answered[i];
+    let body="";
+    if(s.t==="diagram")body=`<div class="ldwrap">${s.svg}</div><div class="ldbar"><button type="button" class="chip" id="ldhide">Hide labels and test yourself</button><span class="ldhint" id="ldhint" hidden>Tap a number to check it.</span></div>${s.html||""}`;
+    else if(s.t==="q")body=`<p class="qzq">${s.q}</p><div class="opts">${s.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div><div id="lsfb"></div>`;
+    else if(s.t==="num")body=`<p class="qzq">${s.q}</p><form class="qztype" id="lsform" autocomplete="off"><input id="lsin" inputmode="decimal" placeholder="Your answer${s.unit&&s.unit!=="×"?" in "+s.unit:""}" aria-label="Your answer"><button type="submit" class="btn p">Check</button></form><button type="button" class="linkbtn" id="lsidk">Show me the answer</button><div id="lsfb"></div>`;
+    else if(s.t==="sum")body=`<ul class="lssum">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul><div class="lsend"><button type="button" class="btn p" id="lsquiz">Quiz me on ${C.topics[l.topic]||"this topic"}</button><button type="button" class="btn" id="lsnotes">Open the full notes</button></div>`;
+    else body=s.html;
+    sh.innerHTML=`<div class="qzbar"><b>${l.title}</b><button type="button" class="qzx" id="lsx" aria-label="Close lesson">✕</button></div>
+      <div class="qzin lsin"><div class="lsprog"><i style="width:${(i+1)/l.steps.length*100}%"></i></div><p class="qzmeta">Step ${i+1} of ${l.steps.length} · ${lab[s.t]}</p><h2 class="lsh">${s.h}</h2><div class="lsbody lst-${s.t}">${body}</div>
+      <div class="lsnav"><button type="button" class="btn" id="lsback"${i?"":" disabled"}>Back</button><button type="button" class="btn p" id="lsnext"${need?" disabled":""}>${last?"Finish":"Next"}</button></div></div>`;
+    $("lsx").onclick=close;$("lsback").onclick=()=>{i--;step()};
+    $("lsnext").onclick=()=>{if(last){S.done=Date.now();S.step=0;save();if(window.GCSEasy){GCSEasy.addXP(5,"lesson",40,"lesson:"+C.id+":"+id+":"+new Date().toDateString());GCSEasy.topicResult&&GCSEasy.topicResult(C.id,l.topic,true)}close();return}i++;step()};
+    if(s.t==="diagram"){const svg=sh.querySelector(".ldiag");$("ldhide").onclick=e=>{const on=svg.classList.toggle("test");e.target.classList.toggle("on",on);e.target.textContent=on?"Show all labels":"Hide labels and test yourself";$("ldhint").hidden=!on;svg.querySelectorAll(".lb").forEach(g=>g.classList.remove("show"))};
+      svg.querySelectorAll(".lb").forEach(g=>g.addEventListener("click",()=>{if(svg.classList.contains("test"))g.classList.toggle("show")}))}
+    const done=(ok,extra)=>{answered[i]=1;if(ok&&window.GCSEasy)GCSEasy.addXP(1,"quiz",60);if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,l.topic,ok);
+      $("lsfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${extra||""}<div class="panel ms">${s.ex}</div>`;$("lsnext").disabled=false;$("lsnext").focus({preventScroll:true})};
+    if(s.t==="q")sh.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;sh.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===s.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===s.a)});
+    if(s.t==="num"){const inp=$("lsin");setTimeout(()=>inp.focus({preventScroll:true}),50);
+      const fin=(ok,v)=>{inp.disabled=true;sh.querySelector("#lsform button").disabled=true;const k=$("lsidk");if(k)k.remove();done(ok,ok?"":`<div class="panel ms"><b>Answer:</b> ${s.ans}${s.unit&&s.unit!=="×"?" "+s.unit:""}</div>`)};
+      $("lsform").onsubmit=e=>{e.preventDefault();const v=parseFloat(String(inp.value).replace(/,/g,"").replace(/[^\d.\-eE]/g,""));if(isNaN(v)){inp.focus();return}fin(Math.abs(v-s.ans)<=s.tol,v)};
+      $("lsidk").onclick=()=>fin(false)}
+    if(s.t==="sum"){$("lsquiz").onclick=()=>{close();openQuiz([l.topic])};$("lsnotes").onclick=()=>{close();const t=$("tab-"+(document.querySelector("nav.tabs button").dataset.p));const sec=$(l.topic);if($("tab-rev"))$("tab-rev").click();if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),80)}}}
+    sh.scrollTop=0}
+  sh.onkeydown=e=>{if(e.key==="Escape")close()};step();$("lsx").focus({preventScroll:true})}
 function init(cfg){
   C=cfg;KEY=cfg.key;load();applyTier();window.__STUDY=C;
   {const scb=document.querySelector("#p-ex .score"),pp=$("paper");if(scb&&pp&&pp.parentNode===scb.parentNode)pp.after(scb)}
   const cov=document.querySelector("#p-ex .cover");if(cov&&!cov.querySelector(".aiquota")){const q=document.createElement("p");q.className="aiquota";q.hidden=true;cov.appendChild(q)}
   ALL=[];C.sets.forEach(s=>s.qs.forEach(Q=>Q.parts.forEach(p=>ALL.push([p.t||Q.t,p]))));TOTAL=ALL.reduce((s,[,p])=>s+p.mk,0);
-  setupRecap();setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();
+  setupRecap();setupLessons();setupTabs();setupAccordion();setupJump();setupCards();setupTopicQuiz();
   document.querySelectorAll("[data-fig]").forEach(el=>{if(C.figs[el.dataset.fig])el.innerHTML=C.figs[el.dataset.fig]()});
   if($("m-learn")){
     $("m-learn").onclick=()=>{state.learn=true;save();renderSets()};
@@ -564,5 +606,5 @@ function init(cfg){
 }
 const r=(a,b,dp=0)=>+(a+Math.random()*(b-a)).toFixed(dp);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-return {init,chart,table,r,pick,quiz:k=>openQuiz(k)};
+return {init,chart,table,r,pick,quiz:k=>openQuiz(k),lesson:id=>openLesson(id)};
 })();
