@@ -164,24 +164,29 @@ let fcTopic="All",deck=[],idx=0,flipped=false;
 const GAPS=[0,1,3,7,16,35];
 const ckey=c=>c[0]+"|"+String(c[1]).slice(0,60);
 function setupCards(){
-  const card=$("card");if(!card)return;state.srs=state.srs||{};if(!state.fcMode)state.fcMode="due";
+  const card=$("card");if(!card)return;state.srs=state.srs||{};if(!state.fcSize)state.fcSize=10;let note="",sessN=0;
   const mrow=document.createElement("div");mrow.className="chips";mrow.id="fcm";$("fcf").before(mrow);
   const prog=document.createElement("div");prog.className="fcprog";$("card").before(prog);
-  const now=()=>Date.now(),isDue=c=>{const r=state.srs[ckey(c)];return !r||r.due<=now()};
+  const now=()=>Date.now(),isNew=c=>!state.srs[ckey(c)],isDue=c=>{const r=state.srs[ckey(c)];return !!r&&r.due<=now()};
   const pool=()=>C.cards.filter(c=>inTopic(fcTopic,c[0]));
-  const build=()=>{let d=pool();if(state.fcMode==="due")d=d.filter(isDue);deck=shuffle(d);idx=0;flipped=false;render()};
+  if(!["new","due","all"].includes(state.fcMode))state.fcMode=pool().some(isDue)?"due":"new";
+  const build=()=>{let d=pool();if(state.fcMode==="due")d=d.filter(isDue);else if(state.fcMode==="new")d=d.filter(isNew);deck=shuffle(d);if(state.fcSize!=="all")deck=deck.slice(0,+state.fcSize);sessN=deck.length;idx=0;flipped=false;note="";render()};
+  const srow=document.createElement("div");srow.className="chips fcsize";mrow.after(srow);
+  const when=d=>d<=0?"later today":d===1?"tomorrow":`in ${d} days`;
   const render=()=>{
-    const p=pool(),due=p.filter(isDue).length,known=p.filter(c=>(state.srs[ckey(c)]||{}).b>=3).length;
-    chipRow(mrow,[["due",`Due now (${due})`],["all","All cards"]],state.fcMode,k=>{state.fcMode=k;save();build()});
+    const p=pool(),due=p.filter(isDue).length,nw=p.filter(isNew).length,known=p.filter(c=>(state.srs[ckey(c)]||{}).b>=3).length;
+    chipRow(mrow,[["new",`New (${nw})`],["due",`Reviews due (${due})`],["all","All cards"]],state.fcMode,k=>{state.fcMode=k;save();build()});
+    chipRow(srow,[["10","10 a session"],["20","20"],["all","No limit"]],String(state.fcSize),k=>{state.fcSize=k==="all"?"all":+k;save();build()});
     chipRow($("fcf"),topicItems(),fcTopic,k=>{fcTopic=k;build()});
-    prog.innerHTML=`<div class="fcbar"><i style="width:${p.length?known/p.length*100:0}%"></i></div><span>${known} of ${p.length} cards learned</span>`;
+    prog.innerHTML=`<div class="fcbar"><i style="width:${p.length?known/p.length*100:0}%"></i></div><span>${known} of ${p.length} remembered after a break${note?` · <b class="fcnote">${note}</b>`:""}</span>`;
     const pos=$("fcpos"),left=$("fcleft");
-    if(!deck.length){card.className="card";card.innerHTML=state.fcMode==="due"?'<div class="lab">All caught up</div><div class="q">Nothing due right now.</div><div class="a">Cards come back when you\'re about to forget them. Switch to "All cards" to keep going.</div>':'<div class="lab">Done</div><div class="q">Deck cleared.</div><div class="a">Tap "Shuffle &amp; restart" to go again.</div>';pos.textContent="";left.textContent="0 left";return}
+    if(!deck.length&&sessN){card.className="card";card.innerHTML=`<div class="lab">Session done</div><div class="q">${sessN} card${sessN===1?"":"s"} finished.</div><div class="a">Cards you got right come back after a gap; the longer you remember them, the longer the gap. Tap "Shuffle &amp; restart" for another ${state.fcSize==="all"?"round":state.fcSize}.</div>`;pos.textContent="";left.textContent="0 left";sessN=0;return}
+    if(!deck.length){card.className="card";card.innerHTML=state.fcMode==="new"?'<div class="lab">No new cards</div><div class="q">You\'ve seen every card here.</div><div class="a">Switch to "Reviews due" or "All cards".</div>':state.fcMode==="due"?'<div class="lab">All caught up</div><div class="q">Nothing due right now.</div><div class="a">Cards come back when you\'re about to forget them. Switch to "All cards" to keep going.</div>':'<div class="lab">Done</div><div class="q">Deck cleared.</div><div class="a">Tap "Shuffle &amp; restart" to go again.</div>';pos.textContent="";left.textContent="0 left";return}
     const c=deck[idx];pos.textContent=c[0]===C.topics[c[0]]?c[0]:c[0]+" · "+C.topics[c[0]];left.textContent=deck.length+" left";
     card.className="card"+(flipped?" flipped":"");
     card.innerHTML=flipped?`<div class="lab">Answer</div><div class="a">${c[2]}</div>`:`<div class="lab">Question · tap to flip</div><div class="q">${c[1]}</div>`};
   const mark=ok=>{if(!deck.length)return;const c=deck[idx],k=ckey(c),r=state.srs[k]||{b:0,due:0};
-    const wasDue=r.due<=now();if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;deck.splice(idx,1);if(wasDue&&window.GCSEasy)GCSEasy.addXP(1,"cards",150)}else{r.b=0;r.due=now();deck.push(deck.splice(idx,1)[0])}
+    const wasDue=r.due<=now();if(ok){r.b=Math.min(r.b+1,GAPS.length-1);r.due=now()+GAPS[r.b]*864e5;note=`Comes back ${when(GAPS[r.b])}`;deck.splice(idx,1);if(wasDue&&window.GCSEasy)GCSEasy.addXP(1,"cards",150)}else{r.b=0;r.due=now();note="It'll come round again this session";deck.push(deck.splice(idx,1)[0])}
     state.srs[k]=r;save();if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,c[0],ok,"card");if(idx>=deck.length)idx=0;flipped=false;render()};
   card.onclick=()=>{if(!deck.length)return;flipped=!flipped;render()};
   $("fcgot").onclick=()=>mark(true);$("fcagain").onclick=()=>mark(false);
@@ -235,6 +240,7 @@ function tagPills(p){return (p.tag||[]).map(t=>`<span class="pill ${t==="Triple"
 function renderPart(p){
   const d=document.createElement("div");d.className="part";
   d.innerHTML=`<div class="phead"><span class="pid">${p.label||p.id}${tagPills(p)}</span><span class="pmk">[${p.mk} mark${p.mk>1?"s":""}]</span></div><p class="pq">${p.q}</p>`;
+  {const qt=String(p.q).replace(/<[^>]+>/g,"").slice(0,140);const rp=document.createElement("a");rp.className="preport";rp.href=`mailto:gcseasy.app@gmail.com?subject=${encodeURIComponent(`GCSEasy problem: ${C.id} ${p.id}`)}&body=${encodeURIComponent(`Question ${p.id} on ${location.href.split("#")[0]}:\n"${qt}"\n\nWhat's wrong:\n`)}`;rp.textContent="Report a problem";d.querySelector(".phead").appendChild(rp)}
   if(p.fig){const f=document.createElement("div");f.className="fig";f.innerHTML=C.figs[p.fig]();d.appendChild(f)}
   if(p.data){const f=document.createElement("div");f.innerHTML=table(p.data[0],p.data[1]);d.appendChild(f.firstChild)}
   const body=document.createElement("div");d.appendChild(body);
@@ -248,7 +254,7 @@ function renderPart(p){
     body.appendChild(o);
     function pick(j){o.querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;if(k===p.a)b.classList.add("right");else if(k===j)b.classList.add("wrong")});
       const ok=j===p.a;out.innerHTML="";out.appendChild(Object.assign(document.createElement("div"),{className:"fb "+(ok?"ok":"no"),textContent:ok?"Correct":"Not quite"}));
-      out.appendChild(panel("ms","Mark scheme",p.ex));if(p.mist)out.appendChild(panel("mist","Common mistake",p.mist));setMark(p.id,ok?p.mk:0);state.a[p.id]=j;save()}
+      out.appendChild(panel("ms","Marking guidance",p.ex));if(p.mist)out.appendChild(panel("mist","Common mistake",p.mist));setMark(p.id,ok?p.mk:0);state.a[p.id]=j;save()}
     if(state.a[p.id]!=null)setTimeout(()=>pick(state.a[p.id]));
   } else if(p.k==="n"||p.k==="f"){
     const fs=p.k==="n"?[[null,p.ans]]:p.fs;
@@ -275,11 +281,11 @@ function renderPart(p){
   } else {
     const ta=document.createElement("textarea");ta.id="ta-"+p.id;ta.placeholder="Write your answer here first, then mark it.";ta.value=state.txt[p.id]||"";
     ta.oninput=()=>{state.txt[p.id]=ta.value;save()};body.appendChild(ta);
-    const sb=document.createElement("button");sb.className="btn sm p";sb.textContent="Mark it";tools.prepend(sb);
+    const sb=document.createElement("button");sb.className="btn sm p";sb.textContent="Show guide & self-mark";tools.prepend(sb);
     let shown=false;
     const reveal=()=>{if(shown)return;shown=true;sb.remove();
       if(p.k==="L"){out.appendChild(panel("ms","Level descriptors",p.levels.map(l=>`<p class="lvl">${l}</p>`).join("")));out.appendChild(panel("ms","Points to include",list(p.ms)))}
-      else out.appendChild(panel("ms",`Mark scheme · 1 mark each, max ${p.mk}`,list(p.ms)));
+      else out.appendChild(panel("ms",`Marking guidance · 1 mark each, max ${p.mk}`,list(p.ms)));
       if(p.mist)out.appendChild(panel("mist","Common mistake",p.mist));
       out.appendChild(panel("model",p.modelTitle||"Full-marks answer",p.model));markButtons(p,out)};
     sb.onclick=reveal;
@@ -371,7 +377,7 @@ function drawTimedResult(bar,set){const T=state.timed[set.id],parts=setParts(set
     ${unmarked.length?`<div class="trow2"><button type="button" class="btn p" data-tai>\u2726 Mark them with AI (uses ${unmarked.length})</button><button type="button" class="btn" data-tself>Mark them myself</button></div>`:`<p class="tnote">How this is worked out: your percentage is compared with typical grade boundaries from recent years. These questions are original, not a real paper, and boundaries change every year, so treat it as a rough guide to progress.</p>`}
     <div class="trow2"><button type="button" class="linkbtn" data-tagain>Try it again</button></div>`;
   const ai=bar.querySelector("[data-tai]"),self=bar.querySelector("[data-tself]");
-  if(self)self.onclick=()=>{document.querySelectorAll("#paper .part .tools .btn.p").forEach(b=>{if(b.textContent==="Mark it")b.click()});const f=document.querySelector("#paper .mk");if(f)f.closest(".part").scrollIntoView({behavior:"smooth"})};
+  if(self)self.onclick=()=>{document.querySelectorAll("#paper .part .tools .btn.p").forEach(b=>{if(b.textContent==="Show guide & self-mark")b.click()});const f=document.querySelector("#paper .mk");if(f)f.closest(".part").scrollIntoView({behavior:"smooth"})};
   if(ai)ai.onclick=async()=>{ai.disabled=true;const btns=[...document.querySelectorAll("#paper .part .btn.ai")].filter(b=>!b.hidden);
     for(const b of btns){const part=b.closest(".part"),ta=part&&part.querySelector("textarea");if(!ta||ta.value.trim().length<3)continue;ai.textContent="Marking\u2026";b.click();
       await new Promise(r=>{const iv=setInterval(()=>{if(!b.disabled){clearInterval(iv);r()}},400)});if(part.querySelector(".fb.no")&&!part.querySelector(".panel.ai .t"))break}
@@ -545,9 +551,13 @@ function init(cfg){
     renderSets();
   }
   // deep links: #quiz=U2 opens a quiz on that topic; #topic=U2 opens the notes
-  const deep=()=>{const m=location.hash.match(/^#(quiz|topic)=([\w-]+)/);if(!m||!C.topics[m[2]])return;
+  const deep=()=>{const m=location.hash.match(/^#(quiz|topic)=([\w-]+)(?:&find=([^&]+))?/);if(!m||!C.topics[m[2]])return;
     if(m[1]==="quiz")setTimeout(()=>openQuiz([m[2]]),150);
-    else{const sec=$(m[2]);if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),100)}}
+    else{const sec=$(m[2]);if(sec){const pan=sec.closest('div[id^="p-"]');if(pan&&pan.hidden){const tb=document.getElementById("tab-"+pan.id.slice(2));if(tb)tb.click()}
+      if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();
+      let target=sec;const want=m[3]?decodeURIComponent(m[3]).toLowerCase().trim():"";
+      if(want){const els=[...sec.querySelectorAll(".tbody li, .tbody p, .tbody td, .tbody dd, .tbody h3")].filter(e=>!e.closest(".qcheck"));const hit=els.find(e=>e.textContent.toLowerCase().includes(want));if(hit){target=hit;const blk=hit.closest("li,tr,p,h3")||hit;blk.classList.add("gzflash");setTimeout(()=>blk.classList.remove("gzflash"),3200)}}
+      setTimeout(()=>target.scrollIntoView({behavior:"smooth",block:want?"center":"start"}),120)}}
     history.replaceState(null,"",location.pathname+location.search)};
   deep();addEventListener("hashchange",deep);
 }

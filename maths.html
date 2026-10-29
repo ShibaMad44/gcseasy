@@ -81,6 +81,7 @@
 tr.mpon td{background:var(--accent-soft);font-weight:700}
 .mwtip{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:90;background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;max-width:min(92vw,460px);box-shadow:0 10px 30px rgba(0,0,0,.25)}
 @media (min-width:641px){.mwtip{bottom:28px}}
+.b.gc{display:none!important}
 </style>
 </head>
 <body>
@@ -107,7 +108,7 @@ document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dat
 </nav>
 <div id="p-tp">
 <p style="margin-bottom:10px">Every topic on the Higher GCSE. Rate each one <b>red</b> (don't get it), <b>orange</b> (getting there) or <b>green</b> (confident). Tap a <b>MW</b> clip to watch that MathsWatch video (you'll need your school login), or <b>Practise</b> for questions that change every time.</p>
-<div class="key"><span><span class="b nc">✱ Non-calc</span> likely on the non-calculator paper</span><span><span class="b gc">GCSE only</span> may not be in your school mock, but can be in the real exam</span></div>
+<div class="key"><span><span class="b nc">✱ Non-calc</span> good to practise without a calculator</span></div>
 <div class="pnote" id="mpnote"></div>
 <div class="msum" id="msum"></div>
 <div class="chips" id="mfilt"></div>
@@ -216,7 +217,7 @@ document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dat
 <tr data-mp="1"><td>Paper 1</td><td><b>No</b></td><td>1 h 30</td><td class="num">80</td></tr>
 <tr data-mp="2"><td>Paper 2</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr>
 <tr data-mp="3"><td>Paper 3</td><td>Yes</td><td>1 h 30</td><td class="num">80</td></tr></table></div>
-<p>About <b>1 minute per mark</b>, with 10 minutes spare to check. Topics marked ✱ are likely to come up on the non-calculator paper: practise them by hand.</p></div></details>
+<p>About <b>1 minute per mark</b>, with 10 minutes spare to check. Topics marked ✱ are good to practise without a calculator, because they often appear on Paper 1.</p></div></details>
 <details class="rc"><summary>Get the method marks</summary><div class="in"><ol class="steps">
 <li><b>Show every step.</b> A wrong answer with the right method can still score most of the marks.</li>
 <li>Write the formula first, then substitute, then calculate.</li>
@@ -519,19 +520,19 @@ st.rag=st.rag||{};if(st.ok){Object.keys(st.ok).forEach(k=>{if(st.ok[k]&&!st.rag[
 const TOP=T.map(([s,n,f,c,g],i)=>({i,s,n,nc:f.includes("n"),gcse:f.includes("g"),clips:c,gens:g}));
 const strands=[...new Set(TOP.map(t=>t.s))];
 let filt=MPAPER==="1"?"nc":"all";const PCALC=MPAPER!=="1";
-$("mpnote").innerHTML=PCALC?`<b>Paper ${MPAPER}: calculator allowed.</b> Any topic can come up on Papers 2 and 3, so revise them all. Use your calculator for the working, but still write every step down for method marks.`:`<b>Paper 1: no calculator.</b> Any topic can come up, but the ✱ ones are the most likely. Practise them by hand: fractions, surds, indices, standard form and exact answers.`;
+$("mpnote").innerHTML=PCALC?`<b>Paper ${MPAPER}: calculator allowed.</b> Any topic can come up on Papers 2 and 3, so revise them all. Use your calculator for the working, but still write every step down for method marks.`:`<b>Paper 1: no calculator.</b> Any topic can come up. The ✱ ones are especially good to practise by hand. Practise them by hand: fractions, surds, indices, standard form and exact answers.`;
 function chip(el,items,cur,cb){el.innerHTML="";items.forEach(([k,l])=>{const b=document.createElement("button");b.className="chip"+(k===cur?" on":"");b.textContent=l;b.onclick=()=>cb(k);el.appendChild(b)})}
 function summary(){const c=k=>TOP.filter(t=>(st.rag[t.i]||"")===k).length,N=TOP.length,g=c("g"),o=c("o"),r=c("r"),u=c("");
   $("msum").innerHTML=`<div class="ragsum"><div class="ragbar"><i class="g" style="width:${g/N*100}%"></i><i class="o" style="width:${o/N*100}%"></i><i class="r" style="width:${r/N*100}%"></i></div>
   <p><span class="dot g"></span><b>${g}</b> green <span class="dot o"></span><b>${o}</b> orange <span class="dot r"></span><b>${r}</b> red <span class="dot u"></span><b>${u}</b> not rated</p></div>`}
 function drawTopics(){
-  chip($("mfilt"),[["all","All topics"],["mock","Core topics"],["nc","✱ Likely non-calc"],["gcse","GCSE only"],["r","Red"],["o","Orange"],["u","Not rated"]],filt,k=>{filt=k;drawTopics()});
+  chip($("mfilt"),[["all","All topics"],["nc","✱ Non-calc practice"],["r","Red"],["o","Orange"],["u","Not rated"]],filt,k=>{filt=k;drawTopics()});
   summary();
   const show=t=>filt==="all"||(filt==="mock"&&!t.gcse)||(filt==="nc"&&t.nc)||(filt==="gcse"&&t.gcse)||(filt==="r"&&st.rag[t.i]==="r")||(filt==="o"&&st.rag[t.i]==="o")||(filt==="u"&&!st.rag[t.i]);
   $("mlist").innerHTML=strands.map(s=>{const ts=TOP.filter(t=>t.s===s&&show(t));if(!ts.length)return "";
     return `<section class="strand"><h3>${s}</h3><ul class="trows">${ts.map(t=>`<li class="${t.gcse?"g":""}${st.rag[t.i]?" rag-"+st.rag[t.i]:""}">
       <span class="tk"><span class="rag" role="group" aria-label="How confident are you with ${t.n}?">${[["r","Red: don't get it"],["o","Orange: getting there"],["g","Green: confident"]].map(([k,l])=>`<button type="button" class="${k}${st.rag[t.i]===k?" on":""}" data-i="${t.i}" data-k="${k}" aria-pressed="${st.rag[t.i]===k}" title="${l}" aria-label="${l}"></button>`).join("")}</span><span class="tn">${t.n}</span></span>
-      <span class="badges">${t.nc?`<span class="b nc" title="Likely on the non-calculator paper">✱ Non-calc</span>`:""}${t.gcse?`<span class="b gc" title="May not be in your school mock, but can come up in the real GCSE">GCSE only</span>`:""}</span>
+      <span class="badges">${t.nc?`<span class="b nc" title="Good to practise without a calculator">✱ Non-calc</span>`:""}${t.gcse?`<span class="b gc" title="May not be in your school mock, but can come up in the real GCSE">GCSE only</span>`:""}</span>
       <span class="acts">${t.clips.map(c=>`<a class="mw" href="${mwUrl(c)}" target="_blank" rel="noopener" title="MathsWatch clip ${c}: video and questions">MW ${c}</a>`).join("")}${t.gens.length?`<button class="btn sm p" data-pr="${t.i}">Practise</button>`:""}</span></li>`).join("")}</ul></section>`}).join("")||`<p class="noresult">Nothing here. Nice work.</p>`;
   $("mlist").querySelectorAll(".rag button").forEach(b=>b.onclick=()=>{const i=b.dataset.i,k=b.dataset.k;if(st.rag[i]===k)delete st.rag[i];else st.rag[i]=k;save();
     const li=b.closest("li");li.classList.remove("rag-r","rag-o","rag-g");if(st.rag[i])li.classList.add("rag-"+st.rag[i]);
@@ -541,12 +542,12 @@ function drawTopics(){
 /* practice */
 let pmode=st["pmode"+MPAPER]||(PCALC?"calc":"nc"),ptopic=st.ptopic??0,cur=null,mini=null;
 const withGen=TOP.filter(t=>t.gens.length);
-function pool(){if(pmode==="topic")return [TOP[ptopic]];if(pmode==="nc")return withGen.filter(t=>t.nc&&!t.gcse);if(pmode==="gcse")return withGen.filter(t=>t.gcse);if(pmode==="calc"){const c=withGen.filter(t=>!t.gcse&&!t.nc);return c.length?c:withGen.filter(t=>!t.gcse)}return withGen.filter(t=>!t.gcse)}
-const MODES=PCALC?[["calc","Calculator topics"],["mock","Mixed: core topics"],["topic","One topic"],["gcse","GCSE-only topics"],["mini",`Paper ${MPAPER} mini mock (10 Qs)`]]:[["nc","✱ Non-calc mix"],["mock","Mixed: core topics"],["topic","One topic"],["gcse","GCSE-only topics"],["mini","Paper 1 mini mock (10 Qs)"]];
+function pool(){if(pmode==="topic")return [TOP[ptopic]];if(pmode==="nc")return withGen.filter(t=>t.nc&&!t.gcse);if(pmode==="gcse")return withGen.filter(t=>t.gcse);if(pmode==="calc"){const c=withGen.filter(t=>!t.gcse&&!t.nc);return c.length?c:withGen.filter(t=>!t.gcse)}return withGen}
+const MODES=PCALC?[["calc","Calculator topics"],["mock","Mixed topics"],["topic","One topic"],["mini",`Paper ${MPAPER} mini mock (10 Qs)`]]:[["nc","✱ Non-calc mix"],["mock","Mixed topics"],["topic","One topic"],["mini","Paper 1 mini mock (10 Qs)"]];
 function drawPSetup(){
   if(!MODES.some(m=>m[0]===pmode))pmode=MODES[0][0];chip($("pmode"),MODES,pmode,k=>{pmode=k;st["pmode"+MPAPER]=k;save();mini=null;drawPSetup();startP()});
   const sel=$("ptopic");sel.hidden=pmode!=="topic";
-  if(!sel.options.length){strands.forEach(s=>{const og=document.createElement("optgroup");og.label=s;withGen.filter(t=>t.s===s).forEach(t=>{const o=document.createElement("option");o.value=t.i;o.textContent=t.n+(t.gcse?" (GCSE only)":"")+(t.nc?" ✱":"");og.appendChild(o)});sel.appendChild(og)});sel.onchange=()=>{ptopic=+sel.value;st.ptopic=ptopic;save();startP()}}
+  if(!sel.options.length){strands.forEach(s=>{const og=document.createElement("optgroup");og.label=s;withGen.filter(t=>t.s===s).forEach(t=>{const o=document.createElement("option");o.value=t.i;o.textContent=t.n+(t.nc?" ✱":"");og.appendChild(o)});sel.appendChild(og)});sel.onchange=()=>{ptopic=+sel.value;st.ptopic=ptopic;save();startP()}}
   if(!TOP[ptopic]||!TOP[ptopic].gens.length)ptopic=withGen[0].i;sel.value=ptopic;
   $("ptally").textContent=`${st.tally.r} / ${st.tally.t} right overall`;
   $("pnote").innerHTML=PCALC?`<b>Calculator allowed</b> (Paper ${MPAPER}).`:`<b>No calculator.</b> Work these out on paper.`;

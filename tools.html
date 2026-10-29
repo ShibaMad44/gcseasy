@@ -157,14 +157,14 @@ form.add select{font:500 1rem var(--body);padding:10px;border-radius:9px;border:
   <tr><td><b>Describe</b></td><td>Say what something is like or what happens. No "why".</td></tr>
   <tr><td><b>Explain</b></td><td>Say why or how. Link your points with "because" and "so".</td></tr>
   <tr><td><b>Compare</b></td><td>Similarities and differences. Use "whereas".</td></tr>
-  <tr><td><b>Suggest</b></td><td>Apply what you know to something new. Any sensible answer can score.</td></tr>
+  <tr><td><b>Suggest</b></td><td>Apply your knowledge to a new situation and give a plausible answer that fits the information.</td></tr>
   <tr><td><b>Evaluate / Assess</b></td><td>Arguments for and against, then a justified conclusion.</td></tr>
   <tr><td><b>To what extent</b></td><td>Weigh up both sides and say how far you agree.</td></tr>
   <tr><td><b>Analyse</b></td><td>Break it down and show how the parts link. In English: how language creates an effect.</td></tr>
   <tr><td><b>Calculate</b></td><td>Work out a number. Show working and give units.</td></tr>
   <tr><td><b>Justify</b></td><td>Back up your answer with evidence or reasons.</td></tr>
   </table></div>
-  <p style="margin-top:10px;color:var(--muted);font-size:.92rem">Count the marks: a 3-mark question needs 3 separate points.</p>
+  <p style="margin-top:10px;color:var(--muted);font-size:.92rem">Use the marks as a guide: a 3-mark question usually needs three creditworthy points, steps or linked ideas, depending on the command word.</p>
 </section>
 </div>
 </div>
@@ -179,11 +179,11 @@ function draw(){const L=G.getLog().filter(x=>x&&x.e>x.s),run=G.getRun(),now=Date
   const all=run?[...L,{s:now-G.elapsed(run),e:now,subj:run.subj,live:true}]:L;
   const sum=f=>all.filter(f).reduce((a,x)=>a+(x.e-x.s),0);
   const wk=today-6*864e5;
-  const days=new Set(all.map(x=>day(x.s)));let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
+  const days=G.revDays();let streak=0,d=today;if(!days.has(d))d-=864e5;while(days.has(d)){streak++;d-=864e5}
   const g=G.getGoal(),tm=Math.round(sum(x=>day(x.s)===today)/60000);
   $("tkgoal").innerHTML=`<span>Daily goal</span>${[15,30,45,60,90,120,180].map(m=>`<button type="button" class="chip${m===g?" on":""}" data-g="${m}">${m<60?m+" min":m/60+" h"}</button>`).join("")}<b>${tm>=g?"Goal hit today ✓":(g-tm)+" min to go today"}</b>`;
   $("tkgoal").querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{G.setGoal(+b.dataset.g);draw()});
-  $("tkstats").innerHTML=[[hm(sum(x=>day(x.s)===today)),"today"],[hm(sum(x=>x.s>=wk)),"last 7 days"],[streak+(streak===1?" day":" days"),"streak"],[hm(sum(()=>true)),"all time · "+L.length+" session"+(L.length===1?"":"s")]].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("");
+  $("tkstats").innerHTML=[[hm(sum(x=>day(x.s)===today)),"today"],[hm(sum(x=>x.s>=wk)),"last 7 days"],[streak+(streak===1?" day":" days"),"streak (days with 5+ min or any XP)"],[hm(sum(()=>true)),"all time · "+L.length+" session"+(L.length===1?"":"s")]].map(([b,s])=>`<div><b>${b}</b><span>${s}</span></div>`).join("");
   const per=[];for(let i=6;i>=0;i--){const d0=today-i*864e5;per.push([d0,sum(x=>day(x.s)===d0)])}const mx=Math.max(...per.map(p=>p[1]),1);
   $("tkweek").innerHTML=per.map(([d0,v])=>`<div><em>${v?Math.round(v/60000):""}</em><span class="bar${v?"":" z"}" style="height:${Math.max(2,v/mx*100)}%"></span><small>${new Date(d0).toLocaleDateString("en-GB",{weekday:"short"})}</small></div>`).join("");
   const by={};all.forEach(x=>{by[x.subj]=(by[x.subj]||0)+(x.e-x.s)});const bs=Object.entries(by).sort((a,b)=>b[1]-a[1]),bm=bs.length?bs[0][1]:1;

@@ -148,12 +148,12 @@ async function runAI(env, prompt, wantJson) {
 
 /* class goals: the class creator picks one; progress comes from each member's last 60 days of activity */
 const GOALS = {
-  xp: { label: (n) => `Earn ${n} XP each`, idx: 0, targets: [100, 250, 500] },
-  cards: { label: (n) => `Review ${n} flashcards each`, idx: 1, targets: [50, 150, 300] },
-  quiz: { label: (n) => `Get ${n} quiz questions right each`, idx: 2, targets: [25, 50, 100] },
-  exam: { label: (n) => `Earn ${n} exam marks each`, idx: 3, targets: [20, 50, 100] },
-  daily: { label: (n) => `Do the daily challenge on ${n} days`, idx: 4, targets: [3, 5, 7] },
-  streak: { label: (n) => `Reach a ${n}-day streak`, idx: -1, targets: [3, 5, 7] },
+  xp: { label: (n) => `Earn ${n} XP each`, idx: 0, targets: [100, 250, 500], max: 5000 },
+  cards: { label: (n) => `Review ${n} flashcards each`, idx: 1, targets: [50, 150, 300], max: 3000 },
+  quiz: { label: (n) => `Get ${n} quiz questions right each`, idx: 2, targets: [25, 50, 100], max: 2000 },
+  exam: { label: (n) => `Earn ${n} exam marks each`, idx: 3, targets: [20, 50, 100], max: 2000 },
+  daily: { label: (n) => `Do the daily challenge on ${n} days`, idx: 4, targets: [3, 5, 7], max: 60 },
+  streak: { label: (n) => `Reach a ${n}-day streak`, idx: -1, targets: [3, 5, 7], max: 60 },
 };
 function goalProgress(goal, m) {
   if (!goal || !GOALS[goal.type]) return 0;
@@ -164,7 +164,7 @@ function goalProgress(goal, m) {
 }
 function pub(g) {
   const members = Object.entries(g.members || {}).map(([id, m]) => ({
-    id: id.slice(0, 8), name: m.n, streak: m.st || 0, mins: m.mi || 0,
+    id: id.slice(0, 8), name: m.nn || m.n, own: m.n, renamed: !!m.nn, streak: m.st || 0, mins: m.mi || 0,
     daily: m.dl && m.dl.date === today() ? m.dl : null, answered: m.ca || 0, seen: m.t || 0, badges: m.bg || 0,
     goal: g.goal ? goalProgress(g.goal, m) : null,
   }));
@@ -422,9 +422,11 @@ export default {
         if (body.type === "none") delete g.goal;
         else {
           const G = GOALS[body.type]; const target = parseInt(body.target, 10), days = Math.max(1, Math.min(60, parseInt(body.days, 10) || 7));
-          if (!G || !G.targets.includes(target)) return fail("bad_request", "Pick one of the goals.");
+          if (!G || !(target >= 1 && target <= G.max)) return fail("bad_request", G ? `Pick a target between 1 and ${G.max}.` : "Pick one of the goals.");
+          const title = String(body.title || "").replace(/\s+/g, " ").trim().slice(0, 60), note = String(body.note || "").replace(/[<>]/g, "").trim().slice(0, 400), subj = /^[a-z-]{2,30}$/.test(String(body.subj || "")) ? String(body.subj) : "";
+          if (BAD.test(title) || BAD.test(note)) return fail("bad_name", "Please reword the assignment.");
           const end = new Date(Date.now() + (days - 1) * 864e5).toISOString().slice(0, 10);
-          g.goal = { type: body.type, target, start: today(), end, set: Date.now() };
+          g.goal = { type: body.type, target, start: today(), end, set: Date.now(), title, note, subj };
         }
         await env.LB.put("g:" + g.code, JSON.stringify(g));
         return json(pub(g));
@@ -436,6 +438,20 @@ export default {
         const target = Object.keys(g.members).find((k) => k.slice(0, 8) === String(body.target || "") && k !== g.owner);
         if (!target) return fail("not_found", "That person isn't in the class.", 404);
         delete g.members[target];
+        await env.LB.put("g:" + g.code, JSON.stringify(g));
+        return json(pub(g));
+      }
+      if ((path === "/lb/rename" || path === "/lb/nick" || path === "/lb/owner") && req.method === "POST") { // class leader tools
+        const g = await getGroup(env, body.code);
+        if (!g) return fail("not_found", "No group with that code.", 404);
+        if (!g.owner || g.owner !== String(body.id || "")) return fail("forbidden", "Only the class leader can do that.", 403);
+        if (path === "/lb/rename") { const nm = cleanName(body.name); if (nm.length < 2 || BAD.test(nm)) return fail("bad_name", "Pick a different class name."); g.name = nm; }
+        else {
+          const target = Object.keys(g.members).find((k) => k.slice(0, 8) === String(body.target || ""));
+          if (!target) return fail("not_found", "That person isn't in the class.", 404);
+          if (path === "/lb/nick") { const nm = cleanName(body.name); if (nm && (nm.length < 2 || BAD.test(nm))) return fail("bad_name", "Pick a different name."); if (nm) g.members[target].nn = nm; else delete g.members[target].nn; }
+          else { if (target === g.owner) return fail("bad_request", "You already lead this class."); g.owner = target; }
+        }
         await env.LB.put("g:" + g.code, JSON.stringify(g));
         return json(pub(g));
       }
