@@ -376,7 +376,7 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 </div>
 
 <footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><a href="index.html#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
-<script src="shared/study.js"></script>
+<script src="shared/lessons.js"></script><script src="shared/lessons-literature.js"></script><script src="shared/study.js"></script>
 <script src="shared/guide.js"></script>
 <script>
 const PAPER=(()=>{const q=new URLSearchParams(location.search).get("paper");let p=q||"";const hm=location.hash.match(/(?:quiz|topic)=([A-Z]+)/);if(!p&&hm)p=["CP","RJ"].includes(hm[1])?"2":["AIC","JH"].includes(hm[1])?"1":"";if(!p){try{p=localStorage.getItem("gcseasy-litpaper")||"1"}catch(e){p="1"}}p=p==="2"?"2":"1";try{localStorage.setItem("gcseasy-litpaper",p)}catch(e){}return p})();
