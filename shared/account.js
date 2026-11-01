@@ -113,7 +113,7 @@ function pwField(id,label,auto){return `<label for="${id}">${label}<div class="p
 function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accbox"><button class="accx" type="button" aria-label="Close" data-close>\u2715</button>`;
   if(sess&&info&&!info.verified){
     sheet.innerHTML=box+`<h2>Verify your email</h2><p class="sub">${esc(sess.email)}</p>
-      <div class="accwarn"><b>One more step.</b> We've sent a link to <b>${esc(sess.email)}</b>. Open it, tap the link, then come back and press <b>I've verified</b>.<br><br>Can't see it? Check junk or spam. School email accounts often block these, so a personal email (like Gmail) works best.</div>
+      <div class="accwarn"><b>One more step.</b> We've sent a link to <b>${esc(sess.email)}</b>. Look for an email from <b>EasyApps</b>, tap the link, then come back and press <b>I've verified</b>.<br><br>Can't see it? Check junk or spam. School email accounts often block these, so a personal email (like Gmail) works best.</div>
       ${verifyErr?`<p class="accmsg bad" style="margin:0 0 12px">The email didn't send: ${esc(verifyErr)}</p>`:verifyAt?`<p class="accmsg good" style="margin:0 0 12px">Email sent at ${new Date(verifyAt).toLocaleTimeString("en-GB",{hour:"numeric",minute:"2-digit"})}.</p>`:""}
       <div class="accf"><button class="accbtnp" type="button" id="accchk">I've verified</button><button class="accbtn2" type="button" id="accresend">Send the email again</button><p class="accmsg" id="accvmsg" role="status"></p></div>
       <p class="accnote" style="margin-top:14px">Until you verify, your account can't save progress, join classes or use AI marking.</p>
@@ -127,7 +127,7 @@ function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accb
   }else if(sess){const v=info?info.verified:null;
     sheet.innerHTML=box+`<h2>Your account</h2><p class="sub">${esc(sess.email)}</p>
       ${reason&&REASON[reason]&&reason!=="signin"?`<div class="accwarn">${esc(REASON[reason])}</div>`:""}
-      ${v===false?`<div class="accwarn"><b>Check your email.</b> We sent a link to verify ${esc(sess.email)}. Tap it, then press "I've verified". It may be in junk or spam.<div class="accrow" style="margin-top:10px"><button class="accbtn2" type="button" id="accchk">I've verified</button><button class="acclink" type="button" id="accresend">Send it again</button></div><p class="accmsg" id="accvmsg" role="status"></p></div>`:""}
+      ${v===false?`<div class="accwarn"><b>Check your email.</b> We sent a link to verify ${esc(sess.email)} (from <b>EasyApps</b>). Tap it, then press "I've verified". It may be in junk or spam.<div class="accrow" style="margin-top:10px"><button class="accbtn2" type="button" id="accchk">I've verified</button><button class="acclink" type="button" id="accresend">Send it again</button></div><p class="accmsg" id="accvmsg" role="status"></p></div>`:""}
       <div class="accinfo"><div><b>Progress sync:</b> ${syncing?"syncing\u2026":syncErr?`<span class="accdanger">${esc(syncErr)}</span>`:lastSync?"saved "+new Date(lastSync).toLocaleString("en-GB",{hour:"numeric",minute:"2-digit",day:"numeric",month:"short"}):"not yet"}</div>
         <div>Your XP, cards, quiz scores, classes and notes save to your account, so you can carry on from any phone, laptop or school computer.</div></div>
       <div class="accrow"><button class="accbtn2" type="button" id="accsync">Sync now</button>${info&&info.admin?`<a class="accbtn2" href="admin.html" style="text-decoration:none">Owner dashboard</a>`:""}<button class="accbtn2" type="button" id="accout">Sign out</button></div>
@@ -140,14 +140,14 @@ function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accb
     if($("accresend"))$("accresend").onclick=async()=>{try{await resend();say("accvmsg","Sent. Check your inbox (and spam).","good")}catch(e){say("accvmsg",e.message,"bad")}};
     $("accdelgo").onclick=async()=>{if($("accdel").value.trim()!=="DELETE"){say("accdmsg","Type DELETE first.","bad");return}say("accdmsg","Deleting\u2026","bad");hold=true;try{await del();hold=false;close();toast("Your account has been deleted.")}catch(e){hold=false;say("accdmsg",e.message,"bad")}};
   }else{
-    const titles={in:["Sign in","Welcome back."],up:["Create a free account","Save your progress on every device, join classes and get 40 AI marks a day."],reset:["Reset your password","We'll email you a link to choose a new one."]};
+    const titles={in:["Sign in","Welcome back."],up:["Create a free account","Save your progress on every device, join classes and get 40 AI marks a day."],reset:["Reset your password","We'll email you a link to choose a new one. It comes from EasyApps."]};
     sheet.innerHTML=box+`<h2>${titles[mode][0]}</h2><p class="sub">${titles[mode][1]}</p>
       ${reason&&REASON[reason]?`<div class="accwarn">${esc(REASON[reason])}</div>`:""}
       ${mode!=="reset"?`<div class="acctabs" role="tablist"><button type="button" role="tab" data-m="in" class="${mode==="in"?"on":""}" aria-selected="${mode==="in"}">Sign in</button><button type="button" role="tab" data-m="up" class="${mode==="up"?"on":""}" aria-selected="${mode==="up"}">Create account</button></div>`:""}
       <form class="accf" id="accform" novalidate>
         <label for="accemail">Email<input id="accemail" type="email" autocomplete="email" inputmode="email" required></label>
         ${mode==="in"?pwField("accpw","Password","current-password"):mode==="up"?pwField("accpw","Password (at least 8 characters)","new-password"):""}
-        ${mode==="up"?`<p class="accnote">We'll email you a link to check it's you. We only use your email to sign you in; see our <a href="privacy.html" target="_blank">privacy notice</a>. Under 13? Ask a parent or carer first.</p>`:""}
+        ${mode==="up"?`<p class="accnote">We'll email you a link to check it's you: it comes from <b>EasyApps</b>. We only use your email to sign you in; see our <a href="privacy.html" target="_blank">privacy notice</a>. Under 13? Ask a parent or carer first.</p>`:""}
         <p class="accmsg" id="accmsg" role="status"></p>
         <button class="accbtnp" type="submit">${mode==="in"?"Sign in":mode==="up"?"Create account":"Send reset link"}</button>
       </form>
@@ -158,7 +158,7 @@ function draw(){if(!sheet||sheet.hidden||hold)return;const box=`<div class="accb
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return msg("Type your email address.");
       if(mode!=="reset"&&!pw)return msg("Type your password.");if(mode==="up"&&pw.length<8)return msg("Use at least 8 characters for your password.");
       const btn=sheet.querySelector(".accbtnp");btn.disabled=true;msg(mode==="reset"?"Sending\u2026":"Just a sec\u2026","");
-      try{if(mode==="in")await signIn(email,pw);else if(mode==="up")await signUp(email,pw);else{await reset(email);msg("If there's an account for that email, a reset link is on its way. Check your spam too.","good");btn.disabled=false;return}
+      try{if(mode==="in")await signIn(email,pw);else if(mode==="up")await signUp(email,pw);else{await reset(email);msg("If there's an account for that email, a reset link is on its way from EasyApps. Check your spam too.","good");btn.disabled=false;return}
         mode="in";draw();if(!(info&&!info.verified))toast("Signed in. Your progress is syncing.")}
       catch(err){msg(err.message);btn.disabled=false}};
   }
