@@ -541,7 +541,7 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
 
 /* Lessons: short step-by-step lessons (learn, diagram, worked example, checks, common mistake, summary) */
-function lessonList(){const o=Object.keys(C.topics||{});return ((window.LESSONS&&window.LESSONS[C.id])||[]).filter(l=>(!o.length||o.includes(l.topic))&&(!l.p||!window.LESSON_PAPER||l.p.includes(String(window.LESSON_PAPER)))).map((l,i)=>[l,i]).sort((x,y)=>((y[0].kicker?1:0)-(x[0].kicker?1:0))||(o.indexOf(x[0].topic)-o.indexOf(y[0].topic))||(x[1]-y[1])).map(x=>x[0])}
+function lessonList(){const o=Object.keys(C.topics||{});return ((window.LESSONS&&window.LESSONS[C.id])||[]).filter(l=>!(l.triple&&SCI.includes(C.id)&&tier()==="combined")).filter(l=>(!o.length||o.includes(l.topic))&&(!l.p||!window.LESSON_PAPER||l.p.includes(String(window.LESSON_PAPER)))).map((l,i)=>[l,i]).sort((x,y)=>((y[0].kicker?1:0)-(x[0].kicker?1:0))||(o.indexOf(x[0].topic)-o.indexOf(y[0].topic))||(x[1]-y[1])).map(x=>x[0])}
 function setupLessons(){const LS=lessonList();if(!LS.length)return;const nav=document.querySelector("nav.tabs");if(!nav)return;
   const after=$("tab-sum")||nav.querySelector("button");const b=document.createElement("button");b.setAttribute("role","tab");b.id="tab-ls";b.setAttribute("aria-selected","false");b.dataset.p="ls";b.textContent="Lessons";after.after(b);
   const ref=$("p-sum")||$("p-"+nav.querySelector("button").dataset.p);const pan=document.createElement("div");pan.id="p-ls";pan.hidden=true;ref.after(pan);

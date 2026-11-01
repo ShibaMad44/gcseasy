@@ -13,6 +13,30 @@ const SVG=(w,h,label,body,x0)=>`<svg viewBox="${x0||0} 0 ${w} ${h}" class="ldiag
 const N=(x,y,n,t,c)=>`<g class="lb" data-n="${n}"><g class="lbt"><text x="${x}" y="${y+4}" text-anchor="middle" class="d-${c||"bx"}">${t}</text></g><g class="lbn"><circle cx="${x}" cy="${y}" r="10" class="d-nb"/><text x="${x}" y="${y+4}" text-anchor="middle" class="d-nt">${n}</text></g></g>`;
 const BN=(x,y,w,h,c,n,t)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" class="d-${c}"/>${N(x+w/2,y+h/2,n,t)}`;
 window.LSN={L,AH,B,A,T,SVG,N,BN};
+/* lab equipment kit for the practical diagrams */
+const K={
+ beaker:(x,y,w,h,f=.6,c="d-water")=>`${f?`<rect x="${x+2}" y="${y+h*(1-f)}" width="${w-4}" height="${h*f-2}" class="${c}"/>`:""}<path d="M${x-4} ${y} L${x} ${y+4} L${x} ${y+h} L${x+w} ${y+h} L${x+w} ${y+4} L${x+w+4} ${y}" class="d-glassw"/>`,
+ tube:(x,y,w,h,f=.5,fill="#bfe0fb")=>{const r=w/2,ly=y+h-(h-r)*f-r;return `${f?`<path d="M${x+1.5} ${ly} L${x+1.5} ${y+h-r} A${r-1.5} ${r-1.5} 0 0 0 ${x+w-1.5} ${y+h-r} L${x+w-1.5} ${ly} Z" fill="${fill}"/>`:""}<path d="M${x} ${y} L${x} ${y+h-r} A${r} ${r} 0 0 0 ${x+w} ${y+h-r} L${x+w} ${y}" class="d-glassw"/>`},
+ flask:(x,y,w,h,f=.35,fill="#bfe0fb")=>{const cx=x+w/2,nw=w*.16,ny=y+h*.32,ly=y+h-(h-(ny-y))*f,lx=(yy)=>(cx-nw)-((yy-ny)/(y+h-ny))*((cx-nw)-x);return `${f?`<path d="M${lx(ly)} ${ly} L${x+2} ${y+h-2} L${x+w-2} ${y+h-2} L${2*cx-lx(ly)} ${ly} Z" fill="${fill}"/>`:""}<path d="M${cx-nw} ${y} L${cx-nw} ${ny} L${x} ${y+h} L${x+w} ${y+h} L${cx+nw} ${ny} L${cx+nw} ${y}" class="d-glassw"/>`},
+ cyl:(x,y,w,h,f=.5)=>`<rect x="${x+2}" y="${y+h*(1-f)}" width="${w-4}" height="${h*f-2}" class="d-water"/><path d="M${x} ${y} L${x} ${y+h} L${x+w} ${y+h} L${x+w} ${y}" class="d-glassw"/><path d="M${x-8} ${y+h} L${x+w+8} ${y+h}" class="d-line"/>${[...Array(8)].map((_,i)=>`<path d="M${x} ${y+12+i*(h-20)/8} L${x+w*.35} ${y+12+i*(h-20)/8}" class="d-ln"/>`).join("")}`,
+ burner:(x,y)=>`<path d="M${x} ${y-6} Q${x-8} ${y-26} ${x} ${y-44} Q${x+8} ${y-26} ${x} ${y-6} Z" class="d-flame"/><rect x="${x-5}" y="${y}" width="10" height="44" class="d-c6"/><rect x="${x-18}" y="${y+44}" width="36" height="8" rx="2" class="d-c6"/>`,
+ tripod:(x,y,w,h)=>`<path d="M${x} ${y} L${x+w} ${y}" stroke="var(--ink)" stroke-width="4"/><path d="M${x+6} ${y} L${x-4} ${y+h} M${x+w-6} ${y} L${x+w+4} ${y+h} M${x+w/2} ${y} L${x+w/2} ${y+h}" class="d-line"/>`,
+ stand:(x,y,h,arm,ay)=>`<rect x="${x-30}" y="${y+h}" width="70" height="10" rx="2" class="d-c6"/><path d="M${x} ${y} L${x} ${y+h}" stroke="var(--ink)" stroke-width="5"/><path d="M${x} ${ay} L${x+arm} ${ay}" stroke="var(--ink)" stroke-width="4"/><rect x="${x-6}" y="${ay-6}" width="12" height="12" class="d-c6"/>`,
+ therm:(x,y,h)=>`<rect x="${x-3}" y="${y}" width="6" height="${h}" rx="3" class="d-c0"/><circle cx="${x}" cy="${y+h}" r="6" fill="#D2433B"/><path d="M${x} ${y+h*0.4} L${x} ${y+h}" stroke="#D2433B" stroke-width="2.5"/>`,
+ bubbles:(x,y,n=4)=>[...Array(n)].map((_,i)=>`<circle cx="${x+(i%2?5:-5)}" cy="${y-i*9}" r="${2.5+(i%3)*.8}" class="d-bub"/>`).join(""),
+ ruler:(x,y,w,h,vert)=>vert?`<rect x="${x}" y="${y}" width="${w}" height="${h}" class="d-c4"/>${[...Array(Math.floor(h/10))].map((_,i)=>`<path d="M${x} ${y+5+i*10} L${x+(i%5?6:11)} ${y+5+i*10}" class="d-ln"/>`).join("")}`:`<rect x="${x}" y="${y}" width="${w}" height="${h}" class="d-c4"/>${[...Array(Math.floor(w/10))].map((_,i)=>`<path d="M${x+5+i*10} ${y} L${x+5+i*10} ${y+(i%5?6:11)}" class="d-ln"/>`).join("")}`,
+ meter:(x,y,t)=>`<circle cx="${x}" cy="${y}" r="13" class="d-bgc"/><text x="${x}" y="${y+5}" text-anchor="middle" class="d-sym">${t}</text>`,
+ cell:(x,y)=>`<rect x="${x-8}" y="${y-12}" width="16" height="24" class="d-bg"/><path d="M${x-4} ${y-12} L${x-4} ${y+12} M${x+5} ${y-6} L${x+5} ${y+6}" class="d-line"/>`,
+ res:(x,y,w=34)=>`<rect x="${x-w/2}" y="${y-8}" width="${w}" height="16" class="d-c0" style="stroke-width:2"/>`,
+ lampS:(x,y)=>`<circle cx="${x}" cy="${y}" r="11" class="d-bgc"/><path d="M${x-8} ${y-8} L${x+8} ${y+8} M${x+8} ${y-8} L${x-8} ${y+8}" class="d-line"/>`,
+ spring:(x,y,len,n=10)=>{let d=`M${x} ${y}`;for(let i=1;i<=n;i++)d+=` L${x+(i%2?9:-9)} ${y+i*len/(n+1)}`;return `<path d="${d} L${x} ${y+len}" class="d-line"/>`},
+ wire:(d)=>`<path d="${d}" class="d-wire"/>`,
+ lampL:(x,y)=>`<circle cx="${x}" cy="${y}" r="16" class="d-light d-pulse"/>`,
+ dish:(x,y,r)=>`<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r*.45}" class="d-c0"/><ellipse cx="${x}" cy="${y}" rx="${r-6}" ry="${r*.45-4}" fill="#f3e3b0" stroke="var(--ink)" stroke-width="1"/>`,
+ tile:(x,y,cols,rows,fills)=>`<rect x="${x}" y="${y}" width="${cols*30+10}" height="${rows*30+10}" rx="6" class="d-c0"/>${[...Array(cols*rows)].map((_,i)=>`<circle cx="${x+20+(i%cols)*30}" cy="${y+20+Math.floor(i/cols)*30}" r="11" fill="${(fills||[])[i]||"#f5f5f5"}" stroke="var(--ink)" stroke-width="1"/>`).join("")}`,
+};
+window.LSN.K=K;
+
 /* ---------- diagrams ---------- */
 const MICRO=`<svg viewBox="-85 0 495 300" class="ldiag" role="img" aria-label="Labelled light microscope">
 <rect x="120" y="262" width="150" height="16" rx="5" class="d-fill2"/>

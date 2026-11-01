@@ -106,7 +106,7 @@ window.LESSONS.physics.push(
  {t:"mistake",h:"Common mistake",html:`<p>Saying an induced magnet can <b>repel</b>. Induced magnetism always causes attraction. Also, field lines never cross.</p>`},
  {t:"sum",h:"Summary",bullets:["Field lines go N → S; closest = strongest","Induced magnets always attract","Solenoid + iron core = strong electromagnet","Motor effect: F = BIl","Fleming's left-hand rule: field, current, motion"]}]},
 
-{id:"space",topic:"P8",title:"The life cycle of a star and the universe",mins:8,steps:[
+{id:"space",triple:true,topic:"P8",title:"The life cycle of a star and the universe",mins:8,steps:[
  {t:"learn",h:"How a star is born",html:`<p>A star forms from a <b>nebula</b>, a cloud of dust and gas. Gravity pulls it together into a <b>protostar</b>, which heats up. When it's hot enough, hydrogen nuclei <b>fuse</b> into helium and it becomes a <b>main sequence</b> star.</p><p>It stays stable because the outward pressure from fusion <b>balances</b> the inward pull of gravity.</p>`},
  {t:"diagram",h:"The life cycle",svg:STAR,html:`<p>What happens at the end depends on the star's <b>mass</b>. Elements heavier than iron are made in <b>supernovae</b>.</p>`},
  {t:"learn",h:"Orbits and red-shift",html:`<ul><li>Gravity keeps planets, moons and satellites in <b>circular orbits</b>. Their velocity changes (direction changes) even though speed is constant.</li><li><b>Red-shift</b>: light from distant galaxies is shifted to longer wavelengths. More distant galaxies are more red-shifted, so they are moving away faster.</li><li>This is evidence that the universe is <b>expanding</b>, which supports the <b>Big Bang</b> theory.</li></ul>`},

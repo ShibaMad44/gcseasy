@@ -455,3 +455,4 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
 .d-pulse{animation:dpulse 1.6s ease-in-out infinite}@keyframes dpulse{50%{opacity:.35}}
 @media (prefers-reduced-motion:reduce){.d-bub,.d-flame,.d-pulse{animation:none}}
 .d-water{fill:#bfe0fb;stroke:none;opacity:.85}.d-glassw{fill:none;stroke:var(--ink);stroke-width:1.8}
+.lsvid a{text-decoration:none}
