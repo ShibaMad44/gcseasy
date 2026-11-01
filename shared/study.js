@@ -541,12 +541,14 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
 
 /* Lessons: short step-by-step lessons (learn, diagram, worked example, checks, common mistake, summary) */
-function lessonList(){return (window.LESSONS&&window.LESSONS[C.id])||[]}
+function lessonList(){const o=Object.keys(C.topics||{});return ((window.LESSONS&&window.LESSONS[C.id])||[]).map((l,i)=>[l,i]).sort((x,y)=>(o.indexOf(x[0].topic)-o.indexOf(y[0].topic))||(x[1]-y[1])).map(x=>x[0])}
 function setupLessons(){const LS=lessonList();if(!LS.length)return;const nav=document.querySelector("nav.tabs");if(!nav)return;
   const after=$("tab-sum")||nav.querySelector("button");const b=document.createElement("button");b.setAttribute("role","tab");b.id="tab-ls";b.setAttribute("aria-selected","false");b.dataset.p="ls";b.textContent="Lessons";after.after(b);
   const ref=$("p-sum")||$("p-"+nav.querySelector("button").dataset.p);const pan=document.createElement("div");pan.id="p-ls";pan.hidden=true;ref.after(pan);
-  const draw=()=>{state.lessons=state.lessons||{};pan.innerHTML=`<p class="lsintro">Short lessons that take you through a tricky topic step by step: a clear explanation, a labelled diagram, a worked example, then questions to check you've got it.</p><div class="lsgrid">${LS.map(l=>{const s=state.lessons[l.id]||{};const st=s.done?"Done ✓":s.step?`Step ${s.step+1} of ${l.steps.length}`:`${l.steps.length} steps`;
-    return `<button type="button" class="lscard${s.done?" done":""}" data-ls="${l.id}"><span class="lsk">${l.topic} · ${C.topics[l.topic]||""}</span><b>${l.title}</b><span class="lsm">About ${l.mins} min · ${st}</span><span class="lsgo">${s.done?"Do it again":s.step?"Carry on":"Start lesson"} →</span></button>`}).join("")}</div>`;
+  const card=l=>{const s=state.lessons[l.id]||{};const st=s.done?"Done ✓":s.step?`Step ${s.step+1} of ${l.steps.length}`:`${l.steps.length} steps`;
+    return `<button type="button" class="lscard${s.done?" done":""}${l.rp?" rp":""}" data-ls="${l.id}"><span class="lsk">${l.rp?"Required practical · ":""}${l.topic} · ${C.topics[l.topic]||""}</span><b>${l.title}</b><span class="lsm">About ${l.mins} min · ${st}</span><span class="lsgo">${s.done?"Do it again":s.step?"Carry on":"Start lesson"} →</span></button>`};
+  const draw=()=>{state.lessons=state.lessons||{};const tl=LS.filter(l=>!l.rp),rp=LS.filter(l=>l.rp),dn=a=>a.filter(l=>(state.lessons[l.id]||{}).done).length;
+    pan.innerHTML=`<p class="lsintro">Short lessons that take you through each topic step by step: a clear explanation, a labelled diagram, a worked example, then questions to check you've got it.</p>${tl.length?`<h3 class="lshd">Topic lessons <span>${dn(tl)}/${tl.length} done</span></h3><div class="lsgrid">${tl.map(card).join("")}</div>`:""}${rp.length?`<h3 class="lshd">Required practicals <span>${dn(rp)}/${rp.length} done</span></h3><p class="lsintro">How each practical works, how to do it, the variables, the results and the exam questions that come up. Each one has a labelled apparatus diagram and a link to watch it being done.</p><div class="lsgrid">${rp.map(card).join("")}</div>`:""}`;
     pan.querySelectorAll("[data-ls]").forEach(x=>x.onclick=()=>openLesson(x.dataset.ls,draw))};
   draw();document.addEventListener("gcseasy:lesson",draw)}
 function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)return;state.lessons=state.lessons||{};const S=state.lessons[id]=state.lessons[id]||{};
@@ -558,17 +560,18 @@ function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)re
   function step(){const s=l.steps[i],last=i===l.steps.length-1;S.step=i;save();
     const need=(s.t==="q"||s.t==="num")&&!answered[i];
     let body="";
-    if(s.t==="diagram")body=`<div class="ldwrap">${s.svg}</div><div class="ldbar"><button type="button" class="chip" id="ldhide">Hide labels and test yourself</button><span class="ldhint" id="ldhint" hidden>Tap a number to check it.</span></div>${s.html||""}`;
+    if(s.t==="diagram")body=`<div class="ldwrap">${s.svg}</div>${/class="lb"/.test(s.svg)?`<div class="ldbar"><button type="button" class="chip" id="ldhide">Hide labels and test yourself</button><span class="ldhint" id="ldhint" hidden>Tap a number to check it.</span></div>`:""}${s.html||""}`;
     else if(s.t==="q")body=`<p class="qzq">${s.q}</p><div class="opts">${s.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div><div id="lsfb"></div>`;
     else if(s.t==="num")body=`<p class="qzq">${s.q}</p><form class="qztype" id="lsform" autocomplete="off"><input id="lsin" inputmode="decimal" placeholder="Your answer${s.unit&&s.unit!=="×"?" in "+s.unit:""}" aria-label="Your answer"><button type="submit" class="btn p">Check</button></form><button type="button" class="linkbtn" id="lsidk">Show me the answer</button><div id="lsfb"></div>`;
     else if(s.t==="sum")body=`<ul class="lssum">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul><div class="lsend"><button type="button" class="btn p" id="lsquiz">Quiz me on ${C.topics[l.topic]||"this topic"}</button><button type="button" class="btn" id="lsnotes">Open the full notes</button></div>`;
     else body=s.html;
+    if(s.vid)body+=`<p class="lsvid"><a class="btn" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(s.vid)}">▶ Watch it done</a><span>Opens demo videos on YouTube in a new tab</span></p>`;
     sh.innerHTML=`<div class="qzbar"><b>${l.title}</b><button type="button" class="qzx" id="lsx" aria-label="Close lesson">✕</button></div>
       <div class="qzin lsin"><div class="lsprog"><i style="width:${(i+1)/l.steps.length*100}%"></i></div><p class="qzmeta">Step ${i+1} of ${l.steps.length} · ${lab[s.t]}</p><h2 class="lsh">${s.h}</h2><div class="lsbody lst-${s.t}">${body}</div>
       <div class="lsnav"><button type="button" class="btn" id="lsback"${i?"":" disabled"}>Back</button><button type="button" class="btn p" id="lsnext"${need?" disabled":""}>${last?"Finish":"Next"}</button></div></div>`;
     $("lsx").onclick=close;$("lsback").onclick=()=>{i--;step()};
     $("lsnext").onclick=()=>{if(last){S.done=Date.now();S.step=0;save();if(window.GCSEasy){GCSEasy.addXP(5,"lesson",40,"lesson:"+C.id+":"+id+":"+new Date().toDateString());GCSEasy.topicResult&&GCSEasy.topicResult(C.id,l.topic,true)}close();return}i++;step()};
-    if(s.t==="diagram"){const svg=sh.querySelector(".ldiag");$("ldhide").onclick=e=>{const on=svg.classList.toggle("test");e.target.classList.toggle("on",on);e.target.textContent=on?"Show all labels":"Hide labels and test yourself";$("ldhint").hidden=!on;svg.querySelectorAll(".lb").forEach(g=>g.classList.remove("show"))};
+    if(s.t==="diagram"&&$("ldhide")){const svg=sh.querySelector(".ldiag");$("ldhide").onclick=e=>{const on=svg.classList.toggle("test");e.target.classList.toggle("on",on);e.target.textContent=on?"Show all labels":"Hide labels and test yourself";$("ldhint").hidden=!on;svg.querySelectorAll(".lb").forEach(g=>g.classList.remove("show"))};
       svg.querySelectorAll(".lb").forEach(g=>g.addEventListener("click",()=>{if(svg.classList.contains("test"))g.classList.toggle("show")}))}
     const done=(ok,extra)=>{answered[i]=1;if(ok&&window.GCSEasy)GCSEasy.addXP(1,"quiz",60);if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,l.topic,ok);
       $("lsfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${extra||""}<div class="panel ms">${s.ex}</div>`;$("lsnext").disabled=false;$("lsnext").focus({preventScroll:true})};

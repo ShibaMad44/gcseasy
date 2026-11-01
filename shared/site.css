@@ -419,7 +419,7 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
 .ldiag{width:100%;height:auto;display:block;font-family:var(--body)}
 .ldbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:4px 0 10px}.ldhint{color:var(--muted);font-size:.85rem}
 .d-tx{font-size:12px;font-weight:700;fill:var(--ink)}.d-cap{font-size:10.5px;fill:var(--muted)}.d-big{font-size:14px;font-weight:700;fill:var(--ink)}.d-band{font-size:10px;font-weight:700;fill:#fff}
-.d-ln{stroke:var(--muted);stroke-width:1.2}.d-dot{fill:var(--ink)}
+.d-ln{stroke:var(--muted);stroke-width:1.2;fill:none}.d-dot{fill:var(--ink)}
 .d-nb{fill:var(--accent)}.d-nt{font-size:11px;font-weight:700;fill:#fff}
 .ldiag .lbn{display:none}.ldiag.test .lbt{display:none}.ldiag.test .lbn{display:inline;cursor:pointer}.ldiag.test .lb.show .lbt{display:inline}.ldiag.test .lb.show .lbn{display:none}.ldiag.test .lb{cursor:pointer}
 .d-fill{fill:var(--accent-soft);stroke:var(--ink);stroke-width:1.6}.d-fill2{fill:color-mix(in srgb,var(--muted) 28%,var(--surface));stroke:var(--ink);stroke-width:1.6}
@@ -438,3 +438,20 @@ section.topic.done>.th .tile{box-shadow:0 0 0 2px var(--good)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .d-blue{fill:#1d3150}:root:not([data-theme="light"]) .d-red{fill:#4a2321}}
 @media (max-width:640px){.lsh{font-size:1.2rem}.ldwrap{padding:4px;margin-left:-6px;margin-right:-6px}}
 @media(max-width:700px){.ldiag .d-tx{font-size:15px}.ldiag .d-cap{font-size:13px}.ldwrap{padding-left:4px;padding-right:4px}}
+.d-bx{font-size:12px;font-weight:700;fill:var(--ink)}.d-sm{font-size:11px;fill:var(--ink)}
+.d-ar{fill:none;stroke:var(--ink);stroke-width:1.8;marker-end:url(#ah)}.d-ar.dash{stroke-dasharray:5 4}.d-ar.red{stroke:#D2433B}.d-ar.blue{stroke:#2F6FD6}
+.d-c1{fill:#CFE0FB;stroke:var(--ink);stroke-width:1.3}.d-c2{fill:#F9D3D0;stroke:var(--ink);stroke-width:1.3}.d-c3{fill:#D5EBC9;stroke:var(--ink);stroke-width:1.3}.d-c4{fill:#FFF0B8;stroke:var(--ink);stroke-width:1.3}.d-c5{fill:#E3DAF5;stroke:var(--ink);stroke-width:1.3}.d-c6{fill:color-mix(in srgb,var(--muted) 22%,var(--surface));stroke:var(--ink);stroke-width:1.3}.d-c0{fill:var(--surface);stroke:var(--ink);stroke-width:1.3}
+.d-no{fill:none;stroke:var(--ink);stroke-width:1.6}.d-sea{fill:#9fc8ee;stroke:none}.d-land{fill:#cbb88f;stroke:var(--ink);stroke-width:1.3}.d-grass{fill:#9cc97f;stroke:var(--ink);stroke-width:1.3}.d-rock{fill:#b8a690;stroke:var(--ink);stroke-width:1.3}.d-mag{fill:#E06666;stroke:none}
+:root[data-theme="dark"] .d-c1{fill:#1d3150}:root[data-theme="dark"] .d-c2{fill:#4a2321}:root[data-theme="dark"] .d-c3{fill:#22391b}:root[data-theme="dark"] .d-c4{fill:#41391a}:root[data-theme="dark"] .d-c5{fill:#33294a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .d-c1{fill:#1d3150}:root:not([data-theme="light"]) .d-c2{fill:#4a2321}:root:not([data-theme="light"]) .d-c3{fill:#22391b}:root:not([data-theme="light"]) .d-c4{fill:#41391a}:root:not([data-theme="light"]) .d-c5{fill:#33294a}}
+@media(max-width:700px){.ldiag .d-bx{font-size:13.5px}.ldiag .d-sm{font-size:12.5px}}
+.lshd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:22px 0 10px;font:700 1.1rem var(--display)}.lshd span{font:600 .85rem var(--body);color:var(--muted)}
+.lscard.rp{border-left:4px solid #93C47D}
+.lsvid{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:14px 0 4px}.lsvid span{color:var(--muted);font-size:.85rem}
+.d-bub{fill:#fff;stroke:var(--ink);stroke-width:1;animation:dbub 2.4s linear infinite}.d-bub:nth-of-type(2n){animation-delay:.8s}.d-bub:nth-of-type(3n){animation-delay:1.6s}
+@keyframes dbub{0%{transform:translateY(0);opacity:0}15%{opacity:1}100%{transform:translateY(-60px);opacity:0}}
+.d-flame{fill:#F6B26B;stroke:#E06666;stroke-width:1.2;transform-box:fill-box;transform-origin:50% 100%;animation:dflame .5s ease-in-out infinite alternate}
+@keyframes dflame{from{transform:scaleY(.85)}to{transform:scaleY(1.1)}}
+.d-pulse{animation:dpulse 1.6s ease-in-out infinite}@keyframes dpulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.d-bub,.d-flame,.d-pulse{animation:none}}
+.d-water{fill:#bfe0fb;stroke:none;opacity:.85}.d-glassw{fill:none;stroke:var(--ink);stroke-width:1.8}

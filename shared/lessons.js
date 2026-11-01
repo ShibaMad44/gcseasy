@@ -4,6 +4,15 @@
 (function(){
 const L=(x,y,tx,ty,n,txt,anchor)=>`<g class="lb" data-n="${n}"><line x1="${x}" y1="${y}" x2="${tx}" y2="${ty}" class="d-ln"/><circle cx="${x}" cy="${y}" r="3" class="d-dot"/><g class="lbt"><text x="${anchor==="end"?tx-6:tx+6}" y="${ty+4}" text-anchor="${anchor||"start"}" class="d-tx">${txt}</text></g><g class="lbn"><circle cx="${anchor==="end"?tx-12:tx+12}" cy="${ty}" r="10" class="d-nb"/><text x="${anchor==="end"?tx-12:tx+12}" y="${ty+4}" text-anchor="middle" class="d-nt">${n}</text></g></g>`;
 
+/* shared helpers for the per-subject lesson files */
+const AH=`<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="d-dot"/></marker></defs>`;
+const B=(x,y,w,h,c,t,sub)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" class="d-${c}"/><text x="${x+w/2}" y="${y+h/2+(sub?-2:4)}" text-anchor="middle" class="d-bx">${t}</text>${sub?`<text x="${x+w/2}" y="${y+h/2+13}" text-anchor="middle" class="d-cap">${sub}</text>`:""}`;
+const A=(x1,y1,x2,y2,c)=>`<path d="M${x1} ${y1} L${x2} ${y2}" class="d-ar${c?" "+c:""}"/>`;
+const T=(x,y,t,c,an)=>`<text x="${x}" y="${y}" text-anchor="${an||"middle"}" class="d-${c||"tx"}">${t}</text>`;
+const SVG=(w,h,label,body,x0)=>`<svg viewBox="${x0||0} 0 ${w} ${h}" class="ldiag" role="img" aria-label="${label}">${AH}${body}</svg>`;
+const N=(x,y,n,t,c)=>`<g class="lb" data-n="${n}"><g class="lbt"><text x="${x}" y="${y+4}" text-anchor="middle" class="d-${c||"bx"}">${t}</text></g><g class="lbn"><circle cx="${x}" cy="${y}" r="10" class="d-nb"/><text x="${x}" y="${y+4}" text-anchor="middle" class="d-nt">${n}</text></g></g>`;
+const BN=(x,y,w,h,c,n,t)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" class="d-${c}"/>${N(x+w/2,y+h/2,n,t)}`;
+window.LSN={L,AH,B,A,T,SVG,N,BN};
 /* ---------- diagrams ---------- */
 const MICRO=`<svg viewBox="-85 0 495 300" class="ldiag" role="img" aria-label="Labelled light microscope">
 <rect x="120" y="262" width="150" height="16" rx="5" class="d-fill2"/>
@@ -56,8 +65,8 @@ const CYCLE=`<svg viewBox="0 0 520 300" class="ldiag" role="img" aria-label="The
 <circle cx="130" cy="150" r="92" class="d-ring1"/>
 <path d="M130 58 A92 92 0 0 1 222 150" class="d-ring2"/>
 <path d="M222 150 A92 92 0 0 1 195 215" class="d-ring3"/>
-<text x="92" y="146" text-anchor="middle" class="d-big">Interphase</text><text x="92" y="164" text-anchor="middle" class="d-cap">grow + copy DNA</text>
-<text x="226" y="88" class="d-tx">Mitosis</text><text x="178" y="258" class="d-tx">Cytokinesis</text>
+${N(92,142,1,"Interphase")}<text x="92" y="164" text-anchor="middle" class="d-cap">grow + copy DNA</text>
+${N(258,84,2,"Mitosis")}${N(218,256,3,"Cytokinesis")}
 <g transform="translate(270,30)"><circle cx="40" cy="30" r="26" class="d-cell"/><circle cx="40" cy="30" r="12" class="d-nuc"/><path d="M34 26 l6 6 M40 26 l-6 6 M42 26 l5 6" class="d-chr"/><text x="80" y="34" class="d-cap">1 Cell with its chromosomes</text></g>
 <g transform="translate(270,95)"><circle cx="40" cy="30" r="28" class="d-cell"/><path d="M30 24 l8 10 M38 24 l-8 10 M44 24 l8 10 M52 24 l-8 10" class="d-chr"/><text x="80" y="34" class="d-cap">2 DNA copied: X shapes</text></g>
 <g transform="translate(270,160)"><circle cx="40" cy="30" r="28" class="d-cell"/><path d="M20 26 l6 8 M26 26 l-6 8 M54 26 l6 8 M60 26 l-6 8" class="d-chr"/><path d="M32 30 L22 30 M48 30 L58 30" class="d-ray"/><text x="80" y="34" class="d-cap">3 Copies pulled apart</text></g>
