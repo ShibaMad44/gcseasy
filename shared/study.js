@@ -541,12 +541,12 @@ function setupRecap(){const nav=document.querySelector("nav.tabs");if(!nav||["en
   pan.addEventListener("keydown",e=>{const d=e.target.closest("dd");if(d&&(e.key==="Enter"||e.key===" ")){e.preventDefault();d.classList.toggle("show")}})}
 
 /* Lessons: short step-by-step lessons (learn, diagram, worked example, checks, common mistake, summary) */
-function lessonList(){const o=Object.keys(C.topics||{});return ((window.LESSONS&&window.LESSONS[C.id])||[]).filter(l=>!o.length||o.includes(l.topic)).map((l,i)=>[l,i]).sort((x,y)=>(o.indexOf(x[0].topic)-o.indexOf(y[0].topic))||(x[1]-y[1])).map(x=>x[0])}
+function lessonList(){const o=Object.keys(C.topics||{});return ((window.LESSONS&&window.LESSONS[C.id])||[]).filter(l=>(!o.length||o.includes(l.topic))&&(!l.p||!window.LESSON_PAPER||l.p.includes(String(window.LESSON_PAPER)))).map((l,i)=>[l,i]).sort((x,y)=>((y[0].kicker?1:0)-(x[0].kicker?1:0))||(o.indexOf(x[0].topic)-o.indexOf(y[0].topic))||(x[1]-y[1])).map(x=>x[0])}
 function setupLessons(){const LS=lessonList();if(!LS.length)return;const nav=document.querySelector("nav.tabs");if(!nav)return;
   const after=$("tab-sum")||nav.querySelector("button");const b=document.createElement("button");b.setAttribute("role","tab");b.id="tab-ls";b.setAttribute("aria-selected","false");b.dataset.p="ls";b.textContent="Lessons";after.after(b);
   const ref=$("p-sum")||$("p-"+nav.querySelector("button").dataset.p);const pan=document.createElement("div");pan.id="p-ls";pan.hidden=true;ref.after(pan);
   const card=l=>{const s=state.lessons[l.id]||{};const st=s.done?"Done ✓":s.step?`Step ${s.step+1} of ${l.steps.length}`:`${l.steps.length} steps`;
-    return `<button type="button" class="lscard${s.done?" done":""}${l.rp?" rp":""}" data-ls="${l.id}"><span class="lsk">${l.rp?"Required practical · ":""}${l.topic} · ${C.topics[l.topic]||""}</span><b>${l.title}</b><span class="lsm">About ${l.mins} min · ${st}</span><span class="lsgo">${s.done?"Do it again":s.step?"Carry on":"Start lesson"} →</span></button>`};
+    return `<button type="button" class="lscard${s.done?" done":""}${l.rp?" rp":""}" data-ls="${l.id}"><span class="lsk">${l.kicker||`${l.rp?"Required practical · ":""}${l.topic} · ${C.topics[l.topic]||""}`}</span><b>${l.title}</b><span class="lsm">About ${l.mins} min · ${st}</span><span class="lsgo">${s.done?"Do it again":s.step?"Carry on":"Start lesson"} →</span></button>`};
   const draw=()=>{state.lessons=state.lessons||{};const tl=LS.filter(l=>!l.rp),rp=LS.filter(l=>l.rp),dn=a=>a.filter(l=>(state.lessons[l.id]||{}).done).length;
     pan.innerHTML=`<p class="lsintro">Short lessons that take you through each topic step by step: a clear explanation, a labelled diagram, a worked example, then questions to check you've got it.</p>${tl.length?`<h3 class="lshd">Topic lessons <span>${dn(tl)}/${tl.length} done</span></h3><div class="lsgrid">${tl.map(card).join("")}</div>`:""}${rp.length?`<h3 class="lshd">Required practicals <span>${dn(rp)}/${rp.length} done</span></h3><p class="lsintro">How each practical works, how to do it, the variables, the results and the exam questions that come up. Each one has a labelled apparatus diagram and a link to watch it being done.</p><div class="lsgrid">${rp.map(card).join("")}</div>`:""}`;
     pan.querySelectorAll("[data-ls]").forEach(x=>x.onclick=()=>openLesson(x.dataset.ls,draw))};
@@ -563,7 +563,7 @@ function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)re
     if(s.t==="diagram")body=`<div class="ldwrap">${s.svg}</div>${/class="lb"/.test(s.svg)?`<div class="ldbar"><button type="button" class="chip" id="ldhide">Hide labels and test yourself</button><span class="ldhint" id="ldhint" hidden>Tap a number to check it.</span></div>`:""}${s.html||""}`;
     else if(s.t==="q")body=`<p class="qzq">${s.q}</p><div class="opts">${s.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div><div id="lsfb"></div>`;
     else if(s.t==="num")body=`<p class="qzq">${s.q}</p><form class="qztype" id="lsform" autocomplete="off"><input id="lsin" inputmode="decimal" placeholder="Your answer${s.unit&&s.unit!=="×"?" in "+s.unit:""}" aria-label="Your answer"><button type="submit" class="btn p">Check</button></form><button type="button" class="linkbtn" id="lsidk">Show me the answer</button><div id="lsfb"></div>`;
-    else if(s.t==="sum")body=`<ul class="lssum">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul><div class="lsend"><button type="button" class="btn p" id="lsquiz">Quiz me on ${C.topics[l.topic]||"this topic"}</button><button type="button" class="btn" id="lsnotes">Open the full notes</button></div>`;
+    else if(s.t==="sum")body=`<ul class="lssum">${s.bullets.map(b=>`<li>${b}</li>`).join("")}</ul>${C.noQuiz?"":`<div class="lsend"><button type="button" class="btn p" id="lsquiz">Quiz me on ${C.topics[l.topic]||"this topic"}</button><button type="button" class="btn" id="lsnotes">Open the full notes</button></div>`}`;
     else body=s.html;
     if(s.vid)body+=`<p class="lsvid"><a class="btn" target="_blank" rel="noopener" href="https://www.youtube.com/results?search_query=${encodeURIComponent(s.vid)}">▶ Watch it done</a><span>Opens demo videos on YouTube in a new tab</span></p>`;
     sh.innerHTML=`<div class="qzbar"><b>${l.title}</b><button type="button" class="qzx" id="lsx" aria-label="Close lesson">✕</button></div>
@@ -580,7 +580,7 @@ function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)re
       const fin=(ok,v)=>{inp.disabled=true;sh.querySelector("#lsform button").disabled=true;const k=$("lsidk");if(k)k.remove();done(ok,ok?"":`<div class="panel ms"><b>Answer:</b> ${s.ans}${s.unit&&s.unit!=="×"?" "+s.unit:""}</div>`)};
       $("lsform").onsubmit=e=>{e.preventDefault();const v=parseFloat(String(inp.value).replace(/,/g,"").replace(/[^\d.\-eE]/g,""));if(isNaN(v)){inp.focus();return}fin(Math.abs(v-s.ans)<=s.tol,v)};
       $("lsidk").onclick=()=>fin(false)}
-    if(s.t==="sum"){$("lsquiz").onclick=()=>{close();openQuiz([l.topic])};$("lsnotes").onclick=()=>{close();const t=$("tab-"+(document.querySelector("nav.tabs button").dataset.p));const sec=$(l.topic);if($("tab-rev"))$("tab-rev").click();if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),80)}}}
+    if(s.t==="sum"){if($("lsquiz"))$("lsquiz").onclick=()=>{close();openQuiz([l.topic])};if($("lsnotes"))$("lsnotes").onclick=()=>{close();const t=$("tab-"+(document.querySelector("nav.tabs button").dataset.p));const sec=$(l.topic);if($("tab-rev"))$("tab-rev").click();if(sec){if(sec.classList.contains("acc")&&!sec.classList.contains("open"))sec.querySelector(".th").click();setTimeout(()=>sec.scrollIntoView({behavior:"smooth"}),80)}}}
     sh.scrollTop=0}
   sh.onkeydown=e=>{if(e.key==="Escape")close()};step();$("lsx").focus({preventScroll:true})}
 function init(cfg){
@@ -609,5 +609,10 @@ function init(cfg){
 }
 const r=(a,b,dp=0)=>+(a+Math.random()*(b-a)).toFixed(dp);
 const pick=a=>a[Math.floor(Math.random()*a.length)];
-return {init,chart,table,r,pick,quiz:k=>openQuiz(k),lesson:id=>openLesson(id)};
+function lessonsOnly(cfg){C=Object.assign({topics:{},cards:[],sets:[],figs:{},noQuiz:true},cfg);KEY=cfg.key;load();window.__STUDY=C;setupLessons();
+  const lsb=$("tab-ls");if(!lsb)return;const others=[...lsb.parentNode.querySelectorAll("button")].filter(b=>b!==lsb);
+  lsb.onclick=()=>{others.forEach(b=>{b.setAttribute("aria-selected","false");const p=$("p-"+b.dataset.p);if(p)p.hidden=true});lsb.setAttribute("aria-selected","true");$("p-ls").hidden=false;window.scrollTo(0,0)};
+  others.forEach(b=>b.addEventListener("click",()=>{lsb.setAttribute("aria-selected","false");$("p-ls").hidden=true}));
+  if(location.hash==="#ls")lsb.onclick()}
+return {init,lessonsOnly,chart,table,r,pick,quiz:k=>openQuiz(k),lesson:id=>openLesson(id)};
 })();

@@ -71,7 +71,7 @@
   <a href="?paper=3" data-paper="3"><b>Reading</b><span>Paper 3 · 1 h</span></a>
   <a href="?paper=4" data-paper="4"><b>Writing</b><span>Paper 4 · 1 h 15</span></a>
 </div>
-<script>window.FPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-frpaper")||"1"}catch(e){p="1"}}p=["1","2","3","4"].includes(p)?p:"1";try{localStorage.setItem("gcseasy-frpaper",p)}catch(e){}return p})();
+<script>window.FPAPER=(()=>{let p=new URLSearchParams(location.search).get("paper")||"";if(!p){try{p=localStorage.getItem("gcseasy-frpaper")||"1"}catch(e){p="1"}}p=["1","2","3","4"].includes(p)?p:"1";try{localStorage.setItem("gcseasy-frpaper",p)}catch(e){}return p})();window.LESSON_PAPER=window.FPAPER;
 document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===FPAPER));</script>
 <nav class="tabs" role="tablist">
   <button role="tab" id="tab-gd" aria-selected="true" data-p="gd">Exam guide</button>
@@ -218,7 +218,7 @@ document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dat
 </div>
 
 <footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><a href="index.html#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
-<script src="shared/study.js"></script>
+<script src="shared/lessons.js"></script><script src="shared/lessons-french.js"></script><script src="shared/study.js"></script>
 <script src="shared/guide.js"></script>
 <script>
 const TOPICS={T1:"People & lifestyle",T2:"Popular culture",T3:"World around us",GR:"Grammar"};

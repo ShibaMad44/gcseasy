@@ -320,5 +320,7 @@ function show(p,sc){tabs.forEach(b=>b.setAttribute("aria-selected",b.dataset.p==
 tabs.forEach(b=>b.onclick=()=>show(b.dataset.p,true));
 const hm={"#practice":"wr","#cards":"ec"}[location.hash];let p=hm;if(!p){try{p=localStorage.getItem(K)}catch(e){}}if(!tabs.some(b=>b.dataset.p===p))p="gd";show(p,false)})();
 </script>
+<script src="shared/lessons.js"></script><script src="shared/lessons-english-language.js"></script><script src="shared/study.js"></script>
+<script>window.LESSON_PAPER=window.LPAPER;Study.lessonsOnly({id:"english-language",key:"englang-lessons-v1",topics:{P1:"Paper 1",P2:"Paper 2",LT:"Language techniques",ST:"Structure techniques",WR:"Writing (Q5)"}});</script>
 </body>
 </html>
