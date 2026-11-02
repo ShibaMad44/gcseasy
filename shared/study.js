@@ -258,6 +258,17 @@ function renderPart(p){
       const ok=j===p.a;out.innerHTML="";out.appendChild(Object.assign(document.createElement("div"),{className:"fb "+(ok?"ok":"no"),textContent:ok?"Correct":"Not quite"}));
       out.appendChild(panel("ms","Marking guidance",p.ex));if(p.mist)out.appendChild(panel("mist","Common mistake",p.mist));setMark(p.id,ok?p.mk:0);state.a[p.id]=j;save()}
     if(state.a[p.id]!=null)setTimeout(()=>pick(state.a[p.id]));
+  } else if(p.k==="x"){
+    const need=p.a.length,o=document.createElement("div");o.className="opts";const sel=new Set();
+    const hint=document.createElement("p");hint.className="xneed";hint.textContent=`Choose ${need} answers.`;body.appendChild(hint);
+    const chk=document.createElement("button");chk.className="btn p sm";chk.textContent="Check";chk.disabled=true;
+    p.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.setAttribute("aria-pressed","false");b.onclick=()=>{if(b.disabled)return;if(sel.has(j)){sel.delete(j)}else{if(sel.size>=need)return;sel.add(j)}b.classList.toggle("sel",sel.has(j));b.setAttribute("aria-pressed",sel.has(j));chk.disabled=sel.size!==need;hint.textContent=sel.size===need?"Ready: press Check.":`Choose ${need} answers (${sel.size} chosen).`};o.appendChild(b)});
+    body.appendChild(o);body.appendChild(chk);
+    function check(arr){arr.forEach(j=>sel.add(j));let right=0;o.querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;const c=p.a.includes(k);if(c)b.classList.add("right");if(sel.has(k)){b.classList.add("sel");if(c)right++;else b.classList.add("wrong")}});chk.remove();hint.remove();
+      out.innerHTML="";out.appendChild(Object.assign(document.createElement("div"),{className:"fb "+(right===need?"ok":"no"),textContent:right===need?"Correct":`${right} / ${need} correct`}));
+      out.appendChild(panel("ms","Marking guidance",p.ex));setMark(p.id,right);state.a[p.id]=[...sel];save()}
+    chk.onclick=()=>check([...sel]);
+    if(Array.isArray(state.a[p.id]))setTimeout(()=>check(state.a[p.id]));
   } else if(p.k==="n"||p.k==="f"){
     const fs=p.k==="n"?[[null,p.ans]]:p.fs;
     const wrap=document.createElement("div");wrap.className=p.k==="n"?"num":"fields";
