@@ -121,7 +121,7 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
   function step(){const q=QZ.items[QZ.i];const label=sel.length===1?(sel[0]===C.topics[sel[0]]?sel[0]:sel[0]+" "+C.topics[sel[0]]):`${sel.length} topics`;
     sheet.innerHTML=top(label)+`<div class="qzin"><div class="qzdots">${QZ.items.map((_,k)=>`<i class="${k<QZ.i?(okAt(k)?"ok":"no"):k===QZ.i?"now":""}"></i>`).join("")}</div>
       <p class="qzmeta">Question ${QZ.i+1} of ${QZ.items.length} · ${q.t}</p><p class="qzq">${q.q}</p>${q.typed?`<form class="qztype" id="qzform" autocomplete="off"><input id="qzin" type="text" placeholder="Type your answer" aria-label="Your answer" autocapitalize="off" spellcheck="false"><button type="submit" class="btn p">Check</button></form><button type="button" class="linkbtn" id="qzidk">I don't know</button>`:`<div class="opts">${q.o.map((o,k)=>`<button class="opt" data-j="${k}">${o}</button>`).join("")}</div>`}<div id="qzfb"></div></div>`;
-    $("qzx").onclick=close;
+    $("qzx").onclick=close;window.mixOpts&&mixOpts(sheet.querySelector(".qzin .opts"));
     const finish=(ok,extra)=>{QZ.res[QZ.i]=ok;const last=QZ.i>=QZ.items.length-1;if(ok&&window.GCSEasy)GCSEasy.addXP(q.typed?2:1,"quiz",60);
       if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,q.t,ok);
       $("qzfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${extra||""}${q.ex?`<div class="panel ms">${q.ex}</div>`:""}<button type="button" class="btn p qzgo" id="qznext">${last?"See my score":"Next"}</button>`;
@@ -131,7 +131,7 @@ function openQuiz(preset){let sheet=$("qzsheet");if(!sheet){sheet=document.creat
         finish(r.ok,`<div class="panel ms"><b>Answer:</b> ${q.ans}${r.ok&&!r.exact?`<br><span class="qzspell">Close enough. Watch the spelling.</span>`:""}</div>`)};
       $("qzform").onsubmit=e=>{e.preventDefault();if(!inp.value.trim()){inp.focus();return}done(QG.check(inp.value,q.ans),inp.value)};
       $("qzidk").onclick=()=>done({ok:false},"")}
-    sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;QZ.ans[QZ.i]=j;sheet.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});
+    sheet.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;QZ.ans[QZ.i]=j;sheet.querySelectorAll(".opt").forEach(x=>{const k=+x.dataset.j;x.disabled=true;if(k===q.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});
       finish(j===q.a)});
     sheet.scrollTop=0}
   function end(){const it=QZ.items,got=it.filter((q,k)=>okAt(k)).length,per={};it.forEach((q,k)=>{per[q.t]=per[q.t]||{g:0,n:0};per[q.t].n++;if(okAt(k))per[q.t].g++});
@@ -252,9 +252,9 @@ function renderPart(p){
     hb.onclick=()=>{if(hintBox){hintBox.remove();hintBox=null;return}hintBox=panel("hint","How to approach it",p.hint);d.insertBefore(hintBox,body)};tools.appendChild(hb)}
   if(p.k==="m"){
     const o=document.createElement("div");o.className="opts";
-    p.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.onclick=()=>pick(j);o.appendChild(b)});
-    body.appendChild(o);
-    function pick(j){o.querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;if(k===p.a)b.classList.add("right");else if(k===j)b.classList.add("wrong")});
+    p.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.dataset.j=j;b.textContent=t;b.onclick=()=>pick(j);o.appendChild(b)});
+    window.mixOpts&&mixOpts(o);body.appendChild(o);
+    function pick(j){o.querySelectorAll(".opt").forEach(b=>{const k=+b.dataset.j;b.disabled=true;if(k===p.a)b.classList.add("right");else if(k===j)b.classList.add("wrong")});
       const ok=j===p.a;out.innerHTML="";out.appendChild(Object.assign(document.createElement("div"),{className:"fb "+(ok?"ok":"no"),textContent:ok?"Correct":"Not quite"}));
       out.appendChild(panel("ms","Marking guidance",p.ex));if(p.mist)out.appendChild(panel("mist","Common mistake",p.mist));setMark(p.id,ok?p.mk:0);state.a[p.id]=j;save()}
     if(state.a[p.id]!=null)setTimeout(()=>pick(state.a[p.id]));
@@ -262,9 +262,9 @@ function renderPart(p){
     const need=p.a.length,o=document.createElement("div");o.className="opts";const sel=new Set();
     const hint=document.createElement("p");hint.className="xneed";hint.textContent=`Choose ${need} answers.`;body.appendChild(hint);
     const chk=document.createElement("button");chk.className="btn p sm";chk.textContent="Check";chk.disabled=true;
-    p.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.setAttribute("aria-pressed","false");b.onclick=()=>{if(b.disabled)return;if(sel.has(j)){sel.delete(j)}else{if(sel.size>=need)return;sel.add(j)}b.classList.toggle("sel",sel.has(j));b.setAttribute("aria-pressed",sel.has(j));chk.disabled=sel.size!==need;hint.textContent=sel.size===need?"Ready: press Check.":`Choose ${need} answers (${sel.size} chosen).`};o.appendChild(b)});
-    body.appendChild(o);body.appendChild(chk);
-    function check(arr){arr.forEach(j=>sel.add(j));let right=0;o.querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;const c=p.a.includes(k);if(c)b.classList.add("right");if(sel.has(k)){b.classList.add("sel");if(c)right++;else b.classList.add("wrong")}});chk.remove();hint.remove();
+    p.o.forEach((t,j)=>{const b=document.createElement("button");b.className="opt";b.dataset.j=j;b.textContent=t;b.setAttribute("aria-pressed","false");b.onclick=()=>{if(b.disabled)return;if(sel.has(j)){sel.delete(j)}else{if(sel.size>=need)return;sel.add(j)}b.classList.toggle("sel",sel.has(j));b.setAttribute("aria-pressed",sel.has(j));chk.disabled=sel.size!==need;hint.textContent=sel.size===need?"Ready: press Check.":`Choose ${need} answers (${sel.size} chosen).`};o.appendChild(b)});
+    window.mixOpts&&mixOpts(o);body.appendChild(o);body.appendChild(chk);
+    function check(arr){arr.forEach(j=>sel.add(j));let right=0;o.querySelectorAll(".opt").forEach(b=>{const k=+b.dataset.j;b.disabled=true;const c=p.a.includes(k);if(c)b.classList.add("right");if(sel.has(k)){b.classList.add("sel");if(c)right++;else b.classList.add("wrong")}});chk.remove();hint.remove();
       out.innerHTML="";out.appendChild(Object.assign(document.createElement("div"),{className:"fb "+(right===need?"ok":"no"),textContent:right===need?"Correct":`${right} / ${need} correct`}));
       out.appendChild(panel("ms","Marking guidance",p.ex));setMark(p.id,right);state.a[p.id]=[...sel];save()}
     chk.onclick=()=>check([...sel]);
@@ -586,7 +586,7 @@ function openLesson(id,onClose){const l=lessonList().find(x=>x.id===id);if(!l)re
       svg.querySelectorAll(".lb").forEach(g=>g.addEventListener("click",()=>{if(svg.classList.contains("test"))g.classList.toggle("show")}))}
     const done=(ok,extra)=>{answered[i]=1;if(ok&&window.GCSEasy)GCSEasy.addXP(1,"quiz",60);if(window.GCSEasy&&GCSEasy.topicResult)GCSEasy.topicResult(C.id,l.topic,ok);
       $("lsfb").innerHTML=`<div class="fb ${ok?"ok":"no"}">${ok?"Correct":"Not quite"}</div>${extra||""}<div class="panel ms">${s.ex}</div>`;$("lsnext").disabled=false;$("lsnext").focus({preventScroll:true})};
-    if(s.t==="q")sh.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;sh.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===s.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===s.a)});
+    if(s.t==="q"){window.mixOpts&&mixOpts(sh.querySelector(".lsbody .opts"));sh.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;sh.querySelectorAll(".opt").forEach(x=>{const k=+x.dataset.j;x.disabled=true;if(k===s.a)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===s.a)});}
     if(s.t==="num"){const inp=$("lsin");setTimeout(()=>inp.focus({preventScroll:true}),50);
       const fin=(ok,v)=>{inp.disabled=true;sh.querySelector("#lsform button").disabled=true;const k=$("lsidk");if(k)k.remove();done(ok,ok?"":`<div class="panel ms"><b>Answer:</b> ${s.ans}${s.unit&&s.unit!=="×"?" "+s.unit:""}</div>`)};
       $("lsform").onsubmit=e=>{e.preventDefault();const v=parseFloat(String(inp.value).replace(/,/g,"").replace(/[^\d.\-eE]/g,""));if(isNaN(v)){inp.focus();return}fin(Math.abs(v-s.ans)<=s.tol,v)};

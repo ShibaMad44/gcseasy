@@ -561,7 +561,7 @@ function parse(s){s=String(s).trim().replace(/[£€$°%,]|cm³|cm²|cm|km\/h|km
 function drawQ(){const q=cur,box=$("pbox");
   const head=`<div class="meta"><span>${q.t.s} · ${q.t.n}${q.t.nc?" · ✱":""}</span><span>${mini?`Question ${mini.i+1} of 10`:""}</span></div>`;
   if(q.opts){box.innerHTML=head+`<p class="dq">${q.q}</p><div class="opts">${q.opts.map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div><div id="pfb"></div>`;
-    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;box.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q.c)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===q.c)})}
+    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j;box.querySelectorAll(".opt").forEach(x=>{const k=+x.dataset.j;x.disabled=true;if(k===q.c)x.classList.add("right");else if(k===j)x.classList.add("wrong")});done(j===q.c)})}
   else{const ans=Array.isArray(q.a)?q.a:[q.a],labels=q.labels||ans.map(()=>"");
     box.innerHTML=head+`<p class="dq">${q.q}</p><div class="pins">${ans.map((_,k)=>`<label>${labels[k]?`<span>${labels[k]}</span>`:""}<input id="pin${k}" inputmode="text" autocomplete="off" placeholder="${q.frac?"e.g. 3/4":"Answer"}" aria-label="${labels[k]||"Answer"}"></label>`).join("")}${q.unit?`<span class="u">${q.unit}</span>`:""}<button class="btn sm p" id="pchk">Check</button></div><div id="pfb"></div>`;
     const go=()=>{const vals=ans.map((_,k)=>parse($("pin"+k).value));if(vals.some(isNaN)){$("pfb").innerHTML='<div class="fb no">Fill in every box with a number (fractions like 3/4 are fine).</div>';return}

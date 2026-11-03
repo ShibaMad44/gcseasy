@@ -1525,7 +1525,7 @@ function rec(c,g,m){run.got+=g;run.max+=m;if(m&&window.GCSEasy&&GCSEasy.topicRes
 function step(){const box=$("quizbox");if(run.i>=run.items.length)return finish();
   const {c,q}=run.items[run.i];const head=`<div class="meta"><span>${run.i+1} of ${run.items.length} · ${c.name}</span><span>${run.got} / ${run.max}</span></div>`;
   if(q[0]==="m"){box.innerHTML=head+`<p class="dq">${q[1]}</p><div class="opts">${q[2].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join("")}</div><div id="qfb"></div>`;
-    box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j,ok=j===q[3];box.querySelectorAll(".opt").forEach((x,k)=>{x.disabled=true;if(k===q[3])x.classList.add("right");else if(k===j)x.classList.add("wrong")});rec(c,ok?1:0,1);if(!ok)run.missed.push(run.items[run.i]);fb(ok,q[4])})}
+    window.mixOpts&&mixOpts(box.querySelector(".opts"));box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{const j=+b.dataset.j,ok=j===q[3];box.querySelectorAll(".opt").forEach(x=>{const k=+x.dataset.j;x.disabled=true;if(k===q[3])x.classList.add("right");else if(k===j)x.classList.add("wrong")});rec(c,ok?1:0,1);if(!ok)run.missed.push(run.items[run.i]);fb(ok,q[4])})}
   else if(q[0]==="n"){box.innerHTML=head+`<p class="dq">${q[1]}</p><div class="num"><input id="qin" inputmode="decimal" placeholder="Your answer" aria-label="Answer">${q[4]?`<span class="u">${q[4]}</span>`:""}<button class="btn sm p" id="qchk">Check</button></div><div id="qfb"></div>`;
     const go=()=>{const v=parseFloat($("qin").value.replace(/[^0-9.\-]/g,""));if(isNaN(v)){$("qfb").innerHTML='<div class="fb no">Type a number first.</div>';return}const ok=Math.abs(v-q[2])<=q[3]+1e-9;$("qin").disabled=true;$("qchk").disabled=true;rec(c,ok?1:0,1);if(!ok)run.missed.push(run.items[run.i]);fb(ok,(ok?"":"Answer: "+q[2].toLocaleString("en-GB")+(q[4]?" "+q[4]:"")+". ")+q[5])};
     $("qchk").onclick=go;$("qin").onkeydown=e=>{if(e.key==="Enter")go()};$("qin").focus()}
@@ -1540,7 +1540,7 @@ function finish(){const box=$("quizbox"),pc=run.max?Math.round(run.got/run.max*1
   box.innerHTML=`<div class="meta"><span>Finished</span><span>${run.got} / ${run.max}</span></div><p class="dq">${pc}% ${pc>=80?"– excellent.":pc>=60?"– good. Go over the ones you missed.":"– reread the cards and try again."}</p>
   ${weak.length>1?`<div class="tbl"><table><tr><th>Case study</th><th class="num">Score</th></tr>${weak.map(([c,p])=>`<tr><td>${c.name}</td><td class="num">${p}%</td></tr>`).join("")}</table></div>`:""}
   <div class="row">${run.missed.length?`<button class="btn p" id="qretry">Retry the ${run.missed.length} I missed</button>`:""}<button class="btn" id="qagain">New quiz</button><button class="btn" id="qlearn">Back to the cards</button></div>`;
-  if(run.missed.length)$("qretry").onclick=()=>{run={items:run.missed,i:0,got:0,max:0,missed:[],per:{}};step()};
+  if(run.missed.length)$("qretry").onclick=()=>{run={items:run.missed.slice().sort(()=>Math.random()-.5),i:0,got:0,max:0,missed:[],per:{}};step()};
   $("qagain").onclick=drawSetup;$("qlearn").onclick=()=>{setView("learn");if(weak[0])setTimeout(()=>{const el=$("cs-"+weak[0][0].id);if(el)el.scrollIntoView({behavior:"smooth"})},50)}}
 setView(view);
 })();

@@ -1,3 +1,13 @@
+/* Shuffle the answer buttons inside an .opts box so the right answer isn't always in the same place.
+   Options like "All of these" / "None of these" stay last; all-number option sets keep their natural order. Buttons keep data-j = original index. */
+window.mixOpts=function(box){if(!box)return;const bs=[...box.querySelectorAll(":scope > .opt")];if(bs.length<2)return;
+  const tx=bs.map(b=>b.textContent.trim());
+  if(tx.every(t=>/^[~≈<>£$−-]?\s?\d/.test(t)))return;
+  if(tx.length===2&&tx.every(t=>/^(true|false|yes|no)$/i.test(t)))return;
+  const last=b=>/^(all|none|both|neither)\b/i.test(b.textContent.trim());
+  const mv=bs.filter(b=>!last(b)),fx=bs.filter(last);
+  for(let i=mv.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[mv[i],mv[j]]=[mv[j],mv[i]]}
+  [...mv,...fx].forEach(b=>box.appendChild(b))};
 /* GCSEasy site helpers: theme switch, subject list, saved progress. Load in <head>. */
 (function(){
 const TKEY="gcseasy-theme",PKEY="gcseasy-progress";
