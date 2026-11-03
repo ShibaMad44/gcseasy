@@ -1495,12 +1495,12 @@ function drawCards(){
 }
 $("cshide").onclick=()=>{hidden=!hidden;st.hidden=hidden;save();drawCards()};
 /* quiz */
-let sel=st.sel||["all"],qmode=st.qmode||"recall",run=null;
+let sel=st.sel||["all"],qmode="recall",run=null;
 function setView(v){view=v;st.view=v;save();$("cs-learn").hidden=v!=="learn";$("cs-quiz").hidden=v!=="quiz";
   chip($("csview"),[["learn","Learn the case studies"],["quiz","Case study quiz"]],v,setView);if(v==="quiz"&&!run)drawSetup();if(v==="learn")drawCards()}
 function drawSetup(){run=null;
   const box=$("quizbox");
-  box.innerHTML=`<p class="qlab">1. Pick case studies</p><div class="chips" id="qsel"></div><p class="qlab">2. Pick question type</p><div class="chips" id="qtype"></div><div class="row"><button class="btn p" id="qgo">Start quiz</button></div><p class="qinfo" id="qinfo"></p>`;
+  box.innerHTML=`<p class="qlab">1. Pick case studies</p><div class="chips" id="qsel"></div><div class="row"><button class="btn p" id="qgo">Start quiz</button></div><p class="qinfo" id="qinfo"></p>`;
   const short=c=>c.name.replace(/,? \d{4}$/,"").replace(/^Malaysia: causes of deforestation$/,"Malaysia");
   const drawSel=()=>{const el=$("qsel");const isOn=id=>sel.includes("all")||sel.includes(id);
     const tog=ids=>{const cur=sel.includes("all")?CASES.map(c=>c.id):sel.slice();const all=ids.every(i=>cur.includes(i));let n=all?cur.filter(i=>!ids.includes(i)):[...new Set([...cur,...ids])];sel=n.length===CASES.length?["all"]:(n.length?n:["all"]);st.sel=sel;save();drawSel();info()};
@@ -1512,9 +1512,8 @@ function drawSetup(){run=null;
     el.querySelectorAll("[data-ids]").forEach(b=>b.onclick=()=>tog(b.dataset.ids.split(",")));
     el.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{const k=b.dataset.c;let cur=sel.includes("all")?CASES.map(c=>c.id):sel.slice();cur=cur.includes(k)?cur.filter(x=>x!==k):[...cur,k];sel=cur.length===CASES.length?["all"]:cur;if(!sel.length)sel=["all"];st.sel=sel;save();drawSel();info()});
   };
-  const drawType=()=>chip($("qtype"),[["recall","Quick recall"],["exam","Exam-style answers"],["mixed","Mixed"]],qmode,k=>{qmode=k;st.qmode=k;save();drawType();info()});
-  const info=()=>{$("qinfo").textContent=`${pool().length} questions. ${qmode==="recall"?"Tick-box and number questions on the facts.":qmode==="exam"?"Write a full answer, then mark it against the mark scheme.":"Facts first, then an exam question for each case study."}`};
-  drawSel();drawType();info();$("qgo").onclick=startQuiz;
+  const info=()=>{$("qinfo").textContent=`${pool().length} questions on the facts: places, figures and what happened. Exam questions are on the Exam Qs tab.`};
+  drawSel();info();$("qgo").onclick=startQuiz;
 }
 function pool(){const cs=sel.includes("all")?CASES:CASES.filter(c=>sel.includes(c.id));let out=[];
   cs.forEach(c=>c.quiz.forEach(q=>{if(qmode==="recall"&&q[0]==="w")return;if(qmode==="exam"&&q[0]!=="w")return;out.push({c,q})}));
