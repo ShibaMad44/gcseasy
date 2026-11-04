@@ -59,6 +59,15 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 .cp3-rank{font:700 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
 .cp3-sts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.cp3-st{font-size:.8rem;background:var(--bg);border-radius:6px;padding:3px 8px;color:var(--muted);font-weight:400}.cp3-st b{color:var(--ink)}
 .cp3-tip{background:var(--warn-soft);border-radius:var(--r-md);padding:10px 12px;margin:8px 0 0}.cp3-ok{background:var(--good-soft);border-radius:var(--r-md);padding:10px 12px;margin:8px 0 0}.cp3-miss{color:var(--bad);margin:6px 0 0}
+.cpa-head h3{margin:12px 0 0}.cpa-by{font:500 .85rem var(--mono);color:var(--muted);margin:2px 0 8px}.cpa-note{color:var(--muted);font-size:.9rem}
+.cpa-poem{margin:10px 0 16px;border:1px solid var(--line);border-radius:var(--r-md);padding:10px 12px;background:var(--surface)}
+.cpa-l{display:grid;grid-template-columns:22px 1fr;gap:0 8px;padding:5px 0;border-bottom:1px dashed var(--line)}.cpa-l:last-child{border-bottom:0}
+.cpa-n{font:500 .7rem var(--mono);color:var(--muted);padding-top:3px;text-align:right}.cpa-t{font-family:Georgia,serif;font-size:1.02rem;line-height:1.45}
+.cpa-l .cpa-a{grid-column:2;font-size:.88rem;color:var(--ink);background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 6px 6px 0;padding:4px 8px;margin:4px 0 2px}
+.cpa-gap{height:14px;border-bottom:1px dashed var(--line)}
+@media(min-width:900px){.cpa-l{grid-template-columns:26px minmax(0,1fr) minmax(0,1.1fr);gap:0 14px;align-items:start}.cpa-l .cpa-a{grid-column:3;margin:0}}
+.cpa-walk{display:grid;gap:8px;margin:6px 0 14px}.cpa-w{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:8px 12px}.cpa-w blockquote{margin:0;font-family:Georgia,serif;font-weight:600}.cpa-w .cpa-a{margin:4px 0 0;font-size:.9rem}
+.test .cpa-a{display:none}.test .show .cpa-a{display:block}.test .has,.test .cpa-w{cursor:pointer}.test .has .cpa-t{text-decoration:underline dotted var(--accent);text-underline-offset:3px}
 .cp3-ct{display:flex;flex-wrap:wrap;gap:4px 10px;margin-top:6px;font-size:.78rem}.cp3-ct .y{color:var(--good)}.cp3-ct .n{color:var(--bad)}.cp3-four{background:var(--accent-soft);border-radius:var(--r-md);padding:10px 12px;margin:8px 0 0}.cpg-notes li{margin:0 0 6px}
 .cp3-rk{margin:6px 0 0}.cp3-asked{color:var(--accent)}
 .cp3-use{display:block;margin:0 0 3px}.cp3-how{margin:0 0 14px}
@@ -160,7 +169,7 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 </div>
 
 <div id="p-cx" hidden>
-<div class="chips" id="ctxjump"><button class="chip" onclick="document.getElementById('cx-aic').scrollIntoView({behavior:'smooth'})">An Inspector Calls</button><button class="chip" onclick="document.getElementById('cx-jh').scrollIntoView({behavior:'smooth'})">Jekyll and Hyde</button><button class="chip" onclick="document.getElementById('cx-cp').scrollIntoView({behavior:'smooth'})">Conflict poetry</button><button class="chip" onclick="document.getElementById('cx-cp3').scrollIntoView({behavior:'smooth'})">Pick your 3 poems</button><button class="chip" onclick="document.getElementById('cx-rj').scrollIntoView({behavior:'smooth'})">Romeo and Juliet</button></div>
+<div class="chips" id="ctxjump"><button class="chip" onclick="document.getElementById('cx-aic').scrollIntoView({behavior:'smooth'})">An Inspector Calls</button><button class="chip" onclick="document.getElementById('cx-jh').scrollIntoView({behavior:'smooth'})">Jekyll and Hyde</button><button class="chip" onclick="document.getElementById('cx-cp').scrollIntoView({behavior:'smooth'})">Conflict poetry</button><button class="chip" onclick="document.getElementById('cx-cp3').scrollIntoView({behavior:'smooth'})">Pick your 3 poems</button><button class="chip" onclick="document.getElementById('cx-cpa').scrollIntoView({behavior:'smooth'})">Annotated poems</button><button class="chip" onclick="document.getElementById('cx-rj').scrollIntoView({behavior:'smooth'})">Romeo and Juliet</button></div>
 
 <section class="topic" id="cx-aic">
 <div class="th"><div class="tile"><small>A</small>IC</div><h2>An Inspector Calls · J.B. Priestley</h2></div>
@@ -307,6 +316,12 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 <div id="cpguide"></div>
 </section>
 
+<section class="topic" id="cx-cpa">
+<div class="th"><div class="tile"><small>C</small>PA</div><h2>Conflict poetry · Annotated poems</h2></div>
+<p>Line-by-line annotations for all 15 poems: techniques, their effects and what they say about conflict. Use "Hide the notes" to test yourself on what to say about each line.</p>
+<div id="cpann"></div>
+</section>
+
 <section class="topic" id="cx-rj">
 <div class="th"><div class="tile"><small>R</small>RJ</div><h2>Romeo and Juliet · William Shakespeare</h2></div>
 <h3>When and where</h3>
@@ -412,7 +427,7 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 </div>
 
 <footer class="sitefoot"><div class="in"><span class="brand">GCS<mark>Easy</mark></span><nav aria-label="Footer"><a href="index.html#subjects">Subjects</a><a href="tools.html">Study tools</a><a href="resources.html">Resources</a><a href="index.html#papers">Past papers</a><a href="privacy.html">Privacy</a></nav><p>Free GCSE revision. Questions are original and written in the style of the real exams. Not affiliated with any exam board. Your progress stays in your browser unless you make a free account to sync it.</p></div></footer>
-<script src="shared/cp-guide.js"></script><script src="shared/lessons.js"></script><script src="shared/lessons-literature.js"></script><script src="shared/study.js"></script>
+<script src="shared/cp-guide.js"></script><script src="shared/cp-annotated.js"></script><script src="shared/lessons.js"></script><script src="shared/lessons-literature.js"></script><script src="shared/study.js"></script>
 <script src="shared/guide.js"></script>
 <script>
 const PAPER=(()=>{const q=new URLSearchParams(location.search).get("paper");let p=q||"";const hm=location.hash.match(/(?:quiz|topic)=([A-Z]+)/);if(!p&&hm)p=["CP","RJ"].includes(hm[1])?"2":["AIC","JH"].includes(hm[1])?"1":"";if(!p){try{p=localStorage.getItem("gcseasy-litpaper")||"1"}catch(e){p="1"}}p=p==="2"?"2":"1";try{localStorage.setItem("gcseasy-litpaper",p)}catch(e){}return p})();
@@ -742,7 +757,7 @@ Study.init({id:"english-literature",key:"englit-v1",topics:Object.fromEntries(Ob
 ].filter(x=>PT.includes({aic:"AIC",jh:"JH",cp:"CP",rj:"RJ"}[x.id]))});
 /* ---- paper split ---- */
 document.querySelectorAll(".papersw a").forEach(a=>a.classList.toggle("on",a.dataset.paper===PAPER));
-{const map={"cx-aic":"AIC","cx-jh":"JH","cx-cp":"CP","cx-cp3":"CP","cx-cpg":"CP","cx-rj":"RJ"};
+{const map={"cx-aic":"AIC","cx-jh":"JH","cx-cp":"CP","cx-cp3":"CP","cx-cpg":"CP","cx-cpa":"CP","cx-rj":"RJ"};
  for(const [id,k] of Object.entries(map)){const s=document.getElementById(id);if(s)s.hidden=!PT.includes(k)}
  const pt=document.getElementById("paper2");if(pt)pt.hidden=true;
  document.querySelectorAll("#ctxjump .chip").forEach(b=>{const m=(b.getAttribute("onclick")||"").match(/cx-[a-z]+/);if(m)b.hidden=!PT.includes(map[m[0]])});}
