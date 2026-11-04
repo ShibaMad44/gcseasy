@@ -223,7 +223,8 @@ const best=(ids,t)=>Math.max(0,...ids.map(id=>fit(id,t)));
 const sc=(ids,wa,pv,bk)=>TK.reduce((a,t)=>{const f=ids.map(id=>fitBy(id,t,pv)).sort((x,y)=>y-x);return a+(ASKED.has(t)?wa:1)*((1-bk)*f[0]+bk*(f[1]||0))},0);
 function stat(ids){const strong=TK.filter(t=>best(ids,t)===1).length,part=TK.filter(t=>best(ids,t)===.5).length,none=TK.filter(t=>!best(ids,t));
  const two=t=>ids.filter(id=>fit(id,t)>0).length>=2,dbl=TK.filter(two).length,askedB=[...ASKED].filter(two).length;
- return {strong,part,none,dbl,askedB,base:sc(ids,2,.5,.5)}}
+ const cov=ids2=>TK.filter(t=>ids2.some(id=>fit(id,t)>0)).length,covN=cov(ids),worst=ids.length===3?Math.min(...ids.map(x=>cov(ids.filter(y=>y!==x)))):covN;
+ return {strong,part,none,dbl,askedB,covN,worst,base:sc(ids,2,.5,.5)}}
 const ALL=[];for(let a=0;a<P.length;a++)for(let b=a+1;b<P.length;b++)for(let c=b+1;c<P.length;c++)ALL.push({ids:[P[a].id,P[b].id,P[c].id],hits:0});
 let RUNS=0;for(const wa of [1,1.5,2,3])for(const pv of [.25,.5,.75])for(const bk of [0,.25,.5,.75]){RUNS++;
  ALL.forEach(t=>t.v=sc(t.ids,wa,pv,bk));[...ALL].sort((x,y)=>y.v-x.v).slice(0,10).forEach(t=>t.hits++)}
@@ -234,7 +235,7 @@ const TOP=ALL.slice(0,10);
 const nm=id=>byId[id].w.replace(/ \(.*\)/,"");
 const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
 const NA=ASKED.size;
-const stats=(s,rob)=>`${rob!=null?`<span class="cp3-st"><b>${rob}%</b> of checks in the top 10</span>`:""}<span class="cp3-st"><b>${s.askedB}</b> of ${NA} past question types with a backup</span><span class="cp3-st"><b>${s.strong}${s.part?` + ${s.part} partly`:""}</b> of ${NT} themes</span>`;
+const stats=(s,rob)=>`<span class="cp3-st"><b>${s.covN}</b> of ${NT} themes</span><span class="cp3-st"><b>${s.worst}</b> of ${NT} if one is printed</span><span class="cp3-st"><b>${s.dbl}</b> with a backup</span>${rob?`<span class="cp3-st cp3-rob">top 10 in <b>${rob}%</b> of checks</span>`:""}`;
 function swapTip(){if(pick.length!==3)return "";const r=rankOf(pick);const cur=ALL[r-1];let bestT=null;
  pick.forEach(out=>P.forEach(p=>{if(pick.includes(p.id))return;const ids=pick.map(x=>x===out?p.id:x),k=rankOf(ids);if(k<r&&(!bestT||k<bestT.k))bestT={out,inn:p.id,k}}));
  const head=`<p class="cp3-rk">Your trio ranks <b>#${r}</b> of ${ALL.length} possible trios.</p>`;
@@ -259,10 +260,9 @@ function drawPick(){const el=document.getElementById("cp3");if(!el)return;
  <p>Close scores are close calls: pick the poems you enjoy and can remember. The fits are our judgement, not OCR's.</p></div></details>
  <p class="qzlab">Or pick your own (up to 3)</p><div class="chips cp3-chips">${P.map(p=>`<button type="button" class="chip${pick.includes(p.id)?" on":""}" data-p="${p.id}" aria-pressed="${pick.includes(p.id)}">${esc(nm(p.id))}</button>`).join("")}</div>
  ${pick.length?`<div class="cp3-sum">${pick.length===3?`<div class="cp3-sts">${stats(s,ALL[rankOf(pick)-1].rob)}</div>${s.none.length?`<p class="cp3-miss">Not covered: ${s.none.map(t=>TH[t]).join(", ")}.</p>`:""}${swapTip()}`:`<span>Pick ${3-pick.length} more.</span>`}</div>
- <h3>Which poem to use for each theme</h3>
- <div class="tbl"><table class="cp3-tab"><tr><th>If part (b) asks about…</th><th>Use</th></tr>${TK.map(t=>{const r=pick.map(id=>[id,fit(id,t)]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);const cls=r.length>=2?"g2":r.length?"g1":"g0";
-   return `<tr class="${cls}"><td>${TH[t]}${ASKED.has(t)?` <small class="cp3-asked">asked before</small>`:""}</td><td>${r.length?r.map(([id,f])=>`<span class="cp3-use">${esc(nm(id))}${f<1?" <small>(partly)</small>":""}</span>`).join(" "):"<i>none of your poems: swap one in</i>"}</td></tr>`}).join("")}</table></div>
- <p class="cp3-key">The first poem listed fits best. "Partly" means it works but isn't the poem's main focus. <span class="g2">Green</span>: you have a backup if one poem is printed. <span class="g1">Amber</span>: only one poem fits. <span class="g0">Red</span>: nothing fits.</p>
+ <h3>Your 3 poems against every theme</h3>
+ <div class="tbl"><table class="cp3-tab"><tr><th>Theme</th>${pick.map(id=>`<th>${SH[id]}</th>`).join("")}</tr>${TK.map(t=>{const n=pick.filter(id=>fit(id,t)>0).length;return `<tr class="${n>=2?"g2":n?"g1":"g0"}"><td>${TH[t]}${ASKED.has(t)?" <span class=\"cp3-asked\" title=\"Asked in a past paper\">★</span>":""}</td>${pick.map(id=>{const f=fit(id,t);return `<td>${f===1?"✓":f?"<small>partly</small>":""}</td>`}).join("")}</tr>`}).join("")}</table></div>
+ <p class="cp3-key">✓ fits well · <small>partly</small> works but isn't the main focus · ★ asked in a past paper.<br><span class="g2">Green</span>: two or more of your poems fit, so you're safe even if one is the printed poem. <span class="g1">Amber</span>: only one fits. <span class="g0">Red</span>: none fit, so think about swapping a poem.</p>
  <h3>Your quotes to learn</h3><div class="row"><button type="button" class="chip${hide?" on":""}" id="cp3hide">Hide key words</button></div>
  ${pick.map(id=>{const p=byId[id];return `<div class="cp3-poem"><h4>${esc(p.w)}</h4><ol class="cpg-q">${p.q.map(([q,s])=>`<li><blockquote>‘${qh(q,hide)}’</blockquote><p>${esc(s)}</p></li>`).join("")}</ol></div>`}).join("")}`:`<p class="cp3-sum">Tap a trio above, or choose poems, to see which theme each one covers.</p>`}`;
  el.querySelectorAll("[data-ids]").forEach(b=>b.onclick=()=>{pick=b.dataset.ids.split(",");st.pick=pick;save();drawPick()});
