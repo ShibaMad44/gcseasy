@@ -1,9 +1,12 @@
 /* Conflict poetry (OCR "Towards a World Unknown", exams from 2024): poem-by-poem guide and the "pick your 3" planner.
    Written for GCSEasy, using a class revision guide as a reference. Quotes are kept short: check each against your anthology. */
 (function(){
-const TH={war:"War & violence",effects:"Suffering & effects",power:"Power & authority",identity:"Identity & belonging",mind:"Internal conflict",guilt:"Guilt & responsibility",memory:"Memory & the past",nature:"Nature",family:"Family, childhood & relationships",faith:"Religion & faith",hope:"Hope & protest",nation:"Nation & empire",loss:"Death & loss"};
+const TH={effects:"Effects of conflict on a person",change:"How conflict changes things",sympathy:"Sympathy for victims",kill:"Killing & violence",power:"Power & powerlessness",cause:"Questioning what people fight for",peace:"Wanting conflict to end",mind:"Internal conflict",nature:"Conflict with nature",guilt:"Guilt & responsibility",memory:"Memory & the past",identity:"Identity & belonging",family:"Family & relationships",faith:"Religion & faith"};
+/* Real OCR part (b) questions (Conflict cluster). Themes that have been asked count double in the ranking. */
+const PASTQ=[["2017","presents how conflict leads to killing","kill"],["2018","questions the things people fight for","cause"],["2019","presents the effects of conflict on a person","effects"],["Nov 2020","presents a conflict that leaves the speaker feeling powerless","power"],["2023","presents sympathy for those involved in conflict","sympathy"],["2024","presents the wish for an end to conflict","peace"],["2025","presents how conflict changes things","change"],["Sample paper","presents lives transformed by conflict","change"]];
+const ASKED=new Set(PASTQ.map(x=>x[2]));
 const P=[
-{id:"envy",w:"Envy",who:"Mary Lamb (1809)",th:["mind", "nature", "identity"],pt:["hope"],
+{id:"envy",w:"Envy",who:"Mary Lamb (1809)",th:["mind","identity"],pt:["nature"],
  conflict:"Internal: a person at war with themselves because they want to be someone else.",
  big:"Envy is a conflict you cause yourself. Lamb uses a rose-tree that wishes it could grow other flowers to show that envious people can't see the value they already have.",
  form:"Short, regular rhyming lines, like a children's fable. The simple sound suits a clear moral lesson.",
@@ -15,7 +18,7 @@ const P=[
   ["Some pretty flower in their own mind","Hopeful ending: with 'care and culture' (effort) you can grow your own talent."]],
  top:"Go beyond 'don't be jealous'. Argue that the conflict comes from a failure to see clearly, and that Lamb's answer is self-improvement, not wishing.",
  pairs:[["Boat Stealing","Nature used to teach a lesson about the self"],["There's a certain Slant of light","A conflict that happens entirely inside the mind"],["Honour Killing","Being true to your own nature instead of others' expectations"]]},
-{id:"songs",w:"Songs for the People",who:"Frances E. W. Harper (1896)",th:["hope"],pt:["war", "faith", "effects", "power"],
+{id:"songs",w:"Songs for the People",who:"Frances E. W. Harper (1896)",th:["peace","sympathy"],pt:["cause","effects","change","power","faith"],
  conflict:"Between a suffering, divided world and the hope that art can heal and unite it.",
  big:"Harper wants poetry to replace violence as the thing that moves people. She borrows the energy of war ('battle-cry') and points it at peace and justice.",
  form:"Regular, song-like quatrains with rhyme and a strong beat, so it sounds like the hymns and songs it describes.",
@@ -27,7 +30,7 @@ const P=[
   ["Till war and crime shall cease","The goal: a world without conflict, reached through changed hearts."]],
  top:"Harper doesn't reject power; she redefines it. Shared music is a stronger force than armies. Context helps: she was an abolitionist and campaigner, so poetry is activism.",
  pairs:[["Flag","Two symbols that stir crowds: one towards war, one towards peace"],["The Destruction of Sennacherib","War's thrilling rhythm vs a song for peace"],["Lament","Poetry as a response to suffering"]]},
-{id:"boat",w:"Boat Stealing (from The Prelude)",who:"William Wordsworth (1850)",th:["nature", "mind", "guilt", "power", "family", "memory"],pt:["faith"],
+{id:"boat",w:"Boat Stealing (from The Prelude)",who:"William Wordsworth (1850)",th:["nature","mind","guilt","power","change","effects","memory"],pt:["family","faith"],
  conflict:"A boy against nature, and against his own conscience.",
  big:"A boy's confident theft of a boat turns to terror when a mountain seems to rise and chase him. Nature teaches him guilt and awe, and the experience changes how he sees the world.",
  form:"Blank verse (unrhymed iambic pentameter): serious and thoughtful, like an adult looking back.",
@@ -39,7 +42,7 @@ const P=[
   ["a trouble to my dreams","The conflict moves inside his mind and lasts for days."]],
  top:"The mountain stands for more than a mountain: conscience, God, nature's power and the boy's own imagination. Wordsworth turns a childish prank into a moral and spiritual education.",
  pairs:[["Envy","Nature as a moral teacher"],["The Destruction of Sennacherib","A power beyond humans humbles them"],["Papa-T","A childhood memory shaping the adult poet"]]},
-{id:"slant",w:"There's a certain Slant of light",who:"Emily Dickinson (c.1861)",th:["mind", "faith", "power", "nature", "effects"],pt:["loss"],
+{id:"slant",w:"There's a certain Slant of light",who:"Emily Dickinson (c.1861)",th:["mind","power","effects","faith","change"],pt:["nature"],
  conflict:"Inside the mind: an unexplained, crushing despair, and doubt about God.",
  big:"A particular winter light brings a pain that leaves no visible wound but changes a person inside. Suffering is invisible, spiritual and impossible to fight.",
  form:"Four short quatrains in hymn metre, broken up by dashes. It sounds religious, but the dashes stop it feeling calm or certain.",
@@ -51,7 +54,7 @@ const P=[
   ["An imperial affliction","Suffering rules like an emperor: grand, powerful and oppressive."]],
  top:"Perfect for internal conflict. Dickinson shows pain that can't be located or cured, so the mind becomes the battlefield.",
  pairs:[["Envy","Inner conflict, with very different tones"],["Boat Stealing","Nature changing someone's state of mind"],["Honour Killing","Oppression felt from the inside"]]},
-{id:"senn",w:"The Destruction of Sennacherib",who:"Lord Byron (1815)",th:["war", "power", "faith", "loss", "effects"],pt:["nature"],
+{id:"senn",w:"The Destruction of Sennacherib",who:"Lord Byron (1815)",th:["kill","power","faith","change"],pt:["effects","sympathy","cause","nature"],
  conflict:"A mighty invading army against the power of God.",
  big:"The glittering Assyrian army looks unstoppable, but God's Angel of Death destroys it overnight. Human military power is impressive but fragile.",
  form:"Rhyming couplets in a galloping anapaestic rhythm that sounds like charging horses.",
@@ -63,7 +66,7 @@ const P=[
   ["melted like snow in the glance of the Lord","A simile of total, effortless destruction: one look from God."]],
  top:"Don't get carried away by the rhythm. Byron makes war sound exciting so that the collapse hits harder: pride before a fall.",
  pairs:[["Boat Stealing","A force beyond humans humbles them"],["Vergissmeinnicht","From military glory to a dead body"],["Songs for the People","War's music vs peace's music"]]},
-{id:"wlh",w:"We Lived Happily during the War",who:"Ilya Kaminsky (2013, in Deaf Republic 2019)",th:["war", "guilt", "nation"],pt:["effects", "power"],
+{id:"wlh",w:"We Lived Happily during the War",who:"Ilya Kaminsky (2013, in Deaf Republic 2019)",th:["guilt","change"],pt:["power","cause","sympathy","kill","peace","effects","mind"],
  conflict:"Moral: ordinary people's comfort against other people's suffering.",
  big:"A confession. 'We' protested a little, but carried on living comfortably while our country bombed others. Comfort makes people morally deaf.",
  form:"Short, plain free verse. Nothing decorative, so there is nowhere to hide from the guilt.",
@@ -75,7 +78,7 @@ const P=[
   ["the city of money","Repeated 'money' shows comfort and wealth mattered more than people."]],
  top:"Push past 'the speaker feels guilty'. Kaminsky suggests war is kept going not just by soldiers, but by ordinary people choosing comfort over resistance. 'We' includes the reader.",
  pairs:[["Lament","Responsibility for distant suffering"],["What Were They Like?","Looking back at destruction from a distance"],["Flag","Conscience vs loyalty to a nation"]]},
-{id:"flag",w:"Flag",who:"John Agard",th:["nation", "power", "war"],pt:["identity", "guilt", "mind"],
+{id:"flag",w:"Flag",who:"John Agard",th:["cause","power"],pt:["kill","guilt","mind","identity"],
  conflict:"Between a simple national symbol and the violence and division it causes.",
  big:"A flag is 'just a piece of cloth', yet it makes nations kneel, armies march and people kill and die. Agard shows how dangerous patriotism can be.",
  form:"A question-and-answer dialogue, like an interrogation. The simple pattern makes it memorable.",
@@ -87,7 +90,7 @@ const P=[
   ["blind your conscience to the end","The warning: loyalty to a flag can override morality."]],
  top:"Explore the disproportion: a tiny object controls huge emotions. The poem strips nationalism back until it looks both silly and deadly.",
  pairs:[["Songs for the People","Symbols that stir crowds, towards war or towards peace"],["Colonization in Reverse","Nation, belonging and who it includes"],["We Lived Happily during the War","Conscience vs national comfort"]]},
-{id:"verg",w:"Vergissmeinnicht",who:"Keith Douglas (1943)",th:["war", "loss", "effects", "memory", "identity"],pt:["family"],
+{id:"verg",w:"Vergissmeinnicht",who:"Keith Douglas (1943)",th:["kill","sympathy","effects","memory","change"],pt:["identity","family"],
  conflict:"War's dehumanising violence against the shared humanity of enemy soldiers.",
  big:"Returning to a battlefield, a soldier finds the decaying body of the German who shot at his tank, with a photo of his girlfriend Steffi. The enemy was a killer and a lover.",
  form:"Regular quatrains with a controlled rhyme. The calm, tight form makes the horror feel coldly observed.",
@@ -99,7 +102,7 @@ const P=[
   ["the lover and killer are mingled","One man is both; war can't erase his humanity."]],
  top:"It's all about duality. Douglas neither glorifies nor hates the enemy; he shows that the same man was killer and lover. Douglas was himself killed in 1944.",
  pairs:[["The Destruction of Sennacherib","Military display ending in death"],["Lament","Grief in the aftermath of war"],["Partition","Individual human stories inside a huge conflict"]]},
-{id:"wwtl",w:"What Were They Like?",who:"Denise Levertov (1966)",th:["war", "effects", "loss", "memory", "identity", "nature"],pt:["nation", "power"],
+{id:"wwtl",w:"What Were They Like?",who:"Denise Levertov (1966)",th:["sympathy","effects","change","kill","memory","identity"],pt:["nature","guilt","power"],
  conflict:"War against a whole culture: the Vietnam War wipes out a people's way of life.",
  big:"Six questions about Vietnamese people are answered as if they've already vanished. War destroys not just lives but songs, ceremonies and memory.",
  form:"Numbered questions, then numbered answers, like a calm academic enquiry. The coldness makes the loss more chilling.",
@@ -111,7 +114,7 @@ const P=[
   ["There is an echo yet","Only a trace remains, and then silence."]],
  top:"It's devastating because it sounds so calm. Levertov makes us feel how wrong it is to discuss a destroyed people like a museum exhibit.",
  pairs:[["Lament","War's damage to people and environment"],["We Lived Happily during the War","Distance from suffering and responsibility"],["Partition","A community torn apart"]]},
-{id:"lament",w:"Lament",who:"Gillian Clarke (1991)",th:["war", "effects", "nature", "loss"],pt:["guilt", "nation"],
+{id:"lament",w:"Lament",who:"Gillian Clarke (1991)",th:["sympathy","effects","change","nature","kill"],pt:["guilt","peace","power"],
  conflict:"War against the natural world, and the many innocent victims of the 1991 Gulf War.",
  big:"An elegy that lists victim after victim (turtles, birds, a soldier, a boy, the sea itself). War poisons whole systems, not just armies.",
  form:"A lament: a list, almost a prayer. Each stanza starts with 'For', so every victim is mourned.",
@@ -123,7 +126,7 @@ const P=[
   ["the ashes of language","The final line: war destroys words and communication, and maybe poetry itself."]],
  top:"Avoid 'it's sad about animals'. Clarke shows war breaking everything: habitats, bodies, families and the planet, and asks who is responsible.",
  pairs:[["What Were They Like?","Aftermath and cultural or environmental loss"],["Songs for the People","Poetry responding to suffering"],["We Lived Happily during the War","Responsibility for distant war"]]},
-{id:"cir",w:"Colonization in Reverse",who:"Louise Bennett (1966)",th:["identity", "nation", "power", "hope"],pt:["memory"],
+{id:"cir",w:"Colonization in Reverse",who:"Louise Bennett (1966)",th:["identity","change","power"],pt:["memory"],
  conflict:"Between Britain as the old colonial power and the Jamaican people it once ruled.",
  big:"With comic delight, the speaker reports that Jamaicans are moving to England in huge numbers, 'colonizin' Britain in reverse. Humour turns history upside down.",
  form:"Written in Jamaican Patois with a ballad-like rhythm and rhyme: a lively spoken performance.",
@@ -135,7 +138,7 @@ const P=[
   ["What a devilment a Englan!","Mock sympathy: Britain getting a taste of being colonised."]],
  top:"The comedy is strategic. Bennett uses humour and Patois to challenge the idea that Britain is the centre of the world, and to celebrate Caribbean voice.",
  pairs:[["Papa-T","Caribbean voice taking over British culture"],["Flag","National symbols and belonging"],["Thirteen","Race and belonging in Britain"]]},
-{id:"thirteen",w:"Thirteen",who:"Caleb Femi (2020)",th:["identity", "power", "family", "effects"],pt:["nation"],
+{id:"thirteen",w:"Thirteen",who:"Caleb Femi (2020)",th:["power","effects","identity","sympathy","change"],pt:["family"],
  conflict:"A Black boy against the authorities and stereotypes that decide who he is.",
  big:"At thirteen, a boy is stopped by police just four minutes from home, wrongly suspected of a robbery. Society starts treating him as a threat before he has done anything; his childhood is taken away.",
  form:"Free verse in the second person ('you'), which makes it intimate and unsettling, like a warning.",
@@ -147,7 +150,7 @@ const P=[
   ["cast lots for your organs","A biblical echo: like soldiers gambling over Jesus's clothes, others decide his fate."]],
  top:"Explore the tragic irony: he is still a child, yet society reads him as a threat. Femi's cosmic images make prejudice feel enormous.",
  pairs:[["Colonization in Reverse","Race and identity in Britain"],["Flag","Power and obedience"],["Honour Killing","Identity forced on someone by others"]]},
-{id:"papat",w:"Papa-T",who:"Fred D'Aguiar",th:["family", "memory", "identity", "nation"],pt:["war", "power", "hope"],
+{id:"papat",w:"Papa-T",who:"Fred D'Aguiar",th:["memory","identity","family"],pt:["power","cause","kill","change"],
  conflict:"Between the British imperial poem a grandfather recites and the Caribbean child who inherits it.",
  big:"The poet remembers his grandfather in Guyana reciting Tennyson's The Charge of the Light Brigade, which the child reimagines as an ambush in a colony. He honours that voice but turns the poem's message of obedience into creative disobedience.",
  form:"Free verse: it breaks away from Tennyson's tight, marching rhythm.",
@@ -159,7 +162,7 @@ const P=[
   ["a blank page","Writing begins from memory and an inherited voice."]],
  top:"Argue that the poem both honours and resists Tennyson. D'Aguiar inherits the British canon, then gives it a Caribbean accent and questions its imperial values.",
  pairs:[["Colonization in Reverse","Taking control of British culture"],["Boat Stealing","Childhood shaping the adult"],["The Destruction of Sennacherib","Older poetry making war dramatic"]]},
-{id:"honour",w:"Honour Killing",who:"Imtiaz Dharker",th:["identity", "power", "mind", "faith", "hope", "nation"],pt:[],
+{id:"honour",w:"Honour Killing",who:"Imtiaz Dharker",th:["identity","power","mind","faith","change"],pt:["cause","effects"],
  conflict:"A woman against the identities forced on her by country, religion, tradition and men.",
  big:"The speaker takes off layer after layer, like coats, that have controlled her. The shocking title is reversed: she 'kills' the false selves, not herself, and is free.",
  form:"Free verse in the first person: she refuses to be restricted, even by form.",
@@ -171,7 +174,7 @@ const P=[
   ["my new geography","The ending: she maps out her own new identity and place."]],
  top:"Brilliant for identity and power. Dharker takes a phrase linked to patriarchal violence and makes it a metaphor for rejecting other people's expectations.",
  pairs:[["There's a certain Slant of light","Oppression felt within"],["Thirteen","Identity imposed by society"],["Colonization in Reverse","Reclaiming voice and power"]]},
-{id:"partition",w:"Partition",who:"Sujata Bhatt",th:["effects", "nation", "memory", "guilt", "family"],pt:["identity", "war", "loss"],
+{id:"partition",w:"Partition",who:"Sujata Bhatt",th:["guilt","sympathy","effects","memory","power","change","family"],pt:["cause","identity","mind","nature"],
  conflict:"The 1947 Partition of India, and a woman's guilt about not helping its victims.",
  big:"In 1947 the poet's mother, then nineteen, heard refugees crying at Ahmedabad railway station. Her aunt took them food and water; she was too afraid and stayed in the garden. Fifty years later she still feels guilty, and asks how a man who knew nothing of the country could divide it.",
  form:"Free verse that starts in the third person ('she') and then reveals the speaker is her daughter, as if the story is handed down.",
@@ -184,7 +187,7 @@ const P=[
  top:"Show how Bhatt makes a huge historical event personal: we see Partition through one frightened girl's ears and her lifelong guilt. The ending turns anger on the politicians who drew the border.",
  pairs:[["We Lived Happily during the War","Guilt about not doing enough"],["What Were They Like?","A community damaged by political conflict"],["Papa-T","Memories handed down through a family"]]}
 ];
-const ROLE={envy:"the self and jealousy",songs:"hope and protest",boat:"nature, the mind, guilt and childhood",slant:"the mind, suffering and faith",senn:"war, God and power",wlh:"guilt and complicity",flag:"nation, power and patriotism",verg:"war, death and the enemy as a human",wwtl:"war, its victims, culture and memory",lament:"war's victims and the environment",cir:"empire, migration and identity",thirteen:"race, power and childhood",papat:"family, memory and empire",honour:"identity, power, religion and protest",partition:"guilt, family and the memory of Partition"};
+const ROLE={envy:"internal conflict and the self",songs:"wanting conflict to end, and sympathy",boat:"nature, powerlessness, guilt and change",slant:"internal conflict, powerlessness and faith",senn:"killing, God's power and change",wlh:"guilt and how war changes a country",flag:"questioning what people fight for, and power",verg:"killing, sympathy and memory",wwtl:"victims, effects, killing and memory",lament:"victims, effects and war against nature",cir:"identity, power and change",thirteen:"powerlessness, identity and sympathy",papat:"family, memory and identity",honour:"identity, power and the mind",partition:"guilt, sympathy, effects, family and memory"};
 window.CPG={TH,P};
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const byId=Object.fromEntries(P.map(p=>[p.id,p]));
@@ -208,40 +211,63 @@ function drawGuide(){const el=document.getElementById("cpguide");if(!el)return;
  document.getElementById("cpghide").onclick=()=>{hide=!hide;st.hide=hide;save();const open=[...el.querySelectorAll("details[open]")].map(d=>d.dataset.id);drawGuide();open.forEach(id=>el.querySelector(`details[data-id="${id}"]`).open=true);drawPick()};
  wire(el)}
 
-/* ---- scoring: strong fit = 1, partial fit = 0.5 ---- */
+/* ---- scoring ----
+   Each poem is a strong (1) or partial (0.5) fit for each theme. For a trio, each theme scores
+   half its best poem + half its second-best poem (the backup you need if the best one is the printed part (a) poem).
+   Themes OCR has actually asked count double. Then the whole ranking is re-run 48 ways (changing those weights)
+   and trios are ordered by how often they make the top 10: the most robust picks first. */
 const TK=Object.keys(TH),NT=TK.length;
-const fit=(id,t)=>byId[id].th.includes(t)?1:byId[id].pt.includes(t)?.5:0;
+const fitBy=(id,t,pv)=>byId[id].th.includes(t)?1:byId[id].pt.includes(t)?pv:0;
+const fit=(id,t)=>fitBy(id,t,.5);
 const best=(ids,t)=>Math.max(0,...ids.map(id=>fit(id,t)));
-const total=ids=>TK.reduce((a,t)=>a+best(ids,t),0);
-function score(ids){const tot=total(ids);
- const worst=ids.length===3?Math.min(...ids.map(x=>total(ids.filter(y=>y!==x)))):tot;
- const strong=TK.filter(t=>best(ids,t)===1).length,part=TK.filter(t=>best(ids,t)===.5).length,none=TK.filter(t=>!best(ids,t));
- const dbl=TK.filter(t=>ids.filter(id=>fit(id,t)>0).length>=2).length;
- return {tot,worst,strong,part,none,dbl,key:tot*1e4+worst*100+dbl}}
-const ALL=[];for(let a=0;a<P.length;a++)for(let b=a+1;b<P.length;b++)for(let c=b+1;c<P.length;c++){const ids=[P[a].id,P[b].id,P[c].id];ALL.push({ids,s:score(ids)})}
-ALL.sort((x,y)=>y.s.key-x.s.key);
-const TOP=ALL.slice(0,5);{const alt=ALL.find(t=>!t.ids.includes("honour"));if(alt){alt.alt="Best without Honour Killing";TOP.push(alt)}}
+const sc=(ids,wa,pv,bk)=>TK.reduce((a,t)=>{const f=ids.map(id=>fitBy(id,t,pv)).sort((x,y)=>y-x);return a+(ASKED.has(t)?wa:1)*((1-bk)*f[0]+bk*(f[1]||0))},0);
+function stat(ids){const strong=TK.filter(t=>best(ids,t)===1).length,part=TK.filter(t=>best(ids,t)===.5).length,none=TK.filter(t=>!best(ids,t));
+ const two=t=>ids.filter(id=>fit(id,t)>0).length>=2,dbl=TK.filter(two).length,askedB=[...ASKED].filter(two).length;
+ return {strong,part,none,dbl,askedB,base:sc(ids,2,.5,.5)}}
+const ALL=[];for(let a=0;a<P.length;a++)for(let b=a+1;b<P.length;b++)for(let c=b+1;c<P.length;c++)ALL.push({ids:[P[a].id,P[b].id,P[c].id],hits:0});
+let RUNS=0;for(const wa of [1,1.5,2,3])for(const pv of [.25,.5,.75])for(const bk of [0,.25,.5,.75]){RUNS++;
+ ALL.forEach(t=>t.v=sc(t.ids,wa,pv,bk));[...ALL].sort((x,y)=>y.v-x.v).slice(0,10).forEach(t=>t.hits++)}
+ALL.forEach(t=>{t.s=stat(t.ids);t.rob=Math.round(t.hits/RUNS*100)});
+ALL.sort((x,y)=>y.hits-x.hits||y.s.base-x.s.base);
+const rankOf=ids=>ALL.findIndex(t=>same(t.ids,ids))+1;
+const TOP=ALL.slice(0,10);
 const nm=id=>byId[id].w.replace(/ \(.*\)/,"");
-const fmt=n=>String(n).replace(".5","½");
 const same=(a,b)=>a.length===b.length&&a.every(x=>b.includes(x));
-const stats=s=>`<span class="cp3-st"><b>${s.strong}${s.part?` + ${s.part} partly`:""}</b> of ${NT} themes</span><span class="cp3-st"><b>${fmt(s.worst)}</b> of ${NT} if one is printed</span><span class="cp3-st"><b>${s.dbl}</b> themes with a backup</span>`;
-function swapTip(){if(pick.length!==3)return "";const cur=score(pick);let bestS=null;
- pick.forEach(out=>P.forEach(p=>{if(pick.includes(p.id))return;const ids=pick.map(x=>x===out?p.id:x),s=score(ids);if(s.key>cur.key&&(!bestS||s.key>bestS.s.key))bestS={out,inn:p.id,s}}));
- if(!bestS)return `<p class="cp3-ok">This is one of the strongest possible trios. Nothing you swap in would cover more.</p>`;
- return `<p class="cp3-tip"><b>Better swap:</b> replace <b>${nm(bestS.out)}</b> with <b>${nm(bestS.inn)}</b>. That gives ${bestS.s.strong}${bestS.s.part?` + ${bestS.s.part} partly`:""} of ${NT} themes, ${fmt(bestS.s.worst)} of ${NT} if one is printed, and ${bestS.s.dbl} with a backup. <button type="button" class="linkbtn" id="cp3swap" data-o="${bestS.out}" data-i="${bestS.inn}">Make the swap</button></p>`}
+const NA=ASKED.size;
+const stats=(s,rob)=>`${rob!=null?`<span class="cp3-st"><b>${rob}%</b> of checks in the top 10</span>`:""}<span class="cp3-st"><b>${s.askedB}</b> of ${NA} past question types with a backup</span><span class="cp3-st"><b>${s.strong}${s.part?` + ${s.part} partly`:""}</b> of ${NT} themes</span>`;
+function swapTip(){if(pick.length!==3)return "";const r=rankOf(pick);const cur=ALL[r-1];let bestT=null;
+ pick.forEach(out=>P.forEach(p=>{if(pick.includes(p.id))return;const ids=pick.map(x=>x===out?p.id:x),k=rankOf(ids);if(k<r&&(!bestT||k<bestT.k))bestT={out,inn:p.id,k}}));
+ const head=`<p class="cp3-rk">Your trio ranks <b>#${r}</b> of ${ALL.length} possible trios.</p>`;
+ if(!bestT)return head+`<p class="cp3-ok">No single swap would improve it. Great choice.</p>`;
+ if(r<=10)return head+`<p class="cp3-ok">That's in the top 10: a strong choice. If you want the very best, swap <b>${nm(bestT.out)}</b> for <b>${nm(bestT.inn)}</b> (#${bestT.k}). <button type="button" class="linkbtn" id="cp3swap" data-o="${bestT.out}" data-i="${bestT.inn}">Make the swap</button></p>`;
+ return head+`<p class="cp3-tip"><b>Better swap:</b> replace <b>${nm(bestT.out)}</b> with <b>${nm(bestT.inn)}</b> to move up to #${bestT.k}. <button type="button" class="linkbtn" id="cp3swap" data-o="${bestT.out}" data-i="${bestT.inn}">Make the swap</button></p>`}
+let around=st.around&&byId[st.around]?st.around:"";
+function trioCard(t,i,lab){return `<li><button type="button" class="cp3-trio${same(t.ids,pick)?" on":""}" data-ids="${t.ids.join(",")}"><span class="cp3-rank">${lab||(i===0?"Top pick":"#"+(i+1))}</span><b>${t.ids.map(nm).join(" · ")}</b><small>${t.ids.map(id=>`${nm(id)}: ${ROLE[id]}`).join(". ")}.</small><span class="cp3-sts">${stats(t.s,t.rob)}</span></button></li>`}
 function drawPick(){const el=document.getElementById("cp3");if(!el)return;
- const s=pick.length?score(pick):null;
- el.innerHTML=`<p class="qzlab">The strongest trios</p><ol class="cp3-trios">${TOP.map((t,i)=>`<li><button type="button" class="cp3-trio${same(t.ids,pick)?" on":""}" data-t="${i}"><span class="cp3-rank">${t.alt||(i===0?"Top pick":"#"+(i+1))}${i&&!t.alt&&t.s.tot===TOP[0].s.tot&&t.s.worst===TOP[0].s.worst?" · close call with the top pick":""}</span><b>${t.ids.map(nm).join(" · ")}</b><small>${t.ids.map(id=>`${nm(id)}: ${ROLE[id]}`).join(". ")}.</small><span class="cp3-sts">${stats(t.s)}</span></button></li>`).join("")}</ol>
- <details class="rc cp3-how"><summary>How the ranking works</summary><div class="in"><p>Each poem is marked as a <b>strong</b> fit or a <b>partial</b> fit for each of the ${NT} themes. Trios are ranked by:</p><ol><li><b>Themes covered</b>: a strong fit counts 1, a partial fit counts ½.</li><li><b>If one is the printed poem</b>: you can't use the part (a) poem again in part (b), so this is how many themes the other two still cover in the worst case.</li><li><b>Themes with a backup</b>: how many themes two or more of your poems fit, so you have a choice.</li></ol><p>Close scores are close calls: choose the poems you like and remember best. A poem you can quote confidently beats a "perfect" one you can't.</p></div></details>
+ const s=pick.length?stat(pick):null;const showAll=!!st.more;
+ const ar=around?ALL.filter(t=>t.ids.includes(around)).slice(0,3):[];
+ el.innerHTML=`<p class="qzlab">The strongest trios</p><ol class="cp3-trios">${TOP.slice(0,showAll?10:5).map((t,i)=>trioCard(t,i)).join("")}</ol>
+ <button type="button" class="btn sm" id="cp3more">${showAll?"Show the top 5 only":"Show the top 10"}</button>
+ <p class="qzlab">Build around a poem you like</p><div class="chips cp3-chips">${P.map(p=>`<button type="button" class="chip${around===p.id?" on":""}" data-a="${p.id}">${esc(nm(p.id))}</button>`).join("")}</div>
+ ${around?`<ol class="cp3-trios">${ar.map(t=>trioCard(t,0,`Best with ${nm(around)} · #${rankOf(t.ids)} overall`)).join("")}</ol>`:""}
+ <details class="rc cp3-how"><summary>How the ranking works, and real past questions</summary><div class="in">
+ <p>Part (b) always asks about one idea, linked to the part (a) poem. These are OCR's real part (b) questions for the Conflict cluster:</p>
+ <ul>${PASTQ.map(([y,q,t])=>`<li><b>${y}:</b> "…which ${q}" <span class="cp3-st">${TH[t]}</span></li>`).join("")}</ul>
+ <p>Older papers used an earlier version of the cluster, but the question types still apply.</p>
+ <p>Every poem is marked as a strong or partial fit for each of ${NT} themes. For each theme a trio scores half for its best poem and half for its second-best, because <b>the printed part (a) poem is often the best fit for that theme, and you can't reuse it</b> (in 2024 the theme was wanting conflict to end, and Songs for the People was the printed poem). Themes OCR has asked count double.</p>
+ <p>Then we re-run the whole ranking ${RUNS} ways, changing how much past themes count, how much a partial fit is worth and how much a backup matters. Trios are ordered by how often they make the top 10, so the top picks hold up however you score them.</p>
+ <p>Close scores are close calls: pick the poems you enjoy and can remember. The fits are our judgement, not OCR's.</p></div></details>
  <p class="qzlab">Or pick your own (up to 3)</p><div class="chips cp3-chips">${P.map(p=>`<button type="button" class="chip${pick.includes(p.id)?" on":""}" data-p="${p.id}" aria-pressed="${pick.includes(p.id)}">${esc(nm(p.id))}</button>`).join("")}</div>
- ${pick.length?`<div class="cp3-sum">${pick.length===3?`<div class="cp3-sts">${stats(s)}</div>${s.none.length?`<p class="cp3-miss">Not covered: ${s.none.map(t=>TH[t]).join(", ")}.</p>`:""}${swapTip()}`:`<span>Pick ${3-pick.length} more.</span>`}</div>
+ ${pick.length?`<div class="cp3-sum">${pick.length===3?`<div class="cp3-sts">${stats(s,ALL[rankOf(pick)-1].rob)}</div>${s.none.length?`<p class="cp3-miss">Not covered: ${s.none.map(t=>TH[t]).join(", ")}.</p>`:""}${swapTip()}`:`<span>Pick ${3-pick.length} more.</span>`}</div>
  <h3>Which poem to use for each theme</h3>
- <div class="tbl"><table class="cp3-tab"><tr><th>If the question is about…</th><th>Use</th></tr>${TK.map(t=>{const r=pick.map(id=>[id,fit(id,t)]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);const cls=r.length>=2?"g2":r.length?"g1":"g0";
-   return `<tr class="${cls}"><td>${TH[t]}</td><td>${r.length?r.map(([id,f])=>`<span class="cp3-use">${esc(nm(id))}${f<1?" <small>(partly)</small>":""}</span>`).join(" "):"<i>none of your poems: swap one in</i>"}</td></tr>`}).join("")}</table></div>
+ <div class="tbl"><table class="cp3-tab"><tr><th>If part (b) asks about…</th><th>Use</th></tr>${TK.map(t=>{const r=pick.map(id=>[id,fit(id,t)]).filter(x=>x[1]).sort((a,b)=>b[1]-a[1]);const cls=r.length>=2?"g2":r.length?"g1":"g0";
+   return `<tr class="${cls}"><td>${TH[t]}${ASKED.has(t)?` <small class="cp3-asked">asked before</small>`:""}</td><td>${r.length?r.map(([id,f])=>`<span class="cp3-use">${esc(nm(id))}${f<1?" <small>(partly)</small>":""}</span>`).join(" "):"<i>none of your poems: swap one in</i>"}</td></tr>`}).join("")}</table></div>
  <p class="cp3-key">The first poem listed fits best. "Partly" means it works but isn't the poem's main focus. <span class="g2">Green</span>: you have a backup if one poem is printed. <span class="g1">Amber</span>: only one poem fits. <span class="g0">Red</span>: nothing fits.</p>
  <h3>Your quotes to learn</h3><div class="row"><button type="button" class="chip${hide?" on":""}" id="cp3hide">Hide key words</button></div>
  ${pick.map(id=>{const p=byId[id];return `<div class="cp3-poem"><h4>${esc(p.w)}</h4><ol class="cpg-q">${p.q.map(([q,s])=>`<li><blockquote>‘${qh(q,hide)}’</blockquote><p>${esc(s)}</p></li>`).join("")}</ol></div>`}).join("")}`:`<p class="cp3-sum">Tap a trio above, or choose poems, to see which theme each one covers.</p>`}`;
- el.querySelectorAll("[data-t]").forEach(b=>b.onclick=()=>{pick=TOP[+b.dataset.t].ids.slice();st.pick=pick;save();drawPick()});
+ el.querySelectorAll("[data-ids]").forEach(b=>b.onclick=()=>{pick=b.dataset.ids.split(",");st.pick=pick;save();drawPick()});
+ el.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{around=around===b.dataset.a?"":b.dataset.a;st.around=around;save();drawPick()});
+ document.getElementById("cp3more").onclick=()=>{st.more=!st.more;save();drawPick()};
  el.querySelectorAll("[data-p]").forEach(b=>b.onclick=()=>{const id=b.dataset.p;if(pick.includes(id))pick=pick.filter(x=>x!==id);else{if(pick.length>=3)pick.shift();pick.push(id)}st.pick=pick;save();drawPick()});
  const sw=document.getElementById("cp3swap");if(sw)sw.onclick=()=>{pick=pick.map(x=>x===sw.dataset.o?sw.dataset.i:x);st.pick=pick;save();drawPick()};
  const h=document.getElementById("cp3hide");if(h)h.onclick=()=>{hide=!hide;st.hide=hide;save();drawPick();const g=document.getElementById("cpghide");if(g)g.classList.toggle("on",hide)};
