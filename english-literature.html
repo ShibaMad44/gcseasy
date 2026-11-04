@@ -52,9 +52,15 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 .cp3-trio{text-align:left;display:flex;flex-direction:column;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-md);padding:12px 14px;color:var(--ink);font:inherit;cursor:pointer}
 .cp3-trio.on{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft)}.cp3-trio span{font-weight:600}.cp3-trio small{color:var(--muted);line-height:1.4}
 .cp3-sum{display:flex;flex-direction:column;gap:2px;margin:14px 0 8px}.cp3-sum span{color:var(--muted)}
-.cp3-tab td:not(:first-child),.cp3-tab th:not(:first-child){text-align:center}
+
 .cp3-tab tr.g2 td:first-child,.cp3-key .g2{background:var(--good-soft)}.cp3-tab tr.g1 td:first-child,.cp3-key .g1{background:var(--warn-soft)}.cp3-tab tr.g0 td:first-child,.cp3-key .g0{background:var(--bad-soft)}
-.cp3-chips{flex-wrap:wrap;overflow:visible}.cp3-tab{table-layout:fixed;width:100%}.cp3-tab th:first-child{width:34%}.cp3-tab th{font-size:.82rem}
+.cp3-steps{padding-left:22px}.cp3-steps li{margin:0 0 8px}
+.cp3-trios{list-style:none;padding:0}.cp3-trios li{display:flex}.cp3-trios li>button{flex:1}
+.cp3-rank{font:700 .72rem var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--accent)}
+.cp3-sts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}.cp3-st{font-size:.8rem;background:var(--bg);border-radius:6px;padding:3px 8px;color:var(--muted);font-weight:400}.cp3-st b{color:var(--ink)}
+.cp3-tip{background:var(--warn-soft);border-radius:var(--r-md);padding:10px 12px;margin:8px 0 0}.cp3-ok{background:var(--good-soft);border-radius:var(--r-md);padding:10px 12px;margin:8px 0 0}.cp3-miss{color:var(--bad);margin:6px 0 0}
+.cp3-use{display:inline-block;margin:0 8px 2px 0;white-space:nowrap}.cp3-how{margin:0 0 14px}
+.cp3-chips{flex-wrap:wrap;overflow:visible}.cp3-tab{width:100%}.cp3-tab th:first-child{width:46%}.cp3-tab th{font-size:.82rem}
 .cp3-key span{border-radius:4px;padding:0 5px}.cp3-key{font-size:.9rem;color:var(--muted)}
 .nm{background:var(--ink);color:transparent;border-radius:5px;cursor:pointer;user-select:none;padding:0 1px}
 .nm.show{background:var(--hl);color:var(--hl-ink)}
@@ -285,7 +291,11 @@ blockquote{margin:0;font:italic 500 1.3rem/1.35 var(--quote);color:var(--ink);te
 
 <section class="topic" id="cx-cp3">
 <div class="th"><div class="tile"><small>C</small>P3</div><h2>Conflict poetry · Pick your 3 poems</h2></div>
-<p>The poem for part (a) is printed for you, so you only need to <b>know</b> every poem: what it's about and its main methods. For part (b) you choose a <b>different</b> cluster poem and write about it from memory. So learn quotes for <b>3 poems</b> that between them fit any theme. If one of your 3 turns out to be the printed poem, you still have two to choose from.</p>
+<ol class="cp3-steps">
+<li><b>Know all 15 poems.</b> The part (a) poem could be any of them, but it's printed, so you just need what it's about and its main methods. The poem table and Cards cover this.</li>
+<li><b>Learn quotes for 3 poems.</b> In part (b) you write about a different cluster poem from memory, so these are the ones to know really well.</li>
+<li><b>Choose 3 that fit any theme.</b> The part (b) question gives a theme, and you can't reuse the printed poem. So pick 3 that between them cover every theme, with a backup for as many as possible.</li>
+</ol>
 <div id="cp3"></div>
 </section>
 
