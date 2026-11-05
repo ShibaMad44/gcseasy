@@ -473,5 +473,9 @@ function setupTables(){document.querySelectorAll(".tbl table, .ftbl table").forE
 function boot(){setupTables();setupToTop();setupFormulas();setTimeout(checkBadges,2500);setupTabScroll();setupLayout();setupToggle();setupPapers();setupTimer();setupInstallBtn();setupBotnav();setTimeout(lbSync,1500);loadQuota();hit();setupSW();paintInstall();
   if(window.GCSEasyAuth&&GCSEasyAuth.enabled){let was=!!GCSEasyAuth.user();GCSEasyAuth.onChange(u=>{if(!!u!==was){was=!!u;loadQuota()}})}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",boot);else boot();
-window.GCSEasy={revDays,QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
+/* Share through the phone's own share sheet (WhatsApp, Snapchat, Messages…). Falls back to copying on computers. */
+async function shareText(text,url,title){const full=url?`${text} ${url}`:text;
+  if(navigator.share){try{await navigator.share(url?{title:title||"GCSEasy",text,url}:{title:title||"GCSEasy",text});return "shared"}catch(e){if(e&&e.name==="AbortError")return "cancelled"}}
+  try{await navigator.clipboard.writeText(full);return "copied"}catch(e){return "failed"}}
+window.GCSEasy={shareText,revDays,QG,reminders,badgeList,checkBadges,topicStats,topicResult,mastery,weakTopics,todayCounts,topicName,ev,installHelp,install,standalone,isIOS,authH,SUBJECTS,CATS,progress,report,AQA,PAPERS,getLog,setLog,getRun,nameOf,fmt,getGoal,setGoal,elapsed,todayMs,aiClient,parseJSON,API,drawQuota,aiLimitMsg,me,saveMe,lbCall,lbSync,myStats,addXP,xpStats};
 })();
